@@ -1,1 +1,1 @@
-# pgs-app-microservices
+# edunet-microservices
