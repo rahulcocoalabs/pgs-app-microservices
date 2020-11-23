@@ -140,7 +140,7 @@ exports.createOnlineClass = async (req, res) => {
     onlineClassObj.fee = null;
   }
   if (params.isPublic === 'true') {
-    onlineClassObj.isPaid = true;
+    onlineClassObj.isPublic = true;
   } else {
     onlineClassObj.isPublic = false;
   }
