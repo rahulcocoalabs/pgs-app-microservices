@@ -25,13 +25,14 @@ var storage = multer.diskStorage({
 var fileUpload = multer({ storage: storage });
 
 module.exports = (app) => {
-    const contests = require('../controllers/onlineClass.controller');
-    app.post('/online-class/add',fileUpload.single('image'), auth,contests.createOnlineClass);
-    app.get('/online-class/:id/detail', auth,contests.getClassDetails);
-    app.get('/online-class/list', auth,contests.listOnlineClasses);
-    app.get('/online-class/tutor/list', auth,contests.listTutorList);
-    app.get('/online-class/student/home', auth,contests.getStudentHome);
-    app.get('/online-class/tutor/:id/detail', auth,contests.getTutorDetails);
-
+    const onlineClass = require('../controllers/onlineClass.controller');
+    app.post('/online-class/add',fileUpload.single('image'), auth,onlineClass.createOnlineClass);
+    app.get('/online-class/:id/detail', auth,onlineClass.getClassDetails);
+    app.get('/online-class/list', auth,onlineClass.listOnlineClasses);
+    app.get('/online-class/tutor/list', auth,onlineClass.listTutorList);
+    app.get('/online-class/student/home', auth,onlineClass.getStudentHome);
+    app.get('/online-class/tutor/:id/detail', auth,onlineClass.getTutorDetails);
+    app.post('/online-class/student/appointment', auth,onlineClass.requestAppointment);
+    // app.post('/online-class/tutor/class', auth,onlineClass.requestAppointment);
 
 }
