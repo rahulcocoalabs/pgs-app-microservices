@@ -218,7 +218,18 @@ exports.listOnlineClasses = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+
   var findCriteria = {};
+  if(params.isPublic !== undefined && params.isPublic === 'true'){
+    findCriteria.isPublic = true;
+  }
+  if(params.isPublic !== undefined && params.isPublic === 'false'){
+    findCriteria.isPublic = false;
+  }
+  if (params.isPopular === 'true') {
+    findCriteria.isPopular = true;
+  }
+  
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
