@@ -742,7 +742,8 @@ exports.getUserDetails = (req, res) => {
     hobbies: 1,
     coinCount: 1,
     karmaIndex: 1,
-    password : 1
+    password : 1,
+    isTutor : 1
   }
   // get data
   User.findOne(filters, queryProjection).populate(['syllabusId', {

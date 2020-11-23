@@ -187,6 +187,7 @@ exports.getClassDetails = async (req, res) => {
       item: classDetails,
       classImageBase: classConfig.imageBase,
       tutorImageBase: usersConfig.imageBase,
+      tutorVideoBase: tutorConfig.videoBase,
       message: 'Class details'
     })
 
