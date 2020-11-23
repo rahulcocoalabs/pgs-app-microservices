@@ -323,7 +323,7 @@ module.exports = {
       }
     },
     {
-      name: 'Favourite tutor - Edunet Microservices',
+      name: 'tutor - Edunet Microservices',
       script: 'tutor.service.js',
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
       instances: 1,
