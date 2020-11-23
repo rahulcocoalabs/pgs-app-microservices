@@ -125,13 +125,18 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.classDescription = params.classDescription;
   onlineClassObj.image = file.filename;
   onlineClassObj.isPaid = params.isPaid;
-  onlineClassObj.isPublic = params.isPublic;
   onlineClassObj.isPopular = false;
   if (params.isPaid === 'true') {
     onlineClassObj.isPaid = true;
     onlineClassObj.fee = params.fee;
   } else {
+    onlineClassObj.isPaid = false;
     onlineClassObj.fee = null;
+  }
+  if (params.isPublic === 'true') {
+    onlineClassObj.isPaid = true;
+  } else {
+    onlineClassObj.isPublic = false;
   }
   onlineClassObj.availableDays = params.availableDays;
   onlineClassObj.availableTime = params.availableTime;
