@@ -64,7 +64,7 @@ exports.createOnlineClass = async (req, res) => {
     }
     if (!file) {
       errors.push({
-        field: "file",
+        field: "image",
         message: "Please select a class image"
       })
     }
