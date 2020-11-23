@@ -49,10 +49,12 @@ exports.createOnlineClass = async (req, res) => {
   }
   var params = req.body;
   var file = req.file;
-
+  console.log("file")
+  console.log(file)
+  console.log("file")
   if (!file || !params.tutorSubjectId || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
-    ||  params.isPublic === undefined
+    || params.isPublic === undefined
   ) {
     var errors = [];
 
@@ -117,7 +119,7 @@ exports.createOnlineClass = async (req, res) => {
       code: 200
     });
   }
-  
+
   var onlineClassObj = {};
   onlineClassObj.userId = userId;
   onlineClassObj.tutorClassId = params.tutorClassId;
@@ -220,16 +222,16 @@ exports.listOnlineClasses = async (req, res) => {
   var params = req.query;
 
   var findCriteria = {};
-  if(params.isPublic !== undefined && params.isPublic === 'true'){
+  if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
   }
-  if(params.isPublic !== undefined && params.isPublic === 'false'){
+  if (params.isPublic !== undefined && params.isPublic === 'false') {
     findCriteria.isPublic = false;
   }
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
-  
+
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
@@ -260,19 +262,19 @@ exports.getStudentHome = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
-  
-  var tabCheckData = await checkYourTab(params,userId);
+
+  var tabCheckData = await checkYourTab(params, userId);
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
 
 
-var findCriteria = {};
-     if(tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)){
-       findCriteria.isPublic = tabCheckData.isPublic
-     }else if(tabCheckData.isFavourite && tabCheckData.isPublic === null){
-      // findCriteria.isFavourite = isFavourite
-     }
+  var findCriteria = {};
+  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+    findCriteria.isPublic = tabCheckData.isPublic
+  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
+    // findCriteria.isFavourite = isFavourite
+  }
   findCriteria.isPopular = true;
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -287,9 +289,9 @@ var findCriteria = {};
 
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
-  if(tabCheckData.isFavourite && tabCheckData.isPublic === null){
+  if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
-   }
+  }
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
@@ -300,13 +302,13 @@ var findCriteria = {};
   }
 
   perPage = classConfig.latestInHomeResultsPerPage;
-  
+
 
   findCriteria = {};
-  if(tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)){
+  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
     findCriteria.isPublic = tabCheckData.isPublic
-  }else if(tabCheckData.isFavourite && tabCheckData.isPublic === null){
-   // findCriteria.isFavourite = isFavourite
+  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
+    // findCriteria.isFavourite = isFavourite
   }
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -407,41 +409,44 @@ exports.requestAppointment = async (req, res) => {
       code: 200
     };
   }
-// var checkClassIsPrivateResp = await checkClassIsPrivate(params);
-var checkAppointmentRequestResp = await checkAppointmentRequest(params,userId);
-if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
-  return res.send(checkAppointmentRequestResp);
+  var checkClassIsPrivateResp = await checkClassIsPrivate(params);
+  if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
+    return checkClassIsPrivateResp;
+  }
+  var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
+  if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
+    return res.send(checkAppointmentRequestResp);
   }
 
-var appointmentClassRequestObj = {};
+  var appointmentClassRequestObj = {};
 
-appointmentClassRequestObj.userId = userId;
-appointmentClassRequestObj.tutorId = params.tutorId;
-appointmentClassRequestObj.tutorClassId = params.tutorClassId;
-appointmentClassRequestObj.tutorSubjectId = params.tutorSubjectId;
-appointmentClassRequestObj.isApproved = false;
-appointmentClassRequestObj.isRejected = false;
-appointmentClassRequestObj.status = 1;
-appointmentClassRequestObj.tsCreatedAt = Date.now();
-appointmentClassRequestObj.tsModifiedAt = null;
+  appointmentClassRequestObj.userId = userId;
+  appointmentClassRequestObj.tutorId = params.tutorId;
+  appointmentClassRequestObj.tutorClassId = params.tutorClassId;
+  appointmentClassRequestObj.tutorSubjectId = params.tutorSubjectId;
+  appointmentClassRequestObj.isApproved = false;
+  appointmentClassRequestObj.isRejected = false;
+  appointmentClassRequestObj.status = 1;
+  appointmentClassRequestObj.tsCreatedAt = Date.now();
+  appointmentClassRequestObj.tsModifiedAt = null;
 
-var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
-var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
-.catch(err => {
-  return {
-    success: 0,
-    message: 'Something went wrong while save appointment class request',
-    error: err
+  var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
+  var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while save appointment class request',
+        error: err
+      }
+    })
+  if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
+    return res.send(newAppointmentClassRequestData);
   }
-})
-if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
-return res.send(newAppointmentClassRequestData);
-}
 
-return res.send({
-  success : 1,
-  message : 'Appointment request sent successfully'
-})
+  return res.send({
+    success: 1,
+    message: 'Appointment request sent successfully'
+  })
 
 }
 
@@ -610,102 +615,126 @@ async function listTutors(findCriteria, perPage, page) {
 
 }
 
-async function checkAppointmentRequest(params,userId){
+async function checkAppointmentRequest(params, userId) {
   var checkAppountmentData = await AppointmentClassRequest.findOne({
-    userId ,
-    tutorId : params.tutorId,
-    classId : params.classId,
-    status : 1
+    userId,
+    tutorId: params.tutorId,
+    classId: params.classId,
+    status: 1
   })
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while save appointment class request',
-      error: err
-    }
-  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while save appointment class request',
+        error: err
+      }
+    })
   if (checkAppountmentData && (checkAppountmentData.success !== undefined) && (checkAppountmentData.success === 0)) {
-  return checkAppountmentData;
+    return checkAppountmentData;
   }
-  if(checkAppountmentData){
-    if(!checkAppountmentData.isApproved && !checkAppountmentData.isRejected){
+  if (checkAppountmentData) {
+    if (!checkAppountmentData.isApproved && !checkAppountmentData.isRejected) {
       return {
-        success : 0,
-        message : 'Already sent an appointment request'
+        success: 0,
+        message: 'Already sent an appointment request'
       }
-    }else if(checkAppountmentData.isApproved){
+    } else if (checkAppountmentData.isApproved) {
       return {
-        success : 0,
-        message : 'Already sent an appointment request and your request already apporoved'
+        success: 0,
+        message: 'Already sent an appointment request and your request already apporoved'
       }
-    }else{
+    } else {
       return {
-        success : 1,
-        message : 'Your old appontment request rejected'
+        success: 1,
+        message: 'Your old appontment request rejected'
       }
     }
 
-  }else{
+  } else {
     return {
-      success : 1,
-      message : 'New appoinment request'
+      success: 1,
+      message: 'New appoinment request'
     }
   }
 }
 
 
-async function checkYourTab(params,userId){
-  if(!params.tabType){
+async function checkYourTab(params, userId) {
+  if (!params.tabType) {
     return {
       success: 0,
       message: "Tab type required"
     }
   }
-  if(params.tabType !== constants.PUBLIC_TAB 
+  if (params.tabType !== constants.PUBLIC_TAB
     && params.tabType !== constants.PRIVATE_TAB
-     && params.tabType !==constants.FAVOURITES_TAB
-     && params.tabType !==constants.OFFLINE_TAB){
-      return {
-        success: 0,
-        message: "Invalid tab"
-      }
-     }
+    && params.tabType !== constants.FAVOURITES_TAB
+    && params.tabType !== constants.OFFLINE_TAB) {
+    return {
+      success: 0,
+      message: "Invalid tab"
+    }
+  }
 
-     if(params.tabType === constants.PUBLIC_TAB){
-       console.log("inside public");
-      return {
-        success : 1,
-        isPublic : true,
-        isFavourite : null,
-        message : 'Public tab'
-      }
-     }else if(params.tabType === constants.PRIVATE_TAB){
-      return {
-        success : 1,
-        isPublic : false,
-        isFavourite : null,
-        message : 'Private tab'
-      }
-     }else if(params.tabType === constants.FAVOURITES_TAB){
-       return {
-        success : 1,
-        isFavourite : true,
-        isPublic : null,
-        message : 'Favourites tab'
-      }
-     }else{
-      return {
-        success : 1,
-        isFavourite : null,
-        isPublic : null,
-        message : 'Offline tab'
-      }
-     }
+  if (params.tabType === constants.PUBLIC_TAB) {
+    console.log("inside public");
+    return {
+      success: 1,
+      isPublic: true,
+      isFavourite: null,
+      message: 'Public tab'
+    }
+  } else if (params.tabType === constants.PRIVATE_TAB) {
+    return {
+      success: 1,
+      isPublic: false,
+      isFavourite: null,
+      message: 'Private tab'
+    }
+  } else if (params.tabType === constants.FAVOURITES_TAB) {
+    return {
+      success: 1,
+      isFavourite: true,
+      isPublic: null,
+      message: 'Favourites tab'
+    }
+  } else {
+    return {
+      success: 1,
+      isFavourite: null,
+      isPublic: null,
+      message: 'Offline tab'
+    }
+  }
 }
 
 
-// async function checkClassIsPrivate(params){
-// //   var onlineClassData = await OnlineCLass.findOne({
-// //     _id : params
-// //   })
-// // }
+async function checkClassIsPrivate(params) {
+  var onlineClassData = await OnlineCLass.findOne({
+    _id: params.classId,
+    isPublic: false,
+    isApproved: true,
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking private class',
+        error: err
+      }
+    })
+  if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
+    return onlineClassData;
+  }
+  if(onlineClassData){
+    return {
+      success: 1,
+      message: 'Private class',
+    }
+  }else{
+    return {
+      success: 0,
+      message: 'Invalid private class',
+    }
+  }
+}
