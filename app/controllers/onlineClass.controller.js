@@ -266,7 +266,9 @@ exports.getStudentHome = async (req, res) => {
     return res.send(tabCheckData);
   }
 
-
+console.log("tabCheckData")
+console.log(tabCheckData)
+console.log("tabCheckData")
      if(tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)){
        findCriteria.isPublic = tabCheckData.isPublic
      }else if(tabCheckData.isFavourite && tabCheckData.isPublic === null){
@@ -406,7 +408,7 @@ exports.requestAppointment = async (req, res) => {
       code: 200
     };
   }
-
+// var checkClassIsPrivateResp = await checkClassIsPrivate(params);
 var checkAppointmentRequestResp = await checkAppointmentRequest(params,userId);
 if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
   return res.send(checkAppointmentRequestResp);
@@ -671,6 +673,7 @@ async function checkYourTab(params,userId){
      }
 
      if(params.tabType === constants.PUBLIC_TAB){
+       console.log("inside public");
       return {
         success : 1,
         isPublic : true,
@@ -700,3 +703,10 @@ async function checkYourTab(params,userId){
       }
      }
 }
+
+
+// async function checkClassIsPrivate(params){
+// //   var onlineClassData = await OnlineCLass.findOne({
+// //     _id : params
+// //   })
+// // }
