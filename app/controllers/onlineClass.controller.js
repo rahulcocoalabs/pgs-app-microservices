@@ -266,9 +266,8 @@ exports.getStudentHome = async (req, res) => {
     return res.send(tabCheckData);
   }
 
-console.log("tabCheckData")
-console.log(tabCheckData)
-console.log("tabCheckData")
+
+var findCriteria = {};
      if(tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)){
        findCriteria.isPublic = tabCheckData.isPublic
      }else if(tabCheckData.isFavourite && tabCheckData.isPublic === null){
