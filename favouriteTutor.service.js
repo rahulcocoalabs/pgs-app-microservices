@@ -1,4 +1,4 @@
 var server = require('./server.js'); 
-var routes = ['favouriteTotor','favouriteClass'];
+var routes = ['favouriteTutor'];
 var serviceName = "favouriteTutors";
 server.start(serviceName, routes);
