@@ -43,19 +43,19 @@ const karmaConfig = config.karma;
 exports.createOnlineClass = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-  console.log("file")
-  console.log(file)
-  console.log("file")
-  console.log("params")
-  console.log(params)
-  console.log("params")
+
   var tutorCheck = await checkUserIsTutor(userId);
   if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
     return res.send(tutorCheck);
   }
   var params = req.body;
   var file = req.file;
-
+  console.log("file")
+  console.log(file)
+  console.log("file")
+  console.log("params")
+  console.log(params)
+  console.log("params")
   if (!file || !params.tutorSubjectId || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined
