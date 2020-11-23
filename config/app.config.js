@@ -208,7 +208,7 @@ module.exports = {
         popularInHomeResultsPerPage : 5,
         latestInHomeResultsPerPage : 5,
         resultsPerPage: 10,
-        authorImageBase: relativeCommonPath + "classes/",
+        imageUploadPath: relativeCommonPath + "classes/",
         imageBase: commonPath + "classes/"
     }
    

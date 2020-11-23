@@ -19,6 +19,7 @@ const TutorCategory = require('../models/tutorCategory.model');
 const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
+const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
@@ -42,15 +43,22 @@ const karmaConfig = config.karma;
 exports.createOnlineClass = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
+
   var tutorCheck = await checkUserIsTutor(userId);
   if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
     return res.send(tutorCheck);
   }
   var params = req.body;
   var file = req.file;
-
+  console.log("file")
+  console.log(file)
+  console.log("file")
+  console.log("params")
+  console.log(params)
+  console.log("params")
   if (!file || !params.tutorSubjectId || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
-    || (params.isPaid === true && !params.fee) || !params.availableDays || !params.availableTime
+    || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
+    || params.isPublic === undefined
   ) {
     var errors = [];
 
@@ -62,8 +70,8 @@ exports.createOnlineClass = async (req, res) => {
     }
     if (!file) {
       errors.push({
-        field: "file",
-        message: "Please seect a class image"
+        field: "image",
+        message: "Please select a class image"
       })
     }
     if (!req.body.tutorClassId) {
@@ -84,10 +92,16 @@ exports.createOnlineClass = async (req, res) => {
         message: "isPaid cannot be empty"
       })
     }
-    if (params.isPaid === true && !params.fee) {
+    if (params.isPaid === 'true' && !params.fee) {
       errors.push({
         field: "fee",
         message: "fee cannot be empty"
+      })
+    }
+    if (params.isPublic === undefined) {
+      errors.push({
+        field: "isPublic",
+        message: "isPublic cannot be empty"
       })
     }
     if (!req.body.availableDays) {
@@ -118,10 +132,17 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.image = file.filename;
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.isPopular = false;
-  if (params.isPaid) {
+  if (params.isPaid === 'true') {
+    onlineClassObj.isPaid = true;
     onlineClassObj.fee = params.fee;
   } else {
+    onlineClassObj.isPaid = false;
     onlineClassObj.fee = null;
+  }
+  if (params.isPublic === 'true') {
+    onlineClassObj.isPublic = true;
+  } else {
+    onlineClassObj.isPublic = false;
   }
   onlineClassObj.availableDays = params.availableDays;
   onlineClassObj.availableTime = params.availableTime;
@@ -203,7 +224,18 @@ exports.listOnlineClasses = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+
   var findCriteria = {};
+  if (params.isPublic !== undefined && params.isPublic === 'true') {
+    findCriteria.isPublic = true;
+  }
+  if (params.isPublic !== undefined && params.isPublic === 'false') {
+    findCriteria.isPublic = false;
+  }
+  if (params.isPopular === 'true') {
+    findCriteria.isPopular = true;
+  }
+
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
@@ -223,7 +255,7 @@ exports.listTutorList = async (req, res) => {
   }
   findCriteria.isTutor = true;
   findCriteria.status = 1;
- 
+
 
   var listTutorResp = await listTutors(findCriteria, params.perPage, params.page)
   return res.send(listTutorResp);
@@ -235,7 +267,18 @@ exports.getStudentHome = async (req, res) => {
   var userId = userData.userId;
   var params = req.query;
 
+  var tabCheckData = await checkYourTab(params, userId);
+  if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
+    return res.send(tabCheckData);
+  }
+
+
   var findCriteria = {};
+  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+    findCriteria.isPublic = tabCheckData.isPublic
+  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
+    // findCriteria.isFavourite = isFavourite
+  }
   findCriteria.isPopular = true;
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -250,6 +293,9 @@ exports.getStudentHome = async (req, res) => {
 
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
+  if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
+    // findCriteria.isFavourite = isFavourite
+  }
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
@@ -261,7 +307,13 @@ exports.getStudentHome = async (req, res) => {
 
   perPage = classConfig.latestInHomeResultsPerPage;
 
+
   findCriteria = {};
+  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+    findCriteria.isPublic = tabCheckData.isPublic
+  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
+    // findCriteria.isFavourite = isFavourite
+  }
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
@@ -283,51 +335,125 @@ exports.getStudentHome = async (req, res) => {
 
 }
 
-exports.getTutorDetails = async(req,res) =>{
+exports.getTutorDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
   var tutorId = req.params.id;
-  
+
   var findCriteria = {};
   findCriteria._id = tutorId;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
   var tutorDetails = await User.findOne(findCriteria)
-  .populate([{
-    path: 'tutorCourseIds',
-  }, {
-    path: 'tutorSubjectIds',
-  }, {
-    path: 'tutorClassIds',
-  }, {
-    path: 'tutorCategoryIds',
-  }])
-  .catch(err => {
+    .populate([{
+      path: 'tutorCourseIds',
+    }, {
+      path: 'tutorSubjectIds',
+    }, {
+      path: 'tutorClassIds',
+    }, {
+      path: 'tutorCategoryIds',
+    }])
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get tutor details',
+        error: err
+      }
+    })
+  if (tutorDetails && (tutorDetails.success !== undefined) && (tutorDetails.success === 0)) {
+    return res.send(tutorDetails);
+  }
+  if (tutorDetails) {
+    return res.send({
+      success: 1,
+      item: tutorDetails,
+      tutorVideoBase: tutorConfig.videoBase,
+      tutorImageBase: usersConfig.imageBase,
+      message: 'Tutor details'
+    })
+  } else {
+    return res.send({
+      success: 0,
+      message: "Tutor not exists"
+    })
+  }
+}
+
+exports.requestAppointment = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var params = req.body;
+
+  if (!params.tutorSubjectId || !params.tutorClassId || !params.tutorId) {
+    var errors = [];
+    if (!params.tutorSubjectId) {
+      errors.push({
+        field: "tutorSubjectId",
+        message: "subject id missing"
+      });
+    }
+    if (!params.tutorClassId) {
+      errors.push({
+        field: "tutorClassId",
+        message: "class id missing"
+      });
+    }
+    if (!params.tutorId) {
+      errors.push({
+        field: "tutorId",
+        message: "tutor id missing"
+      });
+    }
     return {
       success: 0,
-      message: 'Something went wrong while get tutor details',
-      error: err
-    }
-  })
-if (tutorDetails && (tutorDetails.success !== undefined) && (tutorDetails.success === 0)) {
-  return res.send(tutorDetails);
-}
-if(tutorDetails){
+      errors: errors,
+      code: 200
+    };
+  }
+  var checkClassIsPrivateResp = await checkClassIsPrivate(params);
+  if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
+    return checkClassIsPrivateResp;
+  }
+  var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
+  if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
+    return res.send(checkAppointmentRequestResp);
+  }
+
+  var appointmentClassRequestObj = {};
+
+  appointmentClassRequestObj.userId = userId;
+  appointmentClassRequestObj.tutorId = params.tutorId;
+  appointmentClassRequestObj.tutorClassId = params.tutorClassId;
+  appointmentClassRequestObj.tutorSubjectId = params.tutorSubjectId;
+  appointmentClassRequestObj.isApproved = false;
+  appointmentClassRequestObj.isRejected = false;
+  appointmentClassRequestObj.status = 1;
+  appointmentClassRequestObj.tsCreatedAt = Date.now();
+  appointmentClassRequestObj.tsModifiedAt = null;
+
+  var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
+  var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while save appointment class request',
+        error: err
+      }
+    })
+  if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
+    return res.send(newAppointmentClassRequestData);
+  }
+
   return res.send({
     success: 1,
-    item: tutorDetails,
-    tutorVideoBase: tutorConfig.videoBase,
-    tutorImageBase: usersConfig.imageBase,
-    message: 'Tutor details'
+    message: 'Appointment request sent successfully'
   })
-}else{
-  return res.send({
-    success: 0,
-    message: "Tutor not exists"
-  })
+
 }
-}
+
 
 async function checkUserIsTutor(userId) {
   var userData = await User.findOne({
@@ -491,4 +617,128 @@ async function listTutors(findCriteria, perPage, page) {
     message: 'List tutors'
   }
 
+}
+
+async function checkAppointmentRequest(params, userId) {
+  var checkAppountmentData = await AppointmentClassRequest.findOne({
+    userId,
+    tutorId: params.tutorId,
+    classId: params.classId,
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while save appointment class request',
+        error: err
+      }
+    })
+  if (checkAppountmentData && (checkAppountmentData.success !== undefined) && (checkAppountmentData.success === 0)) {
+    return checkAppountmentData;
+  }
+  if (checkAppountmentData) {
+    if (!checkAppountmentData.isApproved && !checkAppountmentData.isRejected) {
+      return {
+        success: 0,
+        message: 'Already sent an appointment request'
+      }
+    } else if (checkAppountmentData.isApproved) {
+      return {
+        success: 0,
+        message: 'Already sent an appointment request and your request already apporoved'
+      }
+    } else {
+      return {
+        success: 1,
+        message: 'Your old appontment request rejected'
+      }
+    }
+
+  } else {
+    return {
+      success: 1,
+      message: 'New appoinment request'
+    }
+  }
+}
+
+
+async function checkYourTab(params, userId) {
+  if (!params.tabType) {
+    return {
+      success: 0,
+      message: "Tab type required"
+    }
+  }
+  if (params.tabType !== constants.PUBLIC_TAB
+    && params.tabType !== constants.PRIVATE_TAB
+    && params.tabType !== constants.FAVOURITES_TAB
+    && params.tabType !== constants.OFFLINE_TAB) {
+    return {
+      success: 0,
+      message: "Invalid tab"
+    }
+  }
+
+  if (params.tabType === constants.PUBLIC_TAB) {
+    console.log("inside public");
+    return {
+      success: 1,
+      isPublic: true,
+      isFavourite: null,
+      message: 'Public tab'
+    }
+  } else if (params.tabType === constants.PRIVATE_TAB) {
+    return {
+      success: 1,
+      isPublic: false,
+      isFavourite: null,
+      message: 'Private tab'
+    }
+  } else if (params.tabType === constants.FAVOURITES_TAB) {
+    return {
+      success: 1,
+      isFavourite: true,
+      isPublic: null,
+      message: 'Favourites tab'
+    }
+  } else {
+    return {
+      success: 1,
+      isFavourite: null,
+      isPublic: null,
+      message: 'Offline tab'
+    }
+  }
+}
+
+
+async function checkClassIsPrivate(params) {
+  var onlineClassData = await OnlineCLass.findOne({
+    _id: params.classId,
+    isPublic: false,
+    isApproved: true,
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking private class',
+        error: err
+      }
+    })
+  if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
+    return onlineClassData;
+  }
+  if(onlineClassData){
+    return {
+      success: 1,
+      message: 'Private class',
+    }
+  }else{
+    return {
+      success: 0,
+      message: 'Invalid private class',
+    }
+  }
 }

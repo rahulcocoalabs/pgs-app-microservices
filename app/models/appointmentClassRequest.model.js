@@ -23,18 +23,11 @@ var options = {
 };
 
 
-const OnlineClassSchema = mongoose.Schema({
+const AppointmentClassRequestSchema = mongoose.Schema({
     userId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    tutorId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     tutorSubjectId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' },
     tutorClassId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' },
-    image : String,
-    classDescription : String,
-    isPaid: Boolean,
-    isPopular: Boolean,
-    fee: Number,
-    availableDays : String,
-    availableTime : String,
-    isPublic : Boolean,
     isApproved : Boolean,
     isRejected : Boolean,
     status : Number,
@@ -42,4 +35,4 @@ const OnlineClassSchema = mongoose.Schema({
     tsModifiedAt : Number
 }, options)
 
-module.exports = mongoose.model('OnlineClass', OnlineClassSchema, 'OnlineClasses');
+module.exports = mongoose.model('AppointmentClassRequest', AppointmentClassRequestSchema, 'AppointmentClassRequests');

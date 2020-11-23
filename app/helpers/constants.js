@@ -68,7 +68,12 @@ module.exports = Object.freeze({
     SEND_GRID_AUTH_KEY : "SEND_GRID_API_KEY",
 
     GOOGLE_PROVIDER : "GOOGLE",
-    FACEBOOK_PROVIDER : "FACEBOOK"
+    FACEBOOK_PROVIDER : "FACEBOOK",
+
+    PUBLIC_TAB : 'public',
+    PRIVATE_TAB : 'private',
+    FAVOURITES_TAB : 'favourites',
+    OFFLINE_TAB : 'offline',
 
 
 });
