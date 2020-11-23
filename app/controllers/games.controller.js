@@ -115,7 +115,7 @@ exports.didClickDownloadButton = async (req, res) => {
   }
 
   try {
-    var response = await Game.update({ status: 1, _id: req.params.id }, { $inc: { seq: 1 } });
+    var response = await Game.updateOne({ status: 1, _id: req.params.id }, { $inc: { viewCount: 1 } });
 
     if (response){
       return res.status(200).json({
