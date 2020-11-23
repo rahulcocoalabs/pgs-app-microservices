@@ -51,7 +51,7 @@ exports.createOnlineClass = async (req, res) => {
   var file = req.file;
 
   if (!file || !params.tutorSubjectId || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
-    || (params.isPaid === true && !params.fee) || !params.availableDays || !params.availableTime
+    || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     ||  params.isPublic === undefined
   ) {
     var errors = [];
@@ -65,7 +65,7 @@ exports.createOnlineClass = async (req, res) => {
     if (!file) {
       errors.push({
         field: "file",
-        message: "Please seect a class image"
+        message: "Please select a class image"
       })
     }
     if (!req.body.tutorClassId) {
@@ -86,7 +86,7 @@ exports.createOnlineClass = async (req, res) => {
         message: "isPaid cannot be empty"
       })
     }
-    if (params.isPaid === true && !params.fee) {
+    if (params.isPaid === 'true' && !params.fee) {
       errors.push({
         field: "fee",
         message: "fee cannot be empty"
@@ -127,7 +127,8 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.isPublic = params.isPublic;
   onlineClassObj.isPopular = false;
-  if (params.isPaid) {
+  if (params.isPaid === 'true') {
+    onlineClassObj.isPaid = true;
     onlineClassObj.fee = params.fee;
   } else {
     onlineClassObj.fee = null;
