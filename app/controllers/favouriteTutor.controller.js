@@ -47,7 +47,7 @@ exports.addfavourite = async (req, res) => {
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
         });
-
+        console.log(newFavourite);
         var info = await newFavourite.save();
 
 
