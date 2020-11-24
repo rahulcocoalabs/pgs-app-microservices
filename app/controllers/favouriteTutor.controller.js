@@ -212,7 +212,7 @@ exports.removefavouriteClass = async (req, res) => {
             code: 200
         });
     }
-
+    console.log(userId,params.id)
     try {
         var update = await Class.updateOne({ status: 1, userId: userId,classId:params.id }, {
             status: 0
