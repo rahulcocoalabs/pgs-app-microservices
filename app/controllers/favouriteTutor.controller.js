@@ -17,7 +17,7 @@ exports.addfavourite = async (req, res) => {
 
     var userData = req.identity.data;
     var userId = userData.userId;
-    var params = req.params;
+    var params = req.body;
 
     errors = [];
     if (!params.id) {
@@ -35,7 +35,7 @@ exports.addfavourite = async (req, res) => {
         });
     }
 
-    return res.send(params.id);
+    //return res.send(params.id);
 
     try {
         const newFavourite = new Favourite({
