@@ -14,7 +14,7 @@ var moment = require('moment');
 
 
 exports.addfavourite = async (req, res) => {
-   
+
     var userData = req.identity.data;
     var userId = userData.userId;
     var params = req.params;
@@ -38,35 +38,82 @@ exports.addfavourite = async (req, res) => {
     try {
         const newFavourite = new Favourite({
             userId: userId,
-            tutorId: params.tutorId,
-           
+            tutorId: params.id,
+
             status: 1,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
         });
-    
+
         var info = await newFavourite.save();
 
-        
 
-        var update = await  User.UpdateOne({status:1,_id:userId},{
+
+        var update = await User.UpdateOne({ status: 1, _id: userId }, {
             $push: {
                 favouriteTutor: params.id
             }
-    
-          })
-          if (update && info){
-            return res.status(200).send({
-                success:1,
-                message:"added to favourites"
-            })
-          }
-    }
-    catch (error){
 
+        })
+        if (update && info) {
+            return res.status(200).send({
+                success: 1,
+                message: "added to favourites"
+            })
+        }
+    }
+    catch (error) {
+        return res.status(201).send({
+            success: 1,
+            message:error.message
+        })
     }
 
 }
+
+
+exports.deletefavourite = async (req, res) => {
+
+    var userData = req.identity.data;
+    var userId = userData.userId;
+    var params = req.params;
+
+    errors = [];
+    if (!params.id) {
+        errors.push({
+            field: "tutorId",
+            message: "tutorId  cannot be empty"
+        });
+    }
+
+    if (errors.length) {
+        return res.status(200).send({
+            success: 0,
+            errors: errors,
+            code: 200
+        });
+    }
+
+    try {
+        var update = await User.UpdateOne({ status: 1, _id: userId }, {
+            status: 0
+        })
+        if (update) {
+            return res.status(200).send({
+                success: 1,
+                message: "added to favourites"
+            })
+        }
+    }
+    catch (error) {
+        return res.status(201).send({
+            success: 1,
+            message:error.message
+        })
+    }
+
+}
+
 
 exports.addFav = (req, res) => {
     var userData = req.identity.data;
@@ -129,7 +176,7 @@ exports.addFav = (req, res) => {
         const newFavourite = new Favourite({
             userId: userId,
             tutorId: params.tutorId,
-           
+
             status: 1,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null

@@ -1,7 +1,7 @@
 const auth = require('../middleware/auth.js');
 module.exports = (app) => {
     const favourites = require('../controllers/favouriteTutor.controller');
-    app.get('/favourites',auth, favourites.getUserFavourites);
+  //  app.get('/favourites',auth, favourites.getUserFavourites);
     app.post('/tutor/tutoradd/:id',auth,favourites.addfavourite);
-    app.delete('/favourites',auth,favourites.removeFav);
+    app.delete('/tutor/tutordelete/:id',auth,favourites.removefavourite);
 }
