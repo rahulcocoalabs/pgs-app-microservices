@@ -161,8 +161,8 @@ const UserSchema = mongoose.Schema({
     referralCode : String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
-    favouriteTutor : [ObjectId],
-    
+  //  favouriteTutor : [ObjectId],
+
     tutorCourseIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorCourse' }],
     tutorSubjectIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' }],
     tutorClassIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' }],
