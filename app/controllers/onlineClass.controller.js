@@ -82,7 +82,7 @@ exports.createOnlineClass = async (req, res) => {
       })
     }
 
-    if (!req.body.title) {
+    if (!params.title) {
       errors.push({
         field: "title",
         message: "title cannot be empty"
