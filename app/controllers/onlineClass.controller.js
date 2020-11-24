@@ -390,9 +390,7 @@ exports.requestAppointment = async (req, res) => {
   var userId = userData.userId;
 
   var params = req.body;
-console.log("params")
-console.log(params)
-console.log("params")
+
   if (!params.tutorSubjectId || !params.tutorClassId || !params.tutorId) {
     var errors = [];
     if (!params.tutorSubjectId) {
@@ -419,20 +417,13 @@ console.log("params")
       code: 200
     };
   }
-  var checkClassIsPrivateResp = await checkClassIsPrivate(params);
-  if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
-    return checkClassIsPrivateResp;
-  }
-  console.log("1checkClassIsPrivateResp")
-console.log(checkClassIsPrivateResp)
-console.log("checkClassIsPrivateResp")
+
+
   var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
   if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
     return res.send(checkAppointmentRequestResp);
   }
-  console.log("2checkAppointmentRequestResp")
-  console.log(checkAppointmentRequestResp)
-  console.log("checkAppointmentRequestResp")
+
   var appointmentClassRequestObj = {};
 
   appointmentClassRequestObj.userId = userId;
@@ -444,21 +435,19 @@ console.log("checkClassIsPrivateResp")
   appointmentClassRequestObj.status = 1;
   appointmentClassRequestObj.tsCreatedAt = Date.now();
   appointmentClassRequestObj.tsModifiedAt = null;
-console.log("3appointmentClassRequestObj")
-console.log(appointmentClassRequestObj)
-console.log("appointmentClassRequestObj")
-  // var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
-  // var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
-  //   .catch(err => {
-  //     return {
-  //       success: 0,
-  //       message: 'Something went wrong while save appointment class request',
-  //       error: err
-  //     }
-  //   })
-  // if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
-  //   return res.send(newAppointmentClassRequestData);
-  // }
+
+  var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
+  var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while save appointment class request',
+        error: err
+      }
+    })
+  if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
+    return res.send(newAppointmentClassRequestData);
+  }
 
   return res.send({
     success: 1,
@@ -728,7 +717,8 @@ async function checkYourTab(params, userId) {
 
 async function checkClassIsPrivate(params) {
   var onlineClassData = await OnlineCLass.findOne({
-    _id: params.classId,
+    _id: params.tutorClassId,
+    _id: params.tutorClassId,
     isPublic: false,
     isApproved: true,
     status: 1
@@ -746,7 +736,7 @@ async function checkClassIsPrivate(params) {
   console.log("onlineClassData")
   console.log(onlineClassData)
   console.log("onlineClassData")
-  if(onlineClassData){
+  if(onlineClassData && onlineClassData !== null){
     return {
       success: 1,
       message: 'Private class',
