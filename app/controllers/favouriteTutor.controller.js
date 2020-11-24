@@ -47,12 +47,20 @@ exports.addfavourite = async (req, res) => {
     
         var info = await newFavourite.save();
 
-        if (info){
+        
+
+        var update = await  User.UpdateOne({status:1,_id:userId},{
+            $push: {
+              favouriteTutor: params.id
+            }
+    
+          })
+          if (update && info){
             return res.status(200).send({
                 success:1,
                 message:"added to favourites"
             })
-        }
+          }
     }
     catch (error){
 
