@@ -49,18 +49,18 @@ exports.addfavourite = async (req, res) => {
 
 
 
-        var update = await User.UpdateOne({ status: 1, _id: userId }, {
-            $push: {
-                favouriteTutor: params.id
-            }
+        // var update = await User.UpdateOne({ status: 1, _id: userId }, {
+        //     $push: {
+        //         favouriteTutor: params.id
+        //     }
 
-        })
-        if (update && info) {
-            return res.status(200).send({
-                success: 1,
-                message: "added to favourites"
-            })
-        }
+        // })
+        // if (update && info) {
+        //     return res.status(200).send({
+        //         success: 1,
+        //         message: "added to favourites"
+        //     })
+        // }
     }
     catch (error) {
         return res.status(201).send({
@@ -95,7 +95,7 @@ exports.removefavourite = async (req, res) => {
     }
 
     try {
-        var update = await User.UpdateOne({ status: 1, userId: userId,tutorId:params.id }, {
+        var update = await Favourite.UpdateOne({ status: 1, userId: userId,tutorId:params.id }, {
             status: 0
         })
         if (update) {
