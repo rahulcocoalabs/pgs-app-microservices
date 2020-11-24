@@ -76,6 +76,8 @@ connectToMongoDb: function (dbConfig,callback) {
 // },
   start: function (serviceName, routes) {
     var that = this;
+    console.log('test1');
+    console.log(serviceName,routes);
     this.connectToDb(function (db) {
       var options = db
       var port = process.env.port ? process.env.port : null;
