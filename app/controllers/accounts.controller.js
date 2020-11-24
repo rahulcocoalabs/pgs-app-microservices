@@ -41,7 +41,7 @@ const EventBookings = require('../models/eventBooking.model.js');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
-ObjectId = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectID;
 var charitiesConfig = config.charities;
 var utilities = require('../components/utilities.component.js');
 const constants = require('../helpers/constants');
@@ -2383,16 +2383,16 @@ var appointmentData = await AppointmentClassRequest.findOne({
   isApproved : false,
   isRejected : false,
 })
-.populate([{
-  path: 'userId',
-  select: {
-    firstName: 1
-  }
-}, {
-  path: 'tutorSubjectId',
-}, {
-  path: 'tutorClassId',
-}])
+// .populate([{
+//   path: 'userId',
+//   select: {
+//     firstName: 1
+//   }
+// }, {
+//   path: 'tutorSubjectId',
+// }, {
+//   path: 'tutorClassId',
+// }])
 .catch(err => {
   return {
     success: 0,
