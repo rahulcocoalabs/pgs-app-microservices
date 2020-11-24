@@ -214,7 +214,7 @@ exports.removefavouriteClass = async (req, res) => {
     }
 
     try {
-        var update = await Class.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
+        var update = await Class.updateOne({ status: 1, userId: userId,classId:params.id }, {
             status: 0
         })
         if (update) {
