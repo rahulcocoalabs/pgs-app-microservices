@@ -51,7 +51,7 @@ exports.addfavourite = async (req, res) => {
 
         var update = await  User.UpdateOne({status:1,_id:userId},{
             $push: {
-              favouriteTutor: params.id
+                favouriteTutor: params.id
             }
     
           })
