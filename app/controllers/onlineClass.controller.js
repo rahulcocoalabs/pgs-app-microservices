@@ -57,7 +57,7 @@ exports.createOnlineClass = async (req, res) => {
   console.log(file)
   console.log("file")
  
-  if (!file || !params.tutorSubjectId || !params.title || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
+  if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined
   ) {
@@ -82,7 +82,7 @@ exports.createOnlineClass = async (req, res) => {
       })
     }
 
-    if (!params.title) {
+    if (!params.title || params.title === undefined) {
       errors.push({
         field: "title",
         message: "title cannot be empty"
