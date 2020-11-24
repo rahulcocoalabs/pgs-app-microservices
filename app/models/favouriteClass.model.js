@@ -45,4 +45,4 @@ FavouritesSchema.getBook = function(cb) {
 } */
 
 
-module.exports = mongoose.model('FavouriteClass', FavouriteClassSchema, 'FavouriteClasses');
+module.exports = mongoose.model('FavouriteClass', FavouriteClasschema, 'FavouriteClasses');
