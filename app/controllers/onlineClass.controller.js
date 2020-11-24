@@ -423,9 +423,7 @@ exports.requestAppointment = async (req, res) => {
   if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
     return res.send(checkAppointmentRequestResp);
   }
-  console.log("2checkAppointmentRequestResp")
-  console.log(checkAppointmentRequestResp)
-  console.log("checkAppointmentRequestResp")
+
   var appointmentClassRequestObj = {};
 
   appointmentClassRequestObj.userId = userId;
@@ -437,21 +435,19 @@ exports.requestAppointment = async (req, res) => {
   appointmentClassRequestObj.status = 1;
   appointmentClassRequestObj.tsCreatedAt = Date.now();
   appointmentClassRequestObj.tsModifiedAt = null;
-console.log("3appointmentClassRequestObj")
-console.log(appointmentClassRequestObj)
-console.log("appointmentClassRequestObj")
-  // var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
-  // var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
-  //   .catch(err => {
-  //     return {
-  //       success: 0,
-  //       message: 'Something went wrong while save appointment class request',
-  //       error: err
-  //     }
-  //   })
-  // if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
-  //   return res.send(newAppointmentClassRequestData);
-  // }
+
+  var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
+  var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while save appointment class request',
+        error: err
+      }
+    })
+  if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
+    return res.send(newAppointmentClassRequestData);
+  }
 
   return res.send({
     success: 1,
