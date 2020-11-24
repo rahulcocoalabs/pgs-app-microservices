@@ -41,13 +41,13 @@ exports.addfavourite = async (req, res) => {
     try {
         const newFavourite = new Favourite({
             userId: userId,
-            tutorId: "hi",
+            tutorId: params.id,
 
             status: 1,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
         });
-
+        console.log(newFavourite);
         var info = await newFavourite.save();
 
 
@@ -58,12 +58,12 @@ exports.addfavourite = async (req, res) => {
         //     }
 
         // })
-        // if (update && info) {
-        //     return res.status(200).send({
-        //         success: 1,
-        //         message: "added to favourites"
-        //     })
-        // }
+        if (info) {
+            return res.status(200).send({
+                success: 1,
+                message: "tutor added to your favourites"
+            })
+        }
     }
     catch (error) {
         return res.status(201).send({
