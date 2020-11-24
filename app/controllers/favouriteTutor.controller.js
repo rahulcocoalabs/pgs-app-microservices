@@ -72,7 +72,7 @@ exports.addfavourite = async (req, res) => {
 }
 
 
-exports.deletefavourite = async (req, res) => {
+exports.removefavourite = async (req, res) => {
 
     var userData = req.identity.data;
     var userId = userData.userId;
