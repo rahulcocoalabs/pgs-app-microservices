@@ -2893,6 +2893,15 @@ async function checkUserIsTutor(userId){
     _id : userId,
     status : 1
   },project)
+  .populate([{
+    path: 'tutorCourseIds',
+  }, {
+    path: 'tutorSubjectIds',
+  }, {
+    path: 'tutorClassIds',
+  }, {
+    path: 'tutorCategoryIds',
+  }])
   .catch(err => {
     return {
       success: 0,
