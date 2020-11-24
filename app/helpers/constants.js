@@ -75,5 +75,8 @@ module.exports = Object.freeze({
     FAVOURITES_TAB : 'favourites',
     OFFLINE_TAB : 'offline',
 
+    APPROVED_STATUS : 'approved',
+    REJECTED_STATUS : 'rejected',
+
 
 });
