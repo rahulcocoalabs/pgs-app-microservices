@@ -2550,7 +2550,9 @@ if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppoin
   return res.send(checkAppointment);
 }
 if(checkAppointment){
-  if(checkAppointment.isApproved)
+  if(checkAppointment.isApproved){
+    
+  }
 
 }else{
   return {
