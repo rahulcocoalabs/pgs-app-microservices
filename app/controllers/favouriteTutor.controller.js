@@ -14,7 +14,7 @@ var moment = require('moment');
 
 
 exports.addfavourite = async (req, res) => {
-
+    return res.send("ok")
     var userData = req.identity.data;
     var userId = userData.userId;
     var params = req.query;
