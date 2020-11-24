@@ -2383,16 +2383,16 @@ var appointmentData = await AppointmentClassRequest.findOne({
   isApproved : false,
   isRejected : false,
 })
-.populate([{
-  path: 'userId',
-  select: {
-    firstName: 1
-  }
-}, {
-  path: 'tutorSubjectId',
-}, {
-  path: 'tutorClassId',
-}])
+// .populate([{
+//   path: 'userId',
+//   select: {
+//     firstName: 1
+//   }
+// }, {
+//   path: 'tutorSubjectId',
+// }, {
+//   path: 'tutorClassId',
+// }])
 .catch(err => {
   return {
     success: 0,
