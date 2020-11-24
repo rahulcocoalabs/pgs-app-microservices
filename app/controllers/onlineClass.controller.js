@@ -421,11 +421,16 @@ exports.requestAppointment = async (req, res) => {
   if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
     return checkClassIsPrivateResp;
   }
+  console.log("1checkClassIsPrivateResp")
+console.log(checkClassIsPrivateResp)
+console.log("checkClassIsPrivateResp")
   var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
   if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
     return res.send(checkAppointmentRequestResp);
   }
-
+  console.log("2checkAppointmentRequestResp")
+  console.log(checkAppointmentRequestResp)
+  console.log("checkAppointmentRequestResp")
   var appointmentClassRequestObj = {};
 
   appointmentClassRequestObj.userId = userId;
@@ -437,7 +442,7 @@ exports.requestAppointment = async (req, res) => {
   appointmentClassRequestObj.status = 1;
   appointmentClassRequestObj.tsCreatedAt = Date.now();
   appointmentClassRequestObj.tsModifiedAt = null;
-console.log("appointmentClassRequestObj")
+console.log("3appointmentClassRequestObj")
 console.log(appointmentClassRequestObj)
 console.log("appointmentClassRequestObj")
   // var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
