@@ -17,10 +17,10 @@ exports.addfavourite = async (req, res) => {
    
     var userData = req.identity.data;
     var userId = userData.userId;
-    var params = req.query;
+    var params = req.params;
 
     errors = [];
-    if (!params.tutorId) {
+    if (!params.id) {
         errors.push({
             field: "tutorId",
             message: "tutorId  cannot be empty"
