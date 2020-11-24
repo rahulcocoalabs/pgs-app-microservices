@@ -35,6 +35,8 @@ exports.addfavourite = async (req, res) => {
         });
     }
 
+    return res.send(params.id);
+
     try {
         const newFavourite = new Favourite({
             userId: userId,
@@ -101,7 +103,7 @@ exports.removefavourite = async (req, res) => {
         if (update) {
             return res.status(200).send({
                 success: 1,
-                message: "added to favourites"
+                message: "removed from favourites"
             })
         }
         else {
