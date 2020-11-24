@@ -28,6 +28,7 @@ const OnlineClassSchema = mongoose.Schema({
     tutorSubjectId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' },
     tutorClassId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' },
     image : String,
+    title : String,
     classDescription : String,
     isPaid: Boolean,
     isPopular: Boolean,

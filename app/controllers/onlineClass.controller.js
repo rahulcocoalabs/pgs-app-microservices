@@ -134,7 +134,7 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.classDescription = params.classDescription;
   onlineClassObj.image = file.filename;
   onlineClassObj.isPaid = params.isPaid;
-  // onlineClassObj.tit = params.isPaid;
+  onlineClassObj.title = params.title;
   onlineClassObj.isPopular = false;
   if (params.isPaid === 'true') {
     onlineClassObj.isPaid = true;
