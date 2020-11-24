@@ -11,10 +11,72 @@ var utilities = require('../components/utilities.component.js');
 var config = require('../../config/app.config.js');
 var favouritesConfig = config.favourites;
 var moment = require('moment');
+var mongoose = require('mongoose');
 
 
 exports.addfavourite = async (req, res) => {
-   
+
+    var userData = req.identity.data;
+    var userId = userData.userId;
+    var params = req.body;
+
+    errors = [];
+    if (!params.id) {
+        errors.push({
+            field: "tutorId",
+            message: "tutorId  cannot be empty"
+        });
+    }
+
+    if (errors.length) {
+        return res.status(200).send({
+            success: 0,
+            errors: errors,
+            code: 200
+        });
+    }
+
+    //return res.send(params.id);
+    var id = mongoose.Types.ObjectId(params.id);
+    try {
+        const newFavourite = new Favourite({
+            userId: userId,
+            tutorId: "hi",
+
+            status: 1,
+            tsCreatedAt: Number(moment().unix()),
+            tsModifiedAt: null
+        });
+
+        var info = await newFavourite.save();
+
+
+
+        // var update = await User.UpdateOne({ status: 1, _id: userId }, {
+        //     $push: {
+        //         favouriteTutor: params.id
+        //     }
+
+        // })
+        // if (update && info) {
+        //     return res.status(200).send({
+        //         success: 1,
+        //         message: "added to favourites"
+        //     })
+        // }
+    }
+    catch (error) {
+        return res.status(201).send({
+            success: 1,
+            message:error.message
+        })
+    }
+
+}
+
+
+exports.removefavourite = async (req, res) => {
+
     var userData = req.identity.data;
     var userId = userData.userId;
     var params = req.params;
@@ -36,37 +98,31 @@ exports.addfavourite = async (req, res) => {
     }
 
     try {
-        const newFavourite = new Favourite({
-            userId: userId,
-            tutorId: params.tutorId,
-           
-            status: 1,
-            tsCreatedAt: Number(moment().unix()),
-            tsModifiedAt: null
-        });
-    
-        var info = await newFavourite.save();
-
-        
-
-        var update = await  User.UpdateOne({status:1,_id:userId},{
-            $push: {
-                favouriteTutor: params.id
-            }
-    
-          })
-          if (update && info){
+        var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
+            status: 0
+        })
+        if (update) {
             return res.status(200).send({
-                success:1,
-                message:"added to favourites"
+                success: 1,
+                message: "removed from favourites"
             })
-          }
+        }
+        else {
+            return res.status(201).send({
+                success: 1,
+                message:"no such entity exists"
+            })
+        }
     }
-    catch (error){
-
+    catch (error) {
+        return res.status(201).send({
+            success: 1,
+            message:error.message
+        })
     }
 
 }
+
 
 exports.addFav = (req, res) => {
     var userData = req.identity.data;
@@ -129,7 +185,7 @@ exports.addFav = (req, res) => {
         const newFavourite = new Favourite({
             userId: userId,
             tutorId: params.tutorId,
-           
+
             status: 1,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
