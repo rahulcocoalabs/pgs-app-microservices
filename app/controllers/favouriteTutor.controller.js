@@ -95,13 +95,19 @@ exports.deletefavourite = async (req, res) => {
     }
 
     try {
-        var update = await User.UpdateOne({ status: 1, _id: userId }, {
+        var update = await User.UpdateOne({ status: 1, userId: userId,tutorId:params.id }, {
             status: 0
         })
         if (update) {
             return res.status(200).send({
                 success: 1,
                 message: "added to favourites"
+            })
+        }
+        else {
+            return res.status(201).send({
+                success: 1,
+                message:"no such entity exists"
             })
         }
     }
