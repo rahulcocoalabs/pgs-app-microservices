@@ -43,7 +43,9 @@ const karmaConfig = config.karma;
 exports.createOnlineClass = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-
+  console.log("params")
+  console.log(params)
+  console.log("params")
   var tutorCheck = await checkUserIsTutor(userId);
   if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
     return res.send(tutorCheck);
