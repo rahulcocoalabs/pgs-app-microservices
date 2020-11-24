@@ -41,7 +41,7 @@ exports.addfavourite = async (req, res) => {
     try {
         const newFavourite = new Favourite({
             userId: userId,
-            tutorId: id,
+            tutorId: params.id,
 
             status: 1,
             tsCreatedAt: Number(moment().unix()),
