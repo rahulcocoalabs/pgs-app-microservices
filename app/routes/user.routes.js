@@ -10,7 +10,6 @@ var tutorsConfig = config.tutors;
 var storage = multer.diskStorage({
     // destination: usersConfig.imageUploadPath,
     destination: function (req, file, cb) {
-     
         if (file.fieldname === "image"){
             cb(null, usersConfig.imageUploadPath.trim());
         } else if (file.fieldname === "video"){
@@ -18,7 +17,6 @@ var storage = multer.diskStorage({
         }else{
             return cb({success: 0, message: "Invalid types" });
         }
-        
     },
     filename: function (req, file, cb) {
         crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -62,7 +60,6 @@ module.exports = (app) => {
     app.get('/accounts/myBookings',auth,accounts.getMyBookings);
     app.get('/accounts/mycoins-summary',auth,accounts.getMyCoinsSummary);
 
-    
     app.post('/accounts/social-signup', accounts.socialSignup); 
 
     //After social signup screen
@@ -72,8 +69,6 @@ module.exports = (app) => {
     app.post('/accounts/request-as-tutor',auth,fileUpload.single('video'), accounts.requestAsTutor); 
     app.get('/accounts/tutor/profile',auth, accounts.getTutorProfile); 
     app.patch('/accounts/tutor/profile',auth,fileUpload.single('video'), accounts.updateTutorProfile); 
-
-
-
+    app.patch('/accounts/tutor/appointment/:id/status', accounts.updateAppointmentStatus); 
 
 };

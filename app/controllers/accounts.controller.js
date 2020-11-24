@@ -2564,7 +2564,25 @@ if(checkAppointment){
     return res.send(checkAppointmentResp);
   }
 
-
+  var updateAppointmentStatus = await AppointmentClassRequest.updateOne({
+    _id : appointmentId,
+    tutorId : userId,
+    status : 1
+  },checkAppointmentResp.update)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while check user',
+      error: err
+    }
+  })
+if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
+  return res.send(updateAppointmentStatus);
+}
+return res.send({
+  success : 1,
+  message
+})
 }else{
   return {
     success: 0,
