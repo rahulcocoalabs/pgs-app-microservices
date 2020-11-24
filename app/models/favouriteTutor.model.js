@@ -28,7 +28,7 @@ var options = {
 var FavouriteTutorSchema = mongoose.Schema({
     
     userId: mongoose.Schema.Types.ObjectId,
-    tutorId: String,
+    tutorId: mongoose.Schema.Types.ObjectId,
     status: Number,
     tsCreatedAt: Number,
     tsModifiedAt: Number
