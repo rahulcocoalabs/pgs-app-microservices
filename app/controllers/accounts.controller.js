@@ -2383,16 +2383,16 @@ var appointmentData = await AppointmentClassRequest.findOne({
   isApproved : false,
   isRejected : false,
 })
-.populate([{
-  path: 'userId',
-  select: {
-    firstName: 1
-  }
-}, {
-  path: 'tutorSubjectId',
-}, {
-  path: 'tutorClassId',
-}])
+// .populate([{
+//   path: 'userId',
+//   select: {
+//     firstName: 1
+//   }
+// }, {
+//   path: 'tutorSubjectId',
+// }, {
+//   path: 'tutorClassId',
+// }])
 .catch(err => {
   return {
     success: 0,
@@ -2499,6 +2499,35 @@ exports.updateTutorProfile = async(req,res) =>{
     message: 'Sent your request to update your tutor profile',
   })
   
+}
+
+exports.updateAppointmentStatus = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+  var params = req.body;
+  var appointmentId = req.params.id;
+
+  if(!params.status || (params.status && params.status !== constants.APPROVED_STATUS
+     && params.status !== constants.REJECTED_STATUS)){
+    var errors = [];
+    if (!params.status) {
+      errors.push({
+        'field': 'status',
+        'message': 'appoinment status required',
+      })
+    }
+
+    return res.send({
+      success: 0,
+      errors
+    })
+
+  }
+
 }
 
 
