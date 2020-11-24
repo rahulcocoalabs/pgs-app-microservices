@@ -7,7 +7,7 @@ function tutor(req,res){
 module.exports = (app) => {
    // const store = require('../controllers/store.controller');
     console.log('test44');
-    app.post('/tutor',auth, tutor);
+    app.post('/tutor', tutor);
     
     //store autocomplete
    
