@@ -390,9 +390,7 @@ exports.requestAppointment = async (req, res) => {
   var userId = userData.userId;
 
   var params = req.body;
-console.log("params")
-console.log(params)
-console.log("params")
+
   if (!params.tutorSubjectId || !params.tutorClassId || !params.tutorId) {
     var errors = [];
     if (!params.tutorSubjectId) {
@@ -420,12 +418,13 @@ console.log("params")
     };
   }
   var checkClassIsPrivateResp = await checkClassIsPrivate(params);
+  console.log("1checkClassIsPrivateResp")
+  console.log(checkClassIsPrivateResp)
+  console.log("checkClassIsPrivateResp")
   if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
     return checkClassIsPrivateResp;
   }
-  console.log("1checkClassIsPrivateResp")
-console.log(checkClassIsPrivateResp)
-console.log("checkClassIsPrivateResp")
+
   var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
   if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
     return res.send(checkAppointmentRequestResp);
@@ -746,7 +745,7 @@ async function checkClassIsPrivate(params) {
   console.log("onlineClassData")
   console.log(onlineClassData)
   console.log("onlineClassData")
-  if(onlineClassData){
+  if(onlineClassData && onlineClassData !== null){
     return {
       success: 1,
       message: 'Private class',
