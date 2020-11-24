@@ -22,8 +22,8 @@ exports.addfavourite = async (req, res) => {
     errors = [];
     if (!params.tutorId) {
         errors.push({
-            field: "itemId",
-            message: "itemId cannot be empty"
+            field: "tutorId",
+            message: "tutorId  cannot be empty"
         });
     }
 
