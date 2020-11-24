@@ -8,6 +8,7 @@ const TutorSubject = require('../models/tutorSubject.model');
 const TutorRequest = require('../models/tutorRequest.model');
 const TutorProfileUpdateRequest = require('../models/tutorProfileUpdateRequest.model');
 const OnlineClass = require('../models/onlineClass.model');
+const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
 var config = require('../../config/app.config.js');
@@ -2377,8 +2378,25 @@ exports.getTutorProfile = async(req,res) =>{
 if (myClassData && (myClassData.success !== undefined) && (myClassData.success === 0)) {
   return res.send(myClassData);
 }
-
-tutorCheck.myAppointments = [],
+var appointmentData = await AppointmentClassRequest.findOne({
+  tutorId : userId,
+  isApproved : false,
+  isRejected : false,
+})
+.catch(err => {
+  return {
+    success: 0,
+    message: 'Something went wrong while get appointments data',
+    error: err
+  }
+})
+if (appointmentData && (appointmentData.success !== undefined) && (appointmentData.success === 0)) {
+return res.send(appointmentData);
+}
+if(!appointmentData || appointmentData === null){
+  appointmentData = [];
+}
+tutorCheck.myAppointments = appointmentData
 tutorCheck.myClasses = myClassData;
 tutorCheck.classImageBase = classConfig.imageBase;
 
