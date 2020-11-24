@@ -422,7 +422,7 @@ exports.requestAppointment = async (req, res) => {
   console.log(checkClassIsPrivateResp)
   console.log("checkClassIsPrivateResp")
   if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
-    return checkClassIsPrivateResp;
+    return res.send(checkClassIsPrivateResp);
   }
 
   var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
