@@ -50,13 +50,8 @@ exports.createOnlineClass = async (req, res) => {
   }
   var params = req.body;
   var file = req.file;
-  console.log("file")
-  console.log(file)
-  console.log("file")
-  console.log("params")
-  console.log(params)
-  console.log("params")
-  if (!file || !params.tutorSubjectId || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
+ 
+  if (!file || !params.tutorSubjectId || !params.title || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined
   ) {
@@ -80,6 +75,14 @@ exports.createOnlineClass = async (req, res) => {
         message: "tutorClassId cannot be empty"
       })
     }
+
+    if (!req.body.title) {
+      errors.push({
+        field: "title",
+        message: "title cannot be empty"
+      })
+    }
+
     if (!req.body.classDescription) {
       errors.push({
         field: "classDescription",
@@ -131,6 +134,7 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.classDescription = params.classDescription;
   onlineClassObj.image = file.filename;
   onlineClassObj.isPaid = params.isPaid;
+  // onlineClassObj.tit = params.isPaid;
   onlineClassObj.isPopular = false;
   if (params.isPaid === 'true') {
     onlineClassObj.isPaid = true;
@@ -433,19 +437,21 @@ exports.requestAppointment = async (req, res) => {
   appointmentClassRequestObj.status = 1;
   appointmentClassRequestObj.tsCreatedAt = Date.now();
   appointmentClassRequestObj.tsModifiedAt = null;
-
-  var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
-  var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
-    .catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while save appointment class request',
-        error: err
-      }
-    })
-  if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
-    return res.send(newAppointmentClassRequestData);
-  }
+console.log("appointmentClassRequestObj")
+console.log(appointmentClassRequestObj)
+console.log("appointmentClassRequestObj")
+  // var newAppointmentClassRequest = new AppointmentClassRequest(appointmentClassRequestObj);
+  // var newAppointmentClassRequestData = await newAppointmentClassRequest.save()
+  //   .catch(err => {
+  //     return {
+  //       success: 0,
+  //       message: 'Something went wrong while save appointment class request',
+  //       error: err
+  //     }
+  //   })
+  // if (newAppointmentClassRequestData && (newAppointmentClassRequestData.success !== undefined) && (newAppointmentClassRequestData.success === 0)) {
+  //   return res.send(newAppointmentClassRequestData);
+  // }
 
   return res.send({
     success: 1,
