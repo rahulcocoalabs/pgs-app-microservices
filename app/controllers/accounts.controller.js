@@ -2848,10 +2848,10 @@ async function checkUserIsTutor(userId){
   var project = {
     firstName : 1,
     image : 1,
-    tutorCourseId : 1,
+    tutorCourseIds : 1,
     tutorSubjectIds : 1,
     tutorClassIds : 1,
-    tutorCategoryId : 1,
+    tutorCategoryIds : 1,
     courceDescription : 1,
     isPaid : 1,
     fee : 1,
