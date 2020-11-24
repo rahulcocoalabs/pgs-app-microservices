@@ -2383,16 +2383,16 @@ var appointmentData = await AppointmentClassRequest.findOne({
   isApproved : false,
   isRejected : false,
 })
-// .populate([{
-//   path: 'userId',
-//   select: {
-//     firstName: 1
-//   }
-// }, {
-//   path: 'tutorSubjectId',
-// }, {
-//   path: 'tutorClassId',
-// }])
+.populate([{
+  path: 'userId',
+  select: {
+    firstName: 1
+  }
+}, {
+  path: 'tutorSubjectId',
+}, {
+  path: 'tutorClassId',
+}])
 .catch(err => {
   return {
     success: 0,
@@ -2520,13 +2520,44 @@ exports.updateAppointmentStatus = async(req,res) =>{
         'message': 'appoinment status required',
       })
     }
-
+    if ((params.status && params.status !== constants.APPROVED_STATUS
+      && params.status !== constants.REJECTED_STATUS)) {
+      errors.push({
+        'field': 'status',
+        'message': 'Invalid status',
+      })
+    }
     return res.send({
       success: 0,
       errors
     })
-
   }
+
+
+  var checkAppointment = await AppointmentClassRequest.findOne({
+    _id : appointmentId,
+    tutorId : userId,
+     status : 1
+  })
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while check user',
+      error: err
+    }
+  })
+if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
+  return res.send(checkAppointment);
+}
+if(checkAppointment){
+  if(checkAppointment.isApproved)
+
+}else{
+  return {
+    success: 1,
+    message: 'Appoinment request not exists',
+  };
+}
 
 }
 
@@ -2922,15 +2953,15 @@ async function checkUserIsTutor(userId){
     _id : userId,
     status : 1
   },project)
-  .populate([{
-    path: 'tutorCourseIds',
-  }, {
-    path: 'tutorSubjectIds',
-  }, {
-    path: 'tutorClassIds',
-  }, {
-    path: 'tutorCategoryIds',
-  }])
+  // .populate([{
+  //   path: 'tutorCourseIds',
+  // }, {
+  //   path: 'tutorSubjectIds',
+  // }, {
+  //   path: 'tutorClassIds',
+  // }, {
+  //   path: 'tutorCategoryIds',
+  // }])
   .catch(err => {
     return {
       success: 0,
