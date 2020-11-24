@@ -95,7 +95,7 @@ exports.removefavourite = async (req, res) => {
     }
 
     try {
-        var update = await Favourite.UpdateOne({ status: 1, userId: userId,tutorId:params.id }, {
+        var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
             status: 0
         })
         if (update) {
