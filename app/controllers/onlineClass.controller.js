@@ -417,13 +417,7 @@ exports.requestAppointment = async (req, res) => {
       code: 200
     };
   }
-  var checkClassIsPrivateResp = await checkClassIsPrivate(params);
-  console.log("1checkClassIsPrivateResp")
-  console.log(checkClassIsPrivateResp)
-  console.log("checkClassIsPrivateResp")
-  if (checkClassIsPrivateResp && (checkClassIsPrivateResp.success !== undefined) && (checkClassIsPrivateResp.success === 0)) {
-    return res.send(checkClassIsPrivateResp);
-  }
+
 
   var checkAppointmentRequestResp = await checkAppointmentRequest(params, userId);
   if (checkAppointmentRequestResp && (checkAppointmentRequestResp.success !== undefined) && (checkAppointmentRequestResp.success === 0)) {
@@ -727,7 +721,8 @@ async function checkYourTab(params, userId) {
 
 async function checkClassIsPrivate(params) {
   var onlineClassData = await OnlineCLass.findOne({
-    _id: params.classId,
+    _id: params.tutorClassId,
+    _id: params.tutorClassId,
     isPublic: false,
     isApproved: true,
     status: 1
