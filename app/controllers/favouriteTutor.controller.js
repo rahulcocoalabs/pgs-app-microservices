@@ -11,6 +11,7 @@ var utilities = require('../components/utilities.component.js');
 var config = require('../../config/app.config.js');
 var favouritesConfig = config.favourites;
 var moment = require('moment');
+var mongoose = require('mongoose');
 
 
 exports.addfavourite = async (req, res) => {
@@ -36,11 +37,11 @@ exports.addfavourite = async (req, res) => {
     }
 
     //return res.send(params.id);
-
+    var id = mongoose.Types.ObjectId(params.id);
     try {
         const newFavourite = new Favourite({
             userId: userId,
-            tutorId: params.id,
+            tutorId: id,
 
             status: 1,
             tsCreatedAt: Number(moment().unix()),
