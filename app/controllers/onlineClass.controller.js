@@ -390,7 +390,9 @@ exports.requestAppointment = async (req, res) => {
   var userId = userData.userId;
 
   var params = req.body;
-
+console.log("params")
+console.log(params)
+console.log("params")
   if (!params.tutorSubjectId || !params.tutorClassId || !params.tutorId) {
     var errors = [];
     if (!params.tutorSubjectId) {
@@ -741,6 +743,9 @@ async function checkClassIsPrivate(params) {
   if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
     return onlineClassData;
   }
+  console.log("onlineClassData")
+  console.log(onlineClassData)
+  console.log("onlineClassData")
   if(onlineClassData){
     return {
       success: 1,
