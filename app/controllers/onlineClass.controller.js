@@ -365,7 +365,7 @@ exports.listApointmentsForTutor = async (req, res) => {
   var offset = (page - 1) * perPage;
 
   var AppointmentClassRequestData = await AppointmentClassRequest.find(findCriteria)
-    .populate([ {path: 'tutorSubjectId',}, {path: 'tutorClassId',}]).limit(perPage).skip(offset).sort({
+    .populate([ {path: 'user'}, {path: 'tutorClassId'},{path: 'tutorSubjectId'}]).limit(perPage).skip(offset).sort({
       'tsCreatedAt': -1
     }).catch(err => {
       return {
@@ -403,9 +403,9 @@ exports.listApointmentsForTutor = async (req, res) => {
   return {
     success: 1,
     pagination,
-    imageBase: classConfig.imageBase,
+    imageBase: usersConfig.imageBase,
     items: AppointmentClassRequestData,
-    message: 'List latest class'
+    message: 'List latest requests'
   }
  
 
