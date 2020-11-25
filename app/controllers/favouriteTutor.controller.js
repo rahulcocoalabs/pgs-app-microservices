@@ -101,9 +101,9 @@ exports.removefavourite = async (req, res) => {
     }
 
     try {
-        var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
-            status: 0
-        })
+        // var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
+        //     status: 0
+        // })
         var update1 = await User.updateOne({ $pull: {  favouriteTutor: params.id } },
         { multi: true })
         if (update && update1) {
