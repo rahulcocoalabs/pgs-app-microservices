@@ -523,9 +523,7 @@ exports.updateAppointmentStatus = async(req,res) =>{
 if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
   return res.send(checkAppointment);
 }
-console.log("checkAppointment")
-console.log(checkAppointment)
-console.log("checkAppointment")
+
 if(checkAppointment && checkAppointment !== null){
    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment,isApproved,isRejected)
    if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
@@ -552,10 +550,10 @@ return res.send({
   message
 })
 }else{
-  return {
+  return res.send( {
     success: 0,
     message: 'Appoinment request not exists',
-  };
+  });
 }
 
 }
