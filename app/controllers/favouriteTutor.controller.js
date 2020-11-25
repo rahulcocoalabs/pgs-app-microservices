@@ -101,12 +101,12 @@ exports.removefavourite = async (req, res) => {
     }
 
     try {
-        // var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
-        //     status: 0
-        // })
-        var update1 = await User.updateOne({ $pull: {  favouriteTutor: params.id } },
+        var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
+            status: 0
+        })
+        var update1 = await User.updateOne({ $pull: {  favouriteTutor: mongoose.Types.ObjectId("5fb60484117273e336af8f6f") } },
         { multi: true })
-        if ( update1) {
+        if ( update1  && update) {
             return res.status(200).send({
                 success: 1,
                 message: "removed from favourites"
