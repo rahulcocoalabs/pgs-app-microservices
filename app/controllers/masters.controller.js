@@ -926,7 +926,10 @@ function getTopMovies(perPage, callback) {
   }
 
   async function checkSubjectsForOnlineClass(params,userId) {
-    if(params.isMySubjects && params.isMySubjects === '1'){
+    if((params.isMySubjects && params.isMySubjects === '1') || (params.tutorId)){
+      if(params.tutorId){
+        userId = tutorId;
+      }
       var userData = await User.findOne({
         _id : userId,
         isTutor : true,
@@ -976,7 +979,10 @@ function getTopMovies(perPage, callback) {
 
   async function checkClassesForOnlineClass(params,userId){
     console.log("userId : " + userId)
-    if(params.isMyClasses && params.isMyClasses === '1'){
+    if((params.isMyClasses && params.isMyClasses === '1') || params.tutorId){
+      if(params.tutorId){
+        userId = params.tutorId;
+      }
       var userData = await User.findOne({
         _id : userId,
         status : 1

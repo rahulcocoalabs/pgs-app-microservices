@@ -2384,7 +2384,7 @@ exports.getTutorProfile = async(req,res) =>{
 if (myClassData && (myClassData.success !== undefined) && (myClassData.success === 0)) {
   return res.send(myClassData);
 }
-var appointmentData = await AppointmentClassRequest.findOne({
+var appointmentData = await AppointmentClassRequest.find({
   tutorId : userId,
   isApproved : false,
   isRejected : false,
@@ -2392,7 +2392,9 @@ var appointmentData = await AppointmentClassRequest.findOne({
 .populate([{
   path: 'userId',
   select: {
-    firstName: 1
+    firstName: 1,
+    image : 1,
+    socialPhotoUrl : 1
   }
 }, {
   path: 'tutorSubjectId',
@@ -2415,7 +2417,7 @@ if(!appointmentData || appointmentData === null){
 tutorCheck.myAppointments = appointmentData
 tutorCheck.myClasses = myClassData;
 tutorCheck.classImageBase = classConfig.imageBase;
-tutorCheck.tutorImageBase = usersConfig.imageBase;
+tutorCheck.imageBase = usersConfig.imageBase;
 
   return res.send(tutorCheck);
 }
@@ -2974,6 +2976,7 @@ async function checkUserIsTutor(userId){
   var project = {
     firstName : 1,
     image : 1,
+    socialPhotoUrl : 1,
     tutorCourseIds : 1,
     tutorSubjectIds : 1,
     tutorClassIds : 1,
