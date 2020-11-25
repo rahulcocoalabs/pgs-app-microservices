@@ -266,7 +266,7 @@ exports.removefavouriteClass = async (req, res) => {
         var existClass = await onlineClass.countDocuments({ status: 1, _id: params.id });
 
         if (existClass == 0) {
-            return res.status(201).send({ success: 0, message: "No such tutor exist" })
+            return res.status(201).send({ success: 0, message: "No such Class exist" })
         }
 
         var existCombo = await Class.countDocuments({ status: 1, classId: params.id, userId: userId });
