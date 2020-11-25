@@ -871,7 +871,7 @@ async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected
     findCriteria.isRejected = false;
     findCriteria.status = 1;
 
-    var checkOnlineClass = await OnlineClass.findOne(findCriteria)
+    var checkOnlineClass = await OnlineCLass.findOne(findCriteria)
     .catch(err => {
       return {
         success: 0,
