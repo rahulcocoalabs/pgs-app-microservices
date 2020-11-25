@@ -1,5 +1,6 @@
 const Favourite = require('../models/favouriteTutor.model.js');
 const Class = require('../models/favouriteClass.model.js');
+const User = require('../models/user.model.js');
 const Book = require('../models/book.model.js');
 const Games = require('../models/game.model.js');
 const Books = require('../models/book.model.js');
