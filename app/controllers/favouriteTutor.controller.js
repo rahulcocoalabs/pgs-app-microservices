@@ -201,7 +201,7 @@ exports.addfavouriteClass = async (req, res) => {
         if (existCombo > 0) {
             return res.status(201).send({ success: 0, message: "already added to favourites" })
         }
-
+        
         const newClass = new Class({
             userId: userId,
             classId: params.id,
@@ -277,7 +277,8 @@ exports.removefavouriteClass = async (req, res) => {
         var update = await Class.updateOne({ status: 1, userId: userId, classId: params.id }, {
             status: 0
         })
-        if (update) {
+        var update1 = await User.updateOne({status:1,_id:userId},{ $pull: {  favouriteClass: params.id } })
+        if (update && update1) {
             return res.status(200).send({
                 success: 1,
                 message: "removed from favourites"
