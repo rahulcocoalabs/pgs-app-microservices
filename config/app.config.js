@@ -1,6 +1,6 @@
 // var commonPath = "http://trackflyvehicle.com/edunet-web/ftp/edunet-admin-portal/common/uploads/";
-var commonPath = "https://139.162.231.108/edunet-portal/common/uploads/";
-var storeCommonPath = "https://172.104.61.150/edunet-ecommerce/";
+var commonPath = "http://139.162.231.108/edunet-portal/common/uploads/";
+var storeCommonPath = "http://172.104.61.150/edunet-ecommerce/";
 var relativeCommonPath = "/var/www/html/edunet-portal/common/uploads/";
 // var relativeCommonPath = 'uploads/'
 module.exports = {
