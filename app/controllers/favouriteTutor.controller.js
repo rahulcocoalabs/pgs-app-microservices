@@ -269,7 +269,7 @@ exports.removefavouriteClass = async (req, res) => {
             return res.status(201).send({ success: 0, message: "No such tutor exist" })
         }
 
-        var existCombo = await Class.countDocuments({ status: 1, tutorId: params.id, userId: userId });
+        var existCombo = await Class.countDocuments({ status: 1, classId: params.id, userId: userId });
         if (existCombo == 0) {
             return res.status(201).send({ success: 0, message: "not in favourite list" })
         }
