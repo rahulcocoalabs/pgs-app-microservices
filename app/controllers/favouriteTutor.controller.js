@@ -1,5 +1,6 @@
 const Favourite = require('../models/favouriteTutor.model.js');
 const Class = require('../models/favouriteClass.model.js');
+const User = require('../models/user.model.js');
 const Book = require('../models/book.model.js');
 const Games = require('../models/game.model.js');
 const Books = require('../models/book.model.js');
@@ -53,14 +54,15 @@ exports.addfavourite = async (req, res) => {
 
 
 
-        // var update = await User.UpdateOne({ status: 1, _id: userId }, {
-        //     $push: {
-        //         favouriteTutor: params.id
-        //     }
+        var update = await User.updateOne({ status: 1, _id: userId }, {
+            $push: {
+                favouriteTutor: params.id
+            }
 
-        // })
-        if (info) {
+        })
+        if (info && update) {
             return res.status(200).send({
+                
                 success: 1,
                 message: "tutor added to your favourites"
             })
@@ -102,7 +104,9 @@ exports.removefavourite = async (req, res) => {
         var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
             status: 0
         })
-        if (update) {
+        var update1 = await User.updateOne({ $pull: {  favouriteTutor: mongoose.Types.ObjectId("5fb60484117273e336af8f6f") } }
+        )
+        if ( update1  && update) {
             return res.status(200).send({
                 success: 1,
                 message: "removed from favourites"
