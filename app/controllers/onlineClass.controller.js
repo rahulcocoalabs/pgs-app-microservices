@@ -718,7 +718,7 @@ async function listTutors(findCriteria, perPage, page) {
   return {
     success: 1,
     pagination,
-    imageBase: users.imageBase,
+    imageBase: usersConfig.imageBase,
     items: tutorsData,
     message: 'List tutors'
   }
