@@ -30,6 +30,8 @@ module.exports = (app) => {
     app.get('/online-class/:id/detail', auth,onlineClass.getClassDetails);
     app.get('/online-class/list', auth,onlineClass.listOnlineClasses);
     app.get('/online-class/tutor/list', auth,onlineClass.listTutorList);
+    app.get('/online-class/tutor/list-classes', auth,onlineClass.listClassForTutor);
+    app.get('/online-class/tutor/list-requests', auth,onlineClass.listApointmentsForTutor);
     app.get('/online-class/student/home', auth,onlineClass.getStudentHome);
     app.get('/online-class/tutor/:id/detail', auth,onlineClass.getTutorDetails);
     app.post('/online-class/student/appointment', auth,onlineClass.requestAppointment);

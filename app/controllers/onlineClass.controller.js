@@ -346,6 +346,72 @@ exports.listClassForTutor = async (req, res) => {
 }
 
 
+exports.listApointmentsForTutor = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var findCriteria = {};
+  var params = req.query;
+
+
+  findCriteria.tutorId = userId;
+  findCriteria.isApproved = true;
+  findCriteria.status = 1;
+
+  var page = Number(page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var AppointmentClassRequestData = await AppointmentClassRequest.find(findCriteria)
+    .populate([ {path: 'tutorSubjectId',}, {path: 'tutorClassId',}]).limit(perPage).skip(offset).sort({
+      'tsCreatedAt': -1
+    }).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting classes',
+        error: err
+      }
+    })
+  if (AppointmentClassRequestData && (AppointmentClassRequestData.success !== undefined) && (AppointmentClassRequestData.success === 0)) {
+    return AppointmentClassRequestData;
+  }
+
+  var AppointmentClassRequestDataCount = await OnlineCLass.countDocuments(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while finding online class count',
+        error: err
+      }
+    })
+  if (AppointmentClassRequestDataCount && (AppointmentClassRequestDataCount.success !== undefined) && (AppointmentClassRequestDataCount.success === 0)) {
+    return AppointmentClassRequestDataCount;
+  }
+
+  totalPages = AppointmentClassRequestDataCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+    page,
+    perPage,
+    hasNextPage,
+    totalItems: AppointmentClassRequestDataCount,
+    totalPages
+  }
+  return {
+    success: 1,
+    pagination,
+    imageBase: classConfig.imageBase,
+    items: AppointmentClassRequestData,
+    message: 'List latest class'
+  }
+ 
+
+}
+
+
 exports.getStudentHome = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
