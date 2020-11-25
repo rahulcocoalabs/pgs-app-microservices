@@ -312,13 +312,13 @@ exports.listClassForTutor = async (req, res) => {
     return onlineClassData;
   }
 
-  var totalOnlineClassCount = await OnlineCLass.countDocuments(findCriteria).catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while finding online class count',
-        error: err
-      }
-    })
+  var totalOnlineClassCount = onlineClassData.length; //await OnlineCLass.countDocuments(findCriteria).catch(err => {
+    //   return {
+    //     success: 0,
+    //     message: 'Something went wrong while finding online class count',
+    //     error: err
+    //   }
+    // })
   if (totalOnlineClassCount && (totalOnlineClassCount.success !== undefined) && (totalOnlineClassCount.success === 0)) {
     return totalOnlineClassCount;
   }
