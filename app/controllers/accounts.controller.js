@@ -2386,8 +2386,7 @@ if (myClassData && (myClassData.success !== undefined) && (myClassData.success =
 }
 var appointmentData = await AppointmentClassRequest.find({
   tutorId : userId,
-  isApproved : false,
-  isRejected : false,
+  status : 1
 })
 .populate([{
   path: 'userId',
