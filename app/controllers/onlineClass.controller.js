@@ -742,7 +742,9 @@ async function listClasses(findCriteria, perPage, page) {
     .populate([{
       path: 'userId',
       select: {
-        firstName: 1
+        firstName: 1,
+        image : 1,
+        socialPhotoUrl : 1
       }
     }, {
       path: 'tutorSubjectId',
@@ -853,7 +855,7 @@ async function listTutors(findCriteria, perPage, page) {
   return {
     success: 1,
     pagination,
-    imageBase: users.imageBase,
+    imageBase: usersConfig.imageBase,
     items: tutorsData,
     message: 'List tutors'
   }
