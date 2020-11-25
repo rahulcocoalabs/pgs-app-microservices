@@ -1,5 +1,6 @@
 const Favourite = require('../models/favouriteTutor.model.js');
 const Class = require('../models/favouriteClass.model.js');
+const onlineClass = require('../models/onlineClass.model.js');
 const User = require('../models/user.model.js');
 const Book = require('../models/book.model.js');
 const Games = require('../models/game.model.js');
@@ -38,8 +39,26 @@ exports.addfavourite = async (req, res) => {
         });
     }
 
+    //validation 
+
+    var existTutor = await User.countDocuments({ status: 1, _id: params.id });
+
+    if (existTutor == 0) {
+        return res.status(201).send({ success: 0, message: "No such tutor exist" })
+    }
+
+    var existCombo = await Favourite.countDocuments({ status: 1, tutorId: params.id, userId: userId });
+    if (existCombo > 0) {
+        return res.status(201).send({ success: 0, message: "already added to favourites" })
+    }
+
+    if (existTutor == 0) {
+        return res.status(201).send({ success: 0, message: "No such tutor exist" })
+    }
+
+
     //return res.send(params.id);
-    var id = mongoose.Types.ObjectId(params.id);
+
     try {
         const newFavourite = new Favourite({
             userId: userId,
@@ -62,7 +81,7 @@ exports.addfavourite = async (req, res) => {
         })
         if (info && update) {
             return res.status(200).send({
-                
+
                 success: 1,
                 message: "tutor added to your favourites"
             })
@@ -71,7 +90,7 @@ exports.addfavourite = async (req, res) => {
     catch (error) {
         return res.status(201).send({
             success: 1,
-            message:error.message
+            message: error.message
         })
     }
 
@@ -101,12 +120,25 @@ exports.removefavourite = async (req, res) => {
     }
 
     try {
-        var update = await Favourite.updateOne({ status: 1, userId: userId,tutorId:params.id }, {
+
+        var existTutor = await User.countDocuments({ status: 1, _id: params.id });
+
+        if (existTutor == 0) {
+            return res.status(201).send({ success: 0, message: "No such tutor exist" })
+        }
+
+        var existCombo = await Favourite.countDocuments({ status: 1, tutorId: params.id, userId: userId });
+        if (existCombo == 0) {
+            return res.status(201).send({ success: 0, message: "not in favourite list" })
+        }
+
+
+        var update = await Favourite.updateOne({ status: 1, userId: userId, tutorId: params.id }, {
             status: 0
         })
-        var update1 = await User.updateOne({ $pull: {  favouriteTutor: mongoose.Types.ObjectId("5fb60484117273e336af8f6f") } }
-        )
-        if ( update1  && update) {
+        // var update1 = await User.updateOne({ $pull: {  favouriteTutor: mongoose.Types.ObjectId("5fb60484117273e336af8f6f") } }
+        // )
+        if (update) {
             return res.status(200).send({
                 success: 1,
                 message: "removed from favourites"
@@ -115,14 +147,14 @@ exports.removefavourite = async (req, res) => {
         else {
             return res.status(201).send({
                 success: 1,
-                message:"no such entity exists"
+                message: "no such entity exists"
             })
         }
     }
     catch (error) {
         return res.status(201).send({
             success: 1,
-            message:error.message
+            message: error.message
         })
     }
 
@@ -159,6 +191,18 @@ exports.addfavouriteClass = async (req, res) => {
     //return res.send(params.id);
     var id = mongoose.Types.ObjectId(params.id);
     try {
+
+        var existTutor = await onlineClass.countDocuments({ status: 1, _id: params.id });
+
+        if (existTutor == 0) {
+            return res.status(201).send({ success: 0, message: "No such class exist" })
+        }
+
+        var existCombo = await Class.countDocuments({ status: 1, tutorId: params.id, userId: userId });
+        if (existCombo > 0) {
+            return res.status(201).send({ success: 0, message: "already added to favourites" })
+        }
+
         const newClass = new Class({
             userId: userId,
             classId: params.id,
@@ -188,7 +232,7 @@ exports.addfavouriteClass = async (req, res) => {
     catch (error) {
         return res.status(201).send({
             success: 1,
-            message:error.message
+            message: error.message
         })
     }
 
@@ -216,9 +260,20 @@ exports.removefavouriteClass = async (req, res) => {
             code: 200
         });
     }
-    console.log(userId,params.id)
+    console.log(userId, params.id)
     try {
-        var update = await Class.updateOne({ status: 1, userId: userId,classId:params.id }, {
+        var existClass = await onlineClass.countDocuments({ status: 1, _id: params.id });
+
+        if (existClass == 0) {
+            return res.status(201).send({ success: 0, message: "No such tutor exist" })
+        }
+
+        var existCombo = await Class.countDocuments({ status: 1, tutorId: params.id, userId: userId });
+        if (existCombo == 0) {
+            return res.status(201).send({ success: 0, message: "not in favourite list" })
+        }
+        
+        var update = await Class.updateOne({ status: 1, userId: userId, classId: params.id }, {
             status: 0
         })
         if (update) {
@@ -230,14 +285,14 @@ exports.removefavouriteClass = async (req, res) => {
         else {
             return res.status(201).send({
                 success: 1,
-                message:"no such entity exists"
+                message: "no such entity exists"
             })
         }
     }
     catch (error) {
         return res.status(201).send({
             success: 1,
-            message:error.message
+            message: error.message
         })
     }
 
