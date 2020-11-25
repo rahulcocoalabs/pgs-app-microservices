@@ -287,8 +287,7 @@ exports.listClassForTutor = async (req, res) => {
   var findCriteria = {};
   var params = req.query;
 
-  console.log(1);
-
+ 
 
   findCriteria.tutorId = userId;
   findCriteria.isApproved = true;
@@ -299,7 +298,7 @@ exports.listClassForTutor = async (req, res) => {
   var perPage = Number(perPage) || classConfig.resultsPerPage;
   perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
-  console.log(2);
+ 
   var onlineClassData = await OnlineCLass.find(findCriteria)
     .populate([ {path: 'tutorSubjectId',}, {path: 'tutorClassId',}]).limit(perPage).skip(offset).sort({
       'tsCreatedAt': -1
@@ -313,18 +312,18 @@ exports.listClassForTutor = async (req, res) => {
   if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
     return onlineClassData;
   }
-  console.log(3);
-  var totalOnlineClassCount = onlineClassData.length; //await OnlineCLass.countDocuments(findCriteria).catch(err => {
-    //   return {
-    //     success: 0,
-    //     message: 'Something went wrong while finding online class count',
-    //     error: err
-    //   }
-    // })
+
+  var totalOnlineClassCount = await OnlineCLass.countDocuments(findCriteria).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while finding online class count',
+        error: err
+      }
+    })
   if (totalOnlineClassCount && (totalOnlineClassCount.success !== undefined) && (totalOnlineClassCount.success === 0)) {
     return totalOnlineClassCount;
   }
-  console.log(4);
+  
   totalPages = totalOnlineClassCount / perPage;
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
@@ -335,13 +334,13 @@ exports.listClassForTutor = async (req, res) => {
     totalItems: totalOnlineClassCount,
     totalPages
   }
-  return {
+  return res.send({
     success: 1,
     pagination,
     imageBase: classConfig.imageBase,
     items: onlineClassData,
     message: 'List latest class'
-  }
+  })
  
 
 }
