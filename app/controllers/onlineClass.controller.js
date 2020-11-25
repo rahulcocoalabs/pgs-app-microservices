@@ -31,8 +31,7 @@ const Feed = require('../models/feed.model.js');
 const sgMail = require('@sendgrid/mail');
 
 var bcrypt = require('bcryptjs');
-const { users } = require('../../config/app.config.js');
-const { find } = require('../models/otp.model.js');
+
 const salt = bcrypt.genSaltSync(10);
 
 const usersConfig = config.users;
@@ -214,11 +213,14 @@ exports.getClassDetails = async (req, res) => {
   }
   if (classDetails) {
 
-    // var checkResp = await checkIfJoinLinkAvailable(classDetails,userId);
-
+    var checkResp = await checkIfJoinLinkAvailable(classDetails,userId);
+    if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
+      return res.send(checkResp);
+      }
     return res.send({
       success: 1,
       item: classDetails,
+      joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
       tutorImageBase: usersConfig.imageBase,
       tutorVideoBase: tutorConfig.videoBase,
@@ -913,6 +915,46 @@ async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected
 }
 
 
-// async function checkIfJoinLinkAvailable(classDetails,userId){
+async function checkIfJoinLinkAvailable(classDetails,userId){
+  if(classDetails.isPublic){
+     return {
+       success : 1,
+       joinLinkAvailable : true,
+       message : 'Public class'
+     }
+  }else{
+  var appointmentCheckResp = await AppointmentClassRequest.findOne({
+    userId,
+    tutorId : classDetails.userId,
+    tutorSubjectId : classDetails.tutorSubjectId,
+    tutorClassId : classDetails.tutorClassId,
+    isApproved : true,
+    isRejected : false,
+    status : 1
+  })
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while checking appointment request approve or not',
+      error: err
+    }
+  })
+  if (appointmentCheckResp && (appointmentCheckResp.success !== undefined) && (appointmentCheckResp.success === 0)) {
+  return appointmentCheckResp;
+  }
+  if(appointmentCheckResp && appointmentCheckResp !== null){
+    return {
+      success : 1,
+      joinLinkAvailable : true,
+      message : 'Private class with approved appointment request'
+    }
 
-// }
+  }else{
+    return {
+      success : 1,
+      joinLinkAvailable : false,
+      message : 'Private class not approve appointment or not sent request'
+    }
+  }
+}
+}
