@@ -213,6 +213,9 @@ exports.getClassDetails = async (req, res) => {
     return res.send(classDetails);
   }
   if (classDetails) {
+
+    // var checkResp = await checkIfJoinLinkAvailable(classDetails,userId);
+
     return res.send({
       success: 1,
       item: classDetails,
@@ -520,7 +523,7 @@ exports.updateAppointmentStatus = async(req,res) =>{
 if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
   return res.send(checkAppointment);
 }
-if(checkAppointment){
+if(checkAppointment && checkAppointment !== null){
    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment,isApproved,isRejected)
    if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
     return res.send(checkAppointmentResp);
@@ -907,3 +910,8 @@ async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected
     }
   }
 }
+
+
+// async function checkIfJoinLinkAvailable(classDetails,userId){
+
+// }
