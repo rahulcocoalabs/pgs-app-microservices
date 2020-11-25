@@ -607,7 +607,9 @@ async function listClasses(findCriteria, perPage, page) {
     .populate([{
       path: 'userId',
       select: {
-        firstName: 1
+        firstName: 1,
+        image : 1,
+        socialPhotoUrl : 1
       }
     }, {
       path: 'tutorSubjectId',
