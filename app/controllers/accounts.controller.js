@@ -2393,7 +2393,8 @@ var appointmentData = await AppointmentClassRequest.find({
   path: 'userId',
   select: {
     firstName: 1,
-    image : 1
+    image : 1,
+    socialPhotoUrl : 1
   }
 }, {
   path: 'tutorSubjectId',
@@ -2975,6 +2976,7 @@ async function checkUserIsTutor(userId){
   var project = {
     firstName : 1,
     image : 1,
+    socialPhotoUrl : 1,
     tutorCourseIds : 1,
     tutorSubjectIds : 1,
     tutorClassIds : 1,
