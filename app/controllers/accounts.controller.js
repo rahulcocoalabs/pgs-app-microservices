@@ -2392,7 +2392,8 @@ var appointmentData = await AppointmentClassRequest.find({
 .populate([{
   path: 'userId',
   select: {
-    firstName: 1
+    firstName: 1,
+    image : 1
   }
 }, {
   path: 'tutorSubjectId',
@@ -2415,7 +2416,7 @@ if(!appointmentData || appointmentData === null){
 tutorCheck.myAppointments = appointmentData
 tutorCheck.myClasses = myClassData;
 tutorCheck.classImageBase = classConfig.imageBase;
-tutorCheck.tutorImageBase = usersConfig.imageBase;
+tutorCheck.imageBase = usersConfig.imageBase;
 
   return res.send(tutorCheck);
 }
