@@ -223,7 +223,7 @@ exports.addfavouriteClass = async (req, res) => {
         })
 
         // })
-        if (info) {
+        if (info && update) {
             return res.status(200).send({
                 success: 1,
                 message: "tutor added to your favourites"
