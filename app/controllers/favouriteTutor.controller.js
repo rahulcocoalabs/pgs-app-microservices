@@ -244,7 +244,7 @@ exports.removefavouriteClass = async (req, res) => {
 
     var userData = req.identity.data;
     var userId = userData.userId;
-    var params = req.params;
+    var params = req.body;
 
     errors = [];
     if (!params.id) {
