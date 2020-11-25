@@ -312,7 +312,7 @@ exports.listClassForTutor = async (req, res) => {
     return onlineClassData;
   }
 
-  var totalOnlineClassCount = await OnlineCLass.countDocuments(findCriteria)
+  var totalOnlineClassCount = await OnlineClass.countDocuments(findCriteria)
     .catch(err => {
       return {
         success: 0,
