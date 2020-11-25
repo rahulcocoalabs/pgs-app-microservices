@@ -334,7 +334,7 @@ exports.listClassForTutor = async (req, res) => {
     totalItems: totalOnlineClassCount,
     totalPages
   }
-  return res.send({
+  return res.status(200).send({
     success: 1,
     pagination,
     imageBase: classConfig.imageBase,
@@ -400,13 +400,13 @@ exports.listApointmentsForTutor = async (req, res) => {
     totalItems: AppointmentClassRequestDataCount,
     totalPages
   }
-  return {
+  return res.status(200).send({
     success: 1,
     pagination,
     imageBase: usersConfig.imageBase,
     items: AppointmentClassRequestData,
     message: 'List latest requests'
-  }
+  })
  
 
 }
