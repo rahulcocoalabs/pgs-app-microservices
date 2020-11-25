@@ -249,8 +249,8 @@ exports.removefavouriteClass = async (req, res) => {
     errors = [];
     if (!params.id) {
         errors.push({
-            field: "tutorId",
-            message: "tutorId  cannot be empty"
+            field: "classId",
+            message: "classId  cannot be empty"
         });
     }
 
