@@ -174,8 +174,8 @@ exports.addfavouriteClass = async (req, res) => {
     errors = [];
     if (!params.id) {
         errors.push({
-            field: "tutorId",
-            message: "tutorId  cannot be empty"
+            field: "classId",
+            message: "classId  cannot be empty"
         });
     }
 
@@ -226,7 +226,7 @@ exports.addfavouriteClass = async (req, res) => {
         if (info && update) {
             return res.status(200).send({
                 success: 1,
-                message: "tutor added to your favourites"
+                message: "class added to your favourites"
             })
         }
     }
@@ -249,8 +249,8 @@ exports.removefavouriteClass = async (req, res) => {
     errors = [];
     if (!params.id) {
         errors.push({
-            field: "tutorId",
-            message: "tutorId  cannot be empty"
+            field: "classId",
+            message: "classId  cannot be empty"
         });
     }
 
@@ -266,7 +266,7 @@ exports.removefavouriteClass = async (req, res) => {
         var existClass = await onlineClass.countDocuments({ status: 1, _id: params.id });
 
         if (existClass == 0) {
-            return res.status(201).send({ success: 0, message: "No such tutor exist" })
+            return res.status(201).send({ success: 0, message: "No such Class exist" })
         }
 
         var existCombo = await Class.countDocuments({ status: 1, classId: params.id, userId: userId });
