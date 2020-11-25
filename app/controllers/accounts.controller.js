@@ -2384,7 +2384,7 @@ exports.getTutorProfile = async(req,res) =>{
 if (myClassData && (myClassData.success !== undefined) && (myClassData.success === 0)) {
   return res.send(myClassData);
 }
-var appointmentData = await AppointmentClassRequest.findOne({
+var appointmentData = await AppointmentClassRequest.find({
   tutorId : userId,
   isApproved : false,
   isRejected : false,
