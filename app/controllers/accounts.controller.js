@@ -2501,96 +2501,96 @@ exports.updateTutorProfile = async(req,res) =>{
   
 }
 
-exports.updateAppointmentStatus = async(req,res) =>{
-  var userData = req.identity.data;
-  var userId = userData.userId;
-  var tutorCheck = await checkUserIsTutor(userId);
-  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
-    return res.send(tutorCheck);
-  }
-  var params = req.body;
-  var appointmentId = req.params.id;
+// exports.updateAppointmentStatus = async(req,res) =>{
+//   var userData = req.identity.data;
+//   var userId = userData.userId;
+//   var tutorCheck = await checkUserIsTutor(userId);
+//   if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+//     return res.send(tutorCheck);
+//   }
+//   var params = req.body;
+//   var appointmentId = req.params.id;
 
-  if(!params.status || (params.status && params.status !== constants.APPROVED_STATUS
-     && params.status !== constants.REJECTED_STATUS)){
-    var errors = [];
-    if (!params.status) {
-      errors.push({
-        'field': 'status',
-        'message': 'appoinment status required',
-      })
-    }
-    if ((params.status && params.status !== constants.APPROVED_STATUS
-      && params.status !== constants.REJECTED_STATUS)) {
-      errors.push({
-        'field': 'status',
-        'message': 'Invalid status',
-      })
-    }
-    return res.send({
-      success: 0,
-      errors
-    })
-  }
-  var isApproved = false;
-  var isRejected = false;
-  var message = ""
-  if(params.status === constants.APPROVED_STATUS){
-    isApproved = true;
-    message = 'Appointment accepted successfully'
-  }else{
-    message = 'Appointment rejected successfully'
-    isRejected = false;
-  }
+//   if(!params.status || (params.status && params.status !== constants.APPROVED_STATUS
+//      && params.status !== constants.REJECTED_STATUS)){
+//     var errors = [];
+//     if (!params.status) {
+//       errors.push({
+//         'field': 'status',
+//         'message': 'appoinment status required',
+//       })
+//     }
+//     if ((params.status && params.status !== constants.APPROVED_STATUS
+//       && params.status !== constants.REJECTED_STATUS)) {
+//       errors.push({
+//         'field': 'status',
+//         'message': 'Invalid status',
+//       })
+//     }
+//     return res.send({
+//       success: 0,
+//       errors
+//     })
+//   }
+//   var isApproved = false;
+//   var isRejected = false;
+//   var message = ""
+//   if(params.status === constants.APPROVED_STATUS){
+//     isApproved = true;
+//     message = 'Appointment accepted successfully'
+//   }else{
+//     message = 'Appointment rejected successfully'
+//     isRejected = false;
+//   }
 
-  var checkAppointment = await AppointmentClassRequest.findOne({
-    _id : appointmentId,
-    tutorId : userId,
-     status : 1
-  })
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while check user',
-      error: err
-    }
-  })
-if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
-  return res.send(checkAppointment);
-}
-if(checkAppointment){
-   var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment,isApproved,isRejected)
-   if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
-    return res.send(checkAppointmentResp);
-  }
+//   var checkAppointment = await AppointmentClassRequest.findOne({
+//     _id : appointmentId,
+//     tutorId : userId,
+//      status : 1
+//   })
+//   .catch(err => {
+//     return {
+//       success: 0,
+//       message: 'Something went wrong while check user',
+//       error: err
+//     }
+//   })
+// if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
+//   return res.send(checkAppointment);
+// }
+// if(checkAppointment){
+//    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment,isApproved,isRejected)
+//    if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
+//     return res.send(checkAppointmentResp);
+//   }
 
-  var updateAppointmentStatus = await AppointmentClassRequest.updateOne({
-    _id : appointmentId,
-    tutorId : userId,
-    status : 1
-  },checkAppointmentResp.update)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while check user',
-      error: err
-    }
-  })
-if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
-  return res.send(updateAppointmentStatus);
-}
-return res.send({
-  success : 1,
-  message
-})
-}else{
-  return {
-    success: 0,
-    message: 'Appoinment request not exists',
-  };
-}
+//   var updateAppointmentStatus = await AppointmentClassRequest.updateOne({
+//     _id : appointmentId,
+//     tutorId : userId,
+//     status : 1
+//   },checkAppointmentResp.update)
+//   .catch(err => {
+//     return {
+//       success: 0,
+//       message: 'Something went wrong while check user',
+//       error: err
+//     }
+//   })
+// if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
+//   return res.send(updateAppointmentStatus);
+// }
+// return res.send({
+//   success : 1,
+//   message
+// })
+// }else{
+//   return {
+//     success: 0,
+//     message: 'Appoinment request not exists',
+//   };
+// }
 
-}
+// }
 
 
 async function checkUser(params, condition) {
@@ -3027,61 +3027,61 @@ async function checkUserIsTutor(userId){
   }
 
 
-  async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
-    if(appointmentData.isApproved && isApproved){
-      return {
-        success: 0,
-        message: 'Appoinment request already approved',
-      };
-    }else if(appointmentData.isRejected && isRejected){
-      return {
-        success: 0,
-        message: 'Appoinment request already rejected',
-      };
-    }
-    var updateObj = {};
-    if(isApproved){
-      var findCriteria = {};
-      findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
-      findCriteria.tutorClassId = appointmentData.tutorClassId;
-      findCriteria.isPublic = false;
-      findCriteria.isApproved = true;
-      findCriteria.isRejected = false;
-      findCriteria.status = 1;
+  // async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
+  //   if(appointmentData.isApproved && isApproved){
+  //     return {
+  //       success: 0,
+  //       message: 'Appoinment request already approved',
+  //     };
+  //   }else if(appointmentData.isRejected && isRejected){
+  //     return {
+  //       success: 0,
+  //       message: 'Appoinment request already rejected',
+  //     };
+  //   }
+  //   var updateObj = {};
+  //   if(isApproved){
+  //     var findCriteria = {};
+  //     findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
+  //     findCriteria.tutorClassId = appointmentData.tutorClassId;
+  //     findCriteria.isPublic = false;
+  //     findCriteria.isApproved = true;
+  //     findCriteria.isRejected = false;
+  //     findCriteria.status = 1;
 
-      var checkOnlineClass = await OnlineClass.findOne(findCriteria)
-      .catch(err => {
-        return {
-          success: 0,
-          message: 'Something went wrong while checking user is a tutor',
-          error: err
-        }
-      })
-      if (checkOnlineClass && (checkOnlineClass.success !== undefined) && (userData.success === 0)) {
-      return checkOnlineClass;
-      }
-      if(!checkOnlineClass || checkOnlineClass === null){
-        return {
-          success: 0,
-          message: 'Requested online class not added, So add class',
-        };
-      }else{
-        updateObj.isApproved = true;
-      updateObj.tsModifiedAt = Date.now();
+  //     var checkOnlineClass = await OnlineClass.findOne(findCriteria)
+  //     .catch(err => {
+  //       return {
+  //         success: 0,
+  //         message: 'Something went wrong while checking user is a tutor',
+  //         error: err
+  //       }
+  //     })
+  //     if (checkOnlineClass && (checkOnlineClass.success !== undefined) && (userData.success === 0)) {
+  //     return checkOnlineClass;
+  //     }
+  //     if(!checkOnlineClass || checkOnlineClass === null){
+  //       return {
+  //         success: 0,
+  //         message: 'Requested online class not added, So add class',
+  //       };
+  //     }else{
+  //       updateObj.isApproved = true;
+  //     updateObj.tsModifiedAt = Date.now();
 
-      return {
-        success : 1,
-        message : 'Approve status',
-        update : updateObj
-      }
-      }
-    }else{
-      updateObj.isRejected = true;
-      updateObj.tsModifiedAt = Date.now();
-      return {
-        success : 1,
-        message : 'Reject status',
-        update : updateObj
-      }
-    }
-  }
+  //     return {
+  //       success : 1,
+  //       message : 'Approve status',
+  //       update : updateObj
+  //     }
+  //     }
+  //   }else{
+  //     updateObj.isRejected = true;
+  //     updateObj.tsModifiedAt = Date.now();
+  //     return {
+  //       success : 1,
+  //       message : 'Reject status',
+  //       update : updateObj
+  //     }
+  //   }
+  // }

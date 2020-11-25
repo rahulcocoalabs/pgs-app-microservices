@@ -69,6 +69,5 @@ module.exports = (app) => {
     app.post('/accounts/request-as-tutor',auth,fileUpload.single('video'), accounts.requestAsTutor); 
     app.get('/accounts/tutor/profile',auth, accounts.getTutorProfile); 
     app.patch('/accounts/tutor/profile',auth,fileUpload.single('video'), accounts.updateTutorProfile); 
-    app.patch('/accounts/tutor/appointment/:id/status', accounts.updateAppointmentStatus); 
 
 };
