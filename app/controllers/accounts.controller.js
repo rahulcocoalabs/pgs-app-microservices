@@ -51,7 +51,7 @@ const sgMail = require('@sendgrid/mail');
 var bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 
-usersConfig = config.users;
+var usersConfig = config.users;
 karmaConfig = config.karma;
 
 function updateCoinCount(reqObj, callback) {
@@ -2368,6 +2368,12 @@ exports.getTutorProfile = async(req,res) =>{
     isRejected : false,
     status : 1
   })
+  .populate([{
+    path: 'tutorSubjectId',
+  }, {
+    path: 'tutorClassId',
+  }])
+
   .catch(err => {
     return {
       success: 0,
@@ -2409,6 +2415,7 @@ if(!appointmentData || appointmentData === null){
 tutorCheck.myAppointments = appointmentData
 tutorCheck.myClasses = myClassData;
 tutorCheck.classImageBase = classConfig.imageBase;
+tutorCheck.tutorImageBase = usersConfig.imageBase;
 
   return res.send(tutorCheck);
 }
