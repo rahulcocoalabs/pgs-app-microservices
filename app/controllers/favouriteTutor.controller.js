@@ -136,8 +136,7 @@ exports.removefavourite = async (req, res) => {
         var update = await Favourite.updateOne({ status: 1, userId: userId, tutorId: params.id }, {
             status: 0
         })
-        var update1 = await User.updateOne({status:1,_id:userId},{ $pull: {  favouriteTutor: params.id } }
-        )
+        var update1 = await User.updateOne({status:1,_id:userId},{ $pull: {  favouriteTutor: params.id } })
         if (update && update1) {
             return res.status(200).send({
                 success: 1,
@@ -216,10 +215,12 @@ exports.addfavouriteClass = async (req, res) => {
 
 
 
-        // var update = await User.UpdateOne({ status: 1, _id: userId }, {
-        //     $push: {
-        //         favouriteTutor: params.id
-        //     }
+        var update = await User.updateOne({ status: 1, _id: userId }, {
+            $push: {
+                favouriteClass: params.id
+            }
+
+        })
 
         // })
         if (info) {
