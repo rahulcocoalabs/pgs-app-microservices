@@ -53,12 +53,12 @@ exports.addfavourite = async (req, res) => {
 
 
 
-        // var update = await User.UpdateOne({ status: 1, _id: userId }, {
-        //     $push: {
-        //         favouriteTutor: params.id
-        //     }
+        var update = await User.UpdateOne({ status: 1, _id: userId }, {
+            $push: {
+                favouriteTutor: params.id
+            }
 
-        // })
+        })
         if (info) {
             return res.status(200).send({
                 success: 1,
