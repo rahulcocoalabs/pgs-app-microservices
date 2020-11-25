@@ -162,7 +162,7 @@ const UserSchema = mongoose.Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     favouriteTutor : [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    favouriteClass : [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    favouriteClass : [{ type: mongoose.Schema.Types.ObjectId, ref: 'OnlineClass' }],
     tutorCourseIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorCourse' }],
     tutorSubjectIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' }],
     tutorClassIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' }],

@@ -55,7 +55,7 @@ exports.createOnlineClass = async (req, res) => {
   console.log("file")
   console.log(file)
   console.log("file")
- 
+
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined
@@ -213,10 +213,10 @@ exports.getClassDetails = async (req, res) => {
   }
   if (classDetails) {
 
-    var checkResp = await checkIfJoinLinkAvailable(classDetails,userId);
+    var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
     if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
       return res.send(checkResp);
-      }
+    }
     return res.send({
       success: 1,
       item: classDetails,
@@ -276,6 +276,75 @@ exports.listTutorList = async (req, res) => {
   return res.send(listTutorResp);
 
 }
+
+
+// rakesh 
+
+exports.listClassForTutor = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var findCriteria = {};
+  var params = req.query;
+
+
+  findCriteria.tutorId = userId;
+  findCriteria.isApproved = true;
+  findCriteria.status = 1;
+
+  var page = Number(page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var onlineClassData = await OnlineCLass.find(findCriteria)
+    .populate([ {path: 'tutorSubjectId',}, {path: 'tutorClassId',}]).limit(perPage).skip(offset).sort({
+      'tsCreatedAt': -1
+    }).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting classes',
+        error: err
+      }
+    })
+  if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
+    return onlineClassData;
+  }
+
+  var totalOnlineClassCount = await OnlineCLass.countDocuments(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while finding online class count',
+        error: err
+      }
+    })
+  if (totalOnlineClassCount && (totalOnlineClassCount.success !== undefined) && (totalOnlineClassCount.success === 0)) {
+    return totalOnlineClassCount;
+  }
+
+  totalPages = totalOnlineClassCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+    page,
+    perPage,
+    hasNextPage,
+    totalItems: totalOnlineClassCount,
+    totalPages
+  }
+  return {
+    success: 1,
+    pagination,
+    imageBase: classConfig.imageBase,
+    items: onlineClassData,
+    message: 'List latest class'
+  }
+ 
+
+}
+
 
 exports.getStudentHome = async (req, res) => {
   var userData = req.identity.data;
@@ -468,7 +537,7 @@ exports.requestAppointment = async (req, res) => {
 }
 
 
-exports.updateAppointmentStatus = async(req,res) =>{
+exports.updateAppointmentStatus = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var tutorCheck = await checkUserIsTutor(userId);
@@ -478,8 +547,8 @@ exports.updateAppointmentStatus = async(req,res) =>{
   var params = req.body;
   var appointmentId = req.params.id;
 
-  if(!params.status || (params.status && params.status !== constants.APPROVED_STATUS
-     && params.status !== constants.REJECTED_STATUS)){
+  if (!params.status || (params.status && params.status !== constants.APPROVED_STATUS
+    && params.status !== constants.REJECTED_STATUS)) {
     var errors = [];
     if (!params.status) {
       errors.push({
@@ -502,61 +571,61 @@ exports.updateAppointmentStatus = async(req,res) =>{
   var isApproved = false;
   var isRejected = false;
   var message = ""
-  if(params.status === constants.APPROVED_STATUS){
+  if (params.status === constants.APPROVED_STATUS) {
     isApproved = true;
     message = 'Appointment accepted successfully'
-  }else{
+  } else {
     message = 'Appointment rejected successfully'
     isRejected = false;
   }
 
   var checkAppointment = await AppointmentClassRequest.findOne({
-    _id : appointmentId,
-    tutorId : userId,
-     status : 1
+    _id: appointmentId,
+    tutorId: userId,
+    status: 1
   })
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while check user',
-      error: err
-    }
-  })
-if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
-  return res.send(checkAppointment);
-}
-
-if(checkAppointment && checkAppointment !== null){
-   var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment,isApproved,isRejected)
-   if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
-    return res.send(checkAppointmentResp);
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while check user',
+        error: err
+      }
+    })
+  if (checkAppointment && (checkAppointment.success !== undefined) && (checkAppointment.success === 0)) {
+    return res.send(checkAppointment);
   }
 
-  var updateAppointmentStatus = await AppointmentClassRequest.updateOne({
-    _id : appointmentId,
-    tutorId : userId,
-    status : 1
-  },checkAppointmentResp.update)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while check user',
-      error: err
+  if (checkAppointment && checkAppointment !== null) {
+    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected)
+    if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
+      return res.send(checkAppointmentResp);
     }
-  })
-if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
-  return res.send(updateAppointmentStatus);
-}
-return res.send({
-  success : 1,
-  message
-})
-}else{
-  return res.send( {
-    success: 0,
-    message: 'Appoinment request not exists',
-  });
-}
+
+    var updateAppointmentStatus = await AppointmentClassRequest.updateOne({
+      _id: appointmentId,
+      tutorId: userId,
+      status: 1
+    }, checkAppointmentResp.update)
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while check user',
+          error: err
+        }
+      })
+    if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
+      return res.send(updateAppointmentStatus);
+    }
+    return res.send({
+      success: 1,
+      message
+    })
+  } else {
+    return res.send({
+      success: 0,
+      message: 'Appoinment request not exists',
+    });
+  }
 
 }
 
@@ -840,12 +909,12 @@ async function checkClassIsPrivate(params) {
   console.log("onlineClassData")
   console.log(onlineClassData)
   console.log("onlineClassData")
-  if(onlineClassData && onlineClassData !== null){
+  if (onlineClassData && onlineClassData !== null) {
     return {
       success: 1,
       message: 'Private class',
     }
-  }else{
+  } else {
     return {
       success: 0,
       message: 'Invalid private class',
@@ -855,20 +924,20 @@ async function checkClassIsPrivate(params) {
 
 
 
-async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
-  if(appointmentData.isApproved && isApproved){
+async function checkAppointmentStatusCheck(appointmentData, isApproved, isRejected) {
+  if (appointmentData.isApproved && isApproved) {
     return {
       success: 0,
       message: 'Appoinment request already approved',
     };
-  }else if(appointmentData.isRejected && isRejected){
+  } else if (appointmentData.isRejected && isRejected) {
     return {
       success: 0,
       message: 'Appoinment request already rejected',
     };
   }
   var updateObj = {};
-  if(isApproved){
+  if (isApproved) {
     var findCriteria = {};
     findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
     findCriteria.tutorClassId = appointmentData.tutorClassId;
@@ -878,83 +947,83 @@ async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected
     findCriteria.status = 1;
 
     var checkOnlineClass = await OnlineCLass.findOne(findCriteria)
-    .catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while checking user is a tutor',
-        error: err
-      }
-    })
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while checking user is a tutor',
+          error: err
+        }
+      })
     if (checkOnlineClass && (checkOnlineClass.success !== undefined) && (userData.success === 0)) {
-    return checkOnlineClass;
+      return checkOnlineClass;
     }
-    if(!checkOnlineClass || checkOnlineClass === null){
+    if (!checkOnlineClass || checkOnlineClass === null) {
       return {
         success: 0,
         message: 'Requested online class not added, So add class',
       };
-    }else{
+    } else {
       updateObj.isApproved = true;
-    updateObj.tsModifiedAt = Date.now();
+      updateObj.tsModifiedAt = Date.now();
 
-    return {
-      success : 1,
-      message : 'Approve status',
-      update : updateObj
+      return {
+        success: 1,
+        message: 'Approve status',
+        update: updateObj
+      }
     }
-    }
-  }else{
+  } else {
     updateObj.isRejected = true;
     updateObj.tsModifiedAt = Date.now();
     return {
-      success : 1,
-      message : 'Reject status',
-      update : updateObj
+      success: 1,
+      message: 'Reject status',
+      update: updateObj
     }
   }
 }
 
 
-async function checkIfJoinLinkAvailable(classDetails,userId){
-  if(classDetails.isPublic){
-     return {
-       success : 1,
-       joinLinkAvailable : true,
-       message : 'Public class'
-     }
-  }else{
-  var appointmentCheckResp = await AppointmentClassRequest.findOne({
-    userId,
-    tutorId : classDetails.userId,
-    tutorSubjectId : classDetails.tutorSubjectId,
-    tutorClassId : classDetails.tutorClassId,
-    isApproved : true,
-    isRejected : false,
-    status : 1
-  })
-  .catch(err => {
+async function checkIfJoinLinkAvailable(classDetails, userId) {
+  if (classDetails.isPublic) {
     return {
-      success: 0,
-      message: 'Something went wrong while checking appointment request approve or not',
-      error: err
+      success: 1,
+      joinLinkAvailable: true,
+      message: 'Public class'
     }
-  })
-  if (appointmentCheckResp && (appointmentCheckResp.success !== undefined) && (appointmentCheckResp.success === 0)) {
-  return appointmentCheckResp;
-  }
-  if(appointmentCheckResp && appointmentCheckResp !== null){
-    return {
-      success : 1,
-      joinLinkAvailable : true,
-      message : 'Private class with approved appointment request'
+  } else {
+    var appointmentCheckResp = await AppointmentClassRequest.findOne({
+      userId,
+      tutorId: classDetails.userId,
+      tutorSubjectId: classDetails.tutorSubjectId,
+      tutorClassId: classDetails.tutorClassId,
+      isApproved: true,
+      isRejected: false,
+      status: 1
+    })
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while checking appointment request approve or not',
+          error: err
+        }
+      })
+    if (appointmentCheckResp && (appointmentCheckResp.success !== undefined) && (appointmentCheckResp.success === 0)) {
+      return appointmentCheckResp;
     }
+    if (appointmentCheckResp && appointmentCheckResp !== null) {
+      return {
+        success: 1,
+        joinLinkAvailable: true,
+        message: 'Private class with approved appointment request'
+      }
 
-  }else{
-    return {
-      success : 1,
-      joinLinkAvailable : false,
-      message : 'Private class not approve appointment or not sent request'
+    } else {
+      return {
+        success: 1,
+        joinLinkAvailable: false,
+        message: 'Private class not approve appointment or not sent request'
+      }
     }
   }
-}
 }
