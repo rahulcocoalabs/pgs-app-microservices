@@ -31,6 +31,7 @@ const Feed = require('../models/feed.model.js');
 const sgMail = require('@sendgrid/mail');
 
 var bcrypt = require('bcryptjs');
+const e = require('express');
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -187,7 +188,9 @@ exports.getClassDetails = async (req, res) => {
   var params = req.query;
 
   var classId = req.params.id;
-
+  if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+    return res.send(favouriteData);
+  }
   var classDetails = await OnlineCLass.findOne({
     _id: classId,
     isApproved: true,
@@ -212,11 +215,22 @@ exports.getClassDetails = async (req, res) => {
     return res.send(classDetails);
   }
   if (classDetails) {
-
+    classDetails = JSON.parse(JSON.stringify(classDetails))
     var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
     if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
       return res.send(checkResp);
     }
+    if(favouriteData && favouriteData.favouriteClass !== null && favouriteData.favouriteClass !== undefined){
+      var index = await favouriteData.favouriteClass.findIndex(id => JSON.stringify(id) === JSON.stringify(classId));
+      if(index > -1){
+        classDetails.isFavourite = true;
+      }else{
+        classDetails.isFavourite = false;
+      }
+    }else{
+      classDetails.isFavourite = false;
+    }
+
     return res.send({
       success: 1,
       item: classDetails,
@@ -496,6 +510,10 @@ exports.getStudentHome = async (req, res) => {
 exports.getTutorDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
+  var favouriteData = await getUserFavouriteData(userId);
+  if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+    return res.send(favouriteData);
+  }
 
   var tutorId = req.params.id;
 
@@ -524,6 +542,17 @@ exports.getTutorDetails = async (req, res) => {
     return res.send(tutorDetails);
   }
   if (tutorDetails) {
+    tutorDetails = JSON.parse(JSON.stringify(tutorDetails));
+    if(favouriteData && favouriteData.favouriteTutor !== null && favouriteData.favouriteTutor !== undefined){
+      var index = await favouriteData.favouriteTutor.findIndex(id => JSON.stringify(id) === JSON.stringify(tutorId));
+      if(index > -1){
+        tutorDetails.isFavourite = true;
+      }else{
+        tutorDetails.isFavourite = false;
+      }
+    }else{
+      tutorDetails.isFavourite = false;
+    }
     return res.send({
       success: 1,
       item: tutorDetails,
