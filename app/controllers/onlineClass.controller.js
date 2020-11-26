@@ -1041,8 +1041,8 @@ async function getFavouriteDetails(params,userId) {
   }
  console.log(1,infoFavourites,userId);
   if (infoFavourites != null){
-    returnObject.favouriteClasses = infoFavourites.favouriteClasses;
-    returnObject.favouriteTutors = infoFavourites.favouriteTutors;
+    returnObject.favouriteClasses = infoFavourites.favouriteClass;
+    returnObject.favouriteTutors = infoFavourites.favouriteTutor;
   }
   else {
     return {
