@@ -1000,7 +1000,7 @@ async function checkYourTab(params, userId) {
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
     console.log(3,favourites)
-    if (favourites && favourites.success && favourites.success === 0){
+    if (favourites && favourites.success && favourites.success == 0){
       return {
       success:0,
       isFavourite: true,
