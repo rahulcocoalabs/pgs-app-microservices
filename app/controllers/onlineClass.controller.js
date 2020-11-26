@@ -455,7 +455,10 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
-    findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
+    console.log(tabCheckData,4);
+    if (tabCheckData.favourites.favouriteClasses){
+      findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
+    }
 
   }
   findCriteria.isPopular = true;
@@ -475,12 +478,14 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
     console.log(tabCheckData.favourites.favouriteTutors);
-    findCriteria = {_id:{$in:tabCheckData.favourites.favouriteTutors}};
+    if (tabCheckData.favourites.favouriteTutors){
+      findCriteria = {_id:{$in:tabCheckData.favourites.favouriteTutors}};
+    }
   }
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
-
+  console.log(5,findCriteria)
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
@@ -997,15 +1002,9 @@ async function checkYourTab(params, userId) {
     }
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
-    if (favourites && favourites.success && favourites.success === 0){
-      return {
-      success:0,
-      isFavourite: true,
-      isPublic: null,
-      favourites:favourites,
-      message: 'Favourites tab Could not loaded properly'
-      }
-   }
+    console.log(3,favourites)
+    
+  
     return {
       success: 1,
       isFavourite: true,
@@ -1027,7 +1026,7 @@ async function getFavouriteDetails(params,userId) {
 
   var returnObject = {};
 
-  var infoFavourites = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1})
+  var infoFavourites = await User.findOne({status:1,_id:userId},{_id:1,favouriteClass:1,favouriteTutor:1})
   .catch(error => {
 
     return {
@@ -1040,10 +1039,16 @@ async function getFavouriteDetails(params,userId) {
   if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
     return infoFavourites
   }
- console.log(1,infoFavourites);
-  if (infoFavourites ){
-    returnObject.favouriteClasses = infoFavourites.favouriteClasses;
-    returnObject.favouriteTutors = infoFavourites.favouriteTutors;
+ console.log(1,infoFavourites,userId);
+  if (infoFavourites != null){
+    returnObject.favouriteClasses = infoFavourites.favouriteClass;
+    returnObject.favouriteTutors = infoFavourites.favouriteTutor;
+  }
+  else {
+    return {
+      success:0,
+      message:"No recored for this user"
+    }
   }
 
   return returnObject;
