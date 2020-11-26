@@ -455,6 +455,7 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
+    console.log(tabCheckData,4);
     if (!tabCheckData.isEmpty){
       findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
     }
