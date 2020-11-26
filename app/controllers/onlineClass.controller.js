@@ -472,6 +472,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria = {};
   if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
+    console.log(tabCheckData.favourites.favouriteTutors);
     findCriteria = {_id:{$in:tabCheckData.favourites.favouriteTutors}};
   }
   findCriteria.isPopular = true;
@@ -994,7 +995,15 @@ async function checkYourTab(params, userId) {
     }
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
-    // if (favourites && favourites.success && favourite.succe)
+    if (favourites && favourites.success && favourites.success === 0){
+      return {
+      success:0,
+      isFavourite: true,
+      isPublic: null,
+      favourites:favourites,
+      message: 'Favourites tab Could not loaded properly'
+      )
+   }
     return {
       success: 1,
       isFavourite: true,
