@@ -198,6 +198,7 @@ exports.addfavouriteClass = async (req, res) => {
         }
 
         var existCombo = await Class.countDocuments({ status: 1, tutorId: params.id, userId: userId });
+        console.log("combo",existCombo);
         if (existCombo > 0) {
             return res.status(201).send({ success: 0, message: "already added to favourites" })
         }
