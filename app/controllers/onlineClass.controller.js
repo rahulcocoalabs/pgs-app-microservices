@@ -365,7 +365,7 @@ exports.listApointmentsForTutor = async (req, res) => {
   var offset = (page - 1) * perPage;
 
   var AppointmentClassRequestData = await AppointmentClassRequest.find(findCriteria)
-    .populate([ {path: 'user'}, {path: 'tutorClassId'},{path: 'tutorSubjectId'}]).limit(perPage).skip(offset).sort({
+    .populate([ {path: 'userId'}, {path: 'tutorClassId'},{path: 'tutorSubjectId'}]).limit(perPage).skip(offset).sort({
       'tsCreatedAt': -1
     }).catch(err => {
       return {
