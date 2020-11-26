@@ -972,9 +972,9 @@ async function getFavouriteDetails(params,userId) {
     }
   });
 
-  if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
-    return class
-  }
+  // if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
+  //   return class
+  // }
  console.log(1,infoFavourites);
   if (class ){
     returnObject.favouriteClasses = infoFavourites.favouriteClasses;
