@@ -958,7 +958,7 @@ async function checkYourTab(params, userId) {
     }
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
-    if (favourite && favourite.success && favourite.succe)
+    // if (favourites && favourites.success && favourite.succe)
     return {
       success: 1,
       isFavourite: true,
