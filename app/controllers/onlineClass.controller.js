@@ -31,7 +31,6 @@ const Feed = require('../models/feed.model.js');
 const sgMail = require('@sendgrid/mail');
 
 var bcrypt = require('bcryptjs');
-const e = require('express');
 
 const salt = bcrypt.genSaltSync(10);
 
