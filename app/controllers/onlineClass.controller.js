@@ -964,20 +964,20 @@ async function getFavouriteDetails(params,userId) {
   var returnObject = {};
 
   var infoFavourites = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1});
-  // .catch(error => {
+  .catch(error => {
 
-  //   return {
-  //     success:0,
-  //     error:error.message,
-  //     message: "could not get favourite classes"
-  //   }
-  // });
+    return {
+      success:0,
+      error:error.message,
+      message: "could not get favourite classes"
+    }
+  });
 
-  // if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
-  //   return class
-  // }
+  if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
+    return infoFavourites
+  }
  console.log(1,infoFavourites);
-  if (class ){
+  if (infoFavourites ){
     returnObject.favouriteClasses = infoFavourites.favouriteClasses;
     returnObject.favouriteTutors = infoFavourites.favouriteTutors;
   }
