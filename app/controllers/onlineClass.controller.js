@@ -456,7 +456,7 @@ exports.getStudentHome = async (req, res) => {
   } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
     console.log(tabCheckData,4);
-    if (!tabCheckData.isEmpty){
+    if (tabCheckData.favourites.favouriteClasses){
       findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
     }
 
@@ -1001,15 +1001,7 @@ async function checkYourTab(params, userId) {
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
     console.log(3,favourites)
-    if (favourites && favourites.success && favourites.success == 0){
-      return {
-      success:0,
-      isFavourite: true,
-      isPublic: null,
-      isEmpty:true,
-      message: 'Favourites tab Could not loaded properly'
-      }
-   }
+    
   
     return {
       success: 1,
