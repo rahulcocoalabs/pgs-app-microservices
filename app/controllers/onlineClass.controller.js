@@ -187,6 +187,8 @@ exports.getClassDetails = async (req, res) => {
   var params = req.query;
 
   var classId = req.params.id;
+  var favouriteData = await getUserFavouriteData(userId);
+
   if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
     return res.send(favouriteData);
   }
