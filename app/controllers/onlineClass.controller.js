@@ -941,11 +941,12 @@ async function checkYourTab(params, userId) {
     }
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
+    if (favourite && favourite.success && favourite.succe)
     return {
       success: 1,
       isFavourite: true,
       isPublic: null,
-      favourites:favourite,
+      favourites:favourites,
       message: 'Favourites tab'
     }
   } else {
@@ -962,7 +963,7 @@ async function getFavouriteDetails(params,userId) {
 
   var returnObject = {};
 
-  var class = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1}).catch(error=>{
+  var infoFavourites = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1}).catch(error=>{
 
     return {
       success:0,
@@ -970,13 +971,13 @@ async function getFavouriteDetails(params,userId) {
     }
   });
 
-  if (class && class.success && class.success === 0){
+  if (infoFavourites && infoFavourites.success && infoFavourites.success === 0){
     return class
   }
- console.console.log(1,class);
+ console.log(1,infoFavourites);
   if (class ){
-    returnObject.favouriteClasses = class.favouriteClasses;
-    returnObject.favouriteTutors = class.favouriteTutors;
+    returnObject.favouriteClasses = infoFavourites.favouriteClasses;
+    returnObject.favouriteTutors = infoFavourites.favouriteTutors;
   }
 
   return returnObject;
