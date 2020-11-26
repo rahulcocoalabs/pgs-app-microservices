@@ -1039,7 +1039,7 @@ async function getFavouriteDetails(params,userId) {
   if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
     return infoFavourites
   }
- console.log(1,infoFavourites);
+ console.log(1,infoFavourites,userId);
   if (infoFavourites != null){
     returnObject.favouriteClasses = infoFavourites.favouriteClasses;
     returnObject.favouriteTutors = infoFavourites.favouriteTutors;
