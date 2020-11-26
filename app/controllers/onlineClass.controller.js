@@ -1002,7 +1002,7 @@ async function checkYourTab(params, userId) {
       isPublic: null,
       favourites:favourites,
       message: 'Favourites tab Could not loaded properly'
-      )
+      }
    }
     return {
       success: 1,
