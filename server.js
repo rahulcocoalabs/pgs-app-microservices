@@ -1,4 +1,5 @@
 const express = require('express');
+var https = require('https');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 var consoleArguments = require('minimist');
@@ -18,6 +19,14 @@ const Sequelize = require('sequelize');
 const mongoose = require('mongoose');
 var sequelize = null;
 //jwttoken and verification
+
+var sslOptions = {
+  key: fs.readFileSync('/etc/ssl/pgsedu.com/private.key'),
+  cert: fs.readFileSync('/etc/ssl/pgsedu.com/certificate.crt'),
+  ca: fs.readFileSync('/etc/ssl/pgsedu.com/ca_bundle.crt')
+};
+
+
 
 
 // create express app
@@ -97,7 +106,8 @@ connectToMongoDb: function (dbConfig,callback) {
           require('./app/routes/' + route + '.routes.js')(app, that.methods, options);
           i++;
         }
-        app.listen(port, () => {
+        var server = https.createServer(sslOptions, app);
+        server.listen(port, () => {
           console.log("Server is listening on port " + port);
         });
 
