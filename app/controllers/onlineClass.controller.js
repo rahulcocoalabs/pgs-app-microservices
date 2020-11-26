@@ -258,6 +258,9 @@ exports.listOnlineClasses = async (req, res) => {
   if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
     return res.send(favouriteData);
   }
+  console.log("favouriteData")
+  console.log(JSON.stringify(favouriteData));
+  console.log("favouriteData")
   var findCriteria = {};
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
@@ -820,6 +823,9 @@ async function listClasses(findCriteria, perPage, page,favouriteData) {
   if(favouriteData && favouriteData.favouriteClass && favouriteData.favouriteClass !== null){
     favouriteClassData = favouriteData.favouriteClass;
   }
+  console.log("favouriteClassData")
+  console.log(JSON.stringify(favouriteClassData));
+  console.log("favouriteClassData")
   onlineClassData = await checkAndSetFavourite(onlineClassData,favouriteClassData)
   totalPages = totalOnlineClassCount / perPage;
   totalPages = Math.ceil(totalPages);
