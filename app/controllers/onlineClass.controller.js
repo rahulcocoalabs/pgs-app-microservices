@@ -455,7 +455,9 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
-    findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
+    if (!tabCheckData.isEmpty){
+      findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
+    }
 
   }
   findCriteria.isPopular = true;
@@ -1003,7 +1005,7 @@ async function checkYourTab(params, userId) {
       success:0,
       isFavourite: true,
       isPublic: null,
-      favouritesTutors:favourites,
+      isEmpty:true,
       message: 'Favourites tab Could not loaded properly'
       }
    }
@@ -1043,9 +1045,15 @@ async function getFavouriteDetails(params,userId) {
     return infoFavourites
   }
  console.log(1,infoFavourites);
-  if (infoFavourites ){
+  if (infoFavourites != null){
     returnObject.favouriteClasses = infoFavourites.favouriteClasses;
     returnObject.favouriteTutors = infoFavourites.favouriteTutors;
+  }
+  else {
+    return {
+      success:0,
+      message:"No recored for this user"
+    }
   }
 
   return returnObject;
