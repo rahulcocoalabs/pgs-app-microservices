@@ -1026,7 +1026,7 @@ async function getFavouriteDetails(params,userId) {
 
   var returnObject = {};
 
-  var infoFavourites = await User.findOne({status:1,_id:userId},{_id:1,favouriteClasses:1,favouriteTutors:1})
+  var infoFavourites = await User.findOne({status:1,_id:userId},{_id:1,favouriteClass:1,favouriteTutor:1})
   .catch(error => {
 
     return {
