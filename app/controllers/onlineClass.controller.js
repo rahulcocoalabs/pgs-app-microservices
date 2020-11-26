@@ -428,6 +428,8 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
+    findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
+
   }
   findCriteria.isPopular = true;
   findCriteria.status = 1;
@@ -445,6 +447,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria = {};
   if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
+    findCriteria = {_id:{$in:tabCheckData.favourites.favouriteTutors}};
   }
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
@@ -939,10 +942,12 @@ async function checkYourTab(params, userId) {
       message: 'Private tab'
     }
   } else if (params.tabType === constants.FAVOURITES_TAB) {
+    var favourites = await getFavouriteDetails(params,userId);
     return {
       success: 1,
       isFavourite: true,
       isPublic: null,
+      favourites:favourite,
       message: 'Favourites tab'
     }
   } else {
@@ -955,6 +960,30 @@ async function checkYourTab(params, userId) {
   }
 }
 
+async function getFavouriteDetails(params,userId) {
+
+  var returnObject = {};
+
+  var class = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1}).catch(error=>{
+
+    return {
+      success:0,
+      message: "could not get favourite classes"
+    }
+  });
+
+  if (class && class.success && class.success === 0){
+    return class
+  }
+
+  if (class ){
+    returnObject.favouriteClasses = class.favouriteClasses;
+    returnObject.favouriteTutors = class.favouriteTutors;
+  }
+
+  return returnObject;
+
+}
 
 async function checkClassIsPrivate(params) {
   var onlineClassData = await OnlineCLass.findOne({
