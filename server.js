@@ -4,6 +4,7 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 var consoleArguments = require('minimist');
 var argv = consoleArguments(process.argv.slice(2));
+const fs = require('fs');
 // Configuring the database
 var env = process.env.NODE_ENV;
 env = env ? env : "development";
