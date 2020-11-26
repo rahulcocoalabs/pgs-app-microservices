@@ -967,7 +967,7 @@ async function getFavouriteDetails(params,userId) {
 
     return {
       success:0,
-      error:error.message;
+      error:error.message,
       message: "could not get favourite classes"
     }
   });
