@@ -422,7 +422,7 @@ exports.getStudentHome = async (req, res) => {
     return res.send(tabCheckData);
   }
 
-
+  console.log(2,tabCheckData);
   var findCriteria = {};
   if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
     findCriteria.isPublic = tabCheckData.isPublic
@@ -484,8 +484,6 @@ exports.getStudentHome = async (req, res) => {
     tutorImageBase: usersConfig.imageBase,
     message: 'Student home'
   })
-
-
 }
 
 exports.getTutorDetails = async (req, res) => {
@@ -975,7 +973,7 @@ async function getFavouriteDetails(params,userId) {
   if (class && class.success && class.success === 0){
     return class
   }
-
+ console.console.log(1,class);
   if (class ){
     returnObject.favouriteClasses = class.favouriteClasses;
     returnObject.favouriteTutors = class.favouriteTutors;
