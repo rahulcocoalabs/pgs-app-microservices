@@ -787,7 +787,7 @@ async function listClasses(findCriteria, perPage, page,favouriteData) {
   }
   onlineClassData = JSON.parse(JSON.stringify(onlineClassData))
   var favouriteClassData = []
-  if(favouriteData.favouriteClass && favouriteData.favouriteClass !== null){
+  if(favouriteData && favouriteData.favouriteClass && favouriteData.favouriteClass !== null){
     favouriteClassData = favouriteData.favouriteClass;
   }
   onlineClassData = await checkAndSetFavourite(onlineClassData,favouriteClassData)
