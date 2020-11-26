@@ -187,7 +187,11 @@ exports.getClassDetails = async (req, res) => {
   var params = req.query;
 
   var classId = req.params.id;
+  var favouriteData = await getUserFavouriteData(userId);
 
+  if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+    return res.send(favouriteData);
+  }
   var classDetails = await OnlineCLass.findOne({
     _id: classId,
     isApproved: true,
@@ -212,11 +216,22 @@ exports.getClassDetails = async (req, res) => {
     return res.send(classDetails);
   }
   if (classDetails) {
-
+    classDetails = JSON.parse(JSON.stringify(classDetails))
     var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
     if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
       return res.send(checkResp);
     }
+    if(favouriteData && favouriteData.favouriteClass !== null && favouriteData.favouriteClass !== undefined){
+      var index = await favouriteData.favouriteClass.findIndex(id => JSON.stringify(id) === JSON.stringify(classId));
+      if(index > -1){
+        classDetails.isFavourite = true;
+      }else{
+        classDetails.isFavourite = false;
+      }
+    }else{
+      classDetails.isFavourite = false;
+    }
+
     return res.send({
       success: 1,
       item: classDetails,
@@ -239,7 +254,10 @@ exports.listOnlineClasses = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
-
+  var favouriteData = await getUserFavouriteData(userId);
+  if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+    return res.send(favouriteData);
+  }
   var findCriteria = {};
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
@@ -254,15 +272,19 @@ exports.listOnlineClasses = async (req, res) => {
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
+  
 
-  var listClassResp = await listClasses(findCriteria, params.perPage, params.page);
+  var listClassResp = await listClasses(findCriteria, params.perPage, params.page,favouriteData);
   return res.send(listClassResp);
 }
 
 exports.listTutorList = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-
+  var favouriteData = await getUserFavouriteData(userId);
+  if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+    return res.send(favouriteData);
+  }
   var findCriteria = {};
   var params = req.query;
   if (params.isPopular === 'true') {
@@ -272,7 +294,7 @@ exports.listTutorList = async (req, res) => {
   findCriteria.status = 1;
 
 
-  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page)
+  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page,favouriteData)
   return res.send(listTutorResp);
 
 }
@@ -490,6 +512,10 @@ exports.getStudentHome = async (req, res) => {
 exports.getTutorDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
+  var favouriteData = await getUserFavouriteData(userId);
+  if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+    return res.send(favouriteData);
+  }
 
   var tutorId = req.params.id;
 
@@ -518,6 +544,17 @@ exports.getTutorDetails = async (req, res) => {
     return res.send(tutorDetails);
   }
   if (tutorDetails) {
+    tutorDetails = JSON.parse(JSON.stringify(tutorDetails));
+    if(favouriteData && favouriteData.favouriteTutor !== null && favouriteData.favouriteTutor !== undefined){
+      var index = await favouriteData.favouriteTutor.findIndex(id => JSON.stringify(id) === JSON.stringify(tutorId));
+      if(index > -1){
+        tutorDetails.isFavourite = true;
+      }else{
+        tutorDetails.isFavourite = false;
+      }
+    }else{
+      tutorDetails.isFavourite = false;
+    }
     return res.send({
       success: 1,
       item: tutorDetails,
@@ -733,12 +770,13 @@ async function checkUserIsTutor(userId) {
   }
 }
 
-async function listClasses(findCriteria, perPage, page) {
+async function listClasses(findCriteria, perPage, page,favouriteData) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || classConfig.resultsPerPage;
   perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
+  
 
   var onlineClassData = await OnlineCLass.find(findCriteria)
     .populate([{
@@ -767,7 +805,6 @@ async function listClasses(findCriteria, perPage, page) {
   if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
     return onlineClassData;
   }
-
   var totalOnlineClassCount = await OnlineCLass.countDocuments(findCriteria)
     .catch(err => {
       return {
@@ -779,7 +816,12 @@ async function listClasses(findCriteria, perPage, page) {
   if (totalOnlineClassCount && (totalOnlineClassCount.success !== undefined) && (totalOnlineClassCount.success === 0)) {
     return totalOnlineClassCount;
   }
-
+  onlineClassData = JSON.parse(JSON.stringify(onlineClassData))
+  var favouriteClassData = []
+  if(favouriteData && favouriteData.favouriteClass && favouriteData.favouriteClass !== null){
+    favouriteClassData = favouriteData.favouriteClass;
+  }
+  onlineClassData = await checkAndSetFavourite(onlineClassData,favouriteClassData)
   totalPages = totalOnlineClassCount / perPage;
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
@@ -800,7 +842,7 @@ async function listClasses(findCriteria, perPage, page) {
 }
 
 
-async function listTutors(findCriteria, perPage, page) {
+async function listTutors(findCriteria, perPage, page,favouriteData) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || tutorConfig.resultsPerPage;
@@ -831,7 +873,12 @@ async function listTutors(findCriteria, perPage, page) {
   if (tutorsData && (tutorsData.success !== undefined) && (tutorsData.success === 0)) {
     return tutorsData;
   }
-
+  tutorsData = JSON.parse(JSON.stringify(tutorsData))
+  var favouriteTutorData = []
+  if(favouriteData && favouriteData.favouriteTutor && favouriteData.favouriteTutor !== null){
+    favouriteTutorData = favouriteData.favouriteTutor;
+  }
+  tutorsData = await checkAndSetFavourite(tutorsData,favouriteTutorData)
   var totalTutorsCount = await User.countDocuments(findCriteria)
     .catch(err => {
       return {
@@ -1134,3 +1181,56 @@ async function checkIfJoinLinkAvailable(classDetails, userId) {
     }
   }
 }
+
+async function getUserFavouriteData(userId){
+  var favouriteData = await User.findOne({
+    _id : userId,
+    status : 1
+  },{
+    favouriteTutor : 1,
+    favouriteClass : 1
+  })
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while getting favourite data',
+      error: err
+    }
+  })
+if (favouriteData && (favouriteData.success !== undefined) && (favouriteData.success === 0)) {
+  return favouriteData;
+}
+if(favouriteData && favouriteData !== null){
+  return {
+    success: 1,
+    favouriteData,
+    message: 'Users favourite data',
+  }
+}else{
+  return {
+    success: 0,
+    message: 'User not exists',
+  }
+}
+}
+
+async function checkAndSetFavourite(listData,favouriteData){
+   if(favouriteData && favouriteData.length > 0){
+    for(let i = 0; i < listData.length; i++){
+      let index  = await favouriteData.findIndex(id => JSON.stringify(id) === JSON.stringify(listData[i].id));
+      if(index > -1){
+       listData[i].isFavourite = true;
+      }else{
+       listData[i].isFavourite = false;
+      }
+    }
+    return listData;
+   }else{
+     for(let i = 0; i < listData.length; i++){
+       listData[i].isFavourite = false;
+     }
+     return listData;
+   }
+}
+
+
