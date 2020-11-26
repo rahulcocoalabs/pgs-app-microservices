@@ -963,7 +963,7 @@ async function getFavouriteDetails(params,userId) {
 
   var returnObject = {};
 
-  var infoFavourites = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1});
+  var infoFavourites = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1})
   .catch(error => {
 
     return {
