@@ -206,7 +206,7 @@ exports.addfavouriteClass = async (req, res) => {
         const newClass = new Class({
             userId: userId,
             classId: params.id,
-
+            tutorId:params.id,
             status: 1,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
