@@ -279,7 +279,7 @@ exports.listTutorList = async (req, res) => {
   findCriteria.status = 1;
 
 
-  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page)
+  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page,favouriteData)
   return res.send(listTutorResp);
 
 }
@@ -811,7 +811,7 @@ async function listClasses(findCriteria, perPage, page,favouriteData) {
 }
 
 
-async function listTutors(findCriteria, perPage, page) {
+async function listTutors(findCriteria, perPage, page,favouriteData) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || tutorConfig.resultsPerPage;
@@ -844,7 +844,7 @@ async function listTutors(findCriteria, perPage, page) {
   }
   tutorsData = JSON.parse(JSON.stringify(tutorsData))
   var favouriteTutorData = []
-  if(favouriteData.favouriteTutor && favouriteData.favouriteTutor !== null){
+  if(favouriteData && favouriteData.favouriteTutor && favouriteData.favouriteTutor !== null){
     favouriteTutorData = favouriteData.favouriteTutor;
   }
   tutorsData = await checkAndSetFavourite(tutorsData,favouriteTutorData)
