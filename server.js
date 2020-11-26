@@ -18,6 +18,7 @@ const Sequelize = require('sequelize');
 const mongoose = require('mongoose');
 const fs = require("fs");
 const https = require("https");
+// const http = require("http");
 
 var sequelize = null;
 //jwttoken and verification
@@ -106,11 +107,11 @@ connectToMongoDb: function (dbConfig,callback) {
         // app.listen(port, () => {
         //   console.log("Server is listening on port " + port);
         // });
-        var httpServer = http.createServer(app);
+        // var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(port);
-httpsServer.listen(443);
+// httpServer.listen(port);
+httpsServer.listen(port);
 
       }
 
