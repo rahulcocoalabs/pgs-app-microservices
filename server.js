@@ -109,8 +109,8 @@ connectToMongoDb: function (dbConfig,callback) {
         // var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-// httpServer.listen(port);
-httpsServer.listen(port);
+httpServer.listen(port);
+httpsServer.listen(443);
 
       }
 
