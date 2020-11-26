@@ -973,7 +973,7 @@ async function getFavouriteDetails(params,userId) {
   });
 
   if(infoFavourites && infoFavourites.success && infoFavourites.success === 0){
-    return class;
+    return class
   }
  console.log(1,infoFavourites);
   if (class ){
