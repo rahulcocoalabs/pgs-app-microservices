@@ -989,15 +989,17 @@ async function checkYourTab(params, userId) {
     }
   } else if (params.tabType === constants.FAVOURITES_TAB) {
     var favourites = await getFavouriteDetails(params,userId);
+    console.log(3,favourites)
     if (favourites && favourites.success && favourites.success === 0){
       return {
       success:0,
       isFavourite: true,
       isPublic: null,
-      favourites:favourites,
+      favouritesTutors:favourites.,
       message: 'Favourites tab Could not loaded properly'
       )
    }
+  
     return {
       success: 1,
       isFavourite: true,
@@ -1019,7 +1021,7 @@ async function getFavouriteDetails(params,userId) {
 
   var returnObject = {};
 
-  var infoFavourites = await User.find({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1})
+  var infoFavourites = await User.findOne({status:1,userId:userId},{_id:1,favouriteClasses:1,favouriteTutors:1})
   .catch(error => {
 
     return {
