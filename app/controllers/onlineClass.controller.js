@@ -15,6 +15,7 @@ var crypto = require("crypto");
 
 const User = require('../models/user.model');
 const OnlineCLass = require('../models/onlineClass.model');
+const tutorRequestModel = require('../models/requestForTutor.model');
 const TutorCategory = require('../models/tutorCategory.model');
 const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
@@ -327,12 +328,12 @@ exports.createTutorRequest = async (req, res) => {
   requestObject.tsModifiedAt = null;
   requestObject.subject = req.body.tutorSubjectId;
   requestObject.class = req.body.tutorClassId;
-  var newrequestObject = new OnlineCLass(requestObject);
+  var newrequestObject = new tutorRequestModel(requestObject);
   var newTutorRequestResponse = await newrequestObject.save()
     .catch(err => {
       return {
         success: 0,
-        message: 'Something went wrong while saving online class',
+        message: 'Something went wrong while saving request',
         error: err
       }
     })
