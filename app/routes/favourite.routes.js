@@ -8,6 +8,6 @@ module.exports = (app) => {
     //  app.get('/favourites',auth, favourites.getUserFavourites);
     app.post('/favourites/tutoradd', auth, favourites1.addfavourite);
     app.post('/favourites/classadd', auth, favourites1.addfavouriteClass);
-    app.delete('/favourites/tutordelete', auth, favourites1.removefavourite);
-    app.delete('/favourites/classdelete', auth, favourites1.removefavouriteClass);
+    app.delete('/favourites/tutordelete/:id', auth, favourites1.removefavourite);
+    app.delete('/favourites/classdelete/:id', auth, favourites1.removefavouriteClass);
 }
