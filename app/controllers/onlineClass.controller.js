@@ -499,6 +499,9 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
     // findCriteria.isFavourite = isFavourite
+    if (tabCheckData.favourites.favouriteClasses){
+      findCriteria = {tutorId:{$in:tabCheckData.favourites.favouriteClasses}};
+    }
   }
   findCriteria.status = 1;
   findCriteria.isApproved = true;
