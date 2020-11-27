@@ -256,7 +256,7 @@ exports.getClassDetails = async (req, res) => {
 exports.createTutorRequest = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-
+ var params = req.body;
 
   if ( !params.tutorSubjectId || !params.classId || !params.classDescription) {
     var errors = [];
@@ -342,7 +342,7 @@ exports.createTutorRequest = async (req, res) => {
   return res.send({
     success: 1,
     statusCode: 200,
-    message: 'Created a class..waiting for admin approval',
+    message: 'Created a request',
   })
 
 }
