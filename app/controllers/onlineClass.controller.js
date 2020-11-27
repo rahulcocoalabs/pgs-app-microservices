@@ -1337,9 +1337,9 @@ async function checkIfJoinLinkAvailable(classDetails, userId) {
   } else {
     var appointmentCheckResp = await AppointmentClassRequest.findOne({
       userId,
-      tutorId: classDetails.userId,
-      tutorSubjectId: classDetails.tutorSubjectId,
-      tutorClassId: classDetails.tutorClassId,
+      tutorId: classDetails.userId.id,
+      tutorSubjectId: classDetails.tutorSubjectId.id,
+      tutorClassId: classDetails.tutorClassId.id,
       isApproved: true,
       isRejected: false,
       status: 1
