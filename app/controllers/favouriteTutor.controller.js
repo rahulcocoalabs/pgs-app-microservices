@@ -197,9 +197,9 @@ exports.addfavouriteClass = async (req, res) => {
             return res.status(201).send({ success: 0, message: "No such class exist" })
         }
 
-        var existCombo = await Class.countDocuments({ status: 1, classId: params.id, userId: userId });
-        console.log("combo",existCombo);
-        if (existCombo > 0) {
+        var existCombo1 = await Class.countDocuments({ status: 1, classId: params.id, userId: userId });
+        console.log("combo",existCombo1,params.id,userId);
+        if (existCombo1 > 0) {
             return res.status(201).send({ success: 0, message: "already added to favourites" })
         }
         
