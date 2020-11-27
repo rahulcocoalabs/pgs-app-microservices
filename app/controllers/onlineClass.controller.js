@@ -448,7 +448,11 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
-
+  var favouriteDataResp = await getUserFavouriteData(userId);
+  if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
+    return res.send(favouriteDataResp);
+  }
+  var favouriteData = favouriteDataResp.favouriteData;
   console.log(2,tabCheckData);
   var findCriteria = {};
   if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
@@ -468,7 +472,7 @@ exports.getStudentHome = async (req, res) => {
   var perPage = classConfig.popularInHomeResultsPerPage;
   var page = 1;
 
-  var listPopularClassData = await listClasses(findCriteria, perPage, page);
+  var listPopularClassData = await listClasses(findCriteria, perPage, page,favouriteData);
   if (listPopularClassData && (listPopularClassData.success !== undefined) && (listPopularClassData.success === 0)) {
     return res.send(listPopularClassData);
   }
@@ -486,7 +490,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isTutor = true;
   findCriteria.status = 1;
   console.log(5,findCriteria)
-  var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page)
+  var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page,favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
   }
@@ -506,7 +510,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
-  var listLatestClassData = await listClasses(findCriteria, perPage, page);
+  var listLatestClassData = await listClasses(findCriteria, perPage, page,favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
   }
