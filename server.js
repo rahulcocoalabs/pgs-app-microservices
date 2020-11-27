@@ -16,9 +16,19 @@ const params = require('./config/params.config');
 var gateway = require('./app/components/gateway.component');
 const Sequelize = require('sequelize');
 const mongoose = require('mongoose');
+const fs = require("fs");
+// const https = require("https");
+// const http = require("http");
+
 var sequelize = null;
 //jwttoken and verification
+var privateKey  = fs.readFileSync('/etc/ssl/pgsedu.com/private.key', 'utf8');
+var certificate = fs.readFileSync('/etc/ssl/pgsedu.com/certificate.crt', 'utf8');
 
+var credentials = {key: privateKey, cert: certificate};
+console.log("credentials")
+console.log(credentials)
+console.log("credentials")
 
 // create express app
 const app = express();
@@ -100,6 +110,11 @@ connectToMongoDb: function (dbConfig,callback) {
         app.listen(port, () => {
           console.log("Server is listening on port " + port);
         });
+        // var httpServer = http.createServer(app);
+// var httpsServer = https.createServer(credentials, app);
+
+// httpServer.listen(port);
+// httpsServer.listen(port);
 
       }
 
