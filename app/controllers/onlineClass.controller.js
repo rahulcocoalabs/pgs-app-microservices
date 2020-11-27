@@ -449,6 +449,7 @@ exports.getStudentHome = async (req, res) => {
     return res.send(tabCheckData);
   }
 
+
   console.log(2,tabCheckData);
   var findCriteria = {};
   if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
@@ -1165,8 +1166,8 @@ async function checkIfJoinLinkAvailable(classDetails, userId) {
     var appointmentCheckResp = await AppointmentClassRequest.findOne({
       userId,
       tutorId: classDetails.userId,
-      tutorSubjectId: classDetails.tutorSubjectId,
-      tutorClassId: classDetails.tutorClassId,
+      tutorSubjectId: classDetails.tutorSubjectId.id,
+      tutorClassId: classDetails.tutorClassId.id,
       isApproved: true,
       isRejected: false,
       status: 1
