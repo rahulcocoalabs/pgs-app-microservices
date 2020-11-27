@@ -249,26 +249,28 @@ exports.sendEventBooking = (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.body;
-  if (!params.name || !params.email || !params.phoneNumber || !params.participateCount || !params.eventId) {
+  if (
+    // !params.name || !params.email || !params.phoneNumber || 
+    !params.participateCount || !params.eventId) {
     errors = [];
-    if (!params.name) {
-      errors.push({
-        field: "name",
-        message: "Name cannot be empty"
-      });
-    }
-    if (!params.email) {
-      errors.push({
-        field: "email",
-        message: "Email cannot be empty"
-      });
-    }
-    if (!params.phoneNumber) {
-      errors.push({
-        field: "phoneNumber",
-        message: "Phonenumber cannot be empty"
-      });
-    }
+    // if (!params.name) {
+    //   errors.push({
+    //     field: "name",
+    //     message: "Name cannot be empty"
+    //   });
+    // }
+    // if (!params.email) {
+    //   errors.push({
+    //     field: "email",
+    //     message: "Email cannot be empty"
+    //   });
+    // }
+    // if (!params.phoneNumber) {
+    //   errors.push({
+    //     field: "phoneNumber",
+    //     message: "Phonenumber cannot be empty"
+    //   });
+    // }
     if (!params.participateCount) {
       errors.push({
         field: "participateCount",
