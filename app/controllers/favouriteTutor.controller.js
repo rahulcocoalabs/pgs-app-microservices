@@ -101,7 +101,7 @@ exports.removefavourite = async (req, res) => {
 
     var userData = req.identity.data;
     var userId = userData.userId;
-    var params = req.body;
+    var params = req.params;
 
     errors = [];
     if (!params.id) {
@@ -245,7 +245,7 @@ exports.removefavouriteClass = async (req, res) => {
 
     var userData = req.identity.data;
     var userId = userData.userId;
-    var params = req.body;
+    var params = req.params;
 
     errors = [];
     if (!params.id) {
