@@ -258,7 +258,7 @@ exports.createTutorRequest = async (req, res) => {
   var userId = userData.userId;
  var params = req.body;
 
-  if ( !params.tutorSubjectId || !params.classId || !params.classDescription) {
+  if ( !params.tutorSubjectId || !params.tutorClassId || !params.classDescription) {
     var errors = [];
 
     if (!req.body.tutorSubjectId) {
@@ -326,7 +326,7 @@ exports.createTutorRequest = async (req, res) => {
   requestObject.tsCreatedAt = Date.now();
   requestObject.tsModifiedAt = null;
   requestObject.subject = req.body.tutorSubjectId;
-  requestObject.class = req.body.classId;
+  requestObject.class = req.body.tutorClassId;
   var newrequestObject = new OnlineCLass(requestObject);
   var newTutorRequestResponse = await newrequestObject.save()
     .catch(err => {
