@@ -390,6 +390,24 @@ exports.getZoomLink = async(req,res) => {
           link:classDetails.zoomLink
         })
       }
+      else {
+        var requestDetailsCount = await AppointmentClassRequest.countDocuments({userId:userId,classId:classDetails.tutorClassId,subjectId:classDetails.tutorSubjectId}).catch(err => {
+          return {
+            success:0,
+            message:"did not fetch count of documents"
+          }
+        })
+        if (requestDetailsCount && requestDetailsCount.success && requestDetailsCount.success ===0){
+          return res.send(requestDetailsCount);
+        }
+        if (requestDetailsCount > 0){
+          return res.send({
+            success:1,
+            message:"link to join class",
+            link:classDetails.zoomLink
+          })
+        }
+      }
     }
     return res.send({
       success:1,
