@@ -377,6 +377,7 @@ exports.getZoomLink = async(req,res) => {
     }
     return res.send({
       success:1,
+      classId,
       message:"success",
       items:classDetails
     })
