@@ -358,7 +358,7 @@ exports.getZoomLink = async(req,res) => {
   // }])
   var userData = req.identity.data;
   var userId = userData.userId;
-  var params = req.query;
+  var params = req.params;
   var classId = params.id;
   var classDetails = await OnlineCLass.findOne({
     _id: classId,
@@ -377,7 +377,7 @@ exports.getZoomLink = async(req,res) => {
     }
     return res.send({
       success:2,
-      id:req.query.id,
+      id:req.params.id,
       message:"success",
       items:classDetails
     })
