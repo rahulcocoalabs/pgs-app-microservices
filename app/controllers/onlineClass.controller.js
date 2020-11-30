@@ -381,6 +381,16 @@ exports.getZoomLink = async(req,res) => {
     if (classDetails && classDetails.success && classDetails.success === 0){
       return res.send(classDetails);
     }
+
+    if (classDetails){
+      if (classDetails.isPublic === true){
+        return res.send({
+          success:1,
+          message:"link to join class",
+          link:classDetails.zoomLink
+        })
+      }
+    }
     return res.send({
       success:1,
       id:req.params.id,
