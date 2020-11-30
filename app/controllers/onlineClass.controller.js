@@ -406,6 +406,14 @@ exports.getZoomLink = async(req,res) => {
             message:"link to join class",
             link:classDetails.zoomLink
           })
+          
+        }
+        else {
+          return res.send({
+            success:0,
+            message:"link to join class can not be provided since class is private and you have not requested or request is approved"
+          
+          })
         }
       }
     }
