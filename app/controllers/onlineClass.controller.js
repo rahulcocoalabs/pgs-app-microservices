@@ -362,8 +362,8 @@ exports.getZoomLink = async(req,res) => {
   var classId = params.id;
   var classDetails = await OnlineCLass.findOne({
     _id: classId,
-    isApproved: true,
-    isRejected: false,
+    // isApproved: true,
+    // isRejected: false,
     status: 1
   }).catch(err => {
       return {
