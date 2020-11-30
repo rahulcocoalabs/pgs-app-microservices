@@ -362,10 +362,16 @@ exports.getZoomLink = async(req,res) => {
   var classId = params.id;
   var classDetails = await OnlineCLass.findOne({
     _id: classId,
-    // isApproved: true,
-    // isRejected: false,
+    isApproved: true,
+    isRejected: false,
     status: 1
-  }).catch(err => {
+  }).populate([{
+      path: 'tutorSubjectId',
+      select:'_id:1'
+    }, {
+     path: 'tutorClassId',
+      select:'_id:1'
+    }]).catch(err => {
       return {
         success: 0,
         message: 'Something went wrong while get class details',
@@ -376,7 +382,7 @@ exports.getZoomLink = async(req,res) => {
       return res.send(classDetails);
     }
     return res.send({
-      success:2,
+      success:1,
       id:req.params.id,
       message:"success",
       items:classDetails
