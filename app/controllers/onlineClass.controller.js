@@ -430,6 +430,9 @@ exports.listOnlineClasses = async (req, res) => {
   console.log(JSON.stringify(favouriteData));
   console.log("favouriteData")
   var findCriteria = {};
+  if (params.isFavourite !== undefined && params.isFavourite === 'true') {
+    findCriteria = { _id: { $in: favouriteData.favouriteClass } };
+  }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
   }
@@ -439,6 +442,8 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
+ 
+  
 
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -459,6 +464,9 @@ exports.listTutorList = async (req, res) => {
   var favouriteData = favouriteDataResp.favouriteData;
   var findCriteria = {};
   var params = req.query;
+  if (params.isFavourite !== undefined && params.isFavourite === 'true') {
+    findCriteria = { _id: { $in: favouriteData.favouriteTutor } };
+  }
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
