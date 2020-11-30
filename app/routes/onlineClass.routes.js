@@ -37,5 +37,7 @@ module.exports = (app) => {
     app.post('/online-class/student/appointment', auth,onlineClass.requestAppointment);
     app.patch('/online-class/tutor/appointment/:id/status',auth, onlineClass.updateAppointmentStatus); 
     app.post('/online-class/student/requesttutor', auth,onlineClass.createTutorRequest);
+    // get zoom link 
+    app.get('/online-class/student/getzoomlink/:id', auth,onlineClass.getZoomLink);
 
 }

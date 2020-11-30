@@ -324,6 +324,7 @@ exports.createTutorRequest = async (req, res) => {
   var requestObject = {};
   requestObject.status = 1;
   requestObject.description = 1;
+  requestObject.userId = userId;
   requestObject.tsCreatedAt = Date.now();
   requestObject.tsModifiedAt = null;
   requestObject.subject = req.body.tutorSubjectId;
@@ -348,10 +349,83 @@ exports.createTutorRequest = async (req, res) => {
 
 }
 
+exports.getZoomLink = async(req,res) => {
+  // .populate([{
+  //   path: 'tutorSubjectId',
+  //   select:'_id:1'
+  // }, {
+  //   path: 'tutorClassId',
+  //   select:'_id:1'
+  // }])
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.params;
+  var classId = params.id;
+  var classDetails = await OnlineCLass.findOne({
+    _id: classId,
+    isApproved: true,
+    isRejected: false,
+    status: 1
+  }).populate([{
+      path: 'tutorSubjectId',
+      select:'_id:1'
+    }, {
+     path: 'tutorClassId',
+      select:'_id:1'
+    }]).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get class details',
+        error: err
+      }
+    })
+    if (classDetails && classDetails.success && classDetails.success === 0){
+      return res.send(classDetails);
+    }
+
+    if (classDetails){
+      if (classDetails.isPublic === true){
+        return res.send({
+          success:1,
+          message:"link to join class",
+          link:classDetails.zoomLink
+        })
+      }
+      else {
+        var requestDetailsCount = await AppointmentClassRequest.countDocuments({userId:userId,classId:classDetails.tutorClassId,subjectId:classDetails.tutorSubjectId}).catch(err => {
+          return {
+            success:0,
+            message:"did not fetch count of documents"
+          }
+        })
+        if (requestDetailsCount && requestDetailsCount.success && requestDetailsCount.success ===0){
+          return res.send(requestDetailsCount);
+        }
+        if (requestDetailsCount > 0){
+          return res.send({
+            success:1,
+            message:"link to join class",
+            link:classDetails.zoomLink
+          })
+          
+        }
+        else {
+          return res.send({
+            success:0,
+            message:"link to join class can not be provided since class is private and you have not requested or request is approved"
+          
+          })
+        }
+      }
+    }
+   
+}
+
 exports.getClassDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+  var classId = req.params.id;
 
   var classId = req.params.id;
   var favouriteDataResp = await getUserFavouriteData(userId);
