@@ -348,10 +348,43 @@ exports.createTutorRequest = async (req, res) => {
 
 }
 
+exports.getZoomLink = async(req,res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+  var classId = params.id;
+  var classDetails = await OnlineCLass.findOne({
+    _id: classId,
+    isApproved: true,
+    isRejected: false,
+    status: 1
+  }).populate([{
+      path: 'tutorSubjectId',
+      select:'_id:1'
+    }, {
+      path: 'tutorClassId',
+      select:'_id:1'
+    }]).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get class details',
+        error: err
+      }
+    })
+
+    return res.send({
+      success:1,
+      message:"success",
+      items:classDetails
+    })
+
+}
+
 exports.getClassDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+  var classId = req.params.id;
 
   var classId = req.params.id;
   var favouriteDataResp = await getUserFavouriteData(userId);
