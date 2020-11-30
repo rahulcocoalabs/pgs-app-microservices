@@ -366,13 +366,15 @@ exports.getZoomLink = async(req,res) => {
     isRejected: false,
     status: 1
   }).catch(err => {
-      return res.send({
+      return {
         success: 0,
         message: 'Something went wrong while get class details',
         error: err
-      })
+      }
     })
-
+    if (classDetails && classDetails.success && classDetails.success === 0){
+      return res.send(classDetails);
+    }
     return res.send({
       success:1,
       message:"success",
