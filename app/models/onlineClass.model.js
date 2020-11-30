@@ -35,6 +35,7 @@ const OnlineClassSchema = mongoose.Schema({
     fee: Number,
     availableDays : String,
     availableTime : String,
+    zoomLink : String,
     isPublic : Boolean,
     isApproved : Boolean,
     isRejected : Boolean,
