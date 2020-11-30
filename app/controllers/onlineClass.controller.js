@@ -324,6 +324,7 @@ exports.createTutorRequest = async (req, res) => {
   var requestObject = {};
   requestObject.status = 1;
   requestObject.description = 1;
+  requestObject.userId = userId;
   requestObject.tsCreatedAt = Date.now();
   requestObject.tsModifiedAt = null;
   requestObject.subject = req.body.tutorSubjectId;
