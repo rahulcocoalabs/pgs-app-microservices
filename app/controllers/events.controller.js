@@ -349,7 +349,7 @@ exports.sendEventBooking = async (req, res) => {
   var coinUpdateObj = {
     coinType:constants.COIN_COUNT_EVENT_PARTICIPATE,
     coinCount:constants.COIN_COUNT_EVENT_PARTICIPATE,
-    coinDate:constants.Date.now()
+    coinDate:Date.now()
   };
   var updateInfo1 = {$push : coinUpdateObj};
   const userUpdate1 = await User.updateOne({_id:userId},updateInfo1).catch(err=>{
