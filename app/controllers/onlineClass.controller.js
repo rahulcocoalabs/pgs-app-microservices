@@ -512,6 +512,10 @@ exports.listOnlineClasses = async (req, res) => {
   if(params.filters){
     var reqFilters = JSON.parse(JSON.stringify(params.filters));
 
+    console.log("type");
+    console.log(typeof reqFilters);
+
+    console.log("type");
     console.log("tutorSubjectId");
     console.log(reqFilters.tutorSubjectId);
     console.log("tutorSubjectId");
