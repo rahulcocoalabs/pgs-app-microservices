@@ -1,5 +1,5 @@
 const Enquiry = require('../models/enquiry.model.js');
-
+const User = require('../models/user.model.js');
   this.listAll = (req, res) => {
     console.log("listAll() working...");
   };
@@ -16,7 +16,7 @@ const Enquiry = require('../models/enquiry.model.js');
         message:"please add some message"
       })
     }
-    var userData = await userId.findOne({_id:userId,status:1})
+    var userData = await User.findOne({_id:userId,status:1})
 
     var msg = new Enquiry({
       email:userData.email,
