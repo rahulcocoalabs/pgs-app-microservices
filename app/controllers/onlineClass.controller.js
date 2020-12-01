@@ -300,7 +300,7 @@ exports.createTutorRequest = async (req, res) => {
       return res.send(subjectCount)
     }
 
-    var classCount = await OnlineCLass.countDocuments({status:1,_id:req.body.tutorClassId}).catch(err=>{
+    var classCount = await TutorClass.countDocuments({status:1,_id:req.body.tutorClassId}).catch(err=>{
       return {success:0,message:"could not read document count of subjects"}
     })
     if (classCount && classCount.success && classCount.success === 0){
