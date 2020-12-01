@@ -501,9 +501,7 @@ exports.listOnlineClasses = async (req, res) => {
     return res.send(favouriteDataResp);
   }
   var favouriteData = favouriteDataResp.favouriteData;
-  console.log("favouriteData")
-  console.log(JSON.stringify(favouriteData));
-  console.log("favouriteData")
+
   var findCriteria = {};
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
@@ -512,13 +510,7 @@ exports.listOnlineClasses = async (req, res) => {
   if(params.filters){
     var reqFilters = JSON.parse(params.filters);
 
-    console.log("reqFilters");
-    console.log(reqFilters);
-    console.log("reqFilters");
-  
-
     var availableFilters = constants.ONLINE_CLASS_FILTERS;
-
 
     findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
