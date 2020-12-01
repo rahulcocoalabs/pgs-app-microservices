@@ -513,7 +513,8 @@ exports.listOnlineClasses = async (req, res) => {
     console.log("params.filters");
     console.log(params.filters);
     console.log("params.filters");
-    var reqFilters = JSON.parse(params.filters);
+    var reqFilters = params.filters;
+    // var reqFilters = JSON.parse(params.filters);
     var availableFilters = constants.ONLINE_CLASS_FILTERS;
     findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
