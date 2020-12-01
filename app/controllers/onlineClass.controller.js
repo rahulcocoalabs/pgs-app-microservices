@@ -520,7 +520,7 @@ exports.listOnlineClasses = async (req, res) => {
     var availableFilters = constants.ONLINE_CLASS_FILTERS;
 
 
-    // findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
