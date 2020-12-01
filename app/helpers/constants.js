@@ -78,5 +78,8 @@ module.exports = Object.freeze({
     APPROVED_STATUS : 'approved',
     REJECTED_STATUS : 'rejected',
 
+    ONLINE_CLASS_FILTERS : [{'name' : 'tutorSubjectId','value' :'tutorSubjectId'} ,{'name' : 'tutorClassId','value' :'tutorClassId'}],
+    TUTOR_FILTERS : [{'name' : 'tutorSubjectId' , 'value' :'tutorSubjectIds'},{'name' :'tutorClassId' ,'value' :  'tutorClassIds'}],
+
 
 });

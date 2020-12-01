@@ -508,6 +508,31 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
+
+  if(params.filters){
+    var reqFilters = JSON.parse(params.filters);
+
+    console.log("type");
+    console.log(typeof reqFilters);
+
+    console.log("type");
+    console.log("tutorSubjectId");
+    console.log(reqFilters.tutorSubjectId);
+    console.log("tutorSubjectId");
+    console.log("tutorClassId");
+    console.log(reqFilters.tutorClassId);
+    console.log("tutorClassId");
+    // var reqFilters = params.filters;
+    console.log("reqFilters");
+    console.log(reqFilters);
+    console.log("reqFilters");
+    var availableFilters = constants.ONLINE_CLASS_FILTERS;
+    console.log("availableFilters");
+    console.log(availableFilters);
+    console.log("availableFilters");
+
+    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+  }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
   }
@@ -523,7 +548,9 @@ exports.listOnlineClasses = async (req, res) => {
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
-
+  console.log("findCriteria")
+  console.log(findCriteria)
+  console.log("findCriteria")
 
   var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData);
   return res.send(listClassResp);
@@ -541,6 +568,11 @@ exports.listTutorList = async (req, res) => {
   var params = req.query;
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteTutor } };
+  }
+  if(params.filters){
+    var reqFilters = JSON.parse(params.filters);
+    var availableFilters = constants.TUTOR_FILTERS;
+    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
@@ -715,8 +747,14 @@ exports.getStudentHome = async (req, res) => {
     if (tabCheckData.favourites.favouriteClasses) {
       findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
     }
-
   }
+
+  if(params.keyword){
+    findCriteria.title = {
+      $regex: `.*${params.keyword}.*`,
+  }
+  }
+
   findCriteria.isPopular = true;
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -737,6 +775,11 @@ exports.getStudentHome = async (req, res) => {
     if (tabCheckData.favourites.favouriteTutors) {
       findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
     }
+  }
+  if(params.keyword){
+    findCriteria.firstName = {
+      $regex: `.*${params.keyword}.*`,
+  }
   }
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
@@ -762,6 +805,11 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
+  if(params.keyword){
+    findCriteria.title = {
+      $regex: `.*${params.keyword}.*`,
+  }
+  }
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
@@ -1503,6 +1551,37 @@ async function checkAndSetFavourite(listData, favouriteData) {
     }
     return listData;
   }
+}
+
+
+async function setFIlter(reqFilters,availableFilters,findCriteria){
+    var i = 0;
+    var j;
+    var k;
+    while(i < availableFilters.length){
+      j = 0;
+      filtersLen = reqFilters.length;
+      console.log("User entered filters length is " + filtersLen);
+      while (j < filtersLen) {
+        if (reqFilters[j].name == availableFilters[i].name) {
+          var reqValues = [];
+          if (reqFilters[j].values && Array.isArray(reqFilters[j].values) && reqFilters[j].values.length) {
+            k = 0;
+            while (k < reqFilters[j].values.length) {
+              if (ObjectId.isValid(reqFilters[j].values[k]))
+                reqValues.push(reqFilters[j].values[k]);
+              k++;
+            }
+            findCriteria[String(availableFilters[i].value)] = {
+              $in: reqValues
+            };
+            console.log("Filters Upadated" + JSON.stringify(filters));
+          }
+        }
+        j++;
+      }
+      i++;
+    }
 }
 
 
