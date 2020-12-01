@@ -506,14 +506,6 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
-
-  if(params.filters){
-    var reqFilters = JSON.parse(params.filters);
-
-    var availableFilters = constants.ONLINE_CLASS_FILTERS;
-
-    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
-  }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria['isPublic'] = true;
   }
@@ -523,6 +515,14 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria['isPopular'] = true;
   }
+  if(params.filters){
+    var reqFilters = JSON.parse(params.filters);
+
+    var availableFilters = constants.ONLINE_CLASS_FILTERS;
+
+    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+  }
+ 
  
   
 
