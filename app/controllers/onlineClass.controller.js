@@ -508,8 +508,12 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
-
+console.log("params.filters")
+console.log(params.filters)
+console.log("params.filters")
   if(params.filters){
+console.log("Inside filter function")
+
     var reqFilters = JSON.parse(params.filters);
 
     var availableFilters = constants.ONLINE_CLASS_FILTERS;
