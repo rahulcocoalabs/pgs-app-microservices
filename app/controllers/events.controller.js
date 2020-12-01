@@ -361,6 +361,10 @@ exports.sendEventBooking = async (req, res) => {
   if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0){
     return res.send(userUpdate1)
   }
+  return res.send({
+    success:1,
+    message:"succesfully added booking"
+  })
   // newEvent.save()
   //   .then(data => {
   //     var formattedData = {
