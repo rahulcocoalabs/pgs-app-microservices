@@ -515,6 +515,9 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria['isPopular'] = true;
   }
+  findCriteria.status = 1;
+  findCriteria.isApproved = true;
+  findCriteria.isRejected = false;
   if(params.filters){
     var reqFilters = JSON.parse(params.filters);
 
@@ -526,9 +529,7 @@ exports.listOnlineClasses = async (req, res) => {
  
   
 
-  findCriteria.status = 1;
-  findCriteria.isApproved = true;
-  findCriteria.isRejected = false;
+
   console.log("findCriteria")
   console.log(findCriteria)
   console.log("findCriteria")
