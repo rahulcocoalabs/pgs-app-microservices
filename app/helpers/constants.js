@@ -8,7 +8,7 @@ module.exports = Object.freeze({
     COIN_TIME_SPEND : "time_spend",
     COIN_MOST_LIKE : "most_like",
     COIN_NEW_POST: "new_post",
-
+    COIN_PARTICIPATE_EVENT: "event_participate",
     COIN_COUNT_PROFILE_COMPLETION : 10,
     // COIN_COUNT_BEST_POST : 5,
     COIN_COUNT_SHARE_APP : 5,
@@ -18,7 +18,7 @@ module.exports = Object.freeze({
     COIN_COUNT_TIME_SPEND : 10,
     COIN_COUNT_MOST_LIKE : 5,
     COIN_COUNT_NEW_POST : 2,
-
+    COIN_COUNT_EVENT_PARTICIPATE : 2,
     LOCKED_STATUS : "locked",
     BOOKED_STATUS : "booked",
     USER_LOCKED_STATUS : "user_locked",

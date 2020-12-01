@@ -1,6 +1,7 @@
 var moment = require('moment');
 var gateway = require('../components/gateway.component.js');
 const Event = require('../models/event.model.js');
+const User = require('../models/user.model.js');
 const EventBooking = require('../models/eventBooking.model.js')
 const SpeakerType = require('../models/speakerType.model')
 var config = require('../../config/app.config.js');
@@ -50,32 +51,32 @@ exports.listAll = async (req, res) => {
   }
   var startTs = await getStartTsToday();
   var endTs = await getEndTsToday();
-if(params.eventTimeType === constants.TODAYS_EVENT_TYPE){
-  filters = {
-    tsFrom : {
-      $gte : startTs,
-      $lte : endTs
+  if (params.eventTimeType === constants.TODAYS_EVENT_TYPE) {
+    filters = {
+      tsFrom: {
+        $gte: startTs,
+        $lte: endTs
+      }
     }
   }
-}
 
-if(params.eventTimeType === constants.PAST_EVENT_TYPE){
-  filters = {
-    tsTo : {
-      $lt : startTs
+  if (params.eventTimeType === constants.PAST_EVENT_TYPE) {
+    filters = {
+      tsTo: {
+        $lt: startTs
+      }
     }
   }
-}
 
-if(params.eventTimeType === constants.UPCOMING_EVENT_TYPE){
-  filters = {
-    tsFrom : {
-      $gt : endTs
+  if (params.eventTimeType === constants.UPCOMING_EVENT_TYPE) {
+    filters = {
+      tsFrom: {
+        $gt: endTs
+      }
     }
   }
-}
 
-filters.status = 1;
+  filters.status = 1;
   Event.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['category']).then(eventsList => {
     Event.countDocuments(filters, function (err, itemsCount) {
 
@@ -152,100 +153,100 @@ exports.getDetail = (req, res) => {
     eventOrganizerId: 1,
     organizer: 1,
     isFav: 1,
-    speakerName : 1,
-    speakerTypeId : 1,
-    speakerTitle : 1,
-    speakerOrganisation : 1,
-    speakerImage : 1,
-    speakerDescription : 1,
-    speakerVideoLinks : 1
+    speakerName: 1,
+    speakerTypeId: 1,
+    speakerTitle: 1,
+    speakerOrganisation: 1,
+    speakerImage: 1,
+    speakerDescription: 1,
+    speakerVideoLinks: 1
   }
   // get data
   Event.findOne(filters, queryProjection)
-  .populate([{
-    path: 'organizer',
-},{
-  path: 'speakerTypeId',
-}])
-  .then(event => {
-    if (!event) {
-      var responseObj = {
-        success: 0,
-        status: 200,
-        errors: [{
-          field: "id",
-          message: "Event not found with id"
-        }]
+    .populate([{
+      path: 'organizer',
+    }, {
+      path: 'speakerTypeId',
+    }])
+    .then(event => {
+      if (!event) {
+        var responseObj = {
+          success: 0,
+          status: 200,
+          errors: [{
+            field: "id",
+            message: "Event not found with id"
+          }]
+        }
+        res.send(responseObj);
+        return;
       }
-      res.send(responseObj);
-      return;
-    }
-    var organizerId = event.organizer.id || null;
-    organizerId = ObjectId(organizerId);
-    console.log(organizerId);
-    var organizerFilter = {
-      status: 1,
-      eventOrganizerId: organizerId
-    };
-    Event.countDocuments(organizerFilter, function (err, eventsCount) {
-      if (err)
-        eventsCount = 0;
+      var organizerId = event.organizer.id || null;
+      organizerId = ObjectId(organizerId);
+      console.log(organizerId);
+      var organizerFilter = {
+        status: 1,
+        eventOrganizerId: organizerId
+      };
+      Event.countDocuments(organizerFilter, function (err, eventsCount) {
+        if (err)
+          eventsCount = 0;
 
-      console.log(eventsCount);
-      console.log("---------after convertion-----------")
-      console.log("eventDate : " + event.eventDate )
-      console.log("eventStartTime : " + event.tsFrom )
-      console.log("eventEndTime : " + event.tsTo)
-      eventDate = event.eventDate ? moment(event.eventDate).format('DD MMMM YYYY') : null;
-      eventStartTime = event.tsFrom ? event.tsFrom : null;
-      eventEndTime = event.tsTo ? event.tsTo : null;
- 
-    //  eventStartTime = event.tsFrom ? moment.unix(event.tsFrom).format('hh:mm A , DD MMMM YYYY') : null;
-    //  eventEndTime = event.tsTo ? moment.unix(event.tsTo).format('hh:mm A , DD MMMM YYYY') : null;
-      console.log("---------after convertion-----------")
-      console.log("eventDate : " + eventDate)
-      console.log("eventStartTime : " + eventStartTime)
-      console.log("eventEndTime : " + eventEndTime)
-      var speakerType = null
-      if(event.speakerTypeId){
-        speakerType = event.speakerTypeId.name;
-      }
-      var eventDetail = {
-        id: id || null,
-        title: event.title || null,
-        description: event.description || null,
-        amount: event.amount || null,
-        image: event.image || null,
-        lat: event.lat || null,
-        lng: event.lng || null,
-        venue: event.venue || null,
-        eventDate: eventDate || null,
-        eventFromTime: eventStartTime,
-        eventToTime: eventEndTime,
-        organizer: event.organizer || null,
-        organizerEventsCount: eventsCount || null,
-        sharingUrl: event.sharingUrl || null,
-        isFav: event.isFav || null,
-        speakerName: event.speakerName || null,
-        speakerType,
-        speakerTitle : event.speakerTitle || null,
-        speakerOrganisation : event.speakerOrganisation || null,
-        speakerImage : event.speakerImage || null,
-        speakerDescription : event.speakerDescription || null,
-        speakerVideoLinks : event.speakerVideoLinks || null,
-        imageBase: eventsConfig.imageBase || null,
-        organizerImageBase: eventsConfig.organizerImageBase || null,
-        eventSpeakerImageBase: eventSpeakerConfig.imageBase || null
-      }
+        console.log(eventsCount);
+        console.log("---------after convertion-----------")
+        console.log("eventDate : " + event.eventDate)
+        console.log("eventStartTime : " + event.tsFrom)
+        console.log("eventEndTime : " + event.tsTo)
+        eventDate = event.eventDate ? moment(event.eventDate).format('DD MMMM YYYY') : null;
+        eventStartTime = event.tsFrom ? event.tsFrom : null;
+        eventEndTime = event.tsTo ? event.tsTo : null;
 
-      res.send(eventDetail);
+        //  eventStartTime = event.tsFrom ? moment.unix(event.tsFrom).format('hh:mm A , DD MMMM YYYY') : null;
+        //  eventEndTime = event.tsTo ? moment.unix(event.tsTo).format('hh:mm A , DD MMMM YYYY') : null;
+        console.log("---------after convertion-----------")
+        console.log("eventDate : " + eventDate)
+        console.log("eventStartTime : " + eventStartTime)
+        console.log("eventEndTime : " + eventEndTime)
+        var speakerType = null
+        if (event.speakerTypeId) {
+          speakerType = event.speakerTypeId.name;
+        }
+        var eventDetail = {
+          id: id || null,
+          title: event.title || null,
+          description: event.description || null,
+          amount: event.amount || null,
+          image: event.image || null,
+          lat: event.lat || null,
+          lng: event.lng || null,
+          venue: event.venue || null,
+          eventDate: eventDate || null,
+          eventFromTime: eventStartTime,
+          eventToTime: eventEndTime,
+          organizer: event.organizer || null,
+          organizerEventsCount: eventsCount || null,
+          sharingUrl: event.sharingUrl || null,
+          isFav: event.isFav || null,
+          speakerName: event.speakerName || null,
+          speakerType,
+          speakerTitle: event.speakerTitle || null,
+          speakerOrganisation: event.speakerOrganisation || null,
+          speakerImage: event.speakerImage || null,
+          speakerDescription: event.speakerDescription || null,
+          speakerVideoLinks: event.speakerVideoLinks || null,
+          imageBase: eventsConfig.imageBase || null,
+          organizerImageBase: eventsConfig.organizerImageBase || null,
+          eventSpeakerImageBase: eventSpeakerConfig.imageBase || null
+        }
+
+        res.send(eventDetail);
+      });
+
     });
-
-  });
 
 }
 
-exports.sendEventBooking = (req, res) => {
+exports.sendEventBooking = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.body;
@@ -311,31 +312,73 @@ exports.sendEventBooking = (req, res) => {
   // })
 
   // function eventSubmit() {
-    const newEvent = new EventBooking({
-      userId: userId,
-      name: params.name,
-      email: params.email,
-      phoneNumber: params.phoneNumber,
-      participateCount: params.participateCount,
-      eventId: params.eventId,
-      status: 1,
-      tsCreatedAt: Number(moment().unix()),
-      tsModifiedAt: null
-    });
-    newEvent.save()
-      .then(data => {
-        var formattedData = {
-          success: 1,
-          message: "Eventbooking submitted"
-        };
-        res.send(formattedData);
-      }).catch(err => {
-        res.status(500).send({
-          success: 0,
-          status: 500,
-          message: err.message || "Some error occurred while booking event."
-        });
-      });
+  const newEvent = new EventBooking({
+    userId: userId,
+    name: params.name,
+    email: params.email,
+    phoneNumber: params.phoneNumber,
+    participateCount: params.participateCount,
+    eventId: params.eventId,
+    status: 1,
+    tsCreatedAt: Number(moment().unix()),
+    tsModifiedAt: null
+  });
+
+  //rakesh 
+  const saveData = await newEvent.save().catch(err => {
+    return {
+      success: 0,
+      message: err.message
+    }
+  });
+  if (saveData && saveData && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+ 
+  var updateInfo = {$inc : {'coinCount' : constants.COIN_COUNT_EVENT_PARTICIPATE}};
+  const userUpdate = await User.updateOne({_id:userId},updateInfo).catch(err=>{
+    return {
+      success:0,
+      message:err.message
+    }
+  })
+  if (userUpdate && userUpdate.success && userUpdate.success === 0){
+    return res.send(userUpdate)
+  }
+  var coinUpdateObj = {
+    coinType:constants.COIN_PARTICIPATE_EVENT,
+    coinCount:constants.COIN_COUNT_EVENT_PARTICIPATE,
+    coinDate:Date.now()
+  };
+  var updateInfo1 = {$push : {coinHistory:coinUpdateObj}};
+  const userUpdate1 = await User.updateOne({_id:userId},updateInfo1).catch(err=>{
+    return {
+      success:0,
+      message:err.message
+    }
+  })
+  if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0){
+    return res.send(userUpdate1)
+  }
+  return res.send({
+    success:1,
+    message:"succesfully added booking"
+  })
+  // newEvent.save()
+  //   .then(data => {
+  //     var formattedData = {
+  //       success: 1,
+  //       message: "Eventbooking submitted"
+  //     };
+  //     res.send(formattedData);
+  //   }).catch(err => {
+  //     res.status(500).send({
+  //       success: 0,
+  //       status: 500,
+  //       message: err.message || "Some error occurred while booking event."
+  //     });
+  //   });
   // }
 }
 
@@ -407,18 +450,18 @@ exports.listEventHistory = async (req, res) => {
 }
 
 
-async function getStartTsToday(){
+async function getStartTsToday() {
   var now = new Date();
   var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var timestamp = startOfDay / 1000;
-  console.log("timestamp : " + timestamp );
+  console.log("timestamp : " + timestamp);
   return timestamp;
 }
-async function getEndTsToday(){
+async function getEndTsToday() {
   var now = new Date();
-var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-var timestamp = startOfDay / 1000;
-var endTimestamp = timestamp + 24 * 60 * 60 - 1
-console.log("endTimestamp : " + endTimestamp );
-return endTimestamp;
+  var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var timestamp = startOfDay / 1000;
+  var endTimestamp = timestamp + 24 * 60 * 60 - 1
+  console.log("endTimestamp : " + endTimestamp);
+  return endTimestamp;
 }
