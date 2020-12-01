@@ -512,26 +512,15 @@ exports.listOnlineClasses = async (req, res) => {
   if(params.filters){
     var reqFilters = JSON.parse(params.filters);
 
-    console.log("type");
-    console.log(typeof reqFilters);
-
-    console.log("type");
-    console.log("tutorSubjectId");
-    console.log(reqFilters.tutorSubjectId);
-    console.log("tutorSubjectId");
-    console.log("tutorClassId");
-    console.log(reqFilters.tutorClassId);
-    console.log("tutorClassId");
-    // var reqFilters = params.filters;
     console.log("reqFilters");
     console.log(reqFilters);
     console.log("reqFilters");
-    var availableFilters = constants.ONLINE_CLASS_FILTERS;
-    console.log("availableFilters");
-    console.log(availableFilters);
-    console.log("availableFilters");
+  
 
-    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+    var availableFilters = constants.ONLINE_CLASS_FILTERS;
+
+
+    // findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
