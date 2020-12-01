@@ -515,13 +515,13 @@ exports.listOnlineClasses = async (req, res) => {
     findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
-    findCriteria.isPublic = true;
+    findCriteria['isPublic'] = true;
   }
   if (params.isPublic !== undefined && params.isPublic === 'false') {
-    findCriteria.isPublic = false;
+    findCriteria['isPublic'] = false;
   }
   if (params.isPopular === 'true') {
-    findCriteria.isPopular = true;
+    findCriteria['isPopular'] = true;
   }
  
   
