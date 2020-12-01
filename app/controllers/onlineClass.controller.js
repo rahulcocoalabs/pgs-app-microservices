@@ -1564,7 +1564,7 @@ async function setFIlter(reqFilters,availableFilters,findCriteria){
             findCriteria[String(availableFilters[i].value)] = {
               $in: reqValues
             };
-            console.log("Filters Upadated" + JSON.stringify(filters));
+            console.log("Filters Upadated" + JSON.stringify(findCriteria));
           }
         }
         j++;
