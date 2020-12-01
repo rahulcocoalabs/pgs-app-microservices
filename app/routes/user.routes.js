@@ -72,6 +72,6 @@ module.exports = (app) => {
      // enquiry routes
     const enquiry = require('../controllers/enquiry.controller.js');
    
-    app.post('accounts/addmessage',auth, accounts.create);
+    app.post('accounts/addmessage', accounts.create);
 
 };
