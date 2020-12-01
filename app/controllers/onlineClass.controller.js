@@ -200,6 +200,8 @@ exports.getClassDetails = async (req, res) => {
     isApproved: true,
     isRejected: false,
     status: 1
+  },{
+    zoomLink : 0
   })
     .populate([{
       path: 'userId',
@@ -501,9 +503,7 @@ exports.listOnlineClasses = async (req, res) => {
     return res.send(favouriteDataResp);
   }
   var favouriteData = favouriteDataResp.favouriteData;
-  console.log("favouriteData")
-  console.log(JSON.stringify(favouriteData));
-  console.log("favouriteData")
+
   var findCriteria = {};
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
@@ -512,24 +512,7 @@ exports.listOnlineClasses = async (req, res) => {
   if(params.filters){
     var reqFilters = JSON.parse(params.filters);
 
-    console.log("type");
-    console.log(typeof reqFilters);
-
-    console.log("type");
-    console.log("tutorSubjectId");
-    console.log(reqFilters.tutorSubjectId);
-    console.log("tutorSubjectId");
-    console.log("tutorClassId");
-    console.log(reqFilters.tutorClassId);
-    console.log("tutorClassId");
-    // var reqFilters = params.filters;
-    console.log("reqFilters");
-    console.log(reqFilters);
-    console.log("reqFilters");
     var availableFilters = constants.ONLINE_CLASS_FILTERS;
-    console.log("availableFilters");
-    console.log(availableFilters);
-    console.log("availableFilters");
 
     findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
@@ -1095,7 +1078,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData) {
   var offset = (page - 1) * perPage;
 
 
-  var onlineClassData = await OnlineCLass.find(findCriteria)
+  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0})
     .populate([{
       path: 'userId',
       select: {
@@ -1575,13 +1558,15 @@ async function setFIlter(reqFilters,availableFilters,findCriteria){
             findCriteria[String(availableFilters[i].value)] = {
               $in: reqValues
             };
-            console.log("Filters Upadated" + JSON.stringify(filters));
+            console.log("Filters Upadated" + JSON.stringify(findCriteria));
           }
         }
         j++;
       }
       i++;
     }
+
+    return findCriteria;
 }
 
 

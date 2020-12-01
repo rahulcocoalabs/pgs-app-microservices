@@ -26,9 +26,7 @@ var privateKey  = fs.readFileSync('/etc/ssl/pgsedu.com/private.key', 'utf8');
 var certificate = fs.readFileSync('/etc/ssl/pgsedu.com/certificate.crt', 'utf8');
 
 var credentials = {key: privateKey, cert: certificate};
-console.log("credentials")
-console.log(credentials)
-console.log("credentials")
+
 
 // create express app
 const app = express();
@@ -48,9 +46,10 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+  
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH");
   next();
 });
 module.exports = {
@@ -99,8 +98,6 @@ connectToMongoDb: function (dbConfig,callback) {
 // },
   start: function (serviceName, routes) {
     var that = this;
-    console.log('test1');
-    console.log(serviceName,routes);
     this.connectToDb(function (db) {
       var options = db
       var port = process.env.port ? process.env.port : null;
@@ -116,7 +113,6 @@ connectToMongoDb: function (dbConfig,callback) {
         var route = null;
         while (i < len) {
           route = routes[i];
-          console.log("Loading route " + route);
           require('./app/routes/' + route + '.routes.js')(app, that.methods, options);
           i++;
         }
