@@ -347,7 +347,7 @@ exports.sendEventBooking = async (req, res) => {
     return res.send(userUpdate)
   }
   var coinUpdateObj = {
-    coinType:constants.COIN_COUNT_EVENT_PARTICIPATE,
+    coinType:constants.COIN_PARTICIPATE_EVENT,
     coinCount:constants.COIN_COUNT_EVENT_PARTICIPATE,
     coinDate:Date.now()
   };
