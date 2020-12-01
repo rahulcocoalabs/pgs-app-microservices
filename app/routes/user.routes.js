@@ -70,4 +70,8 @@ module.exports = (app) => {
     app.get('/accounts/tutor/profile',auth, accounts.getTutorProfile); 
     app.patch('/accounts/tutor/profile',auth,fileUpload.single('video'), accounts.updateTutorProfile); 
 
+    const enquiry = require('../controllers/enquiry.controller.js');
+   
+    app.post('/enquiries',auth, enquiry.add);
+
 };
