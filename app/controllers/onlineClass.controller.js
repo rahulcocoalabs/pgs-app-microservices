@@ -506,18 +506,7 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
-  if (params.isPublic !== undefined && params.isPublic === 'true') {
-    findCriteria['isPublic'] = true;
-  }
-  if (params.isPublic !== undefined && params.isPublic === 'false') {
-    findCriteria['isPublic'] = false;
-  }
-  if (params.isPopular === 'true') {
-    findCriteria['isPopular'] = true;
-  }
-  findCriteria.status = 1;
-  findCriteria.isApproved = true;
-  findCriteria.isRejected = false;
+
   if(params.filters){
     var reqFilters = JSON.parse(params.filters);
 
@@ -525,11 +514,21 @@ exports.listOnlineClasses = async (req, res) => {
 
     findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
- 
+  if (params.isPublic !== undefined && params.isPublic === 'true') {
+    findCriteria.isPublic = true;
+  }
+  if (params.isPublic !== undefined && params.isPublic === 'false') {
+    findCriteria.isPublic = false;
+  }
+  if (params.isPopular === 'true') {
+    findCriteria.isPopular = true;
+  }
  
   
 
-
+  findCriteria.status = 1;
+  findCriteria.isApproved = true;
+  findCriteria.isRejected = false;
   console.log("findCriteria")
   console.log(findCriteria)
   console.log("findCriteria")
@@ -1564,6 +1563,8 @@ async function setFIlter(reqFilters,availableFilters,findCriteria){
       }
       i++;
     }
+
+    return findCriteria;
 }
 
 
