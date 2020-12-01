@@ -361,20 +361,20 @@ exports.sendEventBooking = async (req, res) => {
   if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0){
     return res.send(userUpdate1)
   }
-  newEvent.save()
-    .then(data => {
-      var formattedData = {
-        success: 1,
-        message: "Eventbooking submitted"
-      };
-      res.send(formattedData);
-    }).catch(err => {
-      res.status(500).send({
-        success: 0,
-        status: 500,
-        message: err.message || "Some error occurred while booking event."
-      });
-    });
+  // newEvent.save()
+  //   .then(data => {
+  //     var formattedData = {
+  //       success: 1,
+  //       message: "Eventbooking submitted"
+  //     };
+  //     res.send(formattedData);
+  //   }).catch(err => {
+  //     res.status(500).send({
+  //       success: 0,
+  //       status: 500,
+  //       message: err.message || "Some error occurred while booking event."
+  //     });
+  //   });
   // }
 }
 
