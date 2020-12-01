@@ -531,7 +531,7 @@ exports.listOnlineClasses = async (req, res) => {
     console.log(availableFilters);
     console.log("availableFilters");
 
-    // findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
   }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
@@ -548,7 +548,9 @@ exports.listOnlineClasses = async (req, res) => {
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
-
+  console.log("findCriteria")
+  console.log(findCriteria)
+  console.log("findCriteria")
 
   var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData);
   return res.send(listClassResp);
