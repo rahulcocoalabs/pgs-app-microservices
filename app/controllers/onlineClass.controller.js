@@ -200,6 +200,8 @@ exports.getClassDetails = async (req, res) => {
     isApproved: true,
     isRejected: false,
     status: 1
+  },{
+    zoomLink : 0
   })
     .populate([{
       path: 'userId',
@@ -1076,7 +1078,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData) {
   var offset = (page - 1) * perPage;
 
 
-  var onlineClassData = await OnlineCLass.find(findCriteria)
+  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0})
     .populate([{
       path: 'userId',
       select: {
