@@ -29,5 +29,5 @@ const KeywordSchema = mongoose.Schema({
     tsModifiedAt : Number
 
 }, options)
-,
+
 module.exports = mongoose.model('Keyword', KeywordSchema, 'Keywords');
