@@ -69,5 +69,10 @@ module.exports = (app) => {
     app.post('/accounts/request-as-tutor',auth,fileUpload.single('video'), accounts.requestAsTutor); 
     app.get('/accounts/tutor/profile',auth, accounts.getTutorProfile); 
     app.patch('/accounts/tutor/profile',auth,fileUpload.single('video'), accounts.updateTutorProfile); 
+     // enquiry routes
+    const enquiry = require('../controllers/enquiry.controller.js');
+   
+    app.post('/accounts/addmessage',auth, enquiry.add);
+    
 
 };
