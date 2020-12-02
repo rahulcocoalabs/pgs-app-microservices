@@ -552,7 +552,8 @@ function getTopMovies(perPage, callback) {
     var filters = {
       value: {
         '$regex': regexp
-      }
+      },
+      status : 1
     };
     var queryProjection = {
       value: 1,
