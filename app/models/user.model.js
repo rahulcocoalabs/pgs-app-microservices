@@ -147,6 +147,7 @@ const UserSchema = mongoose.Schema({
     motherNationalityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Nationality' },
     motherProfessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Profession' },
     coinCount: Number,
+    avaregeRating:Number,
     karmaIndex: String,
     coinHistory: Array,
     profileCompletion :Number,
