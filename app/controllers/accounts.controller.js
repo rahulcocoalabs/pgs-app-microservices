@@ -1411,7 +1411,84 @@ exports.addratingToClass = async (req, res) => {
     }
   }
 }
+// rate tutor 
 
+exports.addratingTuTutor = async (req, res) => {
+  let rating = req.body.rating;
+  let userId = req.identity.data.userId;
+  let tutorId = req.params.id;
+  if (!rating || !tutorId) {
+    let errors = [];
+    if (!rating) {
+      errors.push({
+        field: 'rating',
+        message: 'rating cannot be empty'
+      })
+    }
+    if (!tutorId) {
+      errors.push({
+        field: 'tutorId',
+        message: 'tutorId cannot be empty'
+      })
+    }
+    return res.status(400).send({
+      success: 0,
+      errors: errors
+    })
+
+  }
+
+
+  var objectRating = {};
+  objectRating.rating = rating;
+  objectRating.userId = userId;
+  objectRating.tutorId = tutorId;
+  objectRating.type = "class";
+  objectRating.status = 1;
+  objectRating.tsCreatedAt = Date.now();
+  objectRating.tsModifiedAt = null;
+  var save = await new Rating(objectRating).save().catch(error => {
+    return {
+      success: 0,
+      message: error.message
+    }
+  });
+  if (save && save.success && save.success == 0) {
+    return res.send(save)
+  }
+  if (save) {
+    var object = {};
+    object = { $push: { rateduser: userId } }
+
+
+    var update = await User.updateOne({ _id: req.params.id }, object).catch(error => {
+      return {
+        success: 0,
+        message: error.message
+      }
+    });
+
+    if (update && update.success && update.success === 0) {
+      return res.send(update)
+    }
+    var updateARates = await avaregeRates("class",tutorId)
+
+    if (updateARates == 1){
+      return res.send({
+        success: 1,
+        
+        message: 'successfully saved rating'
+      });
+    }
+    else {
+      return res.send({
+        success: 0,
+       
+        message: 'something went wrong'
+      });
+    }
+  }
+}
 // average ratings 
 
 async function avaregeRates(type, id) {
