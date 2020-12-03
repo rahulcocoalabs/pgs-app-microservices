@@ -1425,6 +1425,7 @@ async function avaregeRates(type, id,res) {
       return res.send(array)
     }
     return res.send(array);
+    
     var totalRates = 0
     for (i in array) {
       totalRates += array[i].rating
