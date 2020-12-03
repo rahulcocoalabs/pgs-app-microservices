@@ -1393,7 +1393,7 @@ exports.addratingToClass = async (req, res) => {
     if (update && update.success && update.success === 0) {
       return res.send(update)
     }
-    var updateARates = await avaregeRates("class",classId,res)
+    var updateARates = await avaregeRates("class",classId)
 
     if (updateARates == 1){
       return res.send({
@@ -1414,7 +1414,7 @@ exports.addratingToClass = async (req, res) => {
 
 // average ratings 
 
-async function avaregeRates(type, id,res) {
+async function avaregeRates(type, id) {
 
   if (type == "class") {
     var array = await Rating.find({ classId: id }).catch(error => {
@@ -1422,19 +1422,21 @@ async function avaregeRates(type, id,res) {
     })
 
     if (array && array.succes && array.sucess === 0) {
-      return res.send(array)
+      return 0
     }
-    return res.send(array);
+   // return res.send(array);
+
     var totalRates = 0
     for (i in array) {
       totalRates += array[i].rating
     }
+    console.log(totalRates,"test")
     var avg = totalRates / array.length;
-    var update = await OnlineClass.updateOne({_id:id},{avaregeRates:avg}).catch(err=>{
+    var update = await OnlineClass.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
       return {succes:0,message:err.message}
     })
     if (update && update.succes && update.succes === 1){
-      return res.send(update)
+      return 0
     }
     return 1;
   }
