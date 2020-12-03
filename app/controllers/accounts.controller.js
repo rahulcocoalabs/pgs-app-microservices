@@ -1360,7 +1360,7 @@ exports.addratingToClass = async (req, res) => {
 
   }
 
-  try {
+  
     var objectRating = {};
     objectRating.rating = rating;
     objectRating.userId = userId;
@@ -1379,13 +1379,7 @@ exports.addratingToClass = async (req, res) => {
       });
     }
   }
-  catch(error){
-    return res.send({
-      success:0,
-      message:error.message
-    })
-  }
-}
+  
 
 await function addRatingToUser(req,res){
   var object = {};
