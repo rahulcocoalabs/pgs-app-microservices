@@ -1424,12 +1424,13 @@ async function avaregeRates(type, id,res) {
     if (array && array.succes && array.sucess === 0) {
       return res.send(array)
     }
-    return res.send(array);
-    
+   // return res.send(array);
+
     var totalRates = 0
     for (i in array) {
       totalRates += array[i].rating
     }
+    return res.send(totalRates)
     var avg = totalRates / array.length;
     var update = await OnlineClass.updateOne({_id:id},{avaregeRates:avg}).catch(err=>{
       return {succes:0,message:err.message}
