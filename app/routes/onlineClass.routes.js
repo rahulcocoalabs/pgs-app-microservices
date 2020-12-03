@@ -35,8 +35,14 @@ module.exports = (app) => {
     app.get('/online-class/student/home', auth,onlineClass.getStudentHome);
     app.get('/online-class/tutor/:id/detail', auth,onlineClass.getTutorDetails);
     app.post('/online-class/student/appointment', auth,onlineClass.requestAppointment);
+    app.get('/online-class/student/appointment/list', auth,onlineClass.getStudentAppointmentRequestList);
+    app.get('/online-class/tutor/appointment/list', auth,onlineClass.getTutorAppointmentRequestList);
     app.patch('/online-class/tutor/appointment/:id/status',auth, onlineClass.updateAppointmentStatus); 
+    app.post('/online-class/student/appointment', auth,onlineClass.requestAppointment);
+   
     app.post('/online-class/student/requesttutor', auth,onlineClass.createTutorRequest);
+
+
     // get zoom link 
     app.get('/online-class/student/getzoomlink/:id', auth,onlineClass.getZoomLink);
 

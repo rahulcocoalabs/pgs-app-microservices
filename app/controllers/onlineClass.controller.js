@@ -41,6 +41,7 @@ const salt = bcrypt.genSaltSync(10);
 const usersConfig = config.users;
 const classConfig = config.class;
 const tutorConfig = config.tutors;
+const appointmentConfig = config.appointment;
 const karmaConfig = config.karma;
 
 exports.createOnlineClass = async (req, res) => {
@@ -547,10 +548,7 @@ console.log("Inside filter function")
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
- if(params.itemType === constants.ONLINE_CLASS_SEARCH_TYPE 
-  && params.itemId !== undefined && params.itemId !== null){
-    findCriteria._id = params.itemId
-  }
+
   if(params.itemType === constants.SUBJECT_SEARCH_TYPE 
     && params.itemId !== undefined && params.itemId !== null){
       findCriteria.tutorSubjectId = params.itemId
@@ -588,10 +586,7 @@ exports.listTutorList = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
-  if(params.itemType === constants.TUTOR_SEARCH_TYPE 
-    && params.itemId !== undefined && params.itemId !== null){
-      findCriteria._id = params.itemId
-    }
+
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
@@ -949,6 +944,7 @@ exports.requestAppointment = async (req, res) => {
   appointmentClassRequestObj.tutorSubjectId = params.tutorSubjectId;
   appointmentClassRequestObj.isApproved = false;
   appointmentClassRequestObj.isRejected = false;
+  // appointmentClassRequestObj.isDeleted = false;
   appointmentClassRequestObj.status = 1;
   appointmentClassRequestObj.tsCreatedAt = Date.now();
   appointmentClassRequestObj.tsModifiedAt = null;
@@ -1065,6 +1061,35 @@ exports.updateAppointmentStatus = async (req, res) => {
   }
 
 }
+
+exports.getStudentAppointmentRequestList = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+
+  var findCriteria = {};
+  findCriteria.userId = userId;
+  findCriteria.status = 1;
+ 
+  var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
+
+  return res.send(appointmentRequestListResp);
+}
+
+exports.getTutorAppointmentRequestList = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+
+  var findCriteria = {};
+  findCriteria.tutor = userId;
+  findCriteria.status = 1;
+ 
+  var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
+  return res.send(appointmentRequestListResp);
+}
+
+
 
 
 async function checkUserIsTutor(userId) {
@@ -1599,6 +1624,80 @@ async function setFIlter(reqFilters,availableFilters,findCriteria){
     }
 
     return findCriteria;
+}
+
+
+async function getAppointmentRequestList(findCriteria, perPage, page){
+  var page = Number(page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(perPage) || appointmentConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : appointmentConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var appointmentClassRequestData = await AppointmentClassRequest.find(findCriteria)
+    .populate([{
+      path: 'userId',
+      select: {
+        firstName: 1,
+        image: 1,
+        socialPhotoUrl: 1
+      }
+    },{
+      path: 'tutorId',
+      select: {
+        firstName: 1,
+        image: 1,
+        socialPhotoUrl: 1
+      }
+    }, {
+      path: 'tutorSubjectId',
+    }, {
+      path: 'tutorClassId',
+    }])
+    .limit(perPage)
+    .skip(offset)
+    .sort({
+      'tsCreatedAt': -1
+    }).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting  appointment class requests',
+        error: err
+      }
+    })
+  if (appointmentClassRequestData && (appointmentClassRequestData.success !== undefined) && (appointmentClassRequestData.success === 0)) {
+    return appointmentClassRequestData;
+  }
+  var totalAppointmentClassRequestCount = await AppointmentClassRequest.countDocuments(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while finding appointment class request count',
+        error: err
+      }
+    })
+  if (totalAppointmentClassRequestCount && (totalAppointmentClassRequestCount.success !== undefined) && (totalAppointmentClassRequestCount.success === 0)) {
+    return totalAppointmentClassRequestCount;
+  }
+
+
+  totalPages = totalAppointmentClassRequestCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+    page,
+    perPage,
+    hasNextPage,
+    totalItems: totalAppointmentClassRequestCount,
+    totalPages
+  }
+  return {
+    success: 1,
+    pagination,
+    imageBase : usersConfig.imageBase,
+    items: appointmentClassRequestData,
+    message: 'List appointment request'
+  }
 }
 
 

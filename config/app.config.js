@@ -212,6 +212,9 @@ module.exports = {
         resultsPerPage: 10,
         imageUploadPath: relativeCommonPath + "classes/",
         imageBase: commonPath + "classes/"
+    },
+    appointment: {
+        resultsPerPage : 10
     }
    
 
