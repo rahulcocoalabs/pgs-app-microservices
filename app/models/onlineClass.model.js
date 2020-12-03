@@ -31,6 +31,7 @@ const OnlineClassSchema = mongoose.Schema({
     currencyId : { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
     image : String,
     title : String,
+    avaregeRating:Number,
     classDescription : String,
     isPaid: Boolean,
     isPopular: Boolean,
