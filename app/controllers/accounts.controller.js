@@ -1337,7 +1337,7 @@ exports.getMyBookings = (req, res) => {
 // add rating to class 
 exports.addratingToClass = async (req, res) => {
   let rating = req.body.rating;
-  let userId = req.identity.id;
+  let userId = req.identity.data.userId;
   let classId = req.params.id;
   if (!rating || !classId) {
     let errors = [];
