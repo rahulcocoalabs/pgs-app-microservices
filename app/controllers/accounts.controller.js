@@ -1404,9 +1404,7 @@ exports.addratingToClass = async (req, res) => {
 }
 
 
-await function addRatingToUser(req, res) {
 
-}
 // *** Login with email and password ***
 exports.loginWithEmail = async (req, res) => {
   let email = req.body.email;
