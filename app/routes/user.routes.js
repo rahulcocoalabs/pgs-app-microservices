@@ -73,6 +73,10 @@ module.exports = (app) => {
     const enquiry = require('../controllers/enquiry.controller.js');
    
     app.post('/accounts/addmessage',auth, enquiry.add);
+
+    //ratings 
+
+    app.post('/accounts/add-rating-class/:id',auth,accounts.addratingToClass)
     
 
 };
