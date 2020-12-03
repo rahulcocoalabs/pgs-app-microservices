@@ -25,6 +25,7 @@ var options = {
 
 const OnlineClassSchema = mongoose.Schema({
     userId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    rateduser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     tutorSubjectId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' },
     tutorClassId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' },
     image : String,

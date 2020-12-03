@@ -1371,9 +1371,10 @@ exports.addratingToClass = async (req, res) => {
     objectRating.tsModifiedAt = null;
     var save = await new Rating(objectRating).save();
     if (save){
+      var addUserId = await addRatingToUser(req,res);
       return res.send({
         success:1,
-        objectRating,
+      
         message:'successfully saved rating'
       });
     }
@@ -1385,6 +1386,22 @@ exports.addratingToClass = async (req, res) => {
     })
   }
 }
+
+await function addRatingToUser(req,res){
+  var object = {};
+  object._id = {$push:{ratedUser:req.identity.data.id}}
+
+  try {
+    var update = await OnlineClass.updateOne({_id:req.params.id},object);
+  }
+  catch(error){
+    return res.send({
+      success:0,
+      id:req.params.id,
+      message:"could not add entry to user array"
+    })
+  }
+} 
 // *** Login with email and password ***
 exports.loginWithEmail = async (req, res) => {
   let email = req.body.email;
