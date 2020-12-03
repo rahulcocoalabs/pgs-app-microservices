@@ -1373,6 +1373,7 @@ exports.addratingToClass = async (req, res) => {
     if (save){
       return res.send({
         success:1,
+        objectRating,
         message:'successfully saved rating'
       });
     }
