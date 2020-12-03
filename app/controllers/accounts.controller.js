@@ -1537,6 +1537,7 @@ async function avaregeRates(type, id) {
     var update = await User.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
       return {succes:0,message:err.message}
     })
+    console.log('test1',update,id,avg)
     if (update && update.succes && update.succes === 1){
       return 0
     }
