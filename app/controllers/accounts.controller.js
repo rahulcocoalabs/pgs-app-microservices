@@ -1443,7 +1443,7 @@ exports.addratingTutor = async (req, res) => {
   objectRating.rating = rating;
   objectRating.userId = userId;
   objectRating.tutorId = tutorId;
-  objectRating.type = "class";
+  objectRating.type = "tutor";
   objectRating.status = 1;
   objectRating.tsCreatedAt = Date.now();
   objectRating.tsModifiedAt = null;
@@ -1509,7 +1509,7 @@ async function avaregeRates(type, id) {
     }
     console.log(totalRates,"test")
     var avg = totalRates / array.length;
-    var update = await OnlineClass.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
+    var update = await User.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
       return {succes:0,message:err.message}
     })
     if (update && update.succes && update.succes === 1){
