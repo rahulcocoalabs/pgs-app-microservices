@@ -76,7 +76,7 @@ module.exports = (app) => {
 
     //ratings 
 
-    app.post('/accounts/add-rating-class/:id')
+    app.post('/accounts/add-rating-class/:id',auth,accounts.addratingToClass)
     
 
 };
