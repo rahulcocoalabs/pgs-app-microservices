@@ -32,6 +32,7 @@ const OnlineClassSchema = mongoose.Schema({
     classDescription : String,
     isPaid: Boolean,
     isPopular: Boolean,
+    classTimeCategory: String,
     fee: Number,
     availableDays : String,
     availableTime : String,

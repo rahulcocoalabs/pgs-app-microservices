@@ -83,7 +83,12 @@ module.exports = Object.freeze({
 
     SUBJECT_SEARCH_TYPE : 'subject',
     ONLINE_CLASS_SEARCH_TYPE : 'onlineClass',
-    TUTOR_SEARCH_TYPE : 'tutor'
+    TUTOR_SEARCH_TYPE : 'tutor',
+
+    //classTimeCategory
+   CLASS_TIME_CATEGORY_PER_DAY : "perDay",
+   CLASS_TIME_CATEGORY_PER_HOUR : "perHour",
+   CLASS_TIME_CATEGORY_OTHERS : "others",
 
 
 });

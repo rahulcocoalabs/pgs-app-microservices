@@ -51,17 +51,13 @@ exports.createOnlineClass = async (req, res) => {
     return res.send(tutorCheck);
   }
   var params = req.body;
-  console.log("params")
-  console.log(params)
-  console.log("params")
+
   var file = req.file;
-  console.log("file")
-  console.log(file)
-  console.log("file")
+
 
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
-    || params.isPublic === undefined
+    || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory ) 
   ) {
     var errors = [];
 
@@ -91,6 +87,7 @@ exports.createOnlineClass = async (req, res) => {
       })
     }
 
+
     if (!req.body.classDescription) {
       errors.push({
         field: "classDescription",
@@ -109,6 +106,13 @@ exports.createOnlineClass = async (req, res) => {
         message: "fee cannot be empty"
       })
     }
+    if (params.isPaid === 'true' && !params.classTimeCategory) {
+      errors.push({
+        field: "classTimeCategory",
+        message: "classTimeCategory cannot be empty"
+      })
+    }
+
     if (params.isPublic === undefined) {
       errors.push({
         field: "isPublic",
@@ -147,9 +151,11 @@ exports.createOnlineClass = async (req, res) => {
   if (params.isPaid === 'true') {
     onlineClassObj.isPaid = true;
     onlineClassObj.fee = params.fee;
+    onlineClassObj.classTimeCategory = params.classTimeCategory;
   } else {
     onlineClassObj.isPaid = false;
     onlineClassObj.fee = null;
+    onlineClassObj.classTimeCategory = null;
   }
   if (params.isPublic === 'true') {
     onlineClassObj.isPublic = true;
