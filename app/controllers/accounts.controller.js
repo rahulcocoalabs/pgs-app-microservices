@@ -1430,7 +1430,7 @@ async function avaregeRates(type, id) {
     for (i in array) {
       totalRates += array[i].rating
     }
-    console.log(avaregeRates)
+    console.log(totalRates,"test")
     var avg = totalRates / array.length;
     var update = await OnlineClass.updateOne({_id:id},{avaregeRates:avg}).catch(err=>{
       return {succes:0,message:err.message}
