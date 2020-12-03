@@ -8,6 +8,7 @@ const TutorSubject = require('../models/tutorSubject.model');
 const TutorRequest = require('../models/tutorRequest.model');
 const TutorProfileUpdateRequest = require('../models/tutorProfileUpdateRequest.model');
 const OnlineClass = require('../models/onlineClass.model');
+const Rating = require('../models/rating.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
@@ -1332,6 +1333,57 @@ exports.getMyBookings = (req, res) => {
 
 }
 
+
+// add rating to class 
+exports.addratingToClass = async (req, res) => {
+  let rating = req.body.rating;
+  let userId = req.identity.id;
+  let classId = req.params.id;
+  if (!rating || !classId) {
+    let errors = [];
+    if (!rating) {
+      errors.push({
+        field: 'rating',
+        message: 'rating cannot be empty'
+      })
+    }
+    if (!classId) {
+      errors.push({
+        field: 'classId',
+        message: 'classId cannot be empty'
+      })
+    }
+    return res.status(400).send({
+      success: 0,
+      errors: errors
+    })
+
+  }
+
+  try {
+    var objectRating = {};
+    objectRating.rating = rating;
+    objectRating.userId = userId;
+    objectRating.classId = classId;
+    objectRating.type= "class";
+    objectRating.status = 1;
+    objectRating.tsCreatedAt = Date.now();
+    objectRating.tsModifiedAt = null;
+    var save = await new Rating(objectRating).save();
+    if (save){
+      return res.send({
+        success:1,
+        message:'successfully saved rating'
+      });
+    }
+  }
+  catch(error){
+    return res.send({
+      success:0,
+      message:error.message
+    })
+  }
+}
 // *** Login with email and password ***
 exports.loginWithEmail = async (req, res) => {
   let email = req.body.email;
