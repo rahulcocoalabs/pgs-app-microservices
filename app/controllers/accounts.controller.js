@@ -1413,7 +1413,7 @@ exports.addratingToClass = async (req, res) => {
 }
 // rate tutor 
 
-exports.addratingTuTutor = async (req, res) => {
+exports.addratingTutor = async (req, res) => {
   let rating = req.body.rating;
   let userId = req.identity.data.userId;
   let tutorId = req.params.id;
