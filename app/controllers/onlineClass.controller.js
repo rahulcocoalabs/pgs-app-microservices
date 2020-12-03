@@ -529,8 +529,14 @@ console.log("Inside filter function")
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
- 
-  
+ if(params.itemType === constants.ONLINE_CLASS_SEARCH_TYPE 
+  && params.itemId !== undefined && params.itemId !== null){
+    findCriteria._id = params.itemId
+  }
+  if(params.itemType === constants.SUBJECT_SEARCH_TYPE 
+    && params.itemId !== undefined && params.itemId !== null){
+      findCriteria.tutorSubjectId = params.itemId
+    }
 
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -564,6 +570,10 @@ exports.listTutorList = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
+  if(params.itemType === constants.TUTOR_SEARCH_TYPE 
+    && params.itemId !== undefined && params.itemId !== null){
+      findCriteria._id = params.itemId
+    }
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 

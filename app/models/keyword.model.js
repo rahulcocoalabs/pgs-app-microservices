@@ -23,7 +23,11 @@ var options = {
 const KeywordSchema = mongoose.Schema({
     value: String,
     itemId: String,
-    itemType: String
+    itemType: String,
+    status : Number,
+    tsCreatedAt : Number,
+    tsModifiedAt : Number
+
 }, options)
 
 module.exports = mongoose.model('Keyword', KeywordSchema, 'Keywords');

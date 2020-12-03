@@ -2135,9 +2135,11 @@ exports.requestAsTutor = async (req, res) => {
      ||params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || ( params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)
      ||params.tutorClassIds === null || params.tutorClassIds === undefined || ( params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)
      ||params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || ( params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
-    || !params.courceDescription || params.isPaid === undefined
-    || !file || (params.isPaid !== undefined && params.isPaid === 'true' && !params.fee)
-    || !params.location){
+    || !params.courceDescription || !file ||  !params.location 
+    // ||  (params.yearOfExperience === null || params.yearOfExperience === undefined)
+    //  ||  !params.achievementsOrAwards || !params.achievementsOrAwards
+    //  ||  !params.institution || !params.institution
+    ){
     // || !params.lat || !params.lng) {
     var errors = [];
     if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || ( params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)) {
@@ -2170,34 +2172,29 @@ exports.requestAsTutor = async (req, res) => {
         'message': 'courceDescription required',
       })
     }
-    if (params.isPaid === undefined) {
-      errors.push({
-        'field': 'isPaid',
-        'message': 'isPaid required',
-      })
-    }
-    if (params.isPaid !== undefined && params.isPaid === 'true' && !params.fee) {
-      errors.push({
-        'field': 'fee',
-        'message': 'fee required',
-      })
-    }
+  
     if (!params.location) {
       errors.push({
         'field': 'location',
         'message': 'location required',
       })
     }
-    // if (!params.lat) {
+    // if ((params.yearOfExperience === null || params.yearOfExperience === undefined)) {
     //   errors.push({
-    //     'field': 'lat',
-    //     'message': 'latitude required',
+    //     'field': 'yearOfExperience',
+    //     'message': 'yearOfExperience required',
     //   })
     // }
-    // if (!params.lng) {
+    // if (!params.achievementsOrAwards) {
     //   errors.push({
-    //     'field': 'lng',
-    //     'message': 'lng required',
+    //     'field': 'achievementsOrAwards',
+    //     'message': 'achievementsOrAwards required',
+    //   })
+    // }
+       // if (!params.institution) {
+    //   errors.push({
+    //     'field': 'institution',
+    //     'message': 'institution required',
     //   })
     // }
     if (!file) {
@@ -2215,11 +2212,7 @@ exports.requestAsTutor = async (req, res) => {
   }
   
   
-  if(params.isPaid === 'true'){
-    params.isPaid = true
-  }else{
-    params.isPaid = false
-  }
+ 
   var checkUserData = await User.findOne({
     _id: userId,
     isTutor: true,
@@ -2263,94 +2256,7 @@ if (checkRequestAlready) {
     message: "Sent tutor request already"
   })
 }
-  // var checkCourseData = await TutorCourse.findOne({
-  //   _id: { $in: params.tutorCourseIds },
-  //   status: 1
-  // })
-  //   .catch(err => {
-  //     return {
-  //       success: 0,
-  //       message: 'Something went wrong while checking course ids',
-  //       error: err
-  //     }
-  //   })
-  // if (checkCourseData && (checkCourseData.success !== undefined) && (checkCourseData.success === 0)) {
-  //   return res.send(checkCourseData);
-  // }
-  // if (!checkCourseData) {
-  //   return res.send({
-  //     success: 0,
-  //     message: "course not exists"
-  //   })
 
-  // }
-  // if (checkCourseData && checkCourseData.length < params.tutorCourseIds.length) {
-  //   return res.send({
-  //     success: 0,
-  //     message: "Some courses not exists"
-  //   })
-  // }
-  // var checkCategoryData = await TutorCategory.findOne({
-  //   _id: { $in: params.tutorCategoryIds },
-  //   status: 1
-  // })
-  //   .catch(err => {
-  //     return {
-  //       success: 0,
-  //       message: 'Something went wrong while checking category ids',
-  //       error: err
-  //     }
-  //   })
-  // if (checkCategoryData && (checkCategoryData.success !== undefined) && (checkCategoryData.success === 0)) {
-  //   return res.send(checkCategoryData);
-  // }
-  // if (checkCategoryData && checkCategoryData.length < params.tutorCategoryIds.length) {
-  //   return res.send({
-  //     success: 0,
-  //     message: "Some categories not exists"
-  //   })
-  // }
-  // var subjectIdsCheck = await TutorSubject.find({
-  //   _id: { $in: params.tutorSubjectIds },
-  //   status: 1
-  // })
-  //   .catch(err => {
-  //     return {
-  //       success: 0,
-  //       message: 'Something went wrong while checking subject ids',
-  //       error: err
-  //     }
-  //   })
-  // if (subjectIdsCheck && (subjectIdsCheck.success !== undefined) && (subjectIdsCheck.success === 0)) {
-  //   return res.send(subjectIdsCheck);
-  // }
-  // if (subjectIdsCheck && subjectIdsCheck.length < params.tutorSubjectIds.length) {
-  //   return res.send({
-  //     success: 0,
-  //     message: "Some subjects not exists"
-  //   })
-  // }
-
-  // var classIdsCheck = await TutorClass.find({
-  //   _id: { $in: params.tutorClassIds },
-  //   status: 1
-  // })
-  //   .catch(err => {
-  //     return {
-  //       success: 0,
-  //       message: 'Something went wrong while checking class ids',
-  //       error: err
-  //     }
-  //   })
-  // if (classIdsCheck && (classIdsCheck.success !== undefined) && (classIdsCheck.success === 0)) {
-  //   return res.send(classIdsCheck);
-  // }
-  // if (classIdsCheck && classIdsCheck.length < params.tutorClassIds.length) {
-  //   return res.send({
-  //     success: 0,
-  //     message: "Some classes not exists"
-  //   })
-  // }
   var newTutorRequestObj = {};
   newTutorRequestObj.userId = userId;
   newTutorRequestObj.tutorCourseIds = params.tutorCourseIds;
@@ -2358,12 +2264,15 @@ if (checkRequestAlready) {
   newTutorRequestObj.tutorSubjectIds = params.tutorSubjectIds;
   newTutorRequestObj.tutorClassIds = params.tutorClassIds;
   newTutorRequestObj.courceDescription = params.courceDescription;
-  newTutorRequestObj.isPaid = params.isPaid;
-  newTutorRequestObj.fee = null;
-
-  if (params.isPaid) {
-    newTutorRequestObj.fee = Number(params.fee);
+  if(params.institution){
+  newTutorRequestObj.institution = params.institution;
   }
+  if(params.achievementsOrAwards){
+    newTutorRequestObj.achievementsOrAwards = params.achievementsOrAwards;
+    }
+    if(params.yearOfExperience !== null && params.yearOfExperience !== undefined){
+      newTutorRequestObj.yearOfExperience = params.yearOfExperience;
+      }
   if(params.lat){
     newTutorRequestObj.lat = params.lat;
   }else{
@@ -2487,8 +2396,11 @@ exports.updateTutorProfile = async(req,res) =>{
      && (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || ( params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1))
      && (params.tutorClassIds === null || params.tutorClassIds === undefined || ( params.tutorClassIds !== undefined && params.tutorClassIds.length < 1))
      && (params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || ( params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1))   
-    && !params.courceDescription && params.isPaid === undefined
-    && !file && (params.isPaid !== undefined && params.isPaid === 'true' && !params.fee)
+    && !params.courceDescription
+    && !file 
+    &&  (params.yearOfExperience === null || params.yearOfExperience === undefined)
+     &&  !params.achievementsOrAwards 
+     &&  !params.institution 
     && !params.location && !params.lat && !params.lng){
       return res.send({
         success : 0,
@@ -2512,20 +2424,7 @@ exports.updateTutorProfile = async(req,res) =>{
     if(params.courceDescription){
       tutorProfileUpdateObj.courceDescription = params.courceDescription;
     }
-    if(params.isPaid !== undefined){
-      if(params.isPaid === 'true'){
-        params.isPaid = true
-      }else{
-        params.isPaid = false
-      }
-    if (params.isPaid) {
-      tutorProfileUpdateObj.fee = params.fee;
-      tutorProfileUpdateObj.isPaid = params.isPaid;
-    }else{
-      tutorProfileUpdateObj.isPaid = params.isPaid;
-      tutorProfileUpdateObj.fee = null;
-    }
-  }
+  
     if (params.location) {
       tutorProfileUpdateObj.location = params.location;
     }
@@ -2534,6 +2433,15 @@ exports.updateTutorProfile = async(req,res) =>{
     }
     if (params.lng) {
       tutorProfileUpdateObj.lng = params.lng;
+    }
+    if(params.institution){
+      tutorProfileUpdateObj.institution = params.institution;
+    }
+    if(params.achievementsOrAwards){
+      tutorProfileUpdateObj.achievementsOrAwards = params.achievementsOrAwards;
+    }
+    if(params.yearOfExperience !== null && params.yearOfExperience !== undefined){
+      tutorProfileUpdateObj.yearOfExperience = params.yearOfExperience;
     }
     tutorProfileUpdateObj.isApproved = false;
     tutorProfileUpdateObj.isRejected = false;

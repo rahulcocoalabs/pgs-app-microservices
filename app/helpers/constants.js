@@ -81,5 +81,9 @@ module.exports = Object.freeze({
     ONLINE_CLASS_FILTERS : [{'name' : 'tutorSubjectId','value' :'tutorSubjectId'} ,{'name' : 'tutorClassId','value' :'tutorClassId'}],
     TUTOR_FILTERS : [{'name' : 'tutorSubjectId' , 'value' :'tutorSubjectIds'},{'name' :'tutorClassId' ,'value' :  'tutorClassIds'}],
 
+    SUBJECT_SEARCH_TYPE : 'subject',
+    ONLINE_CLASS_SEARCH_TYPE : 'onlineClass',
+    TUTOR_SEARCH_TYPE : 'tutor'
+
 
 });
