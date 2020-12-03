@@ -137,6 +137,8 @@ const UserSchema = mongoose.Schema({
     phone: String,
     email: String,
     address: String,
+    avaregeRating:Number,
+    rateduser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     userType: String,
     fatherName: String,
     fatherNationalityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Nationality' },
