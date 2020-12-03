@@ -1380,7 +1380,7 @@ exports.addratingToClass = async (req, res) => {
   }
   if (save) {
     var object = {};
-    object._id = { $push: { ratedUser: req.identity.data.id } }
+    object = { $push: { rateduser: userId} }
 
 
     var update = await OnlineClass.updateOne({ _id: req.params.id }, object).catch(error=>{
@@ -1397,7 +1397,7 @@ exports.addratingToClass = async (req, res) => {
 
     return res.send({
       success: 1,
-
+      object,
       message: 'successfully saved rating'
     });
   }
