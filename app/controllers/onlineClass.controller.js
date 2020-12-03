@@ -981,7 +981,8 @@ exports.updateAppointmentStatus = async (req, res) => {
   var appointmentId = req.params.id;
 
   if (!params.status || (params.status && params.status !== constants.APPROVED_STATUS
-    && params.status !== constants.REJECTED_STATUS)) {
+    && params.status !== constants.REJECTED_STATUS) ||
+    (params.status && params.status === constants.REJECTED_STATUS && !params.comments)) {
     var errors = [];
     if (!params.status) {
       errors.push({
@@ -996,6 +997,12 @@ exports.updateAppointmentStatus = async (req, res) => {
         'message': 'Invalid status',
       })
     }
+    if( (params.status && params.status === constants.REJECTED_STATUS && !params.comments)){
+      errors.push({
+        'field': 'comments',
+        'message': 'comments required',
+      })
+    }
     return res.send({
       success: 0,
       errors
@@ -1006,11 +1013,15 @@ exports.updateAppointmentStatus = async (req, res) => {
   var message = ""
   if (params.status === constants.APPROVED_STATUS) {
     isApproved = true;
+    comments = null;
     message = 'Appointment accepted successfully'
   } else {
     message = 'Appointment rejected successfully'
     isRejected = false;
+    comments = params.comments;
+
   }
+
 
   var checkAppointment = await AppointmentClassRequest.findOne({
     _id: appointmentId,
@@ -1029,7 +1040,7 @@ exports.updateAppointmentStatus = async (req, res) => {
   }
 
   if (checkAppointment && checkAppointment !== null) {
-    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected)
+    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected,comments)
     if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
       return res.send(checkAppointmentResp);
     }
@@ -1438,7 +1449,7 @@ async function checkClassIsPrivate(params) {
 
 
 
-async function checkAppointmentStatusCheck(appointmentData, isApproved, isRejected) {
+async function checkAppointmentStatusCheck(appointmentData, isApproved, isRejected,comments) {
   if (appointmentData.isApproved && isApproved) {
     return {
       success: 0,
@@ -1458,6 +1469,7 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     findCriteria.isPublic = false;
     findCriteria.isApproved = true;
     findCriteria.isRejected = false;
+    findCriteria.comments = null;
     findCriteria.status = 1;
 
     var checkOnlineClass = await OnlineCLass.findOne(findCriteria)
@@ -1488,6 +1500,7 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     }
   } else {
     updateObj.isRejected = true;
+    findCriteria.comments = comments;
     updateObj.tsModifiedAt = Date.now();
     return {
       success: 1,
