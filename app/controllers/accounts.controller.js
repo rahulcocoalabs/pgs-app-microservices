@@ -1369,41 +1369,75 @@ exports.addratingToClass = async (req, res) => {
   objectRating.status = 1;
   objectRating.tsCreatedAt = Date.now();
   objectRating.tsModifiedAt = null;
-  var save = await new Rating(objectRating).save().catch(error=>{
+  var save = await new Rating(objectRating).save().catch(error => {
     return {
-      success:0,
-      message:error.message
+      success: 0,
+      message: error.message
     }
   });
-  if (save && save.success && save.success == 0){
+  if (save && save.success && save.success == 0) {
     return res.send(save)
   }
   if (save) {
     var object = {};
-    object = { $push: { rateduser: userId} }
+    object = { $push: { rateduser: userId } }
 
 
-    var update = await OnlineClass.updateOne({ _id: req.params.id }, object).catch(error=>{
+    var update = await OnlineClass.updateOne({ _id: req.params.id }, object).catch(error => {
       return {
-        success:0,
-        message:error.message
+        success: 0,
+        message: error.message
       }
     });
 
-    if (update && update.success && update.success === 0){
+    if (update && update.success && update.success === 0) {
       return res.send(update)
     }
-   
+    var updateARates = await avaregeRates("class",classId,res)
 
-    return res.send({
-      success: 1,
-      object,
-      message: 'successfully saved rating'
-    });
+    if (updateARates == 1){
+      return res.send({
+        success: 1,
+        object,
+        message: 'successfully saved rating'
+      });
+    }
+    else {
+      return res.send({
+        success: 0,
+       
+        message: 'something went wrong'
+      });
+    }
   }
 }
 
+// average ratings 
 
+async function avaregeRates(type, id,res) {
+
+  if (type == "class") {
+    var array = await Rating.find({ classId: id }).catch(error => {
+      return { success: 0, message: error.message }
+    })
+
+    if (array && array.succes && array.sucess === 0) {
+      return res.send(array)
+    }
+    var totalRates = 0
+    for (i in array) {
+      totalRates += array[i].rating
+    }
+    var avg = totalRates / array.length;
+    var update = await OnlineClass.updateOne({_id:id},{avaregeRates:avg}).catch(err=>{
+      return {succes:0,message:err.message}
+    })
+    if (update && update.succes && update.succes === 1){
+      return res.send(update)
+    }
+    return 1;
+  }
+}
 
 // *** Login with email and password ***
 exports.loginWithEmail = async (req, res) => {
