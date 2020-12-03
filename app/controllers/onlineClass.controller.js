@@ -21,6 +21,7 @@ const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
+const Currency = require('../models/currency.model');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
@@ -57,7 +58,8 @@ exports.createOnlineClass = async (req, res) => {
 
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
-    || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory ) 
+    || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory )
+    ||  (params.isPaid === 'true' && !params.currencyId )
   ) {
     var errors = [];
 
@@ -112,6 +114,12 @@ exports.createOnlineClass = async (req, res) => {
         message: "classTimeCategory cannot be empty"
       })
     }
+    if((params.isPaid === 'true' && !params.currencyId )){
+      errors.push({
+        field: "currencyId",
+        message: "currencyId cannot be empty"
+      })
+    }
 
     if (params.isPublic === undefined) {
       errors.push({
@@ -152,16 +160,20 @@ exports.createOnlineClass = async (req, res) => {
     onlineClassObj.isPaid = true;
     onlineClassObj.fee = params.fee;
     onlineClassObj.classTimeCategory = params.classTimeCategory;
+    onlineClassObj.currencyId = params.currencyId;
   } else {
     onlineClassObj.isPaid = false;
     onlineClassObj.fee = null;
     onlineClassObj.classTimeCategory = null;
+    onlineClassObj.currencyId = null;
+
   }
   if (params.isPublic === 'true') {
     onlineClassObj.isPublic = true;
   } else {
     onlineClassObj.isPublic = false;
   }
+
   onlineClassObj.availableDays = params.availableDays;
   onlineClassObj.availableTime = params.availableTime;
   onlineClassObj.isApproved = false;
