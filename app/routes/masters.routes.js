@@ -13,6 +13,7 @@ module.exports = (app) => {
     app.get('/masters/search',masters.searchKeywords);
     app.get('/masters/search/default',masters.defaultSearch);
     app.get('/masters/filters',masters.getFilters);
+    app.get('/masters/currencies',auth,movies.listCurrencies);
 
     //Tutor masters
     app.get('/masters/tutor/courses',masters.getCources);

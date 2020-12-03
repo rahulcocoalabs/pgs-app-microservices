@@ -14,6 +14,8 @@ const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
 const TutorRequest = require('../models/tutorRequest.model');
 const User = require('../models/user.model');
+const Currency = require('../models/currency.model');
+
 //mongoose.Promise = global.Promise;
 
 //Models for filters 
@@ -925,6 +927,31 @@ function getTopMovies(perPage, callback) {
   })
 }
   }
+
+  exports.listCurrencies = async(req,res) => {
+    var currencyData = await  Currency.find({
+      status : 1
+    })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while listing currencies',
+        error: err
+      }
+    })
+  if (currencyData && (currencyData.success !== undefined) && (currencyData.success === 0)) {
+    return res.send(currencyData);
+  }
+  return res.send({
+    success: 1,
+    statusCode: 200,
+    items : currencyData,
+    message: 'listing currencies',
+  })
+}
+
+
+
 
   async function checkSubjectsForOnlineClass(params,userId) {
     if((params.isMySubjects && params.isMySubjects === '1') || (params.tutorId)){
