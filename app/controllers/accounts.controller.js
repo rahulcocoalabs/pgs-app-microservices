@@ -1398,7 +1398,7 @@ exports.addratingToClass = async (req, res) => {
     if (updateARates == 1){
       return res.send({
         success: 1,
-        object,
+        
         message: 'successfully saved rating'
       });
     }
