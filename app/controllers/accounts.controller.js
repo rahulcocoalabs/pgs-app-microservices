@@ -1424,6 +1424,7 @@ async function avaregeRates(type, id,res) {
     if (array && array.succes && array.sucess === 0) {
       return res.send(array)
     }
+    return res.send(array);
     var totalRates = 0
     for (i in array) {
       totalRates += array[i].rating
