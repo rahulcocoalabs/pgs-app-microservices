@@ -744,8 +744,8 @@ exports.getUserDetails = (req, res) => {
     hobbies: 1,
     coinCount: 1,
     karmaIndex: 1,
-    password : 1,
-    isTutor : 1
+    password: 1,
+    isTutor: 1
   }
   // get data
   User.findOne(filters, queryProjection).populate(['syllabusId', {
@@ -765,9 +765,9 @@ exports.getUserDetails = (req, res) => {
       return;
     }
     userDetail = userDetail.toObject();
-    if(userDetail.password && userDetail.password !== null){
+    if (userDetail.password && userDetail.password !== null) {
       userDetail.isPasswordExists = true;
-    }else{
+    } else {
       userDetail.isPasswordExists = false;
 
     }
@@ -896,7 +896,7 @@ exports.update = async (req, res) => {
         update.hobbyIds = hobbyIds;
       }
     }
-    
+
     // if (update.password) {
     //   const hash = bcrypt.hashSync(update.password, salt);
     //   update.password = hash;
@@ -922,12 +922,12 @@ exports.update = async (req, res) => {
     var options = {
       new: true
     };
-    var checkPasswordObj = await checkPassword(update,userId)
+    var checkPasswordObj = await checkPassword(update, userId)
     if (checkPasswordObj && (checkPasswordObj.success !== undefined) && (checkPasswordObj.success === 0)) {
       return res.send(checkPasswordObj);
     }
-  
-    if(checkPasswordObj.isPasswordUpdate){
+
+    if (checkPasswordObj.isPasswordUpdate) {
       update.password = checkPasswordObj.password;
     }
     User.findOne(filter).then(data => {
@@ -1360,42 +1360,53 @@ exports.addratingToClass = async (req, res) => {
 
   }
 
-  
-    var objectRating = {};
-    objectRating.rating = rating;
-    objectRating.userId = userId;
-    objectRating.classId = classId;
-    objectRating.type= "class";
-    objectRating.status = 1;
-    objectRating.tsCreatedAt = Date.now();
-    objectRating.tsModifiedAt = null;
-    var save = await new Rating(objectRating).save();
-    if (save){
-      var addUserId = await addRatingToUser(req,res);
-      return res.send({
-        success:1,
-      
-        message:'successfully saved rating'
-      });
-    }
-  }
-  
 
-await function addRatingToUser(req,res){
-  var object = {};
-  object._id = {$push:{ratedUser:req.identity.data.id}}
-
-  try {
-    var update = await OnlineClass.updateOne({_id:req.params.id},object);
-  }
-  catch(error){
-    return res.send({
+  var objectRating = {};
+  objectRating.rating = rating;
+  objectRating.userId = userId;
+  objectRating.classId = classId;
+  objectRating.type = "class";
+  objectRating.status = 1;
+  objectRating.tsCreatedAt = Date.now();
+  objectRating.tsModifiedAt = null;
+  var save = await new Rating(objectRating).save().catch(error=>{
+    return {
       success:0,
-      id:req.params.id,
-      message:"could not add entry to user array"
-    })
+      message:error.message
+    }
+  });
+  if (save && save.success && save.success == 0){
+    return res.send(save)
   }
-} 
+  if (save) {
+    var object = {};
+    object._id = { $push: { ratedUser: req.identity.data.id } }
+
+
+    var update = await OnlineClass.updateOne({ _id: req.params.id }, object).catch(error=>{
+      return {
+        success:0,
+        message:error.message
+      }
+    });
+
+    if (update && update.success && update.success === 0){
+      return res.send(update)
+    }
+   
+
+    return res.send({
+      success: 1,
+
+      message: 'successfully saved rating'
+    });
+  }
+}
+
+
+await function addRatingToUser(req, res) {
+
+}
 // *** Login with email and password ***
 exports.loginWithEmail = async (req, res) => {
   let email = req.body.email;
@@ -1450,7 +1461,7 @@ exports.loginWithEmail = async (req, res) => {
         }, JWT_KEY, {
           expiresIn: '30 days'
         });
-        
+
         return res.send({
           success: 1,
           statusCode: 200,
@@ -1805,27 +1816,27 @@ exports.resetPassword = async (req, res) => {
         success: 0,
         message: 'Password reset token is invalid or has expired.'
       });
-    }else{
-    //Set the new password
-    const hash = bcrypt.hashSync(password, salt);
-    var update = {
-      password: hash,
-      resetPasswordToken: undefined,
-      resetPasswordExpires: undefined,
-    };
-    var filter = {
-      resetPasswordToken: req.params.token,
-      status: 1
-    };
-    let updateUser = await User.findOneAndUpdate(filter, update, {
-      new: true,
-      useFindAndModify: false
-    });
-    res.status(200).send({
-      success: 1,
-      message: 'Your password has been updated.'
-    });
-  }
+    } else {
+      //Set the new password
+      const hash = bcrypt.hashSync(password, salt);
+      var update = {
+        password: hash,
+        resetPasswordToken: undefined,
+        resetPasswordExpires: undefined,
+      };
+      var filter = {
+        resetPasswordToken: req.params.token,
+        status: 1
+      };
+      let updateUser = await User.findOneAndUpdate(filter, update, {
+        new: true,
+        useFindAndModify: false
+      });
+      res.status(200).send({
+        success: 1,
+        message: 'Your password has been updated.'
+      });
+    }
   } catch (err) {
     res.status(500).send({
       success: 0,
@@ -1918,10 +1929,10 @@ exports.socialSignup = async (req, res) => {
     } else {
       userObj.phone = null;
     }
-    if(params.provider === constants.FACEBOOK_PROVIDER && params.id){
-    userObj.facebookId = params.id;
+    if (params.provider === constants.FACEBOOK_PROVIDER && params.id) {
+      userObj.facebookId = params.id;
     }
-    userObj.isTutor =  false;
+    userObj.isTutor = false;
 
     userObj.address = null;
     userObj.userType = "Student",
@@ -2125,7 +2136,7 @@ exports.updateForSocialAccount = async (req, res) => {
   if (checkUser && (checkUser.success !== undefined) && (checkUser.success === 0)) {
     return checkUser;
   }
-  
+
   return res.send({
     success: 1,
     statusCode: 200,
@@ -2143,36 +2154,36 @@ exports.requestAsTutor = async (req, res) => {
   var params = req.body;
   var file = req.file;
 
-  if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || ( params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)
-     ||params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || ( params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)
-     ||params.tutorClassIds === null || params.tutorClassIds === undefined || ( params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)
-     ||params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || ( params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
-    || !params.courceDescription || !file ||  !params.location 
+  if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || (params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)
+    || params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)
+    || params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)
+    || params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
+    || !params.courceDescription || !file || !params.location
     // ||  (params.yearOfExperience === null || params.yearOfExperience === undefined)
     //  ||  !params.achievementsOrAwards || !params.achievementsOrAwards
     //  ||  !params.institution || !params.institution
-    ){
+  ) {
     // || !params.lat || !params.lng) {
     var errors = [];
-    if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || ( params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)) {
+    if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || (params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)) {
       errors.push({
         'field': 'tutorCourseIds',
         'message': 'tutorCourseId required',
       })
     }
-    if (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || ( params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)) {
+    if (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)) {
       errors.push({
         'field': 'tutorSubjectIds',
         'message': 'tutorSubjectIds required',
       })
     }
-    if (params.tutorClassIds === null || params.tutorClassIds === undefined || ( params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)) {
+    if (params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)) {
       errors.push({
         'field': 'tutorClassIds',
         'message': 'tutorClassIds required',
       })
     }
-    if (params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || ( params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)) {
+    if (params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)) {
       errors.push({
         'field': 'tutorCategoryIds',
         'message': 'tutorCategoryIds required',
@@ -2184,7 +2195,7 @@ exports.requestAsTutor = async (req, res) => {
         'message': 'courceDescription required',
       })
     }
-  
+
     if (!params.location) {
       errors.push({
         'field': 'location',
@@ -2203,7 +2214,7 @@ exports.requestAsTutor = async (req, res) => {
     //     'message': 'achievementsOrAwards required',
     //   })
     // }
-       // if (!params.institution) {
+    // if (!params.institution) {
     //   errors.push({
     //     'field': 'institution',
     //     'message': 'institution required',
@@ -2222,9 +2233,9 @@ exports.requestAsTutor = async (req, res) => {
     })
 
   }
-  
-  
- 
+
+
+
   var checkUserData = await User.findOne({
     _id: userId,
     isTutor: true,
@@ -2248,26 +2259,26 @@ exports.requestAsTutor = async (req, res) => {
   }
   var checkRequestAlready = await TutorRequest.findOne({
     userId,
-    isRejected : false,
-    isApproved : false,
-    status : 1
+    isRejected: false,
+    isApproved: false,
+    status: 1
   })
-  .catch(err => {
-    return {
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking tutor request already',
+        error: err
+      }
+    })
+  if (checkRequestAlready && (checkRequestAlready.success !== undefined) && (checkRequestAlready.success === 0)) {
+    return res.send(checkRequestAlready);
+  }
+  if (checkRequestAlready) {
+    return res.send({
       success: 0,
-      message: 'Something went wrong while checking tutor request already',
-      error: err
-    }
-  })
-if (checkRequestAlready && (checkRequestAlready.success !== undefined) && (checkRequestAlready.success === 0)) {
-  return res.send(checkRequestAlready);
-}
-if (checkRequestAlready) {
-  return res.send({
-    success: 0,
-    message: "Sent tutor request already"
-  })
-}
+      message: "Sent tutor request already"
+    })
+  }
 
   var newTutorRequestObj = {};
   newTutorRequestObj.userId = userId;
@@ -2276,26 +2287,26 @@ if (checkRequestAlready) {
   newTutorRequestObj.tutorSubjectIds = params.tutorSubjectIds;
   newTutorRequestObj.tutorClassIds = params.tutorClassIds;
   newTutorRequestObj.courceDescription = params.courceDescription;
-  if(params.institution){
-  newTutorRequestObj.institution = params.institution;
+  if (params.institution) {
+    newTutorRequestObj.institution = params.institution;
   }
-  if(params.achievementsOrAwards){
+  if (params.achievementsOrAwards) {
     newTutorRequestObj.achievementsOrAwards = params.achievementsOrAwards;
-    }
-    if(params.yearOfExperience !== null && params.yearOfExperience !== undefined){
-      newTutorRequestObj.yearOfExperience = params.yearOfExperience;
-      }
-  if(params.lat){
+  }
+  if (params.yearOfExperience !== null && params.yearOfExperience !== undefined) {
+    newTutorRequestObj.yearOfExperience = params.yearOfExperience;
+  }
+  if (params.lat) {
     newTutorRequestObj.lat = params.lat;
-  }else{
+  } else {
     newTutorRequestObj.lat = null;
   }
 
-  if(params.lng){
+  if (params.lng) {
     newTutorRequestObj.lng = params.lng;
-  }else{
-  newTutorRequestObj.lng = null;
-    
+  } else {
+    newTutorRequestObj.lng = null;
+
   }
 
   newTutorRequestObj.location = params.location;
@@ -2326,75 +2337,75 @@ if (checkRequestAlready) {
   })
 }
 
-exports.getTutorProfile = async(req,res) =>{
+exports.getTutorProfile = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var tutorCheck = await checkUserIsTutor(userId);
-    if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
     return res.send(tutorCheck);
   }
-    
-  
+
+
   var myClassData = await OnlineClass.find({
     userId,
-    isApproved : true,
-    isRejected : false,
-    status : 1
+    isApproved: true,
+    isRejected: false,
+    status: 1
   })
-  .populate([{
-    path: 'tutorSubjectId',
-  }, {
-    path: 'tutorClassId',
-  }])
+    .populate([{
+      path: 'tutorSubjectId',
+    }, {
+      path: 'tutorClassId',
+    }])
 
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while get my classes',
-      error: err
-    }
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get my classes',
+        error: err
+      }
+    })
+  if (myClassData && (myClassData.success !== undefined) && (myClassData.success === 0)) {
+    return res.send(myClassData);
+  }
+  var appointmentData = await AppointmentClassRequest.find({
+    tutorId: userId,
+    status: 1
   })
-if (myClassData && (myClassData.success !== undefined) && (myClassData.success === 0)) {
-  return res.send(myClassData);
-}
-var appointmentData = await AppointmentClassRequest.find({
-  tutorId : userId,
-  status : 1
-})
-.populate([{
-  path: 'userId',
-  select: {
-    firstName: 1,
-    image : 1,
-    socialPhotoUrl : 1
+    .populate([{
+      path: 'userId',
+      select: {
+        firstName: 1,
+        image: 1,
+        socialPhotoUrl: 1
+      }
+    }, {
+      path: 'tutorSubjectId',
+    }, {
+      path: 'tutorClassId',
+    }])
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get appointments data',
+        error: err
+      }
+    })
+  if (appointmentData && (appointmentData.success !== undefined) && (appointmentData.success === 0)) {
+    return res.send(appointmentData);
   }
-}, {
-  path: 'tutorSubjectId',
-}, {
-  path: 'tutorClassId',
-}])
-.catch(err => {
-  return {
-    success: 0,
-    message: 'Something went wrong while get appointments data',
-    error: err
+  if (!appointmentData || appointmentData === null) {
+    appointmentData = [];
   }
-})
-if (appointmentData && (appointmentData.success !== undefined) && (appointmentData.success === 0)) {
-return res.send(appointmentData);
-}
-if(!appointmentData || appointmentData === null){
-  appointmentData = [];
-}
-tutorCheck.myAppointments = appointmentData
-tutorCheck.myClasses = myClassData;
-tutorCheck.classImageBase = classConfig.imageBase;
-tutorCheck.imageBase = usersConfig.imageBase;
+  tutorCheck.myAppointments = appointmentData
+  tutorCheck.myClasses = myClassData;
+  tutorCheck.classImageBase = classConfig.imageBase;
+  tutorCheck.imageBase = usersConfig.imageBase;
 
   return res.send(tutorCheck);
 }
 
-exports.updateTutorProfile = async(req,res) =>{
+exports.updateTutorProfile = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var tutorCheck = await checkUserIsTutor(userId);
@@ -2403,66 +2414,66 @@ exports.updateTutorProfile = async(req,res) =>{
   }
   var params = req.body;
   var file = req.file;
-  
-  if ((params.tutorCourseIds === null || params.tutorCourseIds === undefined || ( params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1))
-     && (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || ( params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1))
-     && (params.tutorClassIds === null || params.tutorClassIds === undefined || ( params.tutorClassIds !== undefined && params.tutorClassIds.length < 1))
-     && (params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || ( params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1))   
-    && !params.courceDescription
-    && !file 
-    &&  (params.yearOfExperience === null || params.yearOfExperience === undefined)
-     &&  !params.achievementsOrAwards 
-     &&  !params.institution 
-    && !params.location && !params.lat && !params.lng){
-      return res.send({
-        success : 0,
-        message : "Nothing to update"
-      })
-    }
-    var tutorProfileUpdateObj = {};
-    tutorProfileUpdateObj.userId = userId;
-    if((params.tutorCourseIds !== null && params.tutorCourseIds !== undefined && (params.tutorCourseIds !== undefined && params.tutorCourseIds.length > 1))){
-      tutorProfileUpdateObj.tutorCourseIds = params.tutorCourseIds;
-    }
-    if((params.tutorSubjectIds !== null && params.tutorSubjectIds !== undefined && ( params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length >= 1))){
-      tutorProfileUpdateObj.tutorSubjectIds = params.tutorSubjectIds;
-    }
-    if((params.tutorClassIds !== null && params.tutorClassIds !== undefined && ( params.tutorClassIds !== undefined && params.tutorClassIds.length >= 1))){
-      tutorProfileUpdateObj.tutorClassIds = params.tutorClassIds;
-    }
-    if((params.tutorCategoryIds !== null && params.tutorCategoryIds !== undefined && ( params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length >= 1))){
-      tutorProfileUpdateObj.tutorCategoryIds = params.tutorCategoryIds;
-    }
-    if(params.courceDescription){
-      tutorProfileUpdateObj.courceDescription = params.courceDescription;
-    }
-  
-    if (params.location) {
-      tutorProfileUpdateObj.location = params.location;
-    }
-    if (params.lat) {
-      tutorProfileUpdateObj.lat = params.lat;
-    }
-    if (params.lng) {
-      tutorProfileUpdateObj.lng = params.lng;
-    }
-    if(params.institution){
-      tutorProfileUpdateObj.institution = params.institution;
-    }
-    if(params.achievementsOrAwards){
-      tutorProfileUpdateObj.achievementsOrAwards = params.achievementsOrAwards;
-    }
-    if(params.yearOfExperience !== null && params.yearOfExperience !== undefined){
-      tutorProfileUpdateObj.yearOfExperience = params.yearOfExperience;
-    }
-    tutorProfileUpdateObj.isApproved = false;
-    tutorProfileUpdateObj.isRejected = false;
-    tutorProfileUpdateObj.status = 1;
-    tutorProfileUpdateObj.tsCreatedAt = Date.now();
-    tutorProfileUpdateObj.tsModifiedAt = null;
 
-    var newTutorProfileUpdateObj = new TutorProfileUpdateRequest(tutorProfileUpdateObj);
-    var newTutorProfileUpdateResponse = await newTutorProfileUpdateObj.save()
+  if ((params.tutorCourseIds === null || params.tutorCourseIds === undefined || (params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1))
+    && (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1))
+    && (params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1))
+    && (params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1))
+    && !params.courceDescription
+    && !file
+    && (params.yearOfExperience === null || params.yearOfExperience === undefined)
+    && !params.achievementsOrAwards
+    && !params.institution
+    && !params.location && !params.lat && !params.lng) {
+    return res.send({
+      success: 0,
+      message: "Nothing to update"
+    })
+  }
+  var tutorProfileUpdateObj = {};
+  tutorProfileUpdateObj.userId = userId;
+  if ((params.tutorCourseIds !== null && params.tutorCourseIds !== undefined && (params.tutorCourseIds !== undefined && params.tutorCourseIds.length > 1))) {
+    tutorProfileUpdateObj.tutorCourseIds = params.tutorCourseIds;
+  }
+  if ((params.tutorSubjectIds !== null && params.tutorSubjectIds !== undefined && (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length >= 1))) {
+    tutorProfileUpdateObj.tutorSubjectIds = params.tutorSubjectIds;
+  }
+  if ((params.tutorClassIds !== null && params.tutorClassIds !== undefined && (params.tutorClassIds !== undefined && params.tutorClassIds.length >= 1))) {
+    tutorProfileUpdateObj.tutorClassIds = params.tutorClassIds;
+  }
+  if ((params.tutorCategoryIds !== null && params.tutorCategoryIds !== undefined && (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length >= 1))) {
+    tutorProfileUpdateObj.tutorCategoryIds = params.tutorCategoryIds;
+  }
+  if (params.courceDescription) {
+    tutorProfileUpdateObj.courceDescription = params.courceDescription;
+  }
+
+  if (params.location) {
+    tutorProfileUpdateObj.location = params.location;
+  }
+  if (params.lat) {
+    tutorProfileUpdateObj.lat = params.lat;
+  }
+  if (params.lng) {
+    tutorProfileUpdateObj.lng = params.lng;
+  }
+  if (params.institution) {
+    tutorProfileUpdateObj.institution = params.institution;
+  }
+  if (params.achievementsOrAwards) {
+    tutorProfileUpdateObj.achievementsOrAwards = params.achievementsOrAwards;
+  }
+  if (params.yearOfExperience !== null && params.yearOfExperience !== undefined) {
+    tutorProfileUpdateObj.yearOfExperience = params.yearOfExperience;
+  }
+  tutorProfileUpdateObj.isApproved = false;
+  tutorProfileUpdateObj.isRejected = false;
+  tutorProfileUpdateObj.status = 1;
+  tutorProfileUpdateObj.tsCreatedAt = Date.now();
+  tutorProfileUpdateObj.tsModifiedAt = null;
+
+  var newTutorProfileUpdateObj = new TutorProfileUpdateRequest(tutorProfileUpdateObj);
+  var newTutorProfileUpdateResponse = await newTutorProfileUpdateObj.save()
     .catch(err => {
       return {
         success: 0,
@@ -2478,7 +2489,7 @@ exports.updateTutorProfile = async(req,res) =>{
     statusCode: 200,
     message: 'Sent your request to update your tutor profile',
   })
-  
+
 }
 
 // exports.updateAppointmentStatus = async(req,res) =>{
@@ -2805,7 +2816,7 @@ async function validateSocialSignupRequest(params) {
     };
   }
   var isProvideAnyUnique = false;
-  if ((!params.email || params.email === null) && (params.provider === constants.FACEBOOK_PROVIDER) ) {
+  if ((!params.email || params.email === null) && (params.provider === constants.FACEBOOK_PROVIDER)) {
     isProvideAnyUnique = true;
   }
   return {
@@ -2844,7 +2855,7 @@ async function checkYourEmail(params) {
       }
     } else {
       console.log("4")
-   
+
       return {
         success: 1,
         message: "Unique email"
@@ -2861,151 +2872,151 @@ async function checkYourEmail(params) {
   }
 }
 
-async function checkPassword(params,userId){
-  if(params.password || params.oldPassword){
+async function checkPassword(params, userId) {
+  if (params.password || params.oldPassword) {
     var userData = await User.findOne({
-      _id : userId,
-      status : 1
+      _id: userId,
+      status: 1
     })
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while getting user data',
+          error: err
+        }
+      })
+    if (userData && (userData.success !== undefined) && (userData.success === 0)) {
+      return userData;
+    }
+    console.log("1")
+    if (userData.password && userData.password !== null) {
+      console.log("2")
+
+      console.log("reset password")
+      if (!params.oldPassword) {
+        console.log("3")
+
+        return {
+          success: 0,
+          message: "Old password missing",
+        }
+      } else if (!params.password) {
+        console.log("4")
+
+        return {
+          success: 0,
+          message: "New password missing",
+        }
+      } else {
+        console.log("5")
+
+        let matched = await bcrypt.compare(params.oldPassword, userData.password);
+        if (matched) {
+          console.log("6")
+
+          const hash = bcrypt.hashSync(params.password, salt);
+          return {
+            success: 1,
+            isPasswordUpdate: true,
+            password: hash,
+            message: "New password",
+          }
+        } else {
+          console.log("7")
+
+          return {
+            success: 0,
+            message: "Old password incorrect",
+          }
+        }
+      }
+
+    } else {
+      console.log("8")
+
+      const hash = await bcrypt.hashSync(params.password, salt);
+      return {
+        success: 1,
+        isPasswordUpdate: true,
+        password: hash,
+        message: "New password ",
+      }
+    }
+
+  } else {
+    console.log("9")
+
+    return {
+      success: 1,
+      isPasswordUpdate: false,
+      message: 'Password not in request'
+    }
+  }
+}
+
+async function checkUserIsTutor(userId) {
+  var project = {
+    firstName: 1,
+    image: 1,
+    socialPhotoUrl: 1,
+    tutorCourseIds: 1,
+    tutorSubjectIds: 1,
+    tutorClassIds: 1,
+    tutorCategoryIds: 1,
+    courceDescription: 1,
+    isPaid: 1,
+    fee: 1,
+    sampleVideo: 1,
+    lat: 1,
+    lng: 1,
+    location: 1,
+    isTutor: 1
+  }
+  var userData = await User.findOne({
+    _id: userId,
+    status: 1
+  }, project)
+    // .populate([{
+    //   path: 'tutorCourseIds',
+    // }, {
+    //   path: 'tutorSubjectIds',
+    // }, {
+    //   path: 'tutorClassIds',
+    // }, {
+    //   path: 'tutorCategoryIds',
+    // }])
     .catch(err => {
       return {
         success: 0,
-        message: 'Something went wrong while getting user data',
+        message: 'Something went wrong while checking user is a tutor',
         error: err
       }
     })
   if (userData && (userData.success !== undefined) && (userData.success === 0)) {
     return userData;
   }
-  console.log("1")
-  if(userData.password && userData.password !== null){
-  console.log("2")
+  if (userData) {
 
-    console.log("reset password")
-    if(!params.oldPassword){
-  console.log("3")
-      
+    if (userData.isTutor) {
       return {
-        success : 0,
-        message : "Old password missing",
+        success: 1,
+        message: 'Tutor details',
+        item: userData,
+        videoBase: tutorsConfig.videoBase
       }
-    }else if(!params.password){
-  console.log("4")
-
+    } else {
       return {
-        success : 0,
-        message : "New password missing",
-      }
-    }else{
-  console.log("5")
-      
-    let matched = await bcrypt.compare(params.oldPassword, userData.password);
-    if (matched) {
-  console.log("6")
-
-      const hash = bcrypt.hashSync(params.password, salt);
-      return {
-        success : 1,
-        isPasswordUpdate : true,
-        password : hash,
-        message : "New password",
-      }
-    }else{
-  console.log("7")
-
-      return {
-        success : 0,
-        message : "Old password incorrect",
+        success: 0,
+        message: 'You are not a tutor',
       }
     }
-  }
-
-  }else{
-  console.log("8")
-
-    const hash = await bcrypt.hashSync(params.password, salt);
-    return {
-      success : 1,
-      isPasswordUpdate : true,
-      password : hash,
-      message : "New password ",
-    }
-  }
-
-  }else{
-  console.log("9")
-
-    return {
-      success : 1,
-      isPasswordUpdate : false,
-      message : 'Password not in request'
-    }
-  }
-}
-
-async function checkUserIsTutor(userId){
-  var project = {
-    firstName : 1,
-    image : 1,
-    socialPhotoUrl : 1,
-    tutorCourseIds : 1,
-    tutorSubjectIds : 1,
-    tutorClassIds : 1,
-    tutorCategoryIds : 1,
-    courceDescription : 1,
-    isPaid : 1,
-    fee : 1,
-    sampleVideo : 1,
-    lat : 1,
-    lng : 1,
-    location : 1,
-    isTutor : 1
-  }
-  var userData = await User.findOne({
-    _id : userId,
-    status : 1
-  },project)
-  // .populate([{
-  //   path: 'tutorCourseIds',
-  // }, {
-  //   path: 'tutorSubjectIds',
-  // }, {
-  //   path: 'tutorClassIds',
-  // }, {
-  //   path: 'tutorCategoryIds',
-  // }])
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while checking user is a tutor',
-      error: err
-    }
-  })
-  if (userData && (userData.success !== undefined) && (userData.success === 0)) {
-  return userData;
-  }
-  if(userData){
-   
-  if(userData.isTutor){
-    return {
-      success: 1,
-      message: 'Tutor details',
-      item : userData,
-      videoBase : tutorsConfig.videoBase
-    }
-  }else{
-    return {
-      success: 0,
-      message: 'You are not a tutor',
-    }
-  }
-  }else{
+  } else {
     return {
       success: 0,
       message: 'User not exists',
     }
   }
-  }
+}
 
 
   // async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
