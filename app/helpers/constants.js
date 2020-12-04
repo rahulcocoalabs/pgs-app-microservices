@@ -91,7 +91,10 @@ module.exports = Object.freeze({
    CLASS_TIME_CATEGORY_OTHERS : "others",
 
    TUTOR_TYPE : 'tutor',
-   STUDENT_TYPE : 'student'
+   STUDENT_TYPE : 'student',
+
+   ACTIVATE_ACCOUNT_STATUS : 'activate',
+   DEACTIVATE_ACCOUNT_STATUS : 'deactivate',
 
 
 });

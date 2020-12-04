@@ -181,6 +181,7 @@ const UserSchema = mongoose.Schema({
     achievementsOrAwards: String,
     yearOfExperience: Number,
     isBlocked : Boolean,
+    isDeactivated : Boolean,
     status: Number,
     tsCreatedAt: Number,
     tsModifiedAt: Number

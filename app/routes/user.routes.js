@@ -62,6 +62,7 @@ module.exports = (app) => {
 
     app.post('/accounts/social-signup', accounts.socialSignup); 
     app.delete('/accounts/delete', accounts.deleteAccount); 
+    app.patch('/accounts/status', accounts.updateAccountStatus); 
 
     //After social signup screen
     app.patch('/accounts/update',accounts.updateForSocialAccount);

@@ -589,6 +589,7 @@ exports.create = async (req, res) => {
       profileCompletion: profileCompletion,
       referralCode: referralCode,
       isTutor: false,
+      isDeactivated: false,
       coinCount: 0,
       isSocialLogin: false,
       coinHistory: [],
@@ -1393,19 +1394,19 @@ exports.addratingToClass = async (req, res) => {
     if (update && update.success && update.success === 0) {
       return res.send(update)
     }
-    var updateARates = await avaregeRates("class",classId)
+    var updateARates = await avaregeRates("class", classId)
 
-    if (updateARates == 1){
+    if (updateARates == 1) {
       return res.send({
         success: 1,
-        
+
         message: 'successfully saved rating'
       });
     }
     else {
       return res.send({
         success: 0,
-       
+
         message: 'something went wrong'
       });
     }
@@ -1471,19 +1472,19 @@ exports.addratingTutor = async (req, res) => {
     if (update && update.success && update.success === 0) {
       return res.send(update)
     }
-    var updateARates = await avaregeRates("tutor",tutorId)
+    var updateARates = await avaregeRates("tutor", tutorId)
 
-    if (updateARates == 1){
+    if (updateARates == 1) {
       return res.send({
         success: 1,
-        
+
         message: 'successfully saved rating'
       });
     }
     else {
       return res.send({
         success: 0,
-       
+
         message: 'something went wrong'
       });
     }
@@ -1501,18 +1502,18 @@ async function avaregeRates(type, id) {
     if (array && array.succes && array.sucess === 0) {
       return 0
     }
-   // return res.send(array);
+    // return res.send(array);
 
     var totalRates = 0
     for (i in array) {
       totalRates += array[i].rating
     }
-    console.log(totalRates,"test")
+    console.log(totalRates, "test")
     var avg = totalRates / array.length;
-    var update = await OnlineClass.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
-      return {succes:0,message:err.message}
+    var update = await OnlineClass.updateOne({ _id: id }, { avaregeRating: avg }).catch(err => {
+      return { succes: 0, message: err.message }
     })
-    if (update && update.succes && update.succes === 1){
+    if (update && update.succes && update.succes === 1) {
       return 0
     }
     return 1;
@@ -1526,19 +1527,19 @@ async function avaregeRates(type, id) {
     if (array && array.succes && array.sucess === 0) {
       return 0
     }
-   // return res.send(array);
+    // return res.send(array);
 
     var totalRates = 0
     for (i in array) {
       totalRates += array[i].rating
     }
-    console.log(totalRates,"test")
+    console.log(totalRates, "test")
     var avg = totalRates / array.length;
-    var update = await User.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
-      return {succes:0,message:err.message}
+    var update = await User.updateOne({ _id: id }, { avaregeRating: avg }).catch(err => {
+      return { succes: 0, message: err.message }
     })
-    console.log('test1',update,id,avg)
-    if (update && update.succes && update.succes === 1){
+    console.log('test1', update, id, avg)
+    if (update && update.succes && update.succes === 1) {
       return 0
     }
     return 1;
@@ -2062,6 +2063,7 @@ exports.socialSignup = async (req, res) => {
     userObj.ambition = null;
     userObj.genderId = null;
     userObj.countryCode = null;
+    userObj.isDeactivated = false;
     if (params.phone) {
       userObj.phone = params.phone;
     } else {
@@ -2285,54 +2287,158 @@ exports.updateForSocialAccount = async (req, res) => {
   })
 }
 
-exports.deleteAccount = async(req,res) =>{
+exports.deleteAccount = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
   var findCriteria = {
-    _id : userId,
-    status : 1
+    _id: userId,
+    status: 1
   }
 
   var userData = await User.findOne(findCriteria)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while checking user data',
-      error: err
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking user data',
+        error: err
+      }
+    })
+  if (userData && (userData.success !== undefined) && (userData.success === 0)) {
+    return res.send(userData);
+  }
+  if (userData) {
+    var update = {};
+    update.status = 0;
+    update.tsModifiedAt = Date.now();
+
+    var updateUser = await User.updateOne(findCriteria, update)
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while delete account',
+          error: err
+        }
+      })
+    if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
+      return res.send(updateUser);
     }
-  })
-if (userData && (userData.success !== undefined) && (userData.success === 0)) {
-  return res.send(userData);
-}
-if(userData){
-  var update = {};
-  update.status = 0;
-  update.tsModifiedAt = Date.now();
+  //check if tutor change subject status
+  var checkTutorAndUpdateResp = {};
+  checkAccountStatusResp.userId = userId;
+  checkAccountStatusResp.status = 0;
+  checkTutorAndUpdateResp.isTutor = userData.isTutor?userData.isTutor:false;
 
-  var updateUser = await User.updateOne(findCriteria,update)
-  .catch(err => {
-    return {
+  var checkTutorAndUpdateResp = await checkTutorAndUpdate(checkTutorAndUpdateResp);
+  if (checkTutorAndUpdateResp && (checkTutorAndUpdateResp.success !== undefined) && (checkTutorAndUpdateResp.success === 0)) {
+    return res.send(checkTutorAndUpdateResp);
+  }
+
+    return res.send({
+      status: 1,
+      message: 'Your account deleted permanently'
+    });
+
+
+  } else {
+    return res.send({
       success: 0,
-      message: 'Something went wrong while delete account',
-      error: err
+      message: "Invalid user"
+    })
+  }
+}
+
+exports.updateAccountStatus = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var params = req.body;
+
+  if (!params.status || (params.status !== constants.ACTIVATE_ACCOUNT_STATUS
+    && params.status !== constants.DEACTIVATE_ACCOUNT_STATUS)) {
+    var errors = [];
+    if (!params.status) {
+      errors.push({
+        field: "status",
+        message: "Required status"
+      })
     }
-  })
-if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
-  return res.send(updateUser);
-}
-return res.send({
-  status : 1,
-  message : 'Your account deleted permanently'
-});
+    if ((params.status !== constants.ACTIVATE_ACCOUNT_STATUS
+      && params.status !== constants.DEACTIVATE_ACCOUNT_STATUS)) {
+      errors.push({
+        field: "status",
+        message: "invalid status"
+      })
+    }
+
+    return res.status(200).send({
+      success: 0,
+      errors: errors,
+      code: 200
+    });
+  }
 
 
-}else{
-  return res.send({
-    success: 0,
-    message: "Invalid user"
-  })
-}
+  var findCriteria = {
+    _id: userId,
+    status: 1
+  }
+
+  var userData = await User.findOne(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking user data',
+        error: err
+      }
+    })
+  if (userData && (userData.success !== undefined) && (userData.success === 0)) {
+    return res.send(userData);
+  }
+  if (userData) {
+
+    var checkAccountStatusResp = await checkAccountStatus(userData, params.status);
+    if (checkAccountStatusResp && (checkAccountStatusResp.success !== undefined) && (checkAccountStatusResp.success === 0)) {
+      return res.send(checkAccountStatusResp);
+    }
+   
+    
+    var update = {};
+    update.isDeactivated = checkAccountStatusResp.isDeactivated;
+    update.tsModifiedAt = Date.now();
+
+    var updateUser = await User.updateOne(findCriteria, update)
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while ' + checkAccountStatusResp.message + ' account',
+          error: err
+        }
+      })
+    if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
+      return res.send(updateUser);
+    }
+
+    //check if tutor change subject status
+    checkAccountStatusResp.userId = userId;
+    var checkTutorAndUpdateResp = await checkTutorAndUpdate(checkTutorAndUpdateResp);
+    if (checkTutorAndUpdateResp && (checkTutorAndUpdateResp.success !== undefined) && (checkTutorAndUpdateResp.success === 0)) {
+      return res.send(checkTutorAndUpdateResp);
+    }
+
+    return res.send({
+      status: 1,
+      message: 'Your account '+ checkAccountStatusResp.message +' successfully'
+    });
+
+
+
+  } else {
+    return res.send({
+      success: 0,
+      message: "Invalid user"
+    })
+  }
 }
 
 exports.requestAsTutor = async (req, res) => {
@@ -3207,6 +3313,86 @@ async function checkUserIsTutor(userId) {
   }
 }
 
+async function checkAccountStatus(userData, status) {
+  var isDeactivated = false;
+  var status = 1;
+  var message = ''
+  if (status === constants.ACTIVATE_ACCOUNT_STATUS) {
+    isDeactivated = false;
+    status = 1;
+    message = 'activate'
+  }
+  if (status === constants.DEACTIVATE_ACCOUNT_STATUS) {
+    isDeactivated = true;
+    status = 0;
+    message = 'deactivate'
+  }
+  if (userData.isDeactivated === undefined || userData.isDeactivated === null) {
+    return {
+      success: 1,
+      isDeactivated,
+      status,
+      isTutor: userData.isTutor,
+      message
+    }
+  } else {
+    if (userData.isDeactivated === true && isDeactivated === true) {
+      return {
+        success: 0,
+        message: 'Account already deactivated',
+      }
+    }
+    if (userData.isDeactivated === false && isDeactivated === false) {
+      return {
+        success: 0,
+        message: 'Account already activated',
+      }
+    }
+    return {
+      success: 1,
+      isDeactivated,
+      status,
+      isTutor: userData.isTutor,
+      message
+    }
+  }
+}
+
+
+async function checkTutorAndUpdate(userObj) {
+  if (userObj.isTutor) {
+    return userObj;
+  } else {
+    var findCriteria = {
+      userId: userObj.userId
+    }
+    var update = {
+      status: userObj.status,
+      tsModifiedAt: Date.now()
+    }
+    var updateOnlineClassResp = await updateTutorOnlineClassStatus(findCriteria, update)
+    return updateOnlineClassResp;
+
+  }
+}
+
+async function updateTutorOnlineClassStatus(findCriteria, update) {
+  var updateAllOnlineClass = await OnlineClass.update(findCriteria, update, { "multi": true })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while update online class',
+        error: err
+      }
+    })
+  if (updateAllOnlineClass && (updateAllOnlineClass.success !== undefined) && (updateAllOnlineClass.success === 0)) {
+    return updateAllOnlineClass;
+  }
+  return {
+    success: 1,
+    message: 'Updated online class'
+  }
+}
 
   // async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
   //   if(appointmentData.isApproved && isApproved){
