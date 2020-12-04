@@ -61,8 +61,8 @@ module.exports = (app) => {
     app.get('/accounts/mycoins-summary',auth,accounts.getMyCoinsSummary);
 
     app.post('/accounts/social-signup', accounts.socialSignup); 
-    app.delete('/accounts/delete', accounts.deleteAccount); 
-    app.patch('/accounts/status', accounts.updateAccountStatus); 
+    app.delete('/accounts/delete',auth, accounts.deleteAccount); 
+    app.patch('/accounts/status', auth,accounts.updateAccountStatus); 
 
     //After social signup screen
     app.patch('/accounts/update',accounts.updateForSocialAccount);
