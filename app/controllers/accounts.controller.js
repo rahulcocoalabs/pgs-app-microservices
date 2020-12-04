@@ -2508,6 +2508,7 @@ exports.getTutorProfile = async (req, res) => {
   }
   var appointmentData = await AppointmentClassRequest.find({
     tutorId: userId,
+    isTutorDeleted: false,
     status: 1
   })
     .populate([{
