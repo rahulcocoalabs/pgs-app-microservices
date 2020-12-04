@@ -3360,7 +3360,7 @@ async function checkAccountStatus(userData, status) {
 
 
 async function checkTutorAndUpdate(userObj) {
-  if (userObj.isTutor) {
+  if (!userObj.isTutor) {
     return userObj;
   } else {
     var findCriteria = {
