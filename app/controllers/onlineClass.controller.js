@@ -1482,7 +1482,6 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     findCriteria.isPublic = false;
     findCriteria.isApproved = true;
     findCriteria.isRejected = false;
-    findCriteria.comments = null;
     findCriteria.status = 1;
 
     var checkOnlineClass = await OnlineCLass.findOne(findCriteria)
@@ -1503,6 +1502,7 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
       };
     } else {
       updateObj.isApproved = true;
+      updateObj.comments = null;
       updateObj.tsModifiedAt = Date.now();
 
       return {
@@ -1513,7 +1513,7 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     }
   } else {
     updateObj.isRejected = true;
-    findCriteria.comments = comments;
+    updateObj.comments = comments;
     updateObj.tsModifiedAt = Date.now();
     return {
       success: 1,
