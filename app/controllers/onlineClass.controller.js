@@ -944,7 +944,8 @@ exports.requestAppointment = async (req, res) => {
   appointmentClassRequestObj.tutorSubjectId = params.tutorSubjectId;
   appointmentClassRequestObj.isApproved = false;
   appointmentClassRequestObj.isRejected = false;
-  // appointmentClassRequestObj.isDeleted = false;
+  appointmentClassRequestObj.isStudentDeleted = false;
+  appointmentClassRequestObj.isTutorDeleted = false;
   appointmentClassRequestObj.status = 1;
   appointmentClassRequestObj.tsCreatedAt = Date.now();
   appointmentClassRequestObj.tsModifiedAt = null;
