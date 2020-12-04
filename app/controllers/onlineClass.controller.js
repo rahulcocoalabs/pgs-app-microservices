@@ -1125,6 +1125,7 @@ exports.getStudentAppointmentRequestList = async(req,res) =>{
 
   var findCriteria = {};
   findCriteria.userId = userId;
+  findCriteria.isStudentDeleted = false;
   findCriteria.status = 1;
  
   var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
@@ -1139,6 +1140,7 @@ exports.getTutorAppointmentRequestList = async(req,res) =>{
 
   var findCriteria = {};
   findCriteria.tutor = userId;
+  findCriteria.isTutorDeleted = false;
   findCriteria.status = 1;
  
   var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
