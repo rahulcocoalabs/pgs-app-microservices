@@ -1100,6 +1100,12 @@ exports.deleteStudentAppointmentHistory = async(req,res) =>{
 exports.deleteTutorDeleteAppointmentHistory = async(req,res) =>{
   var userData = req.identity.data;
   var userId = userData.userId;
+
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+
   var appointmentId = req.params.id;
 
   var findCriteria = {};
@@ -1136,6 +1142,12 @@ exports.getStudentAppointmentRequestList = async(req,res) =>{
 exports.getTutorAppointmentRequestList = async(req,res) =>{
   var userData = req.identity.data;
   var userId = userData.userId;
+  
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+
   var params = req.query;
 
   var findCriteria = {};
