@@ -2285,6 +2285,56 @@ exports.updateForSocialAccount = async (req, res) => {
   })
 }
 
+exports.deleteAccount = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var findCriteria = {
+    _id : userId,
+    status : 1
+  }
+
+  var userData = await User.findOne(findCriteria)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while checking user data',
+      error: err
+    }
+  })
+if (userData && (userData.success !== undefined) && (userData.success === 0)) {
+  return res.send(userData);
+}
+if(userData){
+  var update = {};
+  update.status = 0;
+  update.tsModifiedAt = Date.now();
+
+  var updateUser = await User.updateOne(findCriteria,update)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while delete account',
+      error: err
+    }
+  })
+if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
+  return res.send(updateUser);
+}
+return res.send({
+  status : 1,
+  message : 'Your account deleted permanently'
+});
+
+
+}else{
+  return res.send({
+    success: 0,
+    message: "Invalid user"
+  })
+}
+}
+
 exports.requestAsTutor = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
