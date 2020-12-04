@@ -15,6 +15,36 @@ var bookCategoriesConfig = config.bookCategories;
 var publishersConfig = config.publishers;
 /* ************ Functions  ************ */
 
+//rakesh view count 
+
+exports.didClickDownloadButton = async (req, res) => {
+
+  if (!req.params){
+    return res.status(500).json({ message: "add params in request", success:0})
+  }
+  if (!req.params.id){
+    return res.status(500).json({ message: "add id in params  in request", success:0})
+  }
+
+  try {
+    var response = await Book.updateOne({ status: 1, _id: req.params.id }, { $inc: { viewCount: 1 } });
+
+    if (response){
+      return res.status(200).json({
+        success: 1,
+        message:"count increased successfully"
+      })
+    }
+
+  }
+  catch (error) {
+
+      return res.status(500).json({ message: error.message, success:0})
+  }
+
+}
+
+
 function getAvailableFilters(entity, callback) {
   gateway.get('/masters/filters', {
     entity: entity
