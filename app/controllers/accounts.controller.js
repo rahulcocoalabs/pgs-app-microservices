@@ -3317,6 +3317,10 @@ async function checkAccountStatus(userData, status) {
   var isDeactivated = false;
   var status = 1;
   var message = ''
+  console.log("status : " +  status)
+  console.log("userData")
+  console.log(userData)
+  console.log("userData")
   if (status === constants.ACTIVATE_ACCOUNT_STATUS) {
     isDeactivated = false;
     status = 1;
