@@ -1142,7 +1142,7 @@ exports.getStudentAppointmentRequestList = async(req,res) =>{
 exports.getTutorAppointmentRequestList = async(req,res) =>{
   var userData = req.identity.data;
   var userId = userData.userId;
-  
+
   var tutorCheck = await checkUserIsTutor(userId);
   if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
     return res.send(tutorCheck);
@@ -1151,10 +1151,12 @@ exports.getTutorAppointmentRequestList = async(req,res) =>{
   var params = req.query;
 
   var findCriteria = {};
-  findCriteria.tutor = userId;
+  findCriteria.tutorId = userId;
   findCriteria.isTutorDeleted = false;
   findCriteria.status = 1;
- 
+  console.log("findCriteria")
+  console.log(findCriteria)
+  console.log("findCriteria")
   var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
   return res.send(appointmentRequestListResp);
 }
