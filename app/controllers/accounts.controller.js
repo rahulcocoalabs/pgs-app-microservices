@@ -1394,9 +1394,9 @@ exports.addratingToClass = async (req, res) => {
     if (update && update.success && update.success === 0) {
       return res.send(update)
     }
-    var updateARates = await avaregeRates("class", classId)
+    var updateAvgRates = await avaregeRates("class", classId)
 
-    if (updateARates == 1) {
+    if (updateAvgRates == 1) {
       return res.send({
         success: 1,
 
@@ -1407,7 +1407,7 @@ exports.addratingToClass = async (req, res) => {
       return res.send({
         success: 0,
 
-        message: 'something went wrong'
+        message: updateAvgRates.message
       });
     }
   }
@@ -1472,9 +1472,9 @@ exports.addratingTutor = async (req, res) => {
     if (update && update.success && update.success === 0) {
       return res.send(update)
     }
-    var updateARates = await avaregeRates("tutor", tutorId)
+    var updateAvgRates = await avaregeRates("tutor", tutorId)
 
-    if (updateARates == 1) {
+    if (updateAvgRates.success == 1) {
       return res.send({
         success: 1,
 
@@ -1485,7 +1485,7 @@ exports.addratingTutor = async (req, res) => {
       return res.send({
         success: 0,
 
-        message: 'something went wrong'
+        message: updateAvgRates.message
       });
     }
   }
@@ -1494,13 +1494,13 @@ exports.addratingTutor = async (req, res) => {
 
 async function avaregeRates(type, id) {
 
-  if (type == "class") {
+  if (type == constants.CLASS_RATES) {
     var array = await Rating.find({ tutorId: id }).catch(error => {
       return { success: 0, message: error.message }
     })
 
     if (array && array.succes && array.sucess === 0) {
-      return 0
+      return {success: 0, message:array.message}
     }
     // return res.send(array);
 
@@ -1514,18 +1514,18 @@ async function avaregeRates(type, id) {
       return { succes: 0, message: err.message }
     })
     if (update && update.succes && update.succes === 1) {
-      return 0
+      return {success:0,message:update.message}
     }
     return 1;
   }
 
-  if (type == "tutor") {
+  if (type == constants.TUTOR_RATES) {
     var array = await Rating.find({ tutorId: id }).catch(error => {
       return { success: 0, message: error.message }
     })
 
     if (array && array.succes && array.sucess === 0) {
-      return 0
+      return {success:0,message:array.message}
     }
     // return res.send(array);
 
@@ -1540,9 +1540,9 @@ async function avaregeRates(type, id) {
     })
     console.log('test1', update, id, avg)
     if (update && update.succes && update.succes === 1) {
-      return 0
+      return {success:0,message:update.message}
     }
-    return 1;
+    return {success:1,message:" added average rating"};
   }
 }
 

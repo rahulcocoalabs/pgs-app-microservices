@@ -95,6 +95,6 @@ module.exports = Object.freeze({
 
    ACTIVATE_ACCOUNT_STATUS : 'activate',
    DEACTIVATE_ACCOUNT_STATUS : 'deactivate',
-
-
+   TUTOR_RATES : 'tutor',
+   CLASS_RATES : 'class'
 });
