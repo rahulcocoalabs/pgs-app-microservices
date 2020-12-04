@@ -1011,6 +1011,7 @@ exports.updateAppointmentStatus = async (req, res) => {
   var isApproved = false;
   var isRejected = false;
   var message = ""
+  var comments = null;
   if (params.status === constants.APPROVED_STATUS) {
     isApproved = true;
     comments = null;
@@ -1072,6 +1073,18 @@ exports.updateAppointmentStatus = async (req, res) => {
   }
 
 }
+
+// exports.deleteStudentAppointmentHistory = async(req,res) =>{
+//   var userData = req.identity.data;
+//   var userId = userData.userId;
+//   var appointmentId = req.params.id;
+
+//   var findCriteria = {};
+//   findCriteria._id = appointmentId;
+//   findCriteria.userId = userId;
+//   findCriteria.status = 1;
+//   var checkAppointmentResp = await checkAppointmentRequest(findCriteria)
+// }
 
 exports.getStudentAppointmentRequestList = async(req,res) =>{
   var userData = req.identity.data;
