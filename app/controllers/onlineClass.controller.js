@@ -1074,17 +1074,48 @@ exports.updateAppointmentStatus = async (req, res) => {
 
 }
 
-// exports.deleteStudentAppointmentHistory = async(req,res) =>{
-//   var userData = req.identity.data;
-//   var userId = userData.userId;
-//   var appointmentId = req.params.id;
+exports.deleteStudentAppointmentHistory = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var appointmentId = req.params.id;
 
-//   var findCriteria = {};
-//   findCriteria._id = appointmentId;
-//   findCriteria.userId = userId;
-//   findCriteria.status = 1;
-//   var checkAppointmentResp = await checkAppointmentRequest(findCriteria)
-// }
+  var findCriteria = {};
+  findCriteria._id = appointmentId;
+  findCriteria.userId = userId;
+  findCriteria.status = 1;
+  var checkAppointmentHistoryResp = await checkAppointmentHistoryRequest(findCriteria,constants.STUDENT_TYPE)
+  if (checkAppointmentHistoryResp && (checkAppointmentHistoryResp.success !== undefined) && (checkAppointmentHistoryResp.success === 0)) {
+    return res.send(checkAppointmentHistoryResp);
+  }
+
+  var update = {};
+  update.isStudentDeleted = true;
+  update.tsModifiedAt = Date.now();
+  var updateAppointmentHistoryResp = await updateAppointmentHistoryRequest(findCriteria,update);
+  return res.send(updateAppointmentHistoryResp);
+}
+
+
+exports.deleteTutorDeleteAppointmentHistory = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var appointmentId = req.params.id;
+
+  var findCriteria = {};
+  findCriteria._id = appointmentId;
+  findCriteria.tutorId = userId;
+  findCriteria.status = 1;
+  var checkAppointmentHistoryResp = await checkAppointmentHistoryRequest(findCriteria,constants.TUTOR_TYPE)
+  if (checkAppointmentHistoryResp && (checkAppointmentHistoryResp.success !== undefined) && (checkAppointmentHistoryResp.success === 0)) {
+    return res.send(checkAppointmentHistoryResp);
+  }
+
+  var update = {};
+  update.isTutorDeleted = true;
+  update.tsModifiedAt = Date.now();
+  var updateAppointmentHistoryResp = await updateAppointmentHistoryRequest(findCriteria,update);
+  return res.send(updateAppointmentHistoryResp);
+}
 
 exports.getStudentAppointmentRequestList = async(req,res) =>{
   var userData = req.identity.data;
@@ -1724,6 +1755,71 @@ async function getAppointmentRequestList(findCriteria, perPage, page){
     items: appointmentClassRequestData,
     message: 'List appointment request'
   }
+}
+
+
+async function checkAppointmentHistoryRequest(findCriteria,type){
+  var appointmentCheck = await AppointmentClassRequest.findOne(findCriteria)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while checking appointment class request',
+      error: err
+    }
+  })
+if (appointmentCheck && (appointmentCheck.success !== undefined) && (appointmentCheck.success === 0)) {
+  return appointmentCheck;
+}
+if(appointmentCheck){
+  if(appointmentCheck.isApproved === false && appointmentCheck.isRejected === false){
+    return {
+      success: 0,
+      message: 'Appointment is currently pending..so can not delete',
+    }
+  }else{
+    if(type === constants.STUDENT_TYPE && appointmentCheck.isStudentDeleted){
+      return {
+        success: 0,
+        message: 'Appointment request is already deleted',
+      }
+    }else if(type === constants.TUTOR_TYPE && appointmentCheck.isTutorDeleted){
+      return {
+        success: 0,
+        message: 'Appointment request is already deleted',
+      }
+    }else{
+      return {
+        success: 1,
+        message: 'Appointment check OK..',
+      }
+    }
+   
+  }
+}else{
+  return {
+    success: 0,
+    message: 'Invalid appointment',
+  }
+}
+}
+
+
+async function updateAppointmentHistoryRequest(findCriteria,update){
+  var updateAppointmentRequest = await AppointmentClassRequest.updateOne(findCriteria,update)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while deleting appointment class request from history',
+      error: err
+    }
+  })
+if (updateAppointmentRequest && (updateAppointmentRequest.success !== undefined) && (updateAppointmentRequest.success === 0)) {
+  return updateAppointmentRequest;
+}
+return {
+  success : 1,
+  message : 'Deleted appointment from history'
+}
 }
 
 

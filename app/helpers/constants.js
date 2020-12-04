@@ -90,5 +90,8 @@ module.exports = Object.freeze({
    CLASS_TIME_CATEGORY_PER_HOUR : "perHour",
    CLASS_TIME_CATEGORY_OTHERS : "others",
 
+   TUTOR_TYPE : 'tutor',
+   STUDENT_TYPE : 'student'
+
 
 });

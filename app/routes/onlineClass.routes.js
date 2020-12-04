@@ -5,7 +5,6 @@ var crypto = require('crypto');
 var mime = require('mime-types');
 var config = require('../../config/app.config.js');
 
-
 var classConfig = config.class;
 
 var storage = multer.diskStorage({
@@ -38,10 +37,11 @@ module.exports = (app) => {
     app.get('/online-class/student/appointment/list', auth,onlineClass.getStudentAppointmentRequestList);
     app.get('/online-class/tutor/appointment/list', auth,onlineClass.getTutorAppointmentRequestList);
     app.patch('/online-class/tutor/appointment/:id/status',auth, onlineClass.updateAppointmentStatus); 
+    app.patch('/online-class/student/appointment/:id/delete',auth, onlineClass.deleteStudentAppointmentHistory); 
+    app.patch('/online-class/tutor/appointment/:id/delete',auth, onlineClass.deleteTutorDeleteAppointmentHistory); 
     app.post('/online-class/student/appointment', auth,onlineClass.requestAppointment);
-   
-    app.post('/online-class/student/requesttutor', auth,onlineClass.createTutorRequest);
 
+    app.post('/online-class/student/requesttutor', auth,onlineClass.createTutorRequest);
 
     // get zoom link 
     app.get('/online-class/student/getzoomlink/:id', auth,onlineClass.getZoomLink);

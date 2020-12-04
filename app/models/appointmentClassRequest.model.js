@@ -30,6 +30,8 @@ const AppointmentClassRequestSchema = mongoose.Schema({
     tutorClassId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' },
     isApproved : Boolean,
     isRejected : Boolean,
+    isStudentDeleted : Boolean,
+    isTutorDeleted : Boolean,
     comments : String,
     status : Number,
     tsCreatedAt : Number,
