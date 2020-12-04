@@ -2324,12 +2324,12 @@ exports.deleteAccount = async (req, res) => {
       return res.send(updateUser);
     }
   //check if tutor change subject status
-  var checkTutorAndUpdateResp = {};
-  checkAccountStatusResp.userId = userId;
-  checkAccountStatusResp.status = 0;
-  checkTutorAndUpdateResp.isTutor = userData.isTutor?userData.isTutor:false;
+  var userResponseObj = {};
+  userResponseObj.userId = userId;
+  userResponseObj.status = 0;
+  userResponseObj.isTutor = userData.isTutor?userData.isTutor:false;
 
-  var checkTutorAndUpdateResp = await checkTutorAndUpdate(checkTutorAndUpdateResp);
+  var checkTutorAndUpdateResp = await checkTutorAndUpdate(userResponseObj);
   if (checkTutorAndUpdateResp && (checkTutorAndUpdateResp.success !== undefined) && (checkTutorAndUpdateResp.success === 0)) {
     return res.send(checkTutorAndUpdateResp);
   }
