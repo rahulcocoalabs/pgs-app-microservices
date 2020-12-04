@@ -2401,23 +2401,25 @@ exports.updateAccountStatus = async (req, res) => {
     if (checkAccountStatusResp && (checkAccountStatusResp.success !== undefined) && (checkAccountStatusResp.success === 0)) {
       return res.send(checkAccountStatusResp);
     }
-   
+    console.log("checkAccountStatusResp")
+    console.log(checkAccountStatusResp)
+    console.log("checkAccountStatusResp")
     
     var update = {};
     update.isDeactivated = checkAccountStatusResp.isDeactivated;
     update.tsModifiedAt = Date.now();
 
-    var updateUser = await User.updateOne(findCriteria, update)
-      .catch(err => {
-        return {
-          success: 0,
-          message: 'Something went wrong while ' + checkAccountStatusResp.message + ' account',
-          error: err
-        }
-      })
-    if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
-      return res.send(updateUser);
-    }
+    // var updateUser = await User.updateOne(findCriteria, update)
+    //   .catch(err => {
+    //     return {
+    //       success: 0,
+    //       message: 'Something went wrong while ' + checkAccountStatusResp.message + ' account',
+    //       error: err
+    //     }
+    //   })
+    // if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
+    //   return res.send(updateUser);
+    // }
 
     //check if tutor change subject status
     checkAccountStatusResp.userId = userId;
