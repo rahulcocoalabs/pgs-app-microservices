@@ -1411,13 +1411,90 @@ exports.addratingToClass = async (req, res) => {
     }
   }
 }
+// rate tutor 
 
+exports.addratingTutor = async (req, res) => {
+  let rating = req.body.rating;
+  let userId = req.identity.data.userId;
+  let tutorId = req.params.id;
+  if (!rating || !tutorId) {
+    let errors = [];
+    if (!rating) {
+      errors.push({
+        field: 'rating',
+        message: 'rating cannot be empty'
+      })
+    }
+    if (!tutorId) {
+      errors.push({
+        field: 'tutorId',
+        message: 'tutorId cannot be empty'
+      })
+    }
+    return res.status(400).send({
+      success: 0,
+      errors: errors
+    })
+
+  }
+
+
+  var objectRating = {};
+  objectRating.rating = rating;
+  objectRating.userId = userId;
+  objectRating.tutorId = tutorId;
+  objectRating.type = "tutor";
+  objectRating.status = 1;
+  objectRating.tsCreatedAt = Date.now();
+  objectRating.tsModifiedAt = null;
+  var save = await new Rating(objectRating).save().catch(error => {
+    return {
+      success: 0,
+      message: error.message
+    }
+  });
+  if (save && save.success && save.success == 0) {
+    return res.send(save)
+  }
+  if (save) {
+    var object = {};
+    object = { $push: { rateduser: userId } }
+
+
+    var update = await User.updateOne({ _id: req.params.id }, object).catch(error => {
+      return {
+        success: 0,
+        message: error.message
+      }
+    });
+
+    if (update && update.success && update.success === 0) {
+      return res.send(update)
+    }
+    var updateARates = await avaregeRates("tutor",tutorId)
+
+    if (updateARates == 1){
+      return res.send({
+        success: 1,
+        
+        message: 'successfully saved rating'
+      });
+    }
+    else {
+      return res.send({
+        success: 0,
+       
+        message: 'something went wrong'
+      });
+    }
+  }
+}
 // average ratings 
 
 async function avaregeRates(type, id) {
 
   if (type == "class") {
-    var array = await Rating.find({ classId: id }).catch(error => {
+    var array = await Rating.find({ tutorId: id }).catch(error => {
       return { success: 0, message: error.message }
     })
 
@@ -1435,6 +1512,32 @@ async function avaregeRates(type, id) {
     var update = await OnlineClass.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
       return {succes:0,message:err.message}
     })
+    if (update && update.succes && update.succes === 1){
+      return 0
+    }
+    return 1;
+  }
+
+  if (type == "tutor") {
+    var array = await Rating.find({ tutorId: id }).catch(error => {
+      return { success: 0, message: error.message }
+    })
+
+    if (array && array.succes && array.sucess === 0) {
+      return 0
+    }
+   // return res.send(array);
+
+    var totalRates = 0
+    for (i in array) {
+      totalRates += array[i].rating
+    }
+    console.log(totalRates,"test")
+    var avg = totalRates / array.length;
+    var update = await User.updateOne({_id:id},{avaregeRating:avg}).catch(err=>{
+      return {succes:0,message:err.message}
+    })
+    console.log('test1',update,id,avg)
     if (update && update.succes && update.succes === 1){
       return 0
     }

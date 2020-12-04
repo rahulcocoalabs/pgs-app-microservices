@@ -6,6 +6,7 @@ const RatingSchema = mongoose.Schema({
     userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     type:String,
     classId:{type: mongoose.Schema.Types.ObjectId, ref: 'OnlineClass'},
+    tutorId:{type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     status: Number,
     tsCreatedAt: Number,
     tsModifiedAt: Number
