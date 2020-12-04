@@ -3313,7 +3313,7 @@ async function checkUserIsTutor(userId) {
   }
 }
 
-async function checkAccountStatus(userData, status) {
+async function checkAccountStatus(userData, changeStatus) {
   var isDeactivated = false;
   var status = 1;
   var message = ''
@@ -3321,12 +3321,12 @@ async function checkAccountStatus(userData, status) {
   console.log("userData")
   console.log(userData)
   console.log("userData")
-  if (status === constants.ACTIVATE_ACCOUNT_STATUS) {
+  if (changeStatus === constants.ACTIVATE_ACCOUNT_STATUS) {
     isDeactivated = false;
     status = 1;
     message = 'activate'
   }
-  if (status === constants.DEACTIVATE_ACCOUNT_STATUS) {
+  if (changeStatus === constants.DEACTIVATE_ACCOUNT_STATUS) {
     isDeactivated = true;
     status = 0;
     message = 'deactivate'
