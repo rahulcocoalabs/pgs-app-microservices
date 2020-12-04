@@ -11,6 +11,8 @@ module.exports = (app) => {
     app.get('/books/categories/:id',auth, books.getBookCategoryDetail);
     app.get('/books/publishers',auth, books.listAllPublishers);
     app.get('/books/publishers/:id',auth, books.getBookPublisherDetail);
+    //rakesh
+    app.patch('/books/download/:id',auth, books.didClickDownloadButton);
 }
 
 
