@@ -882,7 +882,7 @@ exports.getTutorDetails = async (req, res) => {
     } else {
       tutorDetails.isFavourite = false;
     }
-    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId,isApproved:true,isRejected:0},{zoomLink : 0})
+    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId},{zoomLink : 0})
     .populate([{
       path: 'userId',
       select: {
