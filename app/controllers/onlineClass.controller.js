@@ -882,11 +882,39 @@ exports.getTutorDetails = async (req, res) => {
     } else {
       tutorDetails.isFavourite = false;
     }
+    var onlineClassData = await OnlineCLass.find({status: 1,tutorId: tutorId},{zoomLink : 0})
+    .populate([{
+      path: 'userId',
+      select: {
+        firstName: 1,
+        image: 1,
+        socialPhotoUrl: 1
+      }
+    }, {
+      path: 'tutorSubjectId',
+    }, {
+      path: 'tutorClassId',
+    }])
+    .limit(5)
+    .skip(0)
+    .sort({
+      'tsCreatedAt': -1
+    }).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting classes',
+        error: err
+      }
+    })
+  if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
+    return onlineClassData;
+  }
     return res.send({
       success: 1,
       item: tutorDetails,
       tutorVideoBase: tutorConfig.videoBase,
       tutorImageBase: usersConfig.imageBase,
+      previousClasses:onlineClassData,
       message: 'Tutor details'
     })
   } else {
