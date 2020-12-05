@@ -909,6 +909,7 @@ exports.getTutorDetails = async (req, res) => {
   if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
     return onlineClassData;
   }
+  return res.send(onlineClassData);
     return res.send({
       success: 1,
       item: tutorDetails,
