@@ -719,6 +719,7 @@ exports.getUserDetails = (req, res) => {
   }
   var queryProjection = {
     firstName: 1,
+    isActive:1,
     middlename: 1,
     lastName: 1,
     dob: 1,
