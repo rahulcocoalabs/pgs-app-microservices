@@ -1254,6 +1254,8 @@ async function listClasses(findCriteria, perPage, page, favouriteData) {
       path: 'tutorSubjectId',
     }, {
       path: 'tutorClassId',
+    }, {
+      path: 'tutorSyllabusId',
     }])
     .limit(perPage)
     .skip(offset)
