@@ -22,6 +22,7 @@ const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const Currency = require('../models/currency.model');
+const TutorSyllabus = require('../models/tutorSyllabus.model');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
@@ -60,7 +61,7 @@ exports.createOnlineClass = async (req, res) => {
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory )
-    ||  (params.isPaid === 'true' && !params.currencyId )
+    ||  (params.isPaid === 'true' && !params.currencyId && !params.tutorSyllabusId)
   ) {
     var errors = [];
 
@@ -140,6 +141,12 @@ exports.createOnlineClass = async (req, res) => {
         message: "availableTime cannot be empty"
       })
     }
+    if( !params.tutorSyllabusId){
+      errors.push({
+        field: "tutorSyllabusId",
+        message: "tutorSyllabusId cannot be empty"
+      })
+    }
 
     return res.status(200).send({
       success: 0,
@@ -156,7 +163,7 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.image = file.filename;
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.title = params.title;
-  onlineClassObj.syllabusId = params.syllabusId;
+  onlineClassObj.tutorSyllabusId = params.tutorSyllabusId;
   onlineClassObj.isPopular = false;
   if (params.isPaid === 'true') {
     onlineClassObj.isPaid = true;
