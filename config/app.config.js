@@ -211,6 +211,7 @@ module.exports = {
         latestInHomeResultsPerPage : 5,
         resultsPerPage: 10,
         imageUploadPath: relativeCommonPath + "classes/",
+        videoUploadPath: relativeCommonPath + "classes/video",
         imageBase: commonPath + "classes/"
     },
     appointment: {

@@ -10,7 +10,14 @@ var classConfig = config.class;
 var storage = multer.diskStorage({
     // destination: usersConfig.imageUploadPath,
     destination: function (req, file, cb) {
-            cb(null, classConfig.imageUploadPath.trim());
+            // cb(null, classConfig.imageUploadPath.trim());
+            if (file.fieldname === "image"){
+                cb(null, classConfig.imageUploadPath.trim());
+            } else if (file.fieldname === "video"){
+                cb(null, classConfig.videoUploadPath.trim());
+            }else{
+                return cb({success: 0, message: "Invalid types" });
+            }
     },
     filename: function (req, file, cb) {
         crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -22,10 +29,14 @@ var storage = multer.diskStorage({
 });
 
 var fileUpload = multer({ storage: storage });
-var fileUpload1 = multer({ storage: storage });
+
 module.exports = (app) => {
     const onlineClass = require('../controllers/onlineClass.controller');
-    app.post('/online-class/add',fileUpload.single('image'), auth,onlineClass.createOnlineClass);
+    app.post('/online-class/add',fileUpload.fields([{
+        name: 'video', maxCount: 1
+      }, {
+        name: 'image', maxCount: 1
+      }]), auth,onlineClass.createOnlineClass);
     app.get('/online-class/:id/detail', auth,onlineClass.getClassDetails);
     app.get('/online-class/list', auth,onlineClass.listOnlineClasses);
     app.get('/online-class/tutor/list', auth,onlineClass.listTutorList);
