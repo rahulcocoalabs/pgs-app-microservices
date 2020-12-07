@@ -4,6 +4,7 @@ const Profession = require('../models/profession.model.js');
 const Gender = require('../models/gender.model.js');
 const Language = require('../models/language.model.js');
 const Syllabus = require('../models/syllabus.model.js');
+const tutorSyllabus = require('../models/tutorSyllabus.model.js');
 const Hobby = require('../models/hobby.model.js');
 const Keyword = require('../models/keyword.model.js');
 const Filter = require('../models/filter.model.js');
@@ -294,6 +295,19 @@ function getTopMovies(perPage, callback) {
   });
 }
 /* ******** End ********* */
+
+// get syllubus for tutors by rakesh
+
+exports.getSyllubusTutor = (req,res) => {
+
+  var data = tutorSyllabus.find({status: 1}).catch(error=>{
+    return { success:0,message:error.message};
+  })
+  if (data && data.success && data.success === 0){
+    return res.send(data)
+  }
+  return res.send({message:"lusting syllubus",success:1,items:data})
+}
   exports.getGenders = (req, res) => {
     var params = req.query;
     var filters = {

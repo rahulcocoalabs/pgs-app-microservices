@@ -21,4 +21,8 @@ module.exports = (app) => {
     app.get('/masters/tutor/subjects',auth,masters.getSubjects);
     app.get('/masters/tutor/classes',auth,masters.getClasses);
 
+    //syllubus
+
+    app.get('masters/online-class/syllabuses',auth,masters.getSyllubusTutor);
+
 }
