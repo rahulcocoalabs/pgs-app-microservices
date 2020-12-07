@@ -1796,7 +1796,7 @@ async function getAppointmentRequestList(findCriteria, perPage, page){
     success: 1,
     pagination,
     imageBase : usersConfig.imageBase,
-    items: appointmentClassRequestData,
+    previousClasses: appointmentClassRequestData,
     message: 'List appointment request'
   }
 }
