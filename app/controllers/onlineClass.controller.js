@@ -1671,7 +1671,7 @@ async function getUserFavouriteData(userId) {
   }, {
     favouriteTutor: 1,
     favouriteClass: 1,
-    isTutor
+    isTutor : 1
   })
     .catch(err => {
       return {

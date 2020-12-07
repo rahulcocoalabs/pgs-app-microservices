@@ -2339,6 +2339,7 @@ exports.deleteAccount = async (req, res) => {
     return res.send(checkTutorAndUpdateResp);
   }
 
+
     return res.send({
       status: 1,
       message: 'Your account deleted permanently'
@@ -3368,17 +3369,38 @@ async function checkAccountStatus(userData, changeStatus) {
 
 
 async function checkTutorAndUpdate(userObj) {
+  var findCriteria = {
+    userId: userObj.userId
+  }
+  var update = {
+    status: userObj.status,
+    tsModifiedAt: Date.now()
+  }
   if (!userObj.isTutor) {
+    var updateAppointmentRequestFromResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
+    if (updateAppointmentRequestFromResp && (updateAppointmentRequestFromResp.success !== undefined) && (updateAppointmentRequestFromResp.success === 0)) {
+       return updateAppointmentRequestFromResp;
+     }
     return userObj;
   } else {
-    var findCriteria = {
-      userId: userObj.userId
-    }
-    var update = {
-      status: userObj.status,
-      tsModifiedAt: Date.now()
-    }
+ 
     var updateOnlineClassResp = await updateTutorOnlineClassStatus(findCriteria, update)
+    if (updateAllOnlineClass && (updateAllOnlineClass.success !== undefined) && (updateAllOnlineClass.success === 0)) {
+      return updateAllOnlineClass;
+    }
+   
+    var updateAppointmentRequestFromResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
+   if (updateAppointmentRequestFromResp && (updateAppointmentRequestFromResp.success !== undefined) && (updateAppointmentRequestFromResp.success === 0)) {
+      return updateAppointmentRequestFromResp;
+    }
+    findCriteria = {
+      tutorId : userObj.userId
+    }
+    var updateAppointmentRequestToResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
+
+    if (updateAppointmentRequestToResp && (updateAppointmentRequestToResp.success !== undefined) && (updateAppointmentRequestToResp.success === 0)) {
+      return updateAppointmentRequestToResp;
+    }
     return updateOnlineClassResp;
 
   }
@@ -3400,6 +3422,25 @@ async function updateTutorOnlineClassStatus(findCriteria, update) {
     success: 1,
     message: 'Updated online class'
   }
+}
+
+async function updateAppointmentRequestFromAndTo(findCriteria, update){
+  var updateAppointment = await AppointmentClassRequest.update(findCriteria,update, { "multi": true })
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while update online class',
+      error: err
+    }
+  })
+if (updateAppointment && (updateAppointment.success !== undefined) && (updateAppointment.success === 0)) {
+  return updateAppointment;
+}
+return {
+  success: 1,
+  message: 'Updated appointment requests'
+}
+
 }
 
   // async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
