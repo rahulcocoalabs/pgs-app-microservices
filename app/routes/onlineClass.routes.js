@@ -25,7 +25,7 @@ var fileUpload = multer({ storage: storage });
 
 module.exports = (app) => {
     const onlineClass = require('../controllers/onlineClass.controller');
-    app.post('/online-class/add',fileUpload.single('image'), auth,onlineClass.createOnlineClass);
+    app.post('/online-class/add',fileUpload.single('image'),fileUpload('video'), auth,onlineClass.createOnlineClass);
     app.get('/online-class/:id/detail', auth,onlineClass.getClassDetails);
     app.get('/online-class/list', auth,onlineClass.listOnlineClasses);
     app.get('/online-class/tutor/list', auth,onlineClass.listTutorList);
