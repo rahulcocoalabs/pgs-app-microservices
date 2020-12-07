@@ -23,11 +23,11 @@ var options = {
 };
 
 
-const SyllabusSchema = mongoose.Schema({
+const TutorSyllabusSchema = mongoose.Schema({
     name : String,
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number
 }, options)
 
-module.exports = mongoose.model('Syllabus', SyllabusSchema, 'Syllabuses');
+module.exports = mongoose.model('TutorSyllabus', TutorSyllabusSchema, 'TutorSyllabuses');
