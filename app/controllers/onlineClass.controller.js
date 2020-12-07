@@ -157,6 +157,7 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.title = params.title;
   onlineClassObj.isPopular = false;
+  onlineClassObj.avaregeRating = 0;
   if (params.isPaid === 'true') {
     onlineClassObj.isPaid = true;
     onlineClassObj.fee = params.fee;

@@ -44,6 +44,7 @@ const EventsSchema = mongoose.Schema({
     eventDate : Date, 
     tsFrom : Number, 
     tsTo : Number,
+    timeZone : String,
     eventCategoryId : { type: mongoose.Schema.Types.ObjectId, ref: 'EventCategory' },
     eventOrganizerId : { type: mongoose.Schema.Types.ObjectId, ref: 'EventOrganizer' },
     isFav : Boolean,
