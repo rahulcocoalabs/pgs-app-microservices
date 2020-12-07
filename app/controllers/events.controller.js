@@ -4,6 +4,7 @@ const Event = require('../models/event.model.js');
 const User = require('../models/user.model.js');
 const EventBooking = require('../models/eventBooking.model.js')
 const SpeakerType = require('../models/speakerType.model')
+const Timezone = require('../models/timezone.model')
 var config = require('../../config/app.config.js');
 const constants = require('../helpers/constants.js');
 var eventsConfig = config.events;
@@ -77,7 +78,7 @@ exports.listAll = async (req, res) => {
   }
 
   filters.status = 1;
-  Event.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['category']).then(eventsList => {
+  Event.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['category','timeZoneId']).then(eventsList => {
     Event.countDocuments(filters, function (err, itemsCount) {
 
       /* var len = eventsList.length;
@@ -167,6 +168,8 @@ exports.getDetail = (req, res) => {
       path: 'organizer',
     }, {
       path: 'speakerTypeId',
+    },{
+      path : 'timeZoneId'
     }])
     .then(event => {
       if (!event) {
