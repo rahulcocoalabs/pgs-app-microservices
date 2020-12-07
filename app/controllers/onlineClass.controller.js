@@ -532,14 +532,13 @@ exports.listOnlineClasses = async (req, res) => {
   var favouriteData = favouriteDataResp.favouriteData;
 
   var findCriteria = {};
+  var sortOptions = {};
+
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
-console.log("params.filters")
-console.log(params.filters)
-console.log("params.filters")
+
   if(params.filters){
-console.log("Inside filter function")
 
     var reqFilters = JSON.parse(params.filters);
 
@@ -557,6 +556,20 @@ console.log("Inside filter function")
     findCriteria.isPopular = true;
   }
 
+  if(params.isLowToHigh === 'true'){
+       sortOptions = {
+        'fee' : -1
+       }
+  }else if(params.isLowToHigh === 'false'){
+    sortOptions = {
+      'fee' : 1
+    }
+  }else{
+    sortOptions = {
+      'tsCreatedAt': -1
+    }
+  }
+
   if(params.itemType === constants.SUBJECT_SEARCH_TYPE 
     && params.itemId !== undefined && params.itemId !== null){
       findCriteria.tutorSubjectId = params.itemId
@@ -565,11 +578,9 @@ console.log("Inside filter function")
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
-  console.log("findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
+  
 
-  var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData);
+  var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData,sortOptions);
   return res.send(listClassResp);
 }
 
@@ -594,7 +605,7 @@ exports.listTutorList = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
-
+ 
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
@@ -1245,7 +1256,7 @@ async function checkUserIsTutor(userId) {
   }
 }
 
-async function listClasses(findCriteria, perPage, page, favouriteData) {
+async function listClasses(findCriteria, perPage, page, favouriteData,sortOptions) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || classConfig.resultsPerPage;
@@ -1270,9 +1281,8 @@ async function listClasses(findCriteria, perPage, page, favouriteData) {
     }])
     .limit(perPage)
     .skip(offset)
-    .sort({
-      'tsCreatedAt': -1
-    }).catch(err => {
+    .sort(sortOptions)
+    .catch(err => {
       return {
         success: 0,
         message: 'Something went wrong while getting classes',
@@ -1298,9 +1308,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData) {
   if (favouriteData && favouriteData.favouriteClass && favouriteData.favouriteClass !== null) {
     favouriteClassData = favouriteData.favouriteClass;
   }
-  console.log("favouriteClassData")
-  console.log(JSON.stringify(favouriteClassData));
-  console.log("favouriteClassData")
+
   onlineClassData = await checkAndSetFavourite(onlineClassData, favouriteClassData)
   totalPages = totalOnlineClassCount / perPage;
   totalPages = Math.ceil(totalPages);
