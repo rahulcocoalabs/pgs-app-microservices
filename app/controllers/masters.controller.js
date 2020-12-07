@@ -298,15 +298,15 @@ function getTopMovies(perPage, callback) {
 
 // get syllubus for tutors by rakesh
 
-exports.getSyllubusTutor = (req,res) => {
+exports.getSyllubusTutor = async (req,res) => {
 
-  var data = tutorSyllabus.find({status: 1}).catch(error=>{
+  var data = await tutorSyllabus.find({status: 1}).catch(error=>{
     return { success:0,message:error.message};
   })
   if (data && data.success && data.success === 0){
     return res.send(data)
   }
-  return res.send({message:"lusting syllubus",success:1,items:data})
+  return res.send({message:"listing syllubus",success:1,items:data})
 }
   exports.getGenders = (req, res) => {
     var params = req.query;
