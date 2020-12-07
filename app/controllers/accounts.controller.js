@@ -593,7 +593,8 @@ exports.create = async (req, res) => {
       coinCount: 0,
       isSocialLogin: false,
       coinHistory: [],
-      karmaIndex: null
+      karmaIndex: null,
+      avaregeRating : 0
     });
 
     if (req.body.referralCode) {
@@ -2088,6 +2089,7 @@ exports.socialSignup = async (req, res) => {
     userObj.coinCount = 0;
     userObj.coinHistory = [];
     userObj.karmaIndex = null;
+    userObj.avaregeRating = 0;
     userObj.status = 1;
     userObj.tsCreatedAt = Date.now();
     userObj.tsModifiedAt = null;
@@ -2402,9 +2404,6 @@ exports.updateAccountStatus = async (req, res) => {
     if (checkAccountStatusResp && (checkAccountStatusResp.success !== undefined) && (checkAccountStatusResp.success === 0)) {
       return res.send(checkAccountStatusResp);
     }
-    console.log("checkAccountStatusResp")
-    console.log(checkAccountStatusResp)
-    console.log("checkAccountStatusResp")
     
     var update = {};
     update.isDeactivated = checkAccountStatusResp.isDeactivated;
