@@ -23,6 +23,6 @@ module.exports = (app) => {
 
     //syllubus
 
-    app.get('masters/online-class/syllabuses',auth,masters.getSyllubusTutor);
+    app.get('/masters/online-class/syllabuses',auth,masters.getSyllubusTutor);
 
 }
