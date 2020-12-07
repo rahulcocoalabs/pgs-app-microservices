@@ -772,6 +772,9 @@ exports.getStudentHome = async (req, res) => {
       $regex: `.*${params.keyword}.*`,
   }
   }
+  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
+    findCriteria.userId =  { $ne: userId } 
+  }
 
   findCriteria.isPopular = true;
   findCriteria.status = 1;
@@ -799,6 +802,10 @@ exports.getStudentHome = async (req, res) => {
       $regex: `.*${params.keyword}.*`,
   }
   }
+  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
+    findCriteria._id =  { $ne: userId } 
+  }
+
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
@@ -828,6 +835,10 @@ exports.getStudentHome = async (req, res) => {
       $regex: `.*${params.keyword}.*`,
   }
   }
+  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
+    findCriteria.userId =  { $ne: userId } 
+  }
+
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
@@ -1659,7 +1670,8 @@ async function getUserFavouriteData(userId) {
     status: 1
   }, {
     favouriteTutor: 1,
-    favouriteClass: 1
+    favouriteClass: 1,
+    isTutor
   })
     .catch(err => {
       return {
