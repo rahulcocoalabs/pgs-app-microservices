@@ -1497,7 +1497,7 @@ exports.addratingTutor = async (req, res) => {
 async function avaregeRates(type, id) {
 
   if (type == constants.CLASS_RATES) {
-    var array = await Rating.find({ tutorId: id }).catch(error => {
+    var array = await Rating.find({ classId: id }).catch(error => {
       return { success: 0, message: error.message }
     })
 
@@ -1512,7 +1512,7 @@ async function avaregeRates(type, id) {
     }
     console.log(totalRates, "test")
     var avg = totalRates / array.length;
-    console.log("avarege rating ", avg);
+    console.log("avarege rating ", avg, array);
     var update = await OnlineClass.updateOne({ _id: id }, { avaregeRating: avg }).catch(err => {
       return { succes: 0, message: err.message }
     })
