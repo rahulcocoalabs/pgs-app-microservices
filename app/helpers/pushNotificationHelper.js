@@ -1,6 +1,7 @@
 const OneSignal = require('onesignal-node');
 var config = require('../../config/app.config.js');
 var PushNotification = require('../models/pushNotification.model');
+var Notification = require('../models/notification.model');
 var Settings = require('../models/setting.model');
 // var Church = require('../models/church.model');
 var constants = require('../helpers/constants');
@@ -104,7 +105,34 @@ module.exports = {
             return notificationData;
         }
         
+        var newNotificationObj = {};
+        newNotificationObj.title = notificationObj.title;
+        newNotificationObj.content = notificationObj.message;
+        newNotificationObj.type = notificationObj.type;
+        newNotificationObj.referenceId = notificationObj.referenceId;
+        newNotificationObj.notificationType = notificationObj.notificationType;
+        if(notificationObj.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE){
+            notificationObj.userId = notificationObj.userId;
+        }else{
+            // notificationObj.userIds = notificationObj.userIds;
+        }
+        newNotificationObj.markAsRead = false;
+        newNotificationObj.status = 1;
+        newNotificationObj.tsCreatedAt = Date.now();
+        newNotificationObj.tsModifiedAt = null;
 
+        var saveNotificationObj = new Notification(newNotificationObj);
+        var newNotificationData = await saveNotificationObj.save()
+        .catch(err => {
+            return {
+                success: 0,
+                message: 'Something went wrong while saving new notification',
+                error: err
+            }
+        })
+    if (newNotificationData && (newNotificationData.success !== undefined) && (notificationData.success === 0)) {
+        return newNotificationData;
+    }
         return notificationData;
 
         } catch (e) {

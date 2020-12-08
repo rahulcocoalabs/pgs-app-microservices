@@ -21,12 +21,11 @@ var options = {
 const notificationSchema = mongoose.Schema({
     title: String,
     content: String,
-    userIds :  [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-    sendStatus: String,
-    params:[{
-      key: String,
-      value: String
-    }],
+    type: String,
+    referenceId : String,
+    notificationType: String,
+    userId :  {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    readUserIds :  [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     markAsRead: Number,
     status: Number,
     tsCreatedAt: Number,
