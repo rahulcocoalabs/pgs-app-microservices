@@ -3,6 +3,7 @@ const Setting = require('../models/setting.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
 var config = require('../../config/app.config.js');
+var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 var smsConfig = config.sms;
 const JWT_KEY = config.jwt.key;
 const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
@@ -23,7 +24,7 @@ const TutorSubject = require('../models/tutorSubject.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const Currency = require('../models/currency.model');
 const TutorSyllabus = require('../models/tutorSyllabus.model');
-// const PushNotification = require('../models/pushNotification.model');
+const PushNotification = require('../models/pushNotification.model');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
@@ -1090,7 +1091,6 @@ exports.updateAppointmentStatus = async (req, res) => {
     message = 'Appointment rejected successfully'
     isRejected = false;
     comments = params.comments;
-
   }
 
 
@@ -1132,7 +1132,20 @@ exports.updateAppointmentStatus = async (req, res) => {
       return res.send(updateAppointmentStatus);
     }
 
-
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": checkAppointment.userId }]
+    // var metaInfo = {"type":"event","reference_id":eventData.id}
+    var notificationObj = {
+        title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
+        message: message ,
+        type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+        referenceId: appointmentId,
+        filtersJsonArr,
+        // metaInfo,
+        tutorId : userId,
+        userId : checkAppointment.userId 
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+    
 
     return res.send({
       success: 1,
