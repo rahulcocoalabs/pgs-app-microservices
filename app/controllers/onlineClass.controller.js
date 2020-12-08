@@ -152,6 +152,7 @@ exports.createOnlineClass = async (req, res) => {
     return res.status(200).send({
       success: 0,
       errors: errors,
+      name:file.filename,
       code: 200
     });
   }
