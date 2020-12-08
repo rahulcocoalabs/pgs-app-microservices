@@ -23,6 +23,7 @@ const TutorSubject = require('../models/tutorSubject.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const Currency = require('../models/currency.model');
 const TutorSyllabus = require('../models/tutorSyllabus.model');
+// const PushNotification = require('../models/pushNotification.model');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
@@ -556,11 +557,11 @@ exports.listOnlineClasses = async (req, res) => {
     findCriteria.isPopular = true;
   }
 
-  if(params.isLowToHigh === 'true'){
+  if(params.isFeeLowToHigh === 'true'){
        sortOptions = {
         'fee' : -1
        }
-  }else if(params.isLowToHigh === 'false'){
+  }else if(params.isFeeLowToHigh === 'false'){
     sortOptions = {
       'fee' : 1
     }
@@ -1121,6 +1122,9 @@ exports.updateAppointmentStatus = async (req, res) => {
     if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
       return res.send(updateAppointmentStatus);
     }
+
+
+
     return res.send({
       success: 1,
       message
