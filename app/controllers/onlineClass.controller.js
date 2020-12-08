@@ -1335,6 +1335,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData,sortOption
     success: 1,
     pagination,
     imageBase: classConfig.imageBase,
+    videoBase:classConfig.videoBase,
     items: onlineClassData,
     message: 'List latest class'
   }
