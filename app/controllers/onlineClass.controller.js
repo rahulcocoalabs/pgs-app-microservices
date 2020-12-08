@@ -559,11 +559,11 @@ exports.listOnlineClasses = async (req, res) => {
 
   if(params.isFeeLowToHigh === 'true'){
        sortOptions = {
-        'fee' : -1
+        'fee' : 1
        }
   }else if(params.isFeeLowToHigh === 'false'){
     sortOptions = {
-      'fee' : 1
+      'fee' : -1
     }
   }else{
     sortOptions = {
