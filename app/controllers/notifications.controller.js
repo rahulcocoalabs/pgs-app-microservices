@@ -6,7 +6,7 @@
 const constants = require('../helpers/constants.js');
   var notificationsConfig = config.notifications;
 
-  exports.listAll = (req, res) => {
+  exports.listAll = async (req, res) => {
     var userData = req.identity.data;
     var userId = userData.userId;
     var params = req.query;
