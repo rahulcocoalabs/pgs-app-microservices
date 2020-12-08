@@ -154,7 +154,7 @@ exports.createOnlineClass = async (req, res) => {
       success: 0,
       errors: errors,
      // name:req.file.filename,
-      name1:req.files.filename,
+      name1:req.files.fieldname,
       code: 200
     });
   }
