@@ -154,13 +154,14 @@ exports.createOnlineClass = async (req, res) => {
       code: 200
     });
   }
-
+console.log("08/12/202",file.filename)
   var onlineClassObj = {};
   onlineClassObj.userId = userId;
   onlineClassObj.tutorClassId = params.tutorClassId;
   onlineClassObj.tutorSubjectId = params.tutorSubjectId;
   onlineClassObj.classDescription = params.classDescription;
   onlineClassObj.image = file.filename;
+  //onlineClassObj.video = file.filename.video;
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.title = params.title;
   onlineClassObj.tutorSyllabusId = params.tutorSyllabusId;
