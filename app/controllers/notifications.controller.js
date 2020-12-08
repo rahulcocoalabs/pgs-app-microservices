@@ -4,6 +4,7 @@
   var config = require('../../config/app.config.js');
   var moment = require('moment');
 const constants = require('../helpers/constants.js');
+const { update } = require('../models/notification.model.js');
   var notificationsConfig = config.notifications;
 
   exports.listAll = async (req, res) => {
@@ -66,7 +67,7 @@ if (notificationCount && (notificationCount.success !== undefined) && (notificat
 }
 
 notificationListData = JSON.parse(JSON.stringify(notificationListData))
-notificationListData = await checkAndUpdateMarkAsRead(notificationListData,userId);
+notificationListData = await checkAndUpdateMarkAsRead(notificationListData,notification);
 
         totalPages = notificationCount / perPage;
         totalPages = Math.ceil(totalPages);
@@ -81,30 +82,79 @@ notificationListData = await checkAndUpdateMarkAsRead(notificationListData,userI
           totalItems: notificationCount,
           totalPages: totalPages
         }
-        res.send(responseObj);
+        return res.send(responseObj);
   }
 
   exports.markAsRead = async (req, res) => {
     var userData = req.identity.data;
     var userId = userData.userId;
     var notificationId = req.params.id;
-    const newReadStatus = new MarkasRead({
-      userId: userId,
-      notificationId: notificationId,
-      isRead: 1,
-      status: 1,
-      tsCreatedAt: Number(moment().unix()),
-      tsModifiedAt: null
-    });
-    try {
-      let saveReadStatus = await newReadStatus.save();
-      res.send({
-        success: 1,
-        message: 'Notifications status added successfully'
-      })
-    } catch (err) {
-      console.error(err);
+
+    var findCriteria = {
+      _id : notificationId,
+      status : 1
+    };
+    var notificationCheck = await Notification.findOne(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking notification',
+        error: err
+      }
+    })
+  if (notificationCheck && (notificationCheck.success !== undefined) && (notificationCheck.success === 0)) {
+    return notificationCheck;
+  }
+  if(notificationCheck){
+    if(notificationCheck.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE 
+      && JSON.stringify(notificationCheck.userId) !== JSON.stringify(userId)){
+      return res.send({
+        success : 0,
+        message : 'Invalid notification id'
+      });
+    }else{
+    if(notificationCheck.markAsRead !== undefined 
+      && notificationCheck.markAsRead !== null
+      && notificationCheck.markAsRead
+       && notificationCheck.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE){
+         var update = {};
+         update.markAsRead = true;
+         update.tsModifiedAt = Date.now();
+         var updateStatus = await updateMarkAsRead(update,findCriteria);
+         return res.send(updateStatus);
+
+    }else if(notificationCheck.markAsRead !== undefined 
+      && notificationCheck.markAsRead !== null && notificationCheck.markAsRead === false){
+      return res.send({
+        success : 0,
+        message : 'Notification already read'
+      });
+    }else if(notificationCheck.notificationType === constants.GENERAL_NOTIFICATION_TYPE){
+      var readUserIdArray = notificationCheck.readUserIds;
+      var index = await readUserIdArray.findIndex(id => JSON.stringify(id) === JSON.stringify(userId));
+      if(index > -1){
+        return res.send({
+          success : 0,
+          message : 'Notification already read'
+        });
+      }else{
+       var update =  { $push: { readUserIds: userId } }
+       update.tsModifiedAt = Date.now();
+       var updateStatus = await updateMarkAsRead(update,findCriteria);
+       return res.send(updateStatus);
+      }
     }
+
+  }
+  }else{
+    return res.send({
+      success : 0,
+      message : 'Invalid notification id'
+    });
+
+  }
+
+   
   };
 
   exports.countUnread = (req, res) => {
@@ -136,3 +186,20 @@ notificationListData = await checkAndUpdateMarkAsRead(notificationListData,userI
       }
     }
   }
+async function updateMarkAsRead(update,findCriteria){
+  var notificationUpdateData = await Notification.update(findCriteria,update)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while updating notification read status',
+      error: err
+    }
+  })
+if (notificationUpdateData && (notificationUpdateData.success !== undefined) && (notificationUpdateData.success === 0)) {
+  return notificationUpdateData;
+}
+return {
+  success : 1,
+  message : 'Notification read successfully'
+}
+}
