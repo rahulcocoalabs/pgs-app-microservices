@@ -58,6 +58,7 @@ exports.createOnlineClass = async (req, res) => {
   var params = req.body;
 
   var file = req.files;
+ 
 
 
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
@@ -153,16 +154,21 @@ exports.createOnlineClass = async (req, res) => {
     return res.status(200).send({
       success: 0,
       errors: errors,
+     // name:req.file.filename,
+      name1:req.files.image[0].filename,
+      name3:req.files.video[0].filename,
+     
       code: 200
     });
   }
-
+console.log("08/12/202",file.filename)
   var onlineClassObj = {};
   onlineClassObj.userId = userId;
   onlineClassObj.tutorClassId = params.tutorClassId;
   onlineClassObj.tutorSubjectId = params.tutorSubjectId;
   onlineClassObj.classDescription = params.classDescription;
-  onlineClassObj.image = file.filename;
+  onlineClassObj.image = file.image[0].filename;
+  onlineClassObj.video = file.video[0].filename;
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.title = params.title;
   onlineClassObj.tutorSyllabusId = params.tutorSyllabusId;
@@ -208,6 +214,7 @@ exports.createOnlineClass = async (req, res) => {
   return res.send({
     success: 1,
     statusCode: 200,
+    filename:file.filename,
     message: 'Created a class..waiting for admin approval',
   })
 
@@ -1341,6 +1348,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData,sortOption
     success: 1,
     pagination,
     imageBase: classConfig.imageBase,
+    videoBase:classConfig.videoBase,
     items: onlineClassData,
     message: 'List latest class'
   }
