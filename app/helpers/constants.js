@@ -103,5 +103,20 @@ module.exports = Object.freeze({
     ACTIVATE_ACCOUNT_STATUS: 'activate',
     DEACTIVATE_ACCOUNT_STATUS: 'deactivate',
     TUTOR_RATES: 'tutor',
-    CLASS_RATES: 'class'
+    CLASS_RATES: 'class',
+
+    //ONE SIGNAL
+    ONE_SIGNAL_API_KEY : 'ONE_SIGNAL_API_KEY',
+    ONE_SIGNAL_APP_ID : 'ONE_SIGNAL_APP_ID',
+
+    //push notification types
+    APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE : 'appointmentStatusUpdate',
+
+    //push notification message
+    APPOINTMENT_STATUS_UPDATE_NOTIFICATION_MESSAGE : 'Your appointment request',
+
+    //push notification title
+    APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE : 'Appointment request ',
+
+
 });
