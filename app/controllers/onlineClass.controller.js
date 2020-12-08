@@ -167,7 +167,9 @@ console.log("08/12/202",file.filename)
   onlineClassObj.tutorSubjectId = params.tutorSubjectId;
   onlineClassObj.classDescription = params.classDescription;
   onlineClassObj.image = file.image[0].filename;
-  onlineClassObj.video = file.video[0].filename;
+  if (file.video && file.video.length > 0){
+    onlineClassObj.video = file.video[0].filename;
+  }
   onlineClassObj.isPaid = params.isPaid;
   onlineClassObj.title = params.title;
   onlineClassObj.tutorSyllabusId = params.tutorSyllabusId;
