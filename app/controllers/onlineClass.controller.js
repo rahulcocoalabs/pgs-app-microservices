@@ -57,6 +57,12 @@ exports.createOnlineClass = async (req, res) => {
   var params = req.body;
 
   var file = req.files;
+  return res.status(200).send({
+    success: 0,
+   
+    name:file.filename,
+    code: 200
+  });
 
 
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
