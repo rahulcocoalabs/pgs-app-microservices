@@ -953,6 +953,7 @@ exports.getTutorDetails = async (req, res) => {
       item: tutorDetails,
       tutorVideoBase: tutorConfig.videoBase,
       tutorImageBase: usersConfig.imageBase,
+      classImageBase:classConfig.imageBase,
       previousClasses:onlineClassData,
       message: 'Tutor details'
     })
