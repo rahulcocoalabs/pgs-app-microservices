@@ -118,5 +118,8 @@ module.exports = Object.freeze({
     //push notification title
     APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE : 'Appointment request ',
 
+    INDIVIDUAL_NOTIFICATION_TYPE : 'individual',
+    GENERAL_NOTIFICATION_TYPE : 'general'
+ 
 
 });

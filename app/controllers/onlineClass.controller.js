@@ -1140,7 +1140,8 @@ exports.updateAppointmentStatus = async (req, res) => {
         filtersJsonArr,
         // metaInfo,
         tutorId : userId,
-        userId : checkAppointment.userId 
+        userId : checkAppointment.userId ,
+        notificationType : constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
     let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
     
