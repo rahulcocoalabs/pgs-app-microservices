@@ -842,20 +842,28 @@ exports.update1 = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
-  var validation = await utilities.validateMandatoryFields(params,reqFields,res).catch(err=>{
-    return {
-      success:0,
-      message:"can not validate mandatory fields",
-      error:err.message
-    }
-  });
-  if (validation && validation.sucess && validation.success === 1){
-    return res.send(validation);
-  }
+  // var validation = await utilities.validateMandatoryFields(params,reqFields,res).catch(err=>{
+  //   return {
+  //     success:0,
+  //     message:"can not validate mandatory fields",
+  //     error:err.message
+  //   }
+  // });
+  // if (validation && validation.sucess && validation.success === 1){
+  //   return res.send(validation);
+  // }
 
   //update parameter 
 
   var update = params;
+
+  if (!update){
+    return res.send({
+      success:0,
+      message:"no parameter found"
+    });
+  }
+
   if (update.dob) {
     console.log("dob : " + update.dob)
     var formattedDate = moment(update.dob, 'DD MMMM YYYY');
@@ -864,12 +872,7 @@ exports.update1 = async (req, res) => {
 
   }
 
-  if (!update){
-    return res.send({
-      success:0,
-      message:"no parameter found"
-    });
-  }
+  
   if (update.syllabusId) {
     update.syllabusId = ObjectId(update.syllabusId);
   }
