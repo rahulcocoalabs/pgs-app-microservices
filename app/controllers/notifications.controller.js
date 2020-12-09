@@ -217,11 +217,10 @@ async function checkAndUpdateMarkAsRead(notificationListData, userId) {
       } else {
         notificationListData[i].markAsRead = false;
       }
-      continue;
-    } else {
-      continue;
-    }
+      
+    } 
   }
+  return notificationListData;
 }
 async function updateMarkAsRead(update, findCriteria) {
   var notificationUpdateData = await Notification.update(findCriteria, update)
