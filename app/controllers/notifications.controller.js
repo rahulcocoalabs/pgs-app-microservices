@@ -72,15 +72,21 @@ exports.listAll = async (req, res) => {
   totalPages = notificationCount / perPage;
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
+
+  var pagination = {
+    page,
+    perPage,
+    hasNextPage,
+    totalItems: notificationCount,
+    totalPages
+  }
+
   var responseObj = {
     success: 1,
     message: 'Notifications listed successfully',
+    pagination,
     items: notificationListData,
-    page: page,
-    perPage: perPage,
-    hasNextPage: hasNextPage,
-    totalItems: notificationCount,
-    totalPages: totalPages
+
   }
   return res.send(responseObj);
 }
