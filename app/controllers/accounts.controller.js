@@ -836,7 +836,7 @@ exports.getKarmaIndex = (req, res) => {
 
 exports.update1 = async (req, res) => {
 
-  return res.send("ok")
+  
   var params = req.body;
   var reqFields = [];
   var hobbyIds = [];
@@ -864,7 +864,7 @@ exports.update1 = async (req, res) => {
       message:"no parameter found"
     });
   }
-
+  return res.send("ok")
   if (update.dob) {
     console.log("dob : " + update.dob)
     var formattedDate = moment(update.dob, 'DD MMMM YYYY');
