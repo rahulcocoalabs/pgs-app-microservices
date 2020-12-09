@@ -976,7 +976,7 @@ exports.update1 = async (req, res) => {
      if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
         
-        var updateProfCompletion = await User(filter,{profileCompletion :1,$inc : {coinCount:10 }}).catch(err => {
+        var updateProfCompletion = await User.updateOne(filter,{profileCompletion :1,$inc : {coinCount:10 }}).catch(err => {
           return {
             success:0,
             message:"profile updation related with coin count failed",
