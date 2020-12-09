@@ -942,7 +942,7 @@ exports.update1 = async (req, res) => {
   var options = {
     new: true
   };
-  return res.send("ok")
+ 
   var checkPasswordObj = await checkPassword(update, userId)
   if (checkPasswordObj && (checkPasswordObj.success !== undefined) && (checkPasswordObj.success === 0)) {
     return res.send(checkPasswordObj);
@@ -963,7 +963,10 @@ exports.update1 = async (req, res) => {
   if (update && update.succes && update.success === 0){
     return res.send(update)
   }
-
+  return res.send({
+    flag:"ok",
+    info:update
+  })
   var userInfo = await User.findOne(filter).catch(err=>{
     return {
       success:0,
