@@ -1004,6 +1004,7 @@ exports.update1 = async (req, res) => {
   else {
     return res.send({
       success:1,
+      flag:2,
       message:"profile updatd"
     })
   }
