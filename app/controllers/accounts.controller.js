@@ -963,10 +963,7 @@ exports.update1 = async (req, res) => {
   if (update && update.succes && update.success === 0){
     return res.send(update)
   }
-  return res.send({
-    flag:"ok",
-    info:update
-  })
+ 
   var userInfo = await User.findOne(filter).catch(err=>{
     return {
       success:0,
@@ -974,7 +971,10 @@ exports.update1 = async (req, res) => {
       error:err.message
     }
   })
-
+  return res.send({
+    flag:"ok",
+    info:userInfo
+  })
   if (userInfo.profileCompletion == 0){
      if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined) && (userInfo.languageId != undefined)){
