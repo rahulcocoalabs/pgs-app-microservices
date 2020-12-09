@@ -864,7 +864,7 @@ exports.update1 = async (req, res) => {
       message:"no parameter found"
     });
   }
-  return res.send("ok")
+ 
   if (update.dob) {
     console.log("dob : " + update.dob)
     var formattedDate = moment(update.dob, 'DD MMMM YYYY');
@@ -942,6 +942,7 @@ exports.update1 = async (req, res) => {
   var options = {
     new: true
   };
+  return res.send("ok")
   var checkPasswordObj = await checkPassword(update, userId)
   if (checkPasswordObj && (checkPasswordObj.success !== undefined) && (checkPasswordObj.success === 0)) {
     return res.send(checkPasswordObj);
