@@ -160,7 +160,8 @@ exports.getDetail = (req, res) => {
     speakerOrganisation: 1,
     speakerImage: 1,
     speakerDescription: 1,
-    speakerVideoLinks: 1
+    speakerVideoLinks: 1,
+    timeZoneId : 1
   }
   // get data
   Event.findOne(filters, queryProjection)
