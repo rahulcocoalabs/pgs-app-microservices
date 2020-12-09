@@ -67,7 +67,7 @@ exports.listAll = async (req, res) => {
   }
 
   notificationListData = JSON.parse(JSON.stringify(notificationListData))
-  notificationListData = await checkAndUpdateMarkAsRead(notificationListData, notification);
+  notificationListData = await checkAndUpdateMarkAsRead(notificationListData, userId);
 
   totalPages = notificationCount / perPage;
   totalPages = Math.ceil(totalPages);
