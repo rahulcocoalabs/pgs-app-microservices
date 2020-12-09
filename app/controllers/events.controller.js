@@ -20,7 +20,8 @@ exports.listAll = async (req, res) => {
     venue: 1,
     eventDate: 1,
     eventCategoryId: 1,
-    category: 1
+    category: 1,
+    timeZoneId : 1
   };
 
 
