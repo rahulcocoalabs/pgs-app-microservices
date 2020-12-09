@@ -532,6 +532,7 @@ exports.create = async (req, res) => {
 
 
 
+
     var imagePath = req.file ? req.file.filename : null;
 
     if (req.body.firstName && req.body.middlename && req.body.lastName && req.body.dob && req.body.school && req.body.syllabusId && req.body.nationalityId && req.body.achievements && req.body.ambition && req.body.genderId && req.body.phone && req.body.address && req.body.fatherName && req.body.fatherNationalityId && req.body.fatherProfessionId && req.body.motherName && req.body.motherNationalityId && req.body.motherProfessionId) {
@@ -833,6 +834,184 @@ exports.getKarmaIndex = (req, res) => {
   res.send(responseObj);
 }
 
+exports.update1 = async (req, res) => {
+
+  
+  var params = req.body;
+  var reqFields = [];
+  var hobbyIds = [];
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  // var validation = await utilities.validateMandatoryFields(params,reqFields,res).catch(err=>{
+  //   return {
+  //     success:0,
+  //     message:"can not validate mandatory fields",
+  //     error:err.message
+  //   }
+  // });
+  // if (validation && validation.sucess && validation.success === 1){
+  //   return res.send(validation);
+  // }
+
+  //update parameter 
+
+  var update = params;
+
+  if (!update){
+    return res.send({
+      success:0,
+      message:"no parameter found"
+    });
+  }
+ 
+  if (update.dob) {
+    console.log("dob : " + update.dob)
+    var formattedDate = moment(update.dob, 'DD MMMM YYYY');
+    update.dob = formattedDate;
+    console.log("formattedDate : " + formattedDate)
+
+  }
+
+  
+  if (update.syllabusId) {
+    update.syllabusId = ObjectId(update.syllabusId);
+  }
+  if (update.nationalityId) {
+    update.nationalityId = ObjectId(update.nationalityId);
+  }
+  if (update.language) {
+    update.language = update.language;
+  }
+  if (update.genderId) {
+    update.genderId = ObjectId(update.genderId);
+  }
+  if (update.fatherNationalityId) {
+    update.fatherNationalityId = ObjectId(update.fatherNationalityId);
+  }
+  if (update.fatherProfessionId) {
+    update.fatherProfessionId = ObjectId(update.fatherProfessionId);
+  }
+  if (update.motherNationalityId) {
+    update.motherNationalityId = ObjectId(update.motherNationalityId);
+  }
+  if (update.motherProfessionId) {
+    update.motherProfessionId = ObjectId(update.motherProfessionId);
+  }
+  if (update.phone) {
+    update.phone = update.phone;
+  }
+  if (update.countryCode) {
+    update.countryCode = update.countryCode;
+  }
+  if (update.hobbyIds) {
+    if (update.hobbyIds.length > 0) {
+      hobbyIds = [];
+      var i = 0;
+      var len = update.hobbyIds.length;
+      update.hobbies = [];
+      while (i < len) {
+        hobbyIds[i] = update.hobbyIds[i].id;
+        i++;
+      }
+      update.hobbies = hobbyIds;
+      update.hobbyIds = [];
+      update.hobbyIds = hobbyIds;
+    }
+  }
+
+ 
+  if (req.file) {
+    update.image = req.file.filename
+  }
+  var unwantedFields = ["_id", "userType", "coinCount", "password_hash", "auth_key", "status", "tsCreatedAt", "tsModifiedAt", "karmaIndex", "rev"];
+  var j = 0;
+  var field = null;
+  while (j < unwantedFields.length) {
+    field = unwantedFields[j];
+    if (params[field] !== undefined)
+      delete params[field];
+    j++;
+  }
+
+  var filter = {
+    _id: userId,
+    status: 1
+  };
+
+  var options = {
+    new: true
+  };
+ 
+  var checkPasswordObj = await checkPassword(update, userId)
+  if (checkPasswordObj && (checkPasswordObj.success !== undefined) && (checkPasswordObj.success === 0)) {
+    return res.send(checkPasswordObj);
+  }
+
+  if (checkPasswordObj.isPasswordUpdate) {
+    update.password = checkPasswordObj.password;
+  }
+
+  var update = await User.updateOne(filter,update).catch(err=>{
+    return {
+      success:0,
+      message:"updation failed",
+      error:err.message
+    }
+  })
+
+  if (update && update.succes && update.success === 0){
+    return res.send(update)
+  }
+ 
+  var userInfo = await User.findOne(filter).catch(err=>{
+    return {
+      success:0,
+      message:"did not get info of user",
+      error:err.message
+    }
+  })
+ 
+  if (userInfo.profileCompletion == 0){
+     if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
+      && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
+        
+        var updateProfCompletion = await User.updateOne(filter,{profileCompletion :1,$inc : {coinCount:10 }}).catch(err => {
+          return {
+            success:0,
+            message:"profile updation related with coin count failed",
+            error:err.message
+          }
+        })
+
+        if (updateProfCompletion && updateProfCompletion.success && updateProfCompletion.success === 0) {
+          return res.send(updateTutorProfile);
+        }
+        return res.send({
+          success:1,
+          userInfo,
+          flag:1,
+          message:"profile updatd"
+        })
+      }
+      else {
+        return res.send({
+          success:1,
+          userInfo,
+          message:"profile updated "
+        })
+  }}
+  else {
+    return res.send({
+      success:1,
+      flag:2,
+      userInfo,
+      message:"profile updatd"
+    })
+  }
+
+}
+
 exports.update = async (req, res) => {
   let bearer = req.headers['authorization'];
   var params = req.body;
@@ -940,14 +1119,14 @@ exports.update = async (req, res) => {
           update.profileCompletion = 1;
           // updateCoinCount(userId, coinType, function (err, profileCompletionRes) {});
 
-          let updateCoinReqObj = {
-            userId,
-            coinType,
-            bearer,
-            url: constants.API_UPDATE_COIN,
-          };
+          // let updateCoinReqObj = {
+          //   userId,
+          //   coinType,
+          //   bearer,
+          //   url: constants.API_UPDATE_COIN,
+          // };
 
-          updateCoin(updateCoinReqObj, function (err, trendingBooksRes) { });
+          // updateCoin(updateCoinReqObj, function (err, trendingBooksRes) { });
         }
 
       }
