@@ -4,7 +4,7 @@ const MarkasRead = require('../models/notificationStatus.model.js');
 var config = require('../../config/app.config.js');
 var moment = require('moment');
 const constants = require('../helpers/constants.js');
-const { update } = require('../models/notification.model.js');
+
 var notificationsConfig = config.notifications;
 
 exports.listAll = async (req, res) => {
@@ -50,7 +50,7 @@ exports.listAll = async (req, res) => {
     return notificationListData;
   }
 
-  var notificationCount = await Notification.count(findCriteria)
+  var notificationCount = await Notification.countDocuments(findCriteria)
     .limit(perPage)
     .skip(offset)
     .sort({
@@ -167,7 +167,7 @@ exports.countUnread = async (req, res) => {
     status: 1
   }
 
-  var individualUnreadNotificationCount = await Notification.count(findCriteria)
+  var individualUnreadNotificationCount = await Notification.countDocuments(findCriteria)
     .catch(err => {
       return {
         success: 0,
@@ -186,7 +186,7 @@ exports.countUnread = async (req, res) => {
     status: 1
   }
 
-  var generalUnreadNotificationCount = await Notification.count(findCriteria)
+  var generalUnreadNotificationCount = await Notification.countDocuments(findCriteria)
     .catch(err => {
       return {
         success: 0,
