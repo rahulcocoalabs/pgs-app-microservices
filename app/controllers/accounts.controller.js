@@ -532,6 +532,7 @@ exports.create = async (req, res) => {
 
 
 
+
     var imagePath = req.file ? req.file.filename : null;
 
     if (req.body.firstName && req.body.middlename && req.body.lastName && req.body.dob && req.body.school && req.body.syllabusId && req.body.nationalityId && req.body.achievements && req.body.ambition && req.body.genderId && req.body.phone && req.body.address && req.body.fatherName && req.body.fatherNationalityId && req.body.fatherProfessionId && req.body.motherName && req.body.motherNationalityId && req.body.motherProfessionId) {
@@ -833,6 +834,29 @@ exports.getKarmaIndex = (req, res) => {
   res.send(responseObj);
 }
 
+exports.update1 = async (req, res) => {
+
+  var params = req.body;
+  var reqFields = [];
+  var hobbyIds = [];
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var validation = await utilities.validateMandatoryFields(params,reqFields,res).catch(err=>{
+    return {
+      success:0,
+      message:"can not validate mandatory fields",
+      error:err.message
+    }
+  });
+  if (validation){
+    return res.send({
+      success:0,
+      message:"validation success"
+    })
+  }
+}
+
 exports.update = async (req, res) => {
   let bearer = req.headers['authorization'];
   var params = req.body;
@@ -940,14 +964,14 @@ exports.update = async (req, res) => {
           update.profileCompletion = 1;
           // updateCoinCount(userId, coinType, function (err, profileCompletionRes) {});
 
-          let updateCoinReqObj = {
-            userId,
-            coinType,
-            bearer,
-            url: constants.API_UPDATE_COIN,
-          };
+          // let updateCoinReqObj = {
+          //   userId,
+          //   coinType,
+          //   bearer,
+          //   url: constants.API_UPDATE_COIN,
+          // };
 
-          updateCoin(updateCoinReqObj, function (err, trendingBooksRes) { });
+          // updateCoin(updateCoinReqObj, function (err, trendingBooksRes) { });
         }
 
       }
