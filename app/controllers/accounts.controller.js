@@ -863,6 +863,13 @@ exports.update1 = async (req, res) => {
     console.log("formattedDate : " + formattedDate)
 
   }
+
+  if (!update){
+    return res.send({
+      success:0,
+      message:"no parameter found"
+    });
+  }
   if (update.syllabusId) {
     update.syllabusId = ObjectId(update.syllabusId);
   }
