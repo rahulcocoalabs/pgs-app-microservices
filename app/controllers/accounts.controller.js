@@ -971,10 +971,7 @@ exports.update1 = async (req, res) => {
       error:err.message
     }
   })
-  return res.send({
-    flag:"ok",
-    info:userInfo
-  })
+ 
   if (userInfo.profileCompletion == 0){
      if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined) && (userInfo.languageId != undefined)){
