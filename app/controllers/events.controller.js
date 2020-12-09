@@ -20,7 +20,8 @@ exports.listAll = async (req, res) => {
     venue: 1,
     eventDate: 1,
     eventCategoryId: 1,
-    category: 1
+    category: 1,
+    timeZoneId : 1
   };
 
 
@@ -161,7 +162,8 @@ exports.getDetail = (req, res) => {
     speakerOrganisation: 1,
     speakerImage: 1,
     speakerDescription: 1,
-    speakerVideoLinks: 1
+    speakerVideoLinks: 1,
+    timeZoneId : 1
   }
   // get data
   Event.findOne(filters, queryProjection)
