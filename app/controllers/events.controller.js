@@ -150,6 +150,7 @@ exports.getDetail = (req, res) => {
     venue: 1,
     eventDate: 1,
     tsFrom: 1,
+    timeZoneId:1,
     tsTo: 1,
     eventOrganizerId: 1,
     organizer: 1,
@@ -164,13 +165,7 @@ exports.getDetail = (req, res) => {
   }
   // get data
   Event.findOne(filters, queryProjection)
-    .populate([{
-      path: 'organizer',
-    }, {
-      path: 'speakerTypeId',
-    },{
-      path : 'timeZoneId'
-    }])
+    .populate([ 'organizer','speakerTypeId','timeZoneId'])
     .then(event => {
       if (!event) {
         var responseObj = {
