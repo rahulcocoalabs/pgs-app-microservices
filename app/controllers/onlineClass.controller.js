@@ -769,21 +769,17 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
-  console.log("tabCheckData")
-  console.log(tabCheckData)
-  console.log("tabCheckData")
+
   var favouriteDataResp = await getUserFavouriteData(userId);
   if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
     return res.send(favouriteDataResp);
   }
   var favouriteData = favouriteDataResp.favouriteData;
-  console.log(2, tabCheckData);
+
   var findCriteria = {};
-  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+  if (tabCheckData.isPublic !== null && tabCheckData.isPublic) {
     findCriteria.isPublic = tabCheckData.isPublic
-  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
-    // findCriteria.isFavourite = isFavourite
-    console.log(tabCheckData, 4);
+  } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
     if (tabCheckData.favourites.favouriteClasses) {
       findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
     }
@@ -805,9 +801,7 @@ exports.getStudentHome = async (req, res) => {
   var perPage = classConfig.popularInHomeResultsPerPage;
   var page = 1;
 
-  console.log("popular classes findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
+
 
   var listPopularClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listPopularClassData && (listPopularClassData.success !== undefined) && (listPopularClassData.success === 0)) {
@@ -816,9 +810,7 @@ exports.getStudentHome = async (req, res) => {
 
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
-  if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
-    // findCriteria.isFavourite = isFavourite
-    console.log(tabCheckData.favourites.favouriteTutors);
+  if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
     if (tabCheckData.favourites.favouriteTutors) {
       findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
     }
@@ -835,11 +827,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
-  console.log(5, findCriteria)
-
-  console.log("popular tutors findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
+  
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
@@ -849,10 +837,9 @@ exports.getStudentHome = async (req, res) => {
 
 
   findCriteria = {};
-  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+  if (tabCheckData.isPublic !== null && tabCheckData.isPublic) {
     findCriteria.isPublic = tabCheckData.isPublic
-  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
-    // findCriteria.isFavourite = isFavourite
+  } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
     if (tabCheckData.favourites.favouriteClasses) {
       findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
     }
@@ -868,9 +855,7 @@ exports.getStudentHome = async (req, res) => {
   if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
     findCriteria.userId =  { $ne: userId } 
   }
-  console.log("latest classes findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
+
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
