@@ -975,6 +975,15 @@ exports.update1 = async (req, res) => {
   if (userInfo.profileCompletion == 0){
      if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
+
+        if ((userInfo.languageId == undefined) || ( userInfo.languageId.length == 0)) {
+          return res.send({
+            success:1,
+            
+           
+            message:"profile updatd"
+          })
+        }
         
         var updateProfCompletion = await User.updateOne(filter,{profileCompletion :1,$inc : {coinCount:10 }}).catch(err => {
           return {
@@ -989,8 +998,7 @@ exports.update1 = async (req, res) => {
         }
         return res.send({
           success:1,
-          userInfo,
-          flag:1,
+         
           message:"profile updatd"
         })
       }
@@ -1004,8 +1012,8 @@ exports.update1 = async (req, res) => {
   else {
     return res.send({
       success:1,
-      flag:2,
-      userInfo,
+     
+    
       message:"profile updatd"
     })
   }
