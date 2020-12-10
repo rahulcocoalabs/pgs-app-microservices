@@ -765,6 +765,7 @@ exports.getStudentHome = async (req, res) => {
   var userId = userData.userId;
   var params = req.query;
 
+  console.log("userId : " + userId)
   var tabCheckData = await checkYourTab(params, userId);
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
@@ -833,9 +834,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
-  console.log("---------------popular tutor find criteria--------------")
-  console.log(findCriteria)
-  console.log("---------------popular tutor find criteria--------------")
+ 
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
@@ -863,9 +862,7 @@ exports.getStudentHome = async (req, res) => {
   if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
     findCriteria.userId =  { $ne: userId } 
   }
-  console.log("---------------latest class find criteria--------------")
-  console.log(findCriteria)
-  console.log("---------------latest class find criteria--------------")
+
 
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
