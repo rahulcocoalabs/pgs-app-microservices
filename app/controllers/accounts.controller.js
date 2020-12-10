@@ -834,7 +834,7 @@ exports.getKarmaIndex = (req, res) => {
   res.send(responseObj);
 }
 
-exports.update1 = async (req, res) => {
+exports.update = async (req, res) => {
 
   
   var params = req.body;
@@ -976,11 +976,11 @@ exports.update1 = async (req, res) => {
      if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
 
-        if ((userInfo.languageId == undefined) || ( userInfo.languageId.length == 0)) {
+        if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
           return res.send({
             success:1,
             
-           
+             flag:1,
             message:"profile updatd"
           })
         }
@@ -998,29 +998,29 @@ exports.update1 = async (req, res) => {
         }
         return res.send({
           success:1,
-         
-          message:"profile updatd"
+           flag:2,
+          message:"profile updated 1"
         })
       }
       else {
         return res.send({
           success:1,
-          userInfo,
-          message:"profile updated "
+          flag:3,
+          message:"profile updated 2"
         })
   }}
   else {
     return res.send({
       success:1,
      
-    
-      message:"profile updatd"
+      flag:4,
+      message:"profile updatd 3"
     })
   }
 
 }
 
-exports.update = async (req, res) => {
+exports.update1 = async (req, res) => {
   let bearer = req.headers['authorization'];
   var params = req.body;
   var reqFields = [];
