@@ -770,17 +770,13 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
-  console.log("---------------tabCheckData--------------")
-  console.log(tabCheckData)
-  console.log("---------------tabCheckData--------------")
+
   var favouriteDataResp = await getUserFavouriteData(userId);
   if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
     return res.send(favouriteDataResp);
   }
   var favouriteData = favouriteDataResp.favouriteData;
-  console.log("---------------favouriteData--------------")
-  console.log(favouriteData)
-  console.log("---------------favouriteData--------------")
+
   var findCriteria = {};
   if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
@@ -805,10 +801,6 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isRejected = false;
   var perPage = classConfig.popularInHomeResultsPerPage;
   var page = 1;
-  console.log("---------------popular class find criteria--------------")
-  console.log(findCriteria)
-  console.log("---------------popular class find criteria--------------")
-
 
   var listPopularClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listPopularClassData && (listPopularClassData.success !== undefined) && (listPopularClassData.success === 0)) {
