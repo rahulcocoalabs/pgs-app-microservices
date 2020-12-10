@@ -15,7 +15,7 @@ module.exports = {
             key : constants.ONE_SIGNAL_API_KEY,
             status: 1
         }
-        var settingsData = await Settings.findOne(filterCriteria, projection)
+        var settingsData = await Settings.findOne(filterCriteria)
             .catch(err => {
                 return {
                     success: 0,
