@@ -1145,7 +1145,7 @@ exports.addEmotionToFeed = async (req, res) => {
     };
     var updateFeed = await Feed.updateOne(filter,update).catch(err=>{
       return {success:0,message:"could not update favourites",error:err.message}});
-    })
+    
 
     if (updateFeed && updateFeed.success && updateFeed.success === 0) {
       return res.send(updateFeed);
