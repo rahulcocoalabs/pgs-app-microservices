@@ -999,14 +999,14 @@ exports.update = async (req, res) => {
         return res.send({
           success:1,
            flag:2,
-          message:"profile updatd"
+          message:"profile updated 1"
         })
       }
       else {
         return res.send({
           success:1,
           flag:3,
-          message:"profile updated "
+          message:"profile updated 2"
         })
   }}
   else {
@@ -1014,7 +1014,7 @@ exports.update = async (req, res) => {
       success:1,
      
       flag:4,
-      message:"profile updatd"
+      message:"profile updatd 3"
     })
   }
 
