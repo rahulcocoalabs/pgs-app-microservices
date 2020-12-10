@@ -206,7 +206,7 @@ exports.listAll = async (req, res) => {
           let object = feedsList[y];
           let obj = favouriteObject(userId,object.emotions);
           object.emotionsInfo = obj;
-          console.log(obj)
+          console.log("10/12",obj)
           array.push(object)
         }
         var responseObj = {
