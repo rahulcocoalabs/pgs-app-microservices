@@ -1037,7 +1037,123 @@ exports.removeEmotionFromFeed = (req, res) => {
     });
   });
 }
-exports.addEmotionToFeed = async (req, res) => {
+
+exports.addEmotionToFeed = async (req,res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+
+  //validating request
+  var errors = [];
+  if (!params.emotion) {
+    errors.push({
+      field: "emotion",
+      message: "Emotion cannot be empty"
+    });
+  }
+  if (!params.feedId) {
+    errors.push({
+      field: "feedId",
+      message: "feedId cannot be empty"
+    });
+  }
+  if (params.emotion) {
+    if (!isInArray(params.emotion, emotionsConfig.emotionsList)) {
+      errors.push({
+        field: "emotion",
+        message: "Invalid emotion"
+      });
+    }
+  }
+  if (params.feedId) {
+    var ObjectId = require('mongoose').Types.ObjectId;
+    var isValidId = ObjectId.isValid(params.feedId);
+    if (!isValidId) {
+      errors.push({
+        field: "feedId",
+        message: "feedId is invalid"
+      })
+    }
+  }
+  if (errors.length) {
+    res.send({
+      success: 0,
+      status: 400,
+      params,
+      errors: errors
+    });
+    return;
+  }
+  var filters = {
+    _id: params.feedId,
+    status: 1
+  };
+  var queryProjection = {
+    emotions: 1
+  }
+
+  var feedsResult = await Feed.findOne(filter, queryProjection).catch(err=>{
+    return {success:0,message:"did not find feed"}
+  })
+
+  if (feedsResult && feedsResult.success && feedsResult.success ===0){
+    return res.send(feedsResult);
+  }
+
+  var emotions = feedsResult.emotions;
+  var ObjectId = require('mongoose').Types.ObjectId;
+  if (emotions.length) {
+    console.log("Emotions length is 0");
+    var i = 0;
+    userFoundFlag = false;
+    while (i < emotions.length) {
+      console.log("On loop " + i);
+      console.log("userId is " + emotions[i].userId);
+      if (emotions[i].userId == userId) {
+        console.log("User emotion found");
+        emotions[i].emotion = params.emotion;
+        userFoundFlag = true;
+      }
+      i++;
+    }
+    if (!userFoundFlag) {
+      console.log("User emotion not found");
+      emotions.push({
+        emotion: params.emotion,
+        userId: userId
+      });
+    }
+  } else {
+    console.log("No emotions are present");
+    emotions.push({
+      emotion: params.emotion,
+      userId: userId
+    });
+  }
+  console.log("Emotions array : ");
+  console.log(emotions);
+  //update record with new emotions
+  var filter = {
+    _id: params.feedId
+  };
+  var update = {
+    emotions: emotions
+  };
+  var updateFeed = await Feed.updateOne(filter,update).catch(err=>{
+    return {success:0,message:"could not update favourites",error:err.message}});
+  
+
+  if (updateFeed && updateFeed.success && updateFeed.success === 0) {
+    return res.send(updateFeed);
+  }
+
+  return res.send({sucess:1,
+    update,
+    message:"emotion posted successfully"
+  })
+
+}
+exports.addEmotionToFeed1 = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
