@@ -230,7 +230,7 @@ exports.listAll = async (req, res) => {
     });
 }
 
-async function favouriteObject(userId,list){
+function favouriteObject(userId,list){
 
   var ret = {};
   for (x in list){
