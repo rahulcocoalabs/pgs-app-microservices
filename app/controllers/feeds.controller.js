@@ -1259,7 +1259,7 @@ exports.addEmotionToFeed1 = async (req, res) => {
     var options = {
       new: true
     };
-    var updateFeed = await Feed.updateOne(filter,update).catch(err=>{
+    var updateFeed =  Feed.updateOne(filter,update).catch(err=>{
       return {success:0,message:"could not update favourites",error:err.message}});
     
 
