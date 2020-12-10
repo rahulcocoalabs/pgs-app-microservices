@@ -769,13 +769,17 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
-
+  console.log("---------------tabCheckData--------------")
+  console.log(tabCheckData)
+  console.log("---------------tabCheckData--------------")
   var favouriteDataResp = await getUserFavouriteData(userId);
   if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
     return res.send(favouriteDataResp);
   }
   var favouriteData = favouriteDataResp.favouriteData;
-
+  console.log("---------------favouriteData--------------")
+  console.log(favouriteData)
+  console.log("---------------favouriteData--------------")
   var findCriteria = {};
   if (tabCheckData.isPublic !== null && tabCheckData.isPublic) {
     findCriteria.isPublic = tabCheckData.isPublic
@@ -800,6 +804,9 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isRejected = false;
   var perPage = classConfig.popularInHomeResultsPerPage;
   var page = 1;
+  console.log("---------------popular class find criteria--------------")
+  console.log(findCriteria)
+  console.log("---------------popular class find criteria--------------")
 
 
   var listPopularClassData = await listClasses(findCriteria, perPage, page, favouriteData);
@@ -826,7 +833,9 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
-  
+  console.log("---------------popular tutor find criteria--------------")
+  console.log(findCriteria)
+  console.log("---------------popular tutor find criteria--------------")
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
@@ -854,6 +863,9 @@ exports.getStudentHome = async (req, res) => {
   if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
     findCriteria.userId =  { $ne: userId } 
   }
+  console.log("---------------latest class find criteria--------------")
+  console.log(findCriteria)
+  console.log("---------------latest class find criteria--------------")
 
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
@@ -1114,10 +1126,10 @@ exports.updateAppointmentStatus = async (req, res) => {
       comments = null;
       message = 'Appointment accepted successfully'
   
-      notificationMessage = tutorName + ' accepted your ' + subjectName + ' for class ' + className;
+      notificationMessage = tutorName + ' accepted your subject ' + subjectName + ' for class ' + className;
     } else {
       message = 'Appointment rejected successfully'
-      notificationMessage = tutorName + ' rejected your ' + subjectName + ' for class ' + className;
+      notificationMessage = tutorName + ' rejected your subject' + subjectName + ' for class ' + className;
 
       isRejected = false;
       comments = params.comments;
