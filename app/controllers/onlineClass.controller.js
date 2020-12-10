@@ -785,9 +785,9 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
-    if (tabCheckData.favourites.favouriteClasses) {
+    // if (tabCheckData.favourites.favouriteClasses) {
       findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
-    }
+    // }
   }
 
   if(params.keyword){
@@ -818,9 +818,9 @@ exports.getStudentHome = async (req, res) => {
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
   if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
-    if (tabCheckData.favourites.favouriteTutors) {
+    // if (tabCheckData.favourites.favouriteTutors) {
       findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
-    }
+    // }
   }
   if(params.keyword){
     findCriteria.firstName = {
@@ -847,9 +847,9 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
-    if (tabCheckData.favourites.favouriteClasses) {
+    // if (tabCheckData.favourites.favouriteClasses) {
       findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
-    }
+    // }
   }
   findCriteria.status = 1;
   findCriteria.isApproved = true;
