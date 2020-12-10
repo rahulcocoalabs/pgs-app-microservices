@@ -70,11 +70,16 @@ module.exports = {
             included_segments: null,
             filters: notificationObj.filtersJsonArr
         };
+        console.log("notificationData")
+        console.log(notificationData)
+        console.log("notificationData")
     
         // using async/await
         try {
         const response = await oneSignalClient.createNotification(notificationData);
-
+        console.log("response")
+        console.log(response)
+        console.log("response")
         var notificationLogObj = {};
         notificationLogObj.type = notificationObj.type;
         notificationLogObj.title = notificationObj.title;
