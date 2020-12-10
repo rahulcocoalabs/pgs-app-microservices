@@ -1143,27 +1143,39 @@ exports.addEmotionToFeed = (req, res) => {
     var options = {
       new: true
     };
-    Feed.updateOne(filter, update, options, function (err, response) {
-      if (err) {
-        var responseObj = {
-          success: 0,
-          status: 500,
-          errors: [{
-            field: "",
-            message: "Error posting emotion " + err
-          }]
-        }
-        res.send(responseObj);
-        return;
-      } else {
-        responseObj = {
-          success: 1,
-          message: "Emotion successfully posted..."
-        };
-        res.send(responseObj);
-        return;
-      }
-    });
+    var updateFeed = await Feed.updateOne(filter,update).catch(err=>{
+      return {success:0,message:"could not update favourites",error:err.message}});
+    })
+
+    if (updateFeed && updateFeed.success && updateFeed.success === 0) {
+      return res.send(updateFeed);
+    }
+
+    return res.send({sucess:1,
+      update,
+      message:"emotion posted successfully"
+    })
+    // Feed.updateOne(filter, update, options, function (err, response) {
+    //   if (err) {
+    //     var responseObj = {
+    //       success: 0,
+    //       status: 500,
+    //       errors: [{
+    //         field: "",
+    //         message: "Error posting emotion " + err
+    //       }]
+    //     }
+    //     res.send(responseObj);
+    //     return;
+    //   } else {
+    //     responseObj = {
+    //       success: 1,
+    //       message: "Emotion successfully posted..."
+    //     };
+    //     res.send(responseObj);
+    //     return;
+    //   }
+    // });
   });
 
 }
