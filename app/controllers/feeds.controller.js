@@ -1040,7 +1040,7 @@ exports.removeEmotionFromFeed = (req, res) => {
 exports.addEmotionToFeed = (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-  var params = req.body;
+  var params = req.query;
 
   //validating request
   var errors = [];
