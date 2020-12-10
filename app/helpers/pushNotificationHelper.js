@@ -33,7 +33,7 @@ module.exports = {
                 key : constants.ONE_SIGNAL_APP_ID,
                 status: 1
             }
-            settingsData = await Settings.findOne(filterCriteria, projection)
+            settingsData = await Settings.findOne(filterCriteria)
             .catch(err => {
                 return {
                     success: 0,
