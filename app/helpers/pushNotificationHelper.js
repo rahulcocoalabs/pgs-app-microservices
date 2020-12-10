@@ -47,7 +47,8 @@ module.exports = {
         }
         if(settingsData){
             onesignalAppId = settingsData.value;
-
+        console.log("onesignalAppId : " + onesignalAppId)
+        console.log("onesignalApiKey : " + onesignalApiKey)
         const oneSignalClient = new OneSignal.Client(onesignalAppId,onesignalApiKey);
 
         var notificationData = {
@@ -117,7 +118,7 @@ module.exports = {
         newNotificationObj.referenceId = notificationObj.referenceId;
         newNotificationObj.notificationType = notificationObj.notificationType;
         if(notificationObj.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE){
-            notificationObj.userId = notificationObj.userId;
+            newNotificationObj.userId = notificationObj.userId;
         }else{
             // notificationObj.userIds = notificationObj.userIds;
         }
