@@ -1079,15 +1079,9 @@ exports.updateAppointmentStatus = async (req, res) => {
   var isRejected = false;
   var message = ""
   var comments = null;
-  if (params.status === constants.APPROVED_STATUS) {
-    isApproved = true;
-    comments = null;
-    message = 'Appointment accepted successfully'
-  } else {
-    message = 'Appointment rejected successfully'
-    isRejected = false;
-    comments = params.comments;
-  }
+  var notificationMessage = ""
+  var tutorName = tutorCheck.userData.firstName;
+
 
 
   var checkAppointment = await AppointmentClassRequest.findOne({
@@ -1095,6 +1089,11 @@ exports.updateAppointmentStatus = async (req, res) => {
     tutorId: userId,
     status: 1
   })
+  .populate([{
+    path: 'tutorSubjectId',
+  }, {
+    path: 'tutorClassId',
+  }])
     .catch(err => {
       return {
         success: 0,
@@ -1107,6 +1106,21 @@ exports.updateAppointmentStatus = async (req, res) => {
   }
 
   if (checkAppointment && checkAppointment !== null) {
+    var subjectName = checkAppointment.tutorSubjectId.name;
+    var className = checkAppointment.tutorClassId.name;
+    if (params.status === constants.APPROVED_STATUS) {
+      isApproved = true;
+      comments = null;
+      message = 'Appointment accepted successfully'
+  
+      notificationMessage = tutorName + ' accepted your ' + subjectName + ' for class ' + className;
+    } else {
+      message = 'Appointment rejected successfully'
+      notificationMessage = tutorName + ' rejected your ' + subjectName + ' for class ' + className;
+
+      isRejected = false;
+      comments = params.comments;
+    }
     var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected,comments)
     if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
       return res.send(checkAppointmentResp);
@@ -1132,7 +1146,7 @@ exports.updateAppointmentStatus = async (req, res) => {
     // var metaInfo = {"type":"event","reference_id":eventData.id}
     var notificationObj = {
         title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
-        message: message ,
+        message: notificationMessage ,
         type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
         referenceId: appointmentId,
         filtersJsonArr,
@@ -1264,6 +1278,7 @@ async function checkUserIsTutor(userId) {
       return {
         success: 1,
         message: 'User is a tutor',
+        userData
       }
     } else {
       return {
