@@ -234,7 +234,8 @@ function favouriteObject(userId,list){
 
   var ret = {};
   for (x in list){
-    if (list[x].userId === userId){
+    console.log('10/12/1',list[x],userId);
+    if (list[x].userId == userId){
       ret.userEmotion = true;
       ret.heartfilled = 1;
     }
