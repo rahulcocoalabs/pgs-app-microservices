@@ -168,7 +168,7 @@ exports.getDetail = (req, res) => {
   // get data
   Event.findOne(filters, queryProjection)
     .populate([{
-      path: 'timeZoneId',
+      path: 'timeZone',
     }, {
       path: 'organizer',
     }])
@@ -228,6 +228,7 @@ exports.getDetail = (req, res) => {
           eventFromTime: eventStartTime,
           eventToTime: eventEndTime,
           organizer: event.organizer || null,
+          timeZone: event.timeZone || null,
           organizerEventsCount: eventsCount || null,
           sharingUrl: event.sharingUrl || null,
           isFav: event.isFav || null,

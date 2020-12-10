@@ -67,6 +67,12 @@ EventsSchema.virtual('organizer', {
     foreignField: '_id',
     justOne: true
 });
+EventsSchema.virtual('timeZone', {
+    ref: 'TimeZone',
+    localField: 'timeZoneId',
+    foreignField: '_id',
+    justOne: true
+});
 EventsSchema.virtual('category', {
     ref: 'EventCategory',
     localField: 'eventCategoryId',
