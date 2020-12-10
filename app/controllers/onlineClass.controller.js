@@ -802,7 +802,6 @@ exports.getStudentHome = async (req, res) => {
   var page = 1;
 
 
-
   var listPopularClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listPopularClassData && (listPopularClassData.success !== undefined) && (listPopularClassData.success === 0)) {
     return res.send(listPopularClassData);
@@ -1080,7 +1079,6 @@ exports.updateAppointmentStatus = async (req, res) => {
   var message = ""
   var comments = null;
   var notificationMessage = ""
-  var tutorName = tutorCheck.userData.firstName;
 
 
 
@@ -1090,6 +1088,8 @@ exports.updateAppointmentStatus = async (req, res) => {
     status: 1
   })
   .populate([{
+    path : 'tutorId'
+  },{
     path: 'tutorSubjectId',
   }, {
     path: 'tutorClassId',
@@ -1108,6 +1108,7 @@ exports.updateAppointmentStatus = async (req, res) => {
   if (checkAppointment && checkAppointment !== null) {
     var subjectName = checkAppointment.tutorSubjectId.name;
     var className = checkAppointment.tutorClassId.name;
+    var tutorName = checkAppointment.tutorId.firstName;
     if (params.status === constants.APPROVED_STATUS) {
       isApproved = true;
       comments = null;
@@ -1278,7 +1279,6 @@ async function checkUserIsTutor(userId) {
       return {
         success: 1,
         message: 'User is a tutor',
-        userData
       }
     } else {
       return {
@@ -1620,8 +1620,8 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
   var updateObj = {};
   if (isApproved) {
     var findCriteria = {};
-    findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
-    findCriteria.tutorClassId = appointmentData.tutorClassId;
+    findCriteria.tutorSubjectId = appointmentData.tutorSubjectId.id;
+    findCriteria.tutorClassId = appointmentData.tutorClassId.id;
     findCriteria.isPublic = false;
     findCriteria.isApproved = true;
     findCriteria.isRejected = false;
