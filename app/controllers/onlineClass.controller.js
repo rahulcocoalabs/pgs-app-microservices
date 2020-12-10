@@ -545,6 +545,9 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
+  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
+    findCriteria.userId =  { $ne: userId } 
+  }
 
   if(params.filters){
 
@@ -613,7 +616,9 @@ exports.listTutorList = async (req, res) => {
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
- 
+  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
+    findCriteria._id =  { $ne: userId } 
+  }
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
