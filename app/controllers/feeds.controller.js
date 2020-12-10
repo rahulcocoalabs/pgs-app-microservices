@@ -205,7 +205,7 @@ exports.listAll = async (req, res) => {
         for (y in feedsList){
           let object = feedsList[y];
           let obj = favouriteObject(userId,object.emotions);
-          object.emotionsInfo = obj;
+          object.emotionsInfo1 = obj;
           console.log("10/12",obj)
           array.push(object)
         }
