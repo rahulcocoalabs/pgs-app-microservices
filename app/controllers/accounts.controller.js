@@ -834,7 +834,7 @@ exports.getKarmaIndex = (req, res) => {
   res.send(responseObj);
 }
 
-exports.update1 = async (req, res) => {
+exports.update = async (req, res) => {
 
   
   var params = req.body;
@@ -1005,14 +1005,14 @@ exports.update1 = async (req, res) => {
       else {
         return res.send({
           success:1,
-          userInfo,
+        
           message:"profile updated "
         })
   }}
   else {
     return res.send({
       success:1,
-     
+      userInfo,
     
       message:"profile updatd"
     })
@@ -1020,7 +1020,7 @@ exports.update1 = async (req, res) => {
 
 }
 
-exports.update = async (req, res) => {
+exports.update1 = async (req, res) => {
   let bearer = req.headers['authorization'];
   var params = req.body;
   var reqFields = [];
