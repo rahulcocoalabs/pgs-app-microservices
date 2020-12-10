@@ -1037,7 +1037,7 @@ exports.removeEmotionFromFeed = (req, res) => {
     });
   });
 }
-exports.addEmotionToFeed = (req, res) => {
+exports.addEmotionToFeed = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
