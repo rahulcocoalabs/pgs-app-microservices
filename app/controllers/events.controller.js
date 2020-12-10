@@ -167,7 +167,11 @@ exports.getDetail = (req, res) => {
   }
   // get data
   Event.findOne(filters, queryProjection)
-    .populate('timeZoneId').populate('organizer')
+    .populate([{
+      path: 'timeZoneId',
+    }, {
+      path: 'organizer',
+    }])
     .then(event => {
       if (!event) {
         var responseObj = {
