@@ -769,6 +769,9 @@ exports.getStudentHome = async (req, res) => {
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
+  console.log("tabCheckData")
+  console.log(tabCheckData)
+  console.log("tabCheckData")
   var favouriteDataResp = await getUserFavouriteData(userId);
   if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
     return res.send(favouriteDataResp);
