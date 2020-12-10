@@ -167,7 +167,11 @@ exports.getDetail = (req, res) => {
   }
   // get data
   Event.findOne(filters, queryProjection)
-    .populate('timeZoneId').populate('organizer')
+    .populate([{
+      path: 'timeZone',
+    }, {
+      path: 'organizer',
+    }])
     .then(event => {
       if (!event) {
         var responseObj = {
@@ -224,6 +228,7 @@ exports.getDetail = (req, res) => {
           eventFromTime: eventStartTime,
           eventToTime: eventEndTime,
           organizer: event.organizer || null,
+          timeZone: event.timeZone || null,
           organizerEventsCount: eventsCount || null,
           sharingUrl: event.sharingUrl || null,
           isFav: event.isFav || null,

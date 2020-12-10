@@ -765,28 +765,25 @@ exports.getStudentHome = async (req, res) => {
   var userId = userData.userId;
   var params = req.query;
 
+  console.log("userId : " + userId)
   var tabCheckData = await checkYourTab(params, userId);
   if (tabCheckData && (tabCheckData.success !== undefined) && (tabCheckData.success === 0)) {
     return res.send(tabCheckData);
   }
-  console.log("tabCheckData")
-  console.log(tabCheckData)
-  console.log("tabCheckData")
+
   var favouriteDataResp = await getUserFavouriteData(userId);
   if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
     return res.send(favouriteDataResp);
   }
   var favouriteData = favouriteDataResp.favouriteData;
-  console.log(2, tabCheckData);
+
   var findCriteria = {};
-  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+  if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
-  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
-    // findCriteria.isFavourite = isFavourite
-    console.log(tabCheckData, 4);
-    if (tabCheckData.favourites.favouriteClasses) {
-      findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
-    }
+  } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
+    // if (tabCheckData.favourites.favouriteClasses) {
+      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
+    // }
   }
 
   if(params.keyword){
@@ -805,10 +802,6 @@ exports.getStudentHome = async (req, res) => {
   var perPage = classConfig.popularInHomeResultsPerPage;
   var page = 1;
 
-  console.log("popular classes findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
-
   var listPopularClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listPopularClassData && (listPopularClassData.success !== undefined) && (listPopularClassData.success === 0)) {
     return res.send(listPopularClassData);
@@ -816,12 +809,10 @@ exports.getStudentHome = async (req, res) => {
 
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
-  if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
-    // findCriteria.isFavourite = isFavourite
-    console.log(tabCheckData.favourites.favouriteTutors);
-    if (tabCheckData.favourites.favouriteTutors) {
+  if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
+    // if (tabCheckData.favourites.favouriteTutors) {
       findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
-    }
+    // }
   }
   if(params.keyword){
     findCriteria.firstName = {
@@ -835,11 +826,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
-  console.log(5, findCriteria)
-
-  console.log("popular tutors findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
+ 
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
@@ -849,13 +836,12 @@ exports.getStudentHome = async (req, res) => {
 
 
   findCriteria = {};
-  if (tabCheckData.isPublic || (!tabCheckData.isPublic && tabCheckData.isFavourite === null)) {
+  if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
-  } else if (tabCheckData.isFavourite && tabCheckData.isPublic === null) {
-    // findCriteria.isFavourite = isFavourite
-    if (tabCheckData.favourites.favouriteClasses) {
-      findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
-    }
+  } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
+    // if (tabCheckData.favourites.favouriteClasses) {
+      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
+    // }
   }
   findCriteria.status = 1;
   findCriteria.isApproved = true;
@@ -868,9 +854,8 @@ exports.getStudentHome = async (req, res) => {
   if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
     findCriteria.userId =  { $ne: userId } 
   }
-  console.log("latest classes findCriteria")
-  console.log(findCriteria)
-  console.log("findCriteria")
+
+
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
@@ -1094,15 +1079,8 @@ exports.updateAppointmentStatus = async (req, res) => {
   var isRejected = false;
   var message = ""
   var comments = null;
-  if (params.status === constants.APPROVED_STATUS) {
-    isApproved = true;
-    comments = null;
-    message = 'Appointment accepted successfully'
-  } else {
-    message = 'Appointment rejected successfully'
-    isRejected = false;
-    comments = params.comments;
-  }
+  var notificationMessage = ""
+
 
 
   var checkAppointment = await AppointmentClassRequest.findOne({
@@ -1110,6 +1088,13 @@ exports.updateAppointmentStatus = async (req, res) => {
     tutorId: userId,
     status: 1
   })
+  .populate([{
+    path : 'tutorId'
+  },{
+    path: 'tutorSubjectId',
+  }, {
+    path: 'tutorClassId',
+  }])
     .catch(err => {
       return {
         success: 0,
@@ -1122,6 +1107,22 @@ exports.updateAppointmentStatus = async (req, res) => {
   }
 
   if (checkAppointment && checkAppointment !== null) {
+    var subjectName = checkAppointment.tutorSubjectId.name;
+    var className = checkAppointment.tutorClassId.name;
+    var tutorName = checkAppointment.tutorId.firstName;
+    if (params.status === constants.APPROVED_STATUS) {
+      isApproved = true;
+      comments = null;
+      message = 'Appointment accepted successfully'
+  
+      notificationMessage = tutorName + ' accepted your subject ' + subjectName + ' for class ' + className;
+    } else {
+      message = 'Appointment rejected successfully'
+      notificationMessage = tutorName + ' rejected your subject' + subjectName + ' for class ' + className;
+
+      isRejected = false;
+      comments = params.comments;
+    }
     var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected,comments)
     if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
       return res.send(checkAppointmentResp);
@@ -1147,7 +1148,7 @@ exports.updateAppointmentStatus = async (req, res) => {
     // var metaInfo = {"type":"event","reference_id":eventData.id}
     var notificationObj = {
         title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
-        message: message ,
+        message: notificationMessage ,
         type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
         referenceId: appointmentId,
         filtersJsonArr,
@@ -1620,8 +1621,8 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
   var updateObj = {};
   if (isApproved) {
     var findCriteria = {};
-    findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
-    findCriteria.tutorClassId = appointmentData.tutorClassId;
+    findCriteria.tutorSubjectId = appointmentData.tutorSubjectId.id;
+    findCriteria.tutorClassId = appointmentData.tutorClassId.id;
     findCriteria.isPublic = false;
     findCriteria.isApproved = true;
     findCriteria.isRejected = false;

@@ -15,7 +15,7 @@ module.exports = {
             key : constants.ONE_SIGNAL_API_KEY,
             status: 1
         }
-        var settingsData = await Settings.findOne(filterCriteria, projection)
+        var settingsData = await Settings.findOne(filterCriteria)
             .catch(err => {
                 return {
                     success: 0,
@@ -33,7 +33,7 @@ module.exports = {
                 key : constants.ONE_SIGNAL_APP_ID,
                 status: 1
             }
-            settingsData = await Settings.findOne(filterCriteria, projection)
+            settingsData = await Settings.findOne(filterCriteria)
             .catch(err => {
                 return {
                     success: 0,
@@ -47,7 +47,8 @@ module.exports = {
         }
         if(settingsData){
             onesignalAppId = settingsData.value;
-
+        console.log("onesignalAppId : " + onesignalAppId)
+        console.log("onesignalApiKey : " + onesignalApiKey)
         const oneSignalClient = new OneSignal.Client(onesignalAppId,onesignalApiKey);
 
         var notificationData = {
@@ -70,11 +71,16 @@ module.exports = {
             included_segments: null,
             filters: notificationObj.filtersJsonArr
         };
+        console.log("notificationData")
+        console.log(notificationData)
+        console.log("notificationData")
     
         // using async/await
         try {
         const response = await oneSignalClient.createNotification(notificationData);
-
+        console.log("response")
+        console.log(response)
+        console.log("response")
         var notificationLogObj = {};
         notificationLogObj.type = notificationObj.type;
         notificationLogObj.title = notificationObj.title;
@@ -112,7 +118,7 @@ module.exports = {
         newNotificationObj.referenceId = notificationObj.referenceId;
         newNotificationObj.notificationType = notificationObj.notificationType;
         if(notificationObj.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE){
-            notificationObj.userId = notificationObj.userId;
+            newNotificationObj.userId = notificationObj.userId;
         }else{
             // notificationObj.userIds = notificationObj.userIds;
         }
