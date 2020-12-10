@@ -976,7 +976,7 @@ exports.update = async (req, res) => {
      if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
 
-        if ((userInfo.languageId == undefined) || ( userInfo.languageId.length == 0)) {
+        if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
           return res.send({
             success:1,
             
