@@ -981,7 +981,7 @@ exports.update = async (req, res) => {
             success:1,
             
              flag:1,
-            message:"profile updatd"
+            message:"profile updated"
           })
         }
         
