@@ -781,11 +781,11 @@ exports.getStudentHome = async (req, res) => {
   console.log(favouriteData)
   console.log("---------------favouriteData--------------")
   var findCriteria = {};
-  if (tabCheckData.isPublic !== null && tabCheckData.isPublic) {
+  if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
     if (tabCheckData.favourites.favouriteClasses) {
-      findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
+      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
     }
   }
 
@@ -845,11 +845,11 @@ exports.getStudentHome = async (req, res) => {
 
 
   findCriteria = {};
-  if (tabCheckData.isPublic !== null && tabCheckData.isPublic) {
+  if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
     if (tabCheckData.favourites.favouriteClasses) {
-      findCriteria = { tutorId: { $in: tabCheckData.favourites.favouriteClasses } };
+      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
     }
   }
   findCriteria.status = 1;
