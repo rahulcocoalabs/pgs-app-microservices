@@ -264,7 +264,12 @@ exports.getSummary1 = async (req, res) => {
     return res.send(feeds);
   }
 
-  res.send(feeds);
+  for (x in feeds){
+    let object = feeds[x];
+    return res.send(object)
+  }
+
+  //res.send(feeds);
 }
 
 exports.getSummary = (req, res) => {
