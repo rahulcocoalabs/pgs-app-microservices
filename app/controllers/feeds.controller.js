@@ -284,10 +284,10 @@ exports.getSummary1 = async (req, res) => {
      
       if (emotion.userId == userId) {
         emotionObject.userEmotion = emotion.emotion;
-        return res.send({
-          flag:1,
-          emotionObject
-        })
+        // return res.send({
+        //   flag:1,
+        //   emotionObject
+        // })
       }
       if (emotion.emotion == "heartfilled") {
         emotionObject.heartfilled += 1;
