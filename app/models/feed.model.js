@@ -94,7 +94,7 @@ function transform(record) {
                 ret.emotionsInfo.sad++;
             if (ret.emotions[j].emotion == "angry")
                 ret.emotionsInfo.angry++;
-            if(ret.emotions[j].userId == "5d9856833b775074971fcab5")
+           // if(ret.emotions[j].userId == "5d9856833b775074971fcab5")
                 ret.emotionsInfo.userEmotion = ret.emotions[j].emotion;
             j++;
         }
