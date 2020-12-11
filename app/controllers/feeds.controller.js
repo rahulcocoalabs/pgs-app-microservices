@@ -281,7 +281,11 @@ exports.getSummary1 = async (req, res) => {
     };
     for (y in emotions) {
       let emotion = emotions[y];
-      if (emotion.userId === userId) {
+      return res.send({
+        emotion:emotion,
+        userId
+      })
+      if (emotion.userId == userId) {
         emotionObject.userEmotion = emotion.emotion;
         return res.send({
           flag:1,
