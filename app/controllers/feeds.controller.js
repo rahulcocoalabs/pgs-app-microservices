@@ -317,7 +317,7 @@ exports.getSummary1 = async (req, res) => {
     videoBase: feedsConfig.videoBase,
     documentBase: feedsConfig.documentBase,
     authorImageBase: feedsConfig.authorImageBase,
-    adsImageBase: adsResult.imageBase,
+    //adsImageBase: adsResult.imageBase,
     totalItems: array.length,
     page: Number(page),
     perPage: perPage,
