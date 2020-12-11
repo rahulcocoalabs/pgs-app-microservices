@@ -201,6 +201,14 @@ exports.listAll = async (req, res) => {
         totalPages = itemsCount / perPage;
         totalPages = Math.ceil(totalPages);
         var hasNextPage = page < totalPages;
+        var array = [];
+        for (y in feedsList){
+          let object = feedsList[y];
+          let obj =  favouriteObject(userId,object.emotions);
+          object.emotionsInfo1 = obj;
+          console.log("10/12",obj)
+          array.push(object)
+        }
         var responseObj = {
           imageBase: feedsConfig.imageBase,
           documentImage: feedsConfig.documentImage,
@@ -208,7 +216,7 @@ exports.listAll = async (req, res) => {
           documentBase: feedsConfig.documentBase,
           userImageBase: usersConfig.imageBase,
           contestImageBase: contestsConfig.imageBase,
-          items: feedsList,
+          items: array,
           page: page,
           perPage: perPage,
           hasNextPage: hasNextPage,
@@ -222,6 +230,20 @@ exports.listAll = async (req, res) => {
     });
 }
 
+function favouriteObject(userId,list){
+
+  var ret = {};
+  for (x in list){
+    console.log('10/12/1',list[x],userId);
+    if (list[x].userId == userId){
+      ret.userEmotion = true;
+      ret.heartfilled = 1;
+    }
+  }
+
+  return ret;
+
+}
 
 exports.getSummary = (req, res) => {
   var params = req.query;
