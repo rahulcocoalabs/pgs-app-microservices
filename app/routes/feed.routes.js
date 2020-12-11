@@ -41,6 +41,9 @@ module.exports = (app) => {
     app.post('/feeds/emotion',auth,feeds.addEmotionToFeed);
     app.delete('/feeds/emotion',auth,feeds.removeEmotionFromFeed);
     app.get('/feeds/owner',auth,feeds.getOwnerPosts);
+
+    //test
+    app.get('/feeds/test',auth,feeds.getSummary1);
 }
 
 

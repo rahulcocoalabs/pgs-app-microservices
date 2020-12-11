@@ -202,11 +202,11 @@ exports.listAll = async (req, res) => {
         totalPages = Math.ceil(totalPages);
         var hasNextPage = page < totalPages;
         var array = [];
-        for (y in feedsList){
+        for (y in feedsList) {
           let object = feedsList[y];
-          let obj =  favouriteObject(userId,object.emotions);
+          let obj = favouriteObject(userId, object.emotions);
           object.emotionsInfo1 = obj;
-          console.log("10/12",obj)
+          console.log("10/12", obj)
           array.push(object)
         }
         var responseObj = {
@@ -230,12 +230,12 @@ exports.listAll = async (req, res) => {
     });
 }
 
-function favouriteObject(userId,list){
+function favouriteObject(userId, list) {
 
   var ret = {};
-  for (x in list){
-    console.log('10/12/1',list[x],userId);
-    if (list[x].userId == userId){
+  for (x in list) {
+    console.log('10/12/1', list[x], userId);
+    if (list[x].userId == userId) {
       ret.userEmotion = true;
       ret.heartfilled = 1;
     }
@@ -243,6 +243,28 @@ function favouriteObject(userId,list){
 
   return ret;
 
+}
+
+exports.getSummary1 = async (req, res) => {
+
+  var params = req.query;
+  var page = params.page ? params.page : 1;
+  var perPage = params.perPage ? params.perPage : feedsConfig.perPage;
+  var offset = (page - 1) * perPage;
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
+
+  var feeds = await Feed.find({status:1},{},pageParams).catch(err => {
+    return { success:0,message:err.message};
+  })
+
+  if (feeds && feeds.success && feeds.success === 1) {
+    return res.send(feeds);
+  }
+
+  res.send(feeds);
 }
 
 exports.getSummary = (req, res) => {
@@ -424,8 +446,8 @@ exports.createFeed = async (req, res) => {
     });
   }
 
-  if(params.feedType == 'contest') {
-    if(!params.contestId) {
+  if (params.feedType == 'contest') {
+    if (!params.contestId) {
       return res.status(400).send({
         success: 0,
         field: 'contestId',
@@ -1060,7 +1082,7 @@ exports.removeEmotionFromFeed = (req, res) => {
   });
 }
 
-exports.addEmotionToFeed = async (req,res) => {
+exports.addEmotionToFeed = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
@@ -1114,11 +1136,11 @@ exports.addEmotionToFeed = async (req,res) => {
     emotions: 1
   }
 
-  var feedsResult = await Feed.findOne(filter, queryProjection).catch(err=>{
-    return {success:0,message:"did not find feed"}
+  var feedsResult = await Feed.findOne(filter, queryProjection).catch(err => {
+    return { success: 0, message: "did not find feed" }
   })
 
-  if (feedsResult && feedsResult.success && feedsResult.success ===0){
+  if (feedsResult && feedsResult.success && feedsResult.success === 0) {
     return res.send(feedsResult);
   }
 
@@ -1161,17 +1183,19 @@ exports.addEmotionToFeed = async (req,res) => {
   var update = {
     emotions: emotions
   };
-  var updateFeed = await Feed.updateOne(filter,update).catch(err=>{
-    return {success:0,message:"could not update favourites",error:err.message}});
-  
+  var updateFeed = await Feed.updateOne(filter, update).catch(err => {
+    return { success: 0, message: "could not update favourites", error: err.message }
+  });
+
 
   if (updateFeed && updateFeed.success && updateFeed.success === 0) {
     return res.send(updateFeed);
   }
 
-  return res.send({sucess:1,
+  return res.send({
+    sucess: 1,
     update,
-    message:"emotion posted successfully"
+    message: "emotion posted successfully"
   })
 
 }
@@ -1281,17 +1305,19 @@ exports.addEmotionToFeed1 = async (req, res) => {
     var options = {
       new: true
     };
-    var updateFeed =  Feed.updateOne(filter,update).catch(err=>{
-      return {success:0,message:"could not update favourites",error:err.message}});
-    
+    var updateFeed = Feed.updateOne(filter, update).catch(err => {
+      return { success: 0, message: "could not update favourites", error: err.message }
+    });
+
 
     if (updateFeed && updateFeed.success && updateFeed.success === 0) {
       return res.send(updateFeed);
     }
 
-    return res.send({sucess:1,
+    return res.send({
+      sucess: 1,
       update,
-      message:"emotion posted successfully"
+      message: "emotion posted successfully"
     })
     // Feed.updateOne(filter, update, options, function (err, response) {
     //   if (err) {
@@ -1324,7 +1350,7 @@ exports.getUserFeeds = (req, res) => {
   var filters = {
     status: 1,
     authorUserId: userId,
-    feedType : constants.FEED_TYPE
+    feedType: constants.FEED_TYPE
   };
   var queryProjection = {
     title: 1,
@@ -1338,8 +1364,8 @@ exports.getUserFeeds = (req, res) => {
     authorUser: 1,
     emotions: 1,
     isApproved: 1,
-    isRejected : 1,
-    youTubeLink : 1
+    isRejected: 1,
+    youTubeLink: 1
   };
 
 
@@ -1384,13 +1410,13 @@ exports.getUserFeeds = (req, res) => {
   if (!params.sortBy) {
     sortOptions.tsCreatedAt = sortOrder ? sortOrder : -1;
   }
-  
+
 
   //Feed.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['authorUser', 'emotions.user']).then(feedsList => {
   Feed.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['authorUser']).then(feedsList => {
- console.log("feedsList")
- console.log(feedsList)
- console.log("feedsList")
+    console.log("feedsList")
+    console.log(feedsList)
+    console.log("feedsList")
     if (!feedsList) {
       var responseObj = {
         success: 0,
