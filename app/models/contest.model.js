@@ -24,6 +24,7 @@ var options = {
 const ContestSchema = mongoose.Schema({
     title: String,
     description: String,
+    aboutContest : String,
     place: String,
     image: String,
     fromDate: Number,
