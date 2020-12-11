@@ -247,6 +247,7 @@ function favouriteObject(userId, list) {
 
 exports.getSummary1 = async (req, res) => {
 
+  var userId = req.identity.data.userId;
   var params = req.query;
   var page = params.page ? params.page : 1;
   var perPage = params.perPage ? params.perPage : feedsConfig.perPage;
@@ -264,14 +265,49 @@ exports.getSummary1 = async (req, res) => {
     return res.send(feeds);
   }
 
+  var array = [];
   for (x in feeds){
     let object = feeds[x];
-    let emotion = object.emotions;
-    return res.send(emotion);
-    //return res.send(object)
+    let emotions = object.emotions;
+    var emotionObject = {
+      userEmotion:null,
+      total: 0,
+      love: 0,
+      happy: 0,
+      heartfilled: 0,
+      surprise: 0,
+      sad: 0,
+      angry: 0
+    };
+    for (y in emotions){
+      let emotion = emotions[y];
+      if (emotion.userId === userId){
+        emotionObject.userEmotion = emotion.emotion;
+      }
+      if (emotion.emotion == "heartfilled"){
+        emotionObject.heartfilled += 1;
+      }
+      if (emotion.emotion == "sad"){
+        emotionObject.sad += 1;
+      }
+      if (emotion.emotion == "happy"){
+        emotionObject.sad += 1;
+      } 
+      if (emotion.emotion == "surprie"){
+        emotionObject.surprise += 1;
+      }
+      if (emotion.emotion == "angry"){
+        emotionObject.angry += 1;
+      }
+      if (emotion.emotion == "love"){
+        emotionObject.love += 1;
+      }
+    }
+    object.emotionsInfo = emotionObject;
+    array.push(object)
   }
 
-  //res.send(feeds);
+  res.send(array);
 }
 
 exports.getSummary = (req, res) => {
