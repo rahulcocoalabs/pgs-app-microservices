@@ -529,7 +529,7 @@ function getApisWithAuth(reqObj, callback) {
       perPage: 10,
       bearer,
       url: constants.API_BOOKS_LIST,
-      isTrending: true
+      // isTrending: true
     };
     // { page: 1, perPage: perPage, isTrending:isTrending },
     getApisWithAuth(popularReqObj, function (err, booksResult) {
@@ -544,7 +544,7 @@ function getApisWithAuth(reqObj, callback) {
         perPage: 10,
         bearer,
         url: constants.API_BOOKS_LIST,
-        isTrending: false
+        // isTrending: false
       };
 
       getApisWithAuth(suggestedBooksReqObj, function (err, suggestedBookResult) {
