@@ -266,7 +266,7 @@ exports.getSummary1 = async (req, res) => {
 
   for (x in feeds){
     let object = feeds[x];
-    let emotion = object.emotion;
+    let emotion = object.emotions;
    // return res.send(emotion);
     return res.send(object)
   }
