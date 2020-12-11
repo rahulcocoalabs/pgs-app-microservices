@@ -330,7 +330,7 @@ exports.getSummary1 = async (req, res) => {
     feeds: feedsSummary,
    
   }
-  res.send(summary);
+  res.send(array);
  
 }
 
