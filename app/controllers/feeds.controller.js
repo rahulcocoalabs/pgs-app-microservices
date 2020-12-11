@@ -308,7 +308,7 @@ exports.getSummary1 = async (req, res) => {
         emotionObject.love += 1;
       }
     }
-    object.emotionsInfo1 = emotionObject;
+    object.emotionsInfo = emotionObject;
     array.push({emotionsinfo:object})
   }
 res.send({
