@@ -304,7 +304,7 @@ exports.getSummary1 = async (req, res) => {
       }
     }
     object.emotionsInfo1 = emotionObject;
-    array.push(object)
+    array.push({emotionsinfo:object})
   }
 
   var totalPages = array.length / perPage;
