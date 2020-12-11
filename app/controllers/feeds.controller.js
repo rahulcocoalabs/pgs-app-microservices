@@ -310,8 +310,8 @@ exports.getSummary1 = async (req, res) => {
         emotionObject.love += 1;
       }
     }
-    delete object['emotionsInfo']
-    object.emotionsInfo = emotionObject;
+  
+    object.emotionsInfo1 = emotionObject;
     array.push({emotionsinfo:object})
   }
 res.send({
