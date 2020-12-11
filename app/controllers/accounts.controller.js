@@ -311,7 +311,7 @@ exports.create = async (req, res) => {
   var hobbyIds = [];
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
-  if (!req.body.firstName || !req.body.phone || !req.body.dob || !req.body.language || !req.body.email || !req.body.password || !req.body.countryCode) {
+  if (!req.body.firstName || !req.body.phone || !req.body.dob || !req.body.language || !req.body.email || !req.body.school || !req.body.password || !req.body.countryCode) {
     var errors = [];
     if (!req.body.firstName) {
       errors.push({
@@ -325,12 +325,12 @@ exports.create = async (req, res) => {
         message: "Date of Birth cannot be empty"
       });
     }
-    // if (!req.body.school) {
-    //   errors.push({
-    //     field: "school",
-    //     message: "School Name cannot be empty"
-    //   });
-    // }
+    if (!req.body.school) {
+      errors.push({
+        field: "school",
+        message: "School Name cannot be empty"
+      });
+    }
     // if (!req.body.syllabusId) {
     //     errors.push({
     //         field: "syllabusId",
@@ -903,6 +903,9 @@ exports.update = async (req, res) => {
   }
   if (update.countryCode) {
     update.countryCode = update.countryCode;
+  }
+  if (update.school) {
+    update.school = update.school;
   }
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
@@ -2359,7 +2362,7 @@ exports.socialSignup = async (req, res) => {
 
 exports.updateForSocialAccount = async (req, res) => {
   var params = req.body;
-  if (!params.dob || !params.language || !params.token) {
+  if (!params.dob || !params.language || !params.token || !params.school) {
     if (!params.dob) {
       errors.push({
         field: "dob",
@@ -2370,6 +2373,12 @@ exports.updateForSocialAccount = async (req, res) => {
       errors.push({
         field: "language",
         message: "language missing"
+      });
+    }
+    if (!params.school) {
+      errors.push({
+        field: "school",
+        message: "school missing"
       });
     }
     if (!params.token) {
@@ -2443,6 +2452,7 @@ exports.updateForSocialAccount = async (req, res) => {
     update.email = params.email;
   }
   update.dob = params.dob;
+  update.school = params.school;
   update.language = params.language;
   update.tsModifiedAt = Date.now();
 
