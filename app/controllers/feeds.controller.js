@@ -306,7 +306,10 @@ exports.getSummary1 = async (req, res) => {
     object.emotionsInfo1 = emotionObject;
     array.push({emotionsinfo:object})
   }
-
+res.send({
+  flag:"ok",
+  array:array
+})
   var totalPages = array.length / perPage;
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
