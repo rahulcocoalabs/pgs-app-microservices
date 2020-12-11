@@ -257,8 +257,8 @@ exports.getSummary1 = async (req, res) => {
     limit: perPage
   };
 
-  var feeds = await Feed.find({status:1},{},pageParams).catch(err => {
-    return { success:0,message:err.message};
+  var feeds = await Feed.find({ status: 1 }, {}, pageParams).catch(err => {
+    return { success: 0, message: err.message };
   })
 
   if (feeds && feeds.success && feeds.success === 1) {
@@ -266,11 +266,11 @@ exports.getSummary1 = async (req, res) => {
   }
 
   var array = [];
-  for (x in feeds){
+  for (x in feeds) {
     let object = feeds[x];
     let emotions = object.emotions;
     var emotionObject = {
-      userEmotion:null,
+      userEmotion: null,
       total: 0,
       love: 0,
       happy: 0,
@@ -279,27 +279,27 @@ exports.getSummary1 = async (req, res) => {
       sad: 0,
       angry: 0
     };
-    for (y in emotions){
+    for (y in emotions) {
       let emotion = emotions[y];
-      if (emotion.userId === userId){
+      if (emotion.userId === userId) {
         emotionObject.userEmotion = emotion.emotion;
       }
-      if (emotion.emotion == "heartfilled"){
+      if (emotion.emotion == "heartfilled") {
         emotionObject.heartfilled += 1;
       }
-      if (emotion.emotion == "sad"){
+      if (emotion.emotion == "sad") {
         emotionObject.sad += 1;
       }
-      if (emotion.emotion == "happy"){
+      if (emotion.emotion == "happy") {
         emotionObject.sad += 1;
-      } 
-      if (emotion.emotion == "surprie"){
+      }
+      if (emotion.emotion == "surprie") {
         emotionObject.surprise += 1;
       }
-      if (emotion.emotion == "angry"){
+      if (emotion.emotion == "angry") {
         emotionObject.angry += 1;
       }
-      if (emotion.emotion == "love"){
+      if (emotion.emotion == "love") {
         emotionObject.love += 1;
       }
     }
@@ -307,7 +307,31 @@ exports.getSummary1 = async (req, res) => {
     array.push(object)
   }
 
-  res.send(array);
+  var totalPages = totalContestHistoryCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+
+  var feedsSummary = {
+    imageBase: feedsConfig.imageBase,
+    documentImage: feedsConfig.documentImage,
+    videoBase: feedsConfig.videoBase,
+    documentBase: feedsConfig.documentBase,
+    authorImageBase: feedsConfig.authorImageBase,
+    adsImageBase: adsResult.imageBase,
+    totalItems: array.length,
+    page: Number(page),
+    perPage: perPage,
+    hasNextPage: hasNextPage,
+    totalPages: totalPages,
+    items: array
+  }
+
+  var summary = {
+    feeds: feedsSummary,
+   
+  }
+  res.send(summary);
+ 
 }
 
 exports.getSummary = (req, res) => {
