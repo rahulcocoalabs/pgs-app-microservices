@@ -81,7 +81,8 @@ exports.detail = async (req, res) => {
             place: 1,
             image: 1,
             fromDate: 1,
-            toDate: 1
+            toDate: 1,
+            aboutContest : 1
         };
         let contestDetail = await Contests.findOne(filter, projection);
         res.status(200).send({

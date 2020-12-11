@@ -970,7 +970,7 @@ exports.getSyllubusTutor = async (req,res) => {
   async function checkSubjectsForOnlineClass(params,userId) {
     if((params.isMySubjects && params.isMySubjects === '1') || (params.tutorId)){
       if(params.tutorId){
-        userId = tutorId;
+        userId = params.tutorId;
       }
       var userData = await User.findOne({
         _id : userId,
