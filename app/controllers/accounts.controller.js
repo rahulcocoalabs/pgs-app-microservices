@@ -3582,8 +3582,8 @@ async function checkTutorAndUpdate(userObj) {
   } else {
  
     var updateOnlineClassResp = await updateTutorOnlineClassStatus(findCriteria, update)
-    if (updateAllOnlineClass && (updateAllOnlineClass.success !== undefined) && (updateAllOnlineClass.success === 0)) {
-      return updateAllOnlineClass;
+    if (updateOnlineClassResp && (updateOnlineClassResp.success !== undefined) && (updateOnlineClassResp.success === 0)) {
+      return updateOnlineClassResp;
     }
    
     var updateAppointmentRequestFromResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
