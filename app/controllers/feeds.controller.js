@@ -307,7 +307,7 @@ exports.getSummary1 = async (req, res) => {
     array.push(object)
   }
 
-  var totalPages = totalContestHistoryCount / perPage;
+  var totalPages = array.length / perPage;
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
 
