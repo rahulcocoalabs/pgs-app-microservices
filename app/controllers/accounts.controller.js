@@ -1800,6 +1800,7 @@ exports.loginWithEmail = async (req, res) => {
           statusCode: 200,
           userDetails: checkUser,
           token,
+          flag:"ok",
           message: 'Successfully logged in'
         })
 
