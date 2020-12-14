@@ -274,10 +274,11 @@ exports.getClassDetails = async (req, res) => {
       classDetails.isFavourite = false;
     }
 
-    classDetails.flag = "ok"
+    
 
     return res.send({
       success: 1,
+      flag:"ok",
       item: classDetails,
       joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
