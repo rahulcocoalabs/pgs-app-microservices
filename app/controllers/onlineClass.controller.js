@@ -38,7 +38,7 @@ const sgMail = require('@sendgrid/mail');
 var bcrypt = require('bcryptjs');
 const tutorSubjectModel = require('../models/tutorSubject.model');
 const onlineClassModel = require('../models/onlineClass.model');
-
+const currencyModel = require('../models/currency.model');
 const salt = bcrypt.genSaltSync(10);
 
 const usersConfig = config.users;
