@@ -244,9 +244,10 @@ exports.getClassDetails = async (req, res) => {
       path: 'tutorSubjectId',
     }, {
       path: 'tutorClassId',
-    }, {
-      path: 'currencyId',
-    }])
+    }]).populate({
+      path:'currencyId',
+      select:'name'
+    })
     .catch(err => {
       return {
         success: 0,
