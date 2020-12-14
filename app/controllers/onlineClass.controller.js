@@ -259,6 +259,9 @@ exports.getClassDetails = async (req, res) => {
   if (classDetails && (classDetails.success !== undefined) && (classDetails.success === 0)) {
     return res.send(classDetails);
   }
+  console.log("classDetails")
+  console.log(classDetails)
+  console.log("classDetails")
   if (classDetails) {
     classDetails = JSON.parse(JSON.stringify(classDetails))
     var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
