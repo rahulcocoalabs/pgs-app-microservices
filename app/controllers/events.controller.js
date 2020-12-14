@@ -166,7 +166,7 @@ exports.getDetail = (req, res) => {
     timeZoneId : 1
   }
   // get data
-  Event.findOne(filters, queryProjection)
+  Event.findOne(filters, {})
     .populate([{
       path: 'timeZone',
     }, {
