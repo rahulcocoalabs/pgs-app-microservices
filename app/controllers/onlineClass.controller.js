@@ -237,7 +237,8 @@ exports.getClassDetails = async (req, res) => {
     isRejected: false,
     status: 1
   },{
-    zoomLink : 0
+    zoomLink : 0,
+    startUrl : 0
   })
     .populate([{
       path: 'userId',
@@ -462,6 +463,57 @@ exports.getZoomLink = async(req,res) => {
       }
     }
    
+}
+
+exports.getZoomStartLink = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.params;
+  var classId = params.id;
+
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+  var findCriteria = {
+    _id : classId,
+    userId,
+    status : 1
+  }
+   var projection = {
+    startUrl : 1
+   }
+  var checkClassResp = await OnlineCLass.findOne(findCriteria,projection)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while get class details',
+      error: err
+    }
+  })
+if (checkClassResp && (checkClassResp.success !== undefined) && (checkClassResp.success === 0)) {
+  return res.send(checkClassResp);
+}
+if(checkClassResp){
+  if(checkClassResp.isApproved){
+    return res.send({
+      success:1,
+      message:"Zoom link to start class",
+      link:checkClassResp.startUrl
+    })
+  }else{
+    return res.send({
+      success: 0,
+      message: "Not approved class"
+    })
+  }
+
+}else{
+  return res.send({
+    success: 0,
+    message: "Class not exists"
+  })
+}
 }
 
 exports.getClassDetails = async (req, res) => {
@@ -929,7 +981,7 @@ exports.getTutorDetails = async (req, res) => {
     } else {
       tutorDetails.isFavourite = false;
     }
-    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId,isApproved:true,isPublic:true},{zoomLink : 0})
+    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId,isApproved:true,isPublic:true},{zoomLink : 0, startUrl : 0})
     .populate([{
       path: 'userId',
       select: {
@@ -1314,7 +1366,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData,sortOption
   var offset = (page - 1) * perPage;
 
 
-  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0})
+  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0, startUrl : 0})
     .populate([{
       path: 'userId',
       select: {
