@@ -244,6 +244,8 @@ exports.getClassDetails = async (req, res) => {
       path: 'tutorSubjectId',
     }, {
       path: 'tutorClassId',
+    }, {
+      path: 'currencyId',
     }])
     .catch(err => {
       return {
