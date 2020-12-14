@@ -223,6 +223,7 @@ exports.getClassDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+  console.log("testing pm2 command");
 
   var classId = req.params.id;
   var favouriteDataResp = await getUserFavouriteData(userId);
