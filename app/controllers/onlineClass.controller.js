@@ -481,7 +481,8 @@ exports.getZoomStartLink = async(req,res) =>{
     status : 1
   }
    var projection = {
-    startUrl : 1
+    startUrl : 1,
+    isApproved : 1,
    }
   var checkClassResp = await OnlineCLass.findOne(findCriteria,projection)
   .catch(err => {
@@ -495,6 +496,7 @@ if (checkClassResp && (checkClassResp.success !== undefined) && (checkClassResp.
   return res.send(checkClassResp);
 }
 if(checkClassResp){
+  console.log()
   if(checkClassResp.isApproved){
     return res.send({
       success:1,
