@@ -580,6 +580,7 @@ exports.getClassDetails = async (req, res) => {
 
     return res.send({
       success: 1,
+      flag:1,
       item: classDetails,
       joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
