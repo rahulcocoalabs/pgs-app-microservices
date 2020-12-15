@@ -219,82 +219,86 @@ console.log("08/12/202",file.filename)
 
 }
 
-exports.getClassDetails = async (req, res) => {
-  var userData = req.identity.data;
-  var userId = userData.userId;
-  var params = req.query;
-  console.log("testing pm2 command");
+// exports.getClassDetails = async (req, res) => {
+//   var userData = req.identity.data;
+//   var userId = userData.userId;
+//   var params = req.query;
+//   console.log("testing pm2 command");
 
-  var classId = req.params.id;
-  var favouriteDataResp = await getUserFavouriteData(userId);
-  if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
-    return res.send(favouriteDataResp);
-  }
-  var favouriteData = favouriteDataResp.favouriteData;
-  var classDetails = await OnlineCLass.findOne({
-    _id: classId,
-    isApproved: true,
-    isRejected: false,
-    status: 1
-  },{
-    zoomLink : 0
-  })
-    .populate([{
-      path: 'userId',
-    }, {
-      path: 'tutorSubjectId',
-    }, {
-      path: 'tutorClassId',
-    }, {
-      path: 'currencyId',
-    }])
-    .catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while get class details',
-        error: err
-      }
-    })
-  if (classDetails && (classDetails.success !== undefined) && (classDetails.success === 0)) {
-    return res.send(classDetails);
-  }
-  if (classDetails) {
-    classDetails = JSON.parse(JSON.stringify(classDetails))
-    var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
-    if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
-      return res.send(checkResp);
-    }
-    if (favouriteData && favouriteData.favouriteClass !== null && favouriteData.favouriteClass !== undefined) {
-      var index = await favouriteData.favouriteClass.findIndex(id => JSON.stringify(id) === JSON.stringify(classId));
-      if (index > -1) {
-        classDetails.isFavourite = true;
-      } else {
-        classDetails.isFavourite = false;
-      }
-    } else {
-      classDetails.isFavourite = false;
-    }
+//   var classId = req.params.id;
+//   var favouriteDataResp = await getUserFavouriteData(userId);
+//   if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
+//     return res.send(favouriteDataResp);
+//   }
+//   var favouriteData = favouriteDataResp.favouriteData;
+//   var classDetails = await OnlineCLass.findOne({
+//     _id: classId,
+//     isApproved: true,
+//     isRejected: false,
+//     status: 1
+//   },{
+//     zoomLink : 0,
+//     startUrl : 0
+//   })
+//     .populate([{
+//       path: 'userId',
+//     }, {
+//       path: 'tutorSubjectId',
+//     }, {
+//       path: 'tutorClassId',
+//     }, {
+//       path: 'currencyId',
+//     }])
+//     .catch(err => {
+//       return {
+//         success: 0,
+//         message: 'Something went wrong while get class details',
+//         error: err
+//       }
+//     })
+//   if (classDetails && (classDetails.success !== undefined) && (classDetails.success === 0)) {
+//     return res.send(classDetails);
+//   }
+//   console.log("classDetails")
+//   console.log(classDetails)
+//   console.log("classDetails")
+//   if (classDetails) {
+//     classDetails = JSON.parse(JSON.stringify(classDetails))
+//     var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
+//     if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
+//       return res.send(checkResp);
+//     }
+//     if (favouriteData && favouriteData.favouriteClass !== null && favouriteData.favouriteClass !== undefined) {
+//       var index = await favouriteData.favouriteClass.findIndex(id => JSON.stringify(id) === JSON.stringify(classId));
+//       if (index > -1) {
+//         classDetails.isFavourite = true;
+//       } else {
+//         classDetails.isFavourite = false;
+//       }
+//     } else {
+//       classDetails.isFavourite = false;
+//     }
 
     
 
-    return res.send({
-      success: 1,
-      debugflag:"ok",
-      item: classDetails,
-      joinLinkAvailable: checkResp.joinLinkAvailable,
-      classImageBase: classConfig.imageBase,
-      tutorImageBase: usersConfig.imageBase,
-      tutorVideoBase: tutorConfig.videoBase,
-      message: 'Class details'
-    })
+//     return res.send({
+//       success: 1,
+//       debugflag:"ok",
+//       item: classDetails,
+//       joinLinkAvailable: checkResp.joinLinkAvailable,
+//       classImageBase: classConfig.imageBase,
+//       tutorImageBase: usersConfig.imageBase,
+//       tutorVideoBase: tutorConfig.videoBase,
+//       message: 'Class details'
+//     })
 
-  } else {
-    return res.send({
-      success: 0,
-      message: "Class not exists"
-    })
-  }
-}
+//   } else {
+//     return res.send({
+//       success: 0,
+//       message: "Class not exists"
+//     })
+//   }
+// }
 
 
 exports.createTutorRequest = async (req, res) => {
@@ -464,6 +468,59 @@ exports.getZoomLink = async(req,res) => {
    
 }
 
+exports.getZoomStartLink = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.params;
+  var classId = params.id;
+
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+  var findCriteria = {
+    _id : classId,
+    userId,
+    status : 1
+  }
+   var projection = {
+    startUrl : 1,
+    isApproved : 1,
+   }
+  var checkClassResp = await OnlineCLass.findOne(findCriteria,projection)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while get class details',
+      error: err
+    }
+  })
+if (checkClassResp && (checkClassResp.success !== undefined) && (checkClassResp.success === 0)) {
+  return res.send(checkClassResp);
+}
+if(checkClassResp){
+  console.log()
+  if(checkClassResp.isApproved){
+    return res.send({
+      success:1,
+      message:"Zoom link to start class",
+      link:checkClassResp.startUrl
+    })
+  }else{
+    return res.send({
+      success: 0,
+      message: "Not approved class"
+    })
+  }
+
+}else{
+  return res.send({
+    success: 0,
+    message: "Class not exists"
+  })
+}
+}
+
 exports.getClassDetails = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -488,6 +545,8 @@ exports.getClassDetails = async (req, res) => {
       path: 'tutorSubjectId',
     }, {
       path: 'tutorClassId',
+    }, {
+      path: 'currencyId',
     }])
     .catch(err => {
       return {
@@ -929,7 +988,7 @@ exports.getTutorDetails = async (req, res) => {
     } else {
       tutorDetails.isFavourite = false;
     }
-    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId,isApproved:true,isPublic:true},{zoomLink : 0})
+    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId,isApproved:true,isPublic:true},{zoomLink : 0, startUrl : 0})
     .populate([{
       path: 'userId',
       select: {
@@ -1314,7 +1373,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData,sortOption
   var offset = (page - 1) * perPage;
 
 
-  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0})
+  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0, startUrl : 0})
     .populate([{
       path: 'userId',
       select: {
