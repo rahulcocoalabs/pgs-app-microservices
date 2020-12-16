@@ -29,8 +29,10 @@ exports.getFeedSummary1 = async (req,res) => {
     })
     var array = [];
     for (x in feeds) {
+        
+
         var item = feeds[x];
-        item.flag = 1;
+        Object.assign(item, {key3: "value3"});
         array.push(item);
     }
   
