@@ -32,8 +32,8 @@ exports.getFeedSummary1 = async (req,res) => {
         
         var item1 = feeds[x];
         var item = feeds[x];
-        item.flag = "ok"
-        item[flag] = "ok1"
+        item.flag = "ok",
+        
         array.push(item);
         return res.send({
             itm:item1,
