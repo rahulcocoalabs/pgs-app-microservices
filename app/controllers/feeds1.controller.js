@@ -31,12 +31,49 @@ exports.getFeedSummary1 = async (req, res) => {
     for (x in feeds) {
 
         var objToClone = feeds[x];
-        var objCopy = {};
-        var emotionInfo = {};
+        var objCopy = {
+
+        };
+        var emotionInfo = {
+            userEmotion: null,
+            total: 0,
+            love: 0,
+            happy: 0,
+            heartfilled: 8,
+            surprise: 0,
+            sad: 0,
+            angry: 0
+        };
         var em = objToClone.emotions;
+        for (y in em){
+            let emotion = em[y];
+            if (userId == emotion.userId) {
+                emotionInfo.userEmotion = emotion.emotion
+            }
+            if (emotion.emotion == 'happy') {
+                emotionInfo.happy += 1;
+            }
+            if (emotion.emotion == 'love') {
+                emotionInfo.love += 1;
+            }
+            if (emotion.emotion == 'heartfilled') {
+                emotionInfo.heartfilled += 1;
+            }
+            if (emotion.emotion == 'surprise') {
+                emotionInfo.surprise += 1;
+            }
+            if (emotion.emotion == 'sad') {
+                emotionInfo.sad += 1;
+            }
+            if (emotion.emotion == 'angry') {
+                emotionInfo.angry += 1;
+            }
+            emotion.total += 1;
+           
+        }
         var objCopy = JSON.parse(JSON.stringify(objToClone));
-        objCopy.flag = 1;
-        array.push(em);
+        objCopy.emotionInfo = emotionInfo;
+        array.push(objCopy);
 
     }
 
