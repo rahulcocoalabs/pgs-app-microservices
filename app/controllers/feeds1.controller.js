@@ -1,7 +1,7 @@
 var gateway = require('../components/gateway.component.js');
 const User = require('../models/user.model.js');
 const Nationality = require('../models/nationality.model.js');
-
+const Advertisement = require('../models/advertisement.model.js');
 const Feed1 = require('../models/feeds1.model.js');
 
 const Coin = require('../models/coin.model');
@@ -27,6 +27,10 @@ exports.getFeedSummary1 = async (req, res) => {
     var feeds = await Feed1.find({ status: 1 }).catch(err => {
         return { success: 0, message: err.message }
     })
+
+    if (feeds && feeds.succes && feeds.success === 0){
+        return res.send(feeds)
+    }
     var array = [];
     for (x in feeds) {
 
@@ -77,6 +81,13 @@ exports.getFeedSummary1 = async (req, res) => {
 
     }
 
+    var ads = await Advertisement.find({ status: 1 }).catch(err => {
+        return { success: 0, message: err.message }
+    })
+    if (ads && ads.success && ads.success == 0){
+        return res.send(ads)
+    }
+
     var feedsSummary = {
         imageBase: feedsConfig.imageBase,
         documentImage: feedsConfig.documentImage,
@@ -89,7 +100,8 @@ exports.getFeedSummary1 = async (req, res) => {
         // perPage: feeds.perPage,
         // hasNextPage: feeds.hasNextPage,
         //totalPages: feeds.totalPages,
-        items: array,
+        feeds: array,
+        ads:ads,
         flag: 1
     }
     return res.send(feedsSummary)
