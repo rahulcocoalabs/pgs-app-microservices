@@ -27,6 +27,12 @@ exports.getFeedSummary1 = async (req,res) => {
     var feeds = await Feed1.find({status:1}).catch(err=>{
       return { success:0, message:err.message}
     })
+    var array = [];
+    for (x in feeds) {
+        var item = feeds[x];
+        item.flag = 1;
+        array.push(item);
+    }
   
     var feedsSummary = {
         imageBase: feedsConfig.imageBase,
@@ -40,7 +46,7 @@ exports.getFeedSummary1 = async (req,res) => {
        // perPage: feeds.perPage,
        // hasNextPage: feeds.hasNextPage,
         //totalPages: feeds.totalPages,
-        items: feeds
+        items: array
       }
     return res.send(feedsSummary)
   }
