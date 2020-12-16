@@ -30,4 +30,4 @@ const FeedsSchema1 = mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('Feed', FeedsSchema1, 'Feeds');
+module.exports = mongoose.model('Feed1', FeedsSchema1, 'Feeds');
