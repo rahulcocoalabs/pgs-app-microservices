@@ -59,7 +59,10 @@ const ecProduct = mongoose.Schema({
 	isActive: Boolean,
 	//isFeaturedNew: Boolean,
 	//inPromotion: Boolean,
-
+	currencyId : { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
+	modelNumber: String,
+	color:String,
+	salesPackages: String,
 	isBuyable: Boolean,
 	isShippable: Boolean,
 	parentProduct_id: Number,

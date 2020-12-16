@@ -14,7 +14,7 @@ const { query } = require('express');
 const bannerConfig = config.banners;
 const productsConfig = config.products;
 const categoriesConfig = config.categories;
-
+const Currency = require('../models/currency.model');
 // *** Product detail summary ***
 exports.details = async (req, res) => {
     let userDataz = req.identity.data;
