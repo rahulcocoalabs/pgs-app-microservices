@@ -2,6 +2,7 @@ var gateway = require('../components/gateway.component.js');
 const User = require('../models/user.model.js');
 const Nationality = require('../models/nationality.model.js');
 const Feed = require('../models/feed.model.js');
+const Feed1 = require('../models/feeds1.model.js');
 
 const Coin = require('../models/coin.model');
 const Language = require('../models/language.model');
@@ -1639,5 +1640,10 @@ exports.getFeedSummary1 = async (req,res) => {
 
   const data = req.identity.data;
   const userId = data.userId;
-  res.send(userId);
+  
+  var feeds = await Feed1.find({status:1}).catch(err=>{
+    return { success:0, message:err.message}
+  })
+
+  return res.send(feeds)
 }
