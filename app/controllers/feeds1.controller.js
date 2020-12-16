@@ -25,7 +25,17 @@ exports.getFeedSummary1 = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
 
-    var feeds = await Feed1.find({ status: 1 }).catch(err => {
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    var feeds = await Feed1.find({ status: 1 },{},pageParams).catch(err => {
         return { success: 0, message: err.message }
     })
 
