@@ -33,9 +33,7 @@ exports.getFeedSummary1 = async (req, res) => {
         var objToClone = feeds[x];
         var objCopy = {};
 
-        for (var propKey in objToClone){
-            objCopy[propKey] = objToClone[propKey];
-        }
+        var objCopy = JSON.parse( JSON.stringify( objToClone ) );
         objCopy[flag] = 1;
         array.push(objCopy);
 
