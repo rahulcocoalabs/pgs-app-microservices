@@ -31,6 +31,7 @@ var feedsUpload = multer({ storage: storage });
 const auth = require('../middleware/auth.js');
 module.exports = (app) => {
     const feeds = require('../controllers/feeds.controller');
+    const feeds1 = require('../controllers/feeds1.controller');
     app.get('/feeds',auth, feeds.listAll);
     app.get('/feeds/summary',auth,feeds.getSummary);
     app.get('/feeds/self',auth,feeds.getUserFeeds);
@@ -43,7 +44,7 @@ module.exports = (app) => {
     app.get('/feeds/owner',auth,feeds.getOwnerPosts);
 
     //test
-    app.get('/feeds/test',auth,feeds.getSummary1);
+    app.get('/feeds/test',auth,feeds1.getFeedSummary1);
 }
 
 

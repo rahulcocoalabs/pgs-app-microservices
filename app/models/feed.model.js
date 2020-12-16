@@ -82,6 +82,7 @@ function transform(record) {
         var j = 0;
         //emotion names currently hardcoded. not a proper way to implement
         while (j < ret.emotions.length) {
+            console.log("15/12",ret);
             if (ret.emotions[j].emotion == "love")
                 ret.emotionsInfo.love++;
             if (ret.emotions[j].emotion == "happy")
@@ -94,7 +95,7 @@ function transform(record) {
                 ret.emotionsInfo.sad++;
             if (ret.emotions[j].emotion == "angry")
                 ret.emotionsInfo.angry++;
-            if(ret.emotions[j].userId == "5d9856833b775074971fcab5")
+            if(ret.emotions[j].userId == ret.authorUserId)
                 ret.emotionsInfo.userEmotion = ret.emotions[j].emotion;
             j++;
         }
