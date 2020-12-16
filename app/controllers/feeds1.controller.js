@@ -28,5 +28,19 @@ exports.getFeedSummary1 = async (req,res) => {
       return { success:0, message:err.message}
     })
   
-    return res.send(feeds)
+    var feedsSummary = {
+        imageBase: feedsConfig.imageBase,
+        documentImage: feedsConfig.documentImage,
+        videoBase: feedsConfig.videoBase,
+        documentBase: feedsConfig.documentBase,
+        authorImageBase: feedsConfig.authorImageBase,
+        //adsImageBase: adsResult.imageBase,
+        totalItems: feeds.totalItems,
+       // page: Number(req.params.page),
+       // perPage: feeds.perPage,
+       // hasNextPage: feeds.hasNextPage,
+        //totalPages: feeds.totalPages,
+        items: feeds
+      }
+    return res.send(feedsSummary)
   }
