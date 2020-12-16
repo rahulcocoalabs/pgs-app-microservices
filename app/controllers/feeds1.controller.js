@@ -36,11 +36,11 @@ exports.getFeedSummary1 = async (req, res) => {
         limit: perPage
     };
 
-    var feeds = await Feed1.find({ status: 1 },{},pageParams).catch(err => {
+    var feeds = await Feed1.find({ status: 1 }, {}, pageParams).catch(err => {
         return { success: 0, message: err.message }
     })
 
-    if (feeds && feeds.succes && feeds.success === 0){
+    if (feeds && feeds.succes && feeds.success === 0) {
         return res.send(feeds)
     }
     var array = [];
@@ -61,7 +61,7 @@ exports.getFeedSummary1 = async (req, res) => {
             angry: 0
         };
         var em = objToClone.emotions;
-        for (y in em){
+        for (y in em) {
             let emotion = em[y];
             if (userId == emotion.userId) {
                 emotionInfo.userEmotion = emotion.emotion
@@ -85,7 +85,7 @@ exports.getFeedSummary1 = async (req, res) => {
                 emotionInfo.angry += 1;
             }
             emotion.total += 1;
-           
+
         }
         var objCopy = JSON.parse(JSON.stringify(objToClone));
         objCopy.emotionInfo = emotionInfo;
@@ -96,9 +96,19 @@ exports.getFeedSummary1 = async (req, res) => {
     var ads = await Advertisement.find({ status: 1 }).catch(err => {
         return { success: 0, message: err.message }
     })
-    if (ads && ads.success && ads.success == 0){
+    if (ads && ads.success && ads.success == 0) {
         return res.send(ads)
     }
+
+    let itemsCount = await array.length;//.countDocuments(filter);
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+
+    let adsitemsCount = await ads.length;//.countDocuments(filter);
+    var adstotalPages = itemsCount / perPage;
+    adstotalPages = Math.ceil(totalPages);
+    var adshasNextPage = page < totalPages;
 
     var feedsSummary = {
         imageBase: feedsConfig.imageBase,
@@ -107,15 +117,20 @@ exports.getFeedSummary1 = async (req, res) => {
         documentBase: feedsConfig.documentBase,
         authorImageBase: feedsConfig.authorImageBase,
         //adsImageBase: adsResult.imageBase,
-        totalItems: feeds.totalItems,
-        // page: Number(req.params.page),
-        // perPage: feeds.perPage,
-        // hasNextPage: feeds.hasNextPage,
-        //totalPages: feeds.totalPages,
+        totalItems: itemsCount,
+        page: Number(req.params.page),
+        perPage: req.params.perPage,
+        hasNextPage: hasNextPage,
+        totalPages: totalPages,
         feeds: array,
-        ads:{
-            items:ads,
-            imageBase: adsConfig.imageBase
+        ads: {
+            items: ads,
+            imageBase: adsConfig.imageBase,
+            page: Number(req.params.page),
+            perPage: req.params.perPage,
+            hasNextPage: adshasNextPage,
+            totalItems: adsitemsCount,
+            totalPages: adstotalPages
         },
         flag: 1
     }
