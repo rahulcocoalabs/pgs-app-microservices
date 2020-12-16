@@ -31,6 +31,7 @@ var feedsUpload = multer({ storage: storage });
 const auth = require('../middleware/auth.js');
 module.exports = (app) => {
     const feeds = require('../controllers/feeds.controller');
+    const feeds1 = require('../controllers/feeds1.controller');
     app.get('/feeds',auth, feeds.listAll);
     app.get('/feeds/summary',auth,feeds.getSummary);
     app.get('/feeds/self',auth,feeds.getUserFeeds);
