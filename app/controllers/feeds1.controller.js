@@ -30,10 +30,15 @@ exports.getFeedSummary1 = async (req,res) => {
     var array = [];
     for (x in feeds) {
         
-
+        var item1 = feeds[x];
         var item = feeds[x];
-        Object.assign(item, {key3: "value3"});
+        item.flag = "ok"
+        item[flag] = "ok1"
         array.push(item);
+        return res.send({
+            itm:item1,
+            itm1:item
+        })
     }
   
     var feedsSummary = {
