@@ -12,6 +12,7 @@ var utilities = require('../components/utilities.component.js');
 const constants = require('../helpers/constants');
 
 var feedsConfig = config.feeds;
+var adsConfig = config.ads;
 var usersConfig = config.users;
 var emotionsConfig = config.emotions;
 const contestsConfig = config.contests;
@@ -103,7 +104,7 @@ exports.getFeedSummary1 = async (req, res) => {
         feeds: array,
         ads:{
             items:ads,
-           // imageBase: adsResult.imageBase
+            imageBase: adsConfig.imageBase
         },
         flag: 1
     }
