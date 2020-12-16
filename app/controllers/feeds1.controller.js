@@ -1,7 +1,7 @@
 var gateway = require('../components/gateway.component.js');
 const User = require('../models/user.model.js');
 const Nationality = require('../models/nationality.model.js');
-const Feed = require('../models/feed.model.js');
+
 const Feed1 = require('../models/feeds1.model.js');
 
 const Coin = require('../models/coin.model');
