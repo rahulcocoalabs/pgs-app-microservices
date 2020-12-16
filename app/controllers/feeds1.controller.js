@@ -103,7 +103,7 @@ exports.getFeedSummary1 = async (req, res) => {
         feeds: array,
         ads:{
             items:ads,
-            imageBase: adsResult.imageBase
+           // imageBase: adsResult.imageBase
         },
         flag: 1
     }
