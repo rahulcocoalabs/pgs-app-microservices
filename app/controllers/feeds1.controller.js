@@ -29,13 +29,14 @@ exports.getFeedSummary1 = async (req, res) => {
     })
     var array = [];
     for (x in feeds) {
-       
+
         var objToClone = feeds[x];
         var objCopy = {};
-
-        var objCopy = JSON.parse( JSON.stringify( objToClone ) );
+        var emotionInfo = {};
+        var em = objToClone.emotions;
+        var objCopy = JSON.parse(JSON.stringify(objToClone));
         objCopy.flag = 1;
-        array.push(objCopy);
+        array.push(em);
 
     }
 
@@ -52,7 +53,7 @@ exports.getFeedSummary1 = async (req, res) => {
         // hasNextPage: feeds.hasNextPage,
         //totalPages: feeds.totalPages,
         items: array,
-        flag:1
+        flag: 1
     }
     return res.send(feedsSummary)
 }
