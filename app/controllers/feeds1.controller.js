@@ -24,6 +24,7 @@ exports.getFeedSummary1 = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
+    const params = req.params;
 
     var page = params.page || 1;
     page = page > 0 ? page : 1;
