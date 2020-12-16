@@ -43,7 +43,7 @@ module.exports = (app) => {
     app.get('/feeds/owner',auth,feeds.getOwnerPosts);
 
     //test
-    app.get('/feeds/test',auth,feeds.getSummary1);
+    app.get('/feeds/test',auth,feeds.getFeedSummary1);
 }
 
 

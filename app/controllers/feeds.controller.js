@@ -1634,3 +1634,10 @@ exports.getOwnerPosts = (req, res) => {
     })
   })
 };
+
+exports.getFeedSummary1 = async (req,res) => {
+
+  const data = req.identity.data;
+  const userId = data.userId;
+  res.send(userId);
+}
