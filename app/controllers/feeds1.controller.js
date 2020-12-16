@@ -101,7 +101,10 @@ exports.getFeedSummary1 = async (req, res) => {
         // hasNextPage: feeds.hasNextPage,
         //totalPages: feeds.totalPages,
         feeds: array,
-        ads:ads,
+        ads:{
+            items:ads,
+            imageBase: adsResult.imageBase
+        },
         flag: 1
     }
     return res.send(feedsSummary)
