@@ -19,28 +19,28 @@ var moment = require("moment");
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
-exports.getFeedSummary1 = async (req,res) => {
+exports.getFeedSummary1 = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
-    
-    var feeds = await Feed1.find({status:1}).catch(err=>{
-      return { success:0, message:err.message}
+
+    var feeds = await Feed1.find({ status: 1 }).catch(err => {
+        return { success: 0, message: err.message }
     })
     var array = [];
     for (x in feeds) {
-        
-        var item1 = feeds[x];
-        var item = feeds[x];
-        item.flag = "ok",
-        
-        array.push(item);
-        return res.send({
-            itm:item1,
-            itm1:item
-        })
+       
+        var objToClone = feeds[x];
+        var objCopy = {};
+
+        for (var propKey in objToClone){
+            objCopy[propKey] = objToClone[propKey];
+        }
+        objCopy.flag = 1;
+        array.push(objCopy);
+
     }
-  
+
     var feedsSummary = {
         imageBase: feedsConfig.imageBase,
         documentImage: feedsConfig.documentImage,
@@ -49,11 +49,11 @@ exports.getFeedSummary1 = async (req,res) => {
         authorImageBase: feedsConfig.authorImageBase,
         //adsImageBase: adsResult.imageBase,
         totalItems: feeds.totalItems,
-       // page: Number(req.params.page),
-       // perPage: feeds.perPage,
-       // hasNextPage: feeds.hasNextPage,
+        // page: Number(req.params.page),
+        // perPage: feeds.perPage,
+        // hasNextPage: feeds.hasNextPage,
         //totalPages: feeds.totalPages,
         items: array
-      }
+    }
     return res.send(feedsSummary)
-  }
+}
