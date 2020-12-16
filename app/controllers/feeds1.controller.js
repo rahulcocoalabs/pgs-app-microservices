@@ -53,7 +53,8 @@ exports.getFeedSummary1 = async (req, res) => {
         // perPage: feeds.perPage,
         // hasNextPage: feeds.hasNextPage,
         //totalPages: feeds.totalPages,
-        items: array
+        items: array,
+        flag:1
     }
     return res.send(feedsSummary)
 }
