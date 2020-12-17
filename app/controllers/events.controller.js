@@ -510,6 +510,10 @@ exports.addInterest = async(req,res) => {
     return res.send(interestCount);
   }
 
+  if (interestCount > 0){
+    return res.send({success:0,message:"already assigned your interest"})
+  }
+
   var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestedCount:1}}).catch(err=>{
     return {success:0, message:err.message};
   })
