@@ -642,7 +642,7 @@ exports.create = async (req, res) => {
       //       message: 'User already exists'
       //     })
       //   }
-      User.findOne(filterReferralCode).then(result => {
+      User.findOne(filterReferralCode).then(async result => {
         if (!result) {
           return res.send({
             success: 0,
@@ -662,7 +662,7 @@ exports.create = async (req, res) => {
               })
             } else {
               user.save()
-                .then(data => {
+                .then(async data => {
                   let updateCoinReqObj = {
                     userId: result._id,
                     coinType: inviteApp,
@@ -685,7 +685,7 @@ exports.create = async (req, res) => {
       User.findOne({
         phone: req.body.phone,
         status: 1
-      }).then(result => {
+      }).then(async result => {
         if (result) {
           return res.send({
             success: 0,
@@ -693,7 +693,7 @@ exports.create = async (req, res) => {
           })
         } else {
           user.save()
-            .then(data => {
+            .then(async data => {
               if (profileCompletion == 1) {
                 // updateCoinCount(data.id, coinType, function (err, profileCompletionRes) {});
 
