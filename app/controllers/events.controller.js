@@ -3,6 +3,8 @@ var gateway = require('../components/gateway.component.js');
 const Event = require('../models/event.model.js');
 const User = require('../models/user.model.js');
 const EventBooking = require('../models/eventBooking.model.js')
+
+const eventUserInterest = require('../models/eventUserInterest.model.js')
 const SpeakerType = require('../models/speakerType.model')
 const Timezone = require('../models/timezone.model')
 var config = require('../../config/app.config.js');
@@ -565,9 +567,9 @@ exports.addInterest = async(req,res) => {
   var eventId = req.params.id;
 
   var event = await Event.find({status: 1,_id: eventId}).catch(err => {
-    return {success:0, message:"some thing ent wrong while fetching database"};
+    return {success:0, message:"some thing went wrong while fetching database"};
   })
-  if (event && event.success && event.success == 0){
+  if (event && (event.success != undefined) && event.success == 0){
     return res.send(event);
   }
 
@@ -579,12 +581,43 @@ exports.addInterest = async(req,res) => {
     })
   }
 
+  var interestCount = await eventUserInterest.countDocuments({ status: 1,userId:userId,eventId:eventId }).catch(err=>{
+    return {success:0,message:"could not count document"}
+  });
+
+ 
+  console.log(interestCount)
+  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
+    return res.send(interestCount);
+  }
+
+  if (interestCount > 0){
+    return res.send({success:0,message:"already assigned your interest"})
+  }
+
   var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestedCount:1}}).catch(err=>{
     return {success:0, message:err.message};
   })
 
-  if (update && update.success && update.success === 0){
+
+  if (update && (update.success != undefined ) && update.success === 0){
     return res.send(update);
+  }
+
+  const newInterest = new eventUserInterest({
+    userId: userId,
+    eventId: eventId,
+    status: 1,
+    tsCreatedAt: Date.now(),
+    tsModifiedAt: null
+  });
+
+  var insert = await newInterest.save().catch(err =>{
+    return {success:0,message:"could not insert data"}
+  });
+
+  if (insert && (insert.success != undefined ) && insert.success === 0){
+    return res.send(insert);
   }
 
   return res.send({
