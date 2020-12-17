@@ -493,7 +493,7 @@ exports.participateEvent = async(req,res) =>{
   var userData = req.identity.data;
   var userId = userData.userId;
 
-  var eventId = req.query.id;
+  var eventId = req.params.id;
 
   var findCriteria = {
     _id : eventId,
