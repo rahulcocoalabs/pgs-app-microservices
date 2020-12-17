@@ -324,6 +324,7 @@ exports.sendEventBooking = async (req, res) => {
     phoneNumber: params.phoneNumber,
     participateCount: params.participateCount,
     eventId: params.eventId,
+    isParticipated : false,
     status: 1,
     tsCreatedAt: Number(moment().unix()),
     tsModifiedAt: null
@@ -456,6 +457,86 @@ exports.listEventHistory = async (req, res) => {
     message: 'event history list'
   })
 
+}
+
+exports.participateEvent = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var eventId = req.query.id;
+
+  var findCriteria = {
+    _id : eventId,
+    status : 1
+  }
+
+  var eventCheck = await Event.findOne(findCriteria)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while checking event exists or not',
+      error: err
+    }
+  })
+if (eventCheck && eventCheck.success && (eventCheck.success === 0)) {
+  return res.send(eventCheck);
+}
+if(eventCheck){
+  findCriteria = {
+    eventId,
+    userId,
+    status : 1
+  }
+  var checkEventBook = await EventBooking.findOne(findCriteria)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while event booked or not',
+      error: err
+    }
+  })
+if (checkEventBook && checkEventBook.success && (checkEventBook.success === 0)) {
+  return res.send(checkEventBook);
+}
+if(checkEventBook){
+  if(checkEventBook.isParticipated){
+    return res.send({
+      success:0,
+      message: "Already participated"
+    })
+  }else{
+    var update = {};
+    update.isParticipated = true;
+    update.tsModifiedAt = Date.now();
+
+    var updateEventParticipate = await EventBooking.updateOne(findCriteria,update)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while update event as participated',
+        error: err
+      }
+    })
+  if (updateEventParticipate && updateEventParticipate.success && (updateEventParticipate.success === 0)) {
+    return res.send(updateEventParticipate);
+  }
+  return res.send({
+    success: 1,
+    message: 'Event participated successfully'
+  })
+  }
+}else{
+  return res.send({
+    success:0,
+    message: "Event not booked"
+  })
+}
+}else{
+  return res.send({
+    success:0,
+    message: "Event not exists"
+  })
+}
 }
 
 

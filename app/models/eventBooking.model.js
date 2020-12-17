@@ -9,6 +9,7 @@ const EventBookingSchema = mongoose.Schema({
     phoneNumber: Number,
     participateCount: Number,
     isBooked: Boolean,
+    isParticipated: Boolean,
     bookedOn: Date,
     status: Number,
     tsCreatedAt: Number,
