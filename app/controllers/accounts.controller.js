@@ -39,6 +39,9 @@ const Hobby = require('../models/hobby.model.js');
 const Events = require('../models/event.model.js');
 const EventCategory = require('../models/eventCategory.model.js');
 const EventBookings = require('../models/eventBooking.model.js');
+const Country = require('../models/country.model');
+const State = require('../models/state.model');
+const City = require('../models/city.model');
 var gateway = require('../components/gateway.component.js');
 
 var moment = require('moment');
@@ -311,7 +314,12 @@ exports.create = async (req, res) => {
   var hobbyIds = [];
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
-  if (!req.body.firstName || !req.body.phone || !req.body.dob || !req.body.language || !req.body.email || !req.body.school || !req.body.password || !req.body.countryCode) {
+  if (!req.body.firstName || !req.body.phone
+     || !req.body.dob || !req.body.language
+      || !req.body.email || !req.body.school
+       || !req.body.password || !req.body.countryCode
+       || !req.body.countryId || !req.body.stateId
+       || !req.body.cityId  ) {
     var errors = [];
     if (!req.body.firstName) {
       errors.push({
@@ -347,6 +355,24 @@ exports.create = async (req, res) => {
       errors.push({
         field: "language",
         message: "Array of language Ids cannot be empty"
+      });
+    }
+    if (!req.body.countryId) {
+      errors.push({
+        field: "countryId",
+        message: "countryId cannot be empty"
+      });
+    }
+    if (!req.body.stateId) {
+      errors.push({
+        field: "stateId",
+        message: "stateId cannot be empty"
+      });
+    }
+    if (!req.body.cityId) {
+      errors.push({
+        field: "cityId",
+        message: "cityId cannot be empty"
       });
     }
     // if (req.body.nationalityId && !ObjectId.isValid(req.body.nationalityId)) {
@@ -577,6 +603,9 @@ exports.create = async (req, res) => {
       ambition: req.body.ambition ? req.body.ambition : null,
       status: 1,
       genderId: req.body.genderId ? req.body.genderId : null,
+      countryId : req.body.countryId,
+      stateId : req.body.stateId,
+      cityId : req.body.cityId,
       countryCode: req.body.countryCode,
       phone: req.body.phone,
       address: req.body.address ? req.body.address : null,
@@ -750,13 +779,16 @@ exports.getUserDetails = (req, res) => {
     karmaIndex: 1,
     password: 1,
     isTutor: 1,
-    isDeactivated : 1
+    isDeactivated : 1,
+    countryId : 1,
+    stateId : 1,
+    cityId : 1,
   }
   // get data
   User.findOne(filters, queryProjection).populate(['syllabusId', {
     path: 'language',
     select: 'name'
-  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds']).then(userDetail => {
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).then(userDetail => {
     if (!userDetail) {
       var responseObj = {
         success: 0,
@@ -906,6 +938,17 @@ exports.update = async (req, res) => {
   }
   if (update.school) {
     update.school = update.school;
+  }
+
+  //need to validate country/state & city
+  if (update.countryId) {
+    update.countryId = update.countryId;
+  }
+  if (update.stateId) {
+    update.stateId = update.stateId;
+  }
+  if (update.cityId) {
+    update.cityId = update.cityId;
   }
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
@@ -2363,7 +2406,10 @@ exports.socialSignup = async (req, res) => {
 
 exports.updateForSocialAccount = async (req, res) => {
   var params = req.body;
-  if (!params.dob || !params.language || !params.token || !params.school) {
+  if (!params.dob || !params.language 
+    || !params.token || !params.school 
+    || !params.countryId || !params.stateId
+    || !params.cityId) {
     if (!params.dob) {
       errors.push({
         field: "dob",
@@ -2388,6 +2434,24 @@ exports.updateForSocialAccount = async (req, res) => {
         message: "token missing"
       });
     }
+    if (!params.countryId) {
+      errors.push({
+        field: "countryId",
+        message: "countryId missing"
+      });
+    }
+    if (!params.stateId) {
+      errors.push({
+        field: "stateId",
+        message: "stateId missing"
+      });
+    }
+    if (!params.cityId) {
+      errors.push({
+        field: "cityId",
+        message: "cityId missing"
+      });
+    }
     return res.status(200).send({
       success: 0,
       errors: errors,
@@ -2395,13 +2459,9 @@ exports.updateForSocialAccount = async (req, res) => {
     });
 
   }
-  console.log("params")
-  console.log(params)
-  console.log("params")
+
   const userDetails = await checkAuthToken(params.token, JWT_KEY);
-  console.log("userDetails")
-  console.log(userDetails)
-  console.log("userDetails")
+  
   if (userDetails && userDetails.success !== undefined && userDetails.success === 0) {
     return res.send(userDetails)
   }
@@ -2437,13 +2497,9 @@ exports.updateForSocialAccount = async (req, res) => {
   //     message: 'User not found'
   //   })
   // }
-  console.log("checkUser")
-  console.log(checkUser)
-  console.log("checkUser")
+
   var emailCheck = await checkYourEmail(params);
-  console.log("emailCheck")
-  console.log(emailCheck)
-  console.log("emailCheck")
+ 
   if (emailCheck && emailCheck.success !== undefined && emailCheck.success === 0) {
     return res.send(emailCheck)
   }
@@ -2453,6 +2509,9 @@ exports.updateForSocialAccount = async (req, res) => {
     update.email = params.email;
   }
   update.dob = params.dob;
+  update.countryId = params.countryId;
+  update.stateId = params.stateId;
+  update.cityId = params.cityId;
   update.school = params.school;
   update.language = params.language;
   update.tsModifiedAt = Date.now();
