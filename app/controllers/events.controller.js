@@ -109,7 +109,10 @@ exports.listAll = async (req, res) => {
   });
 }
 
-exports.getDetail = (req, res) => {
+exports.getDetail = async(req, res) => {
+
+  var data = req.identity.data;
+  var userId = data.userId
   var id = req.params.id;
   if (!id) {
     var responseObj = {
@@ -137,6 +140,20 @@ exports.getDetail = (req, res) => {
     }
     res.send(responseObj);
     return;
+  }
+
+  var interestCount = await eventUserInterest.countDocuments({ status: 1,userId:userId,eventId:id }).catch(err=>{
+    return {success:0,message:"could not count document"}
+  });
+
+ 
+ 
+  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
+    return res.send(interestCount);
+  }
+  var interestAssigned = false
+  if (interestCount > 0){
+    interestAssigned = true;
   }
   var filters = {
     _id: id,
@@ -236,6 +253,7 @@ exports.getDetail = (req, res) => {
           isFav: event.isFav || null,
           speakerName: event.speakerName || null,
           speakerType,
+          interestAssigned:interestAssigned || false,
           speakerTitle: event.speakerTitle || null,
           speakerOrganisation: event.speakerOrganisation || null,
           speakerImage: event.speakerImage || null,
