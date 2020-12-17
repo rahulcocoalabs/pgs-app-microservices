@@ -184,6 +184,30 @@ exports.getDetail = async(req, res) => {
     speakerVideoLinks: 1,
     timeZoneId : 1
   }
+  var findCriteria = {
+    userId,
+    eventId : id,
+    status : 1
+  }
+  var eventBookingCheck = await EventBooking.findOne(findCriteria)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while checking event booking',
+      error: err
+    }
+  })
+if (eventBookingCheck && eventBookingCheck.success && (eventBookingCheck.success === 0)) {
+  return res.send(eventBookingCheck);
+}
+var isBooked = false;
+var isParticipated = false;
+if(eventBookingCheck){
+  isBooked = true;
+  if(eventBookingCheck.isParticipated){
+    isParticipated  = true;
+  }
+}
   // get data
   Event.findOne(filters, queryProjection)
     .populate([{
@@ -234,6 +258,7 @@ exports.getDetail = async(req, res) => {
         if (event.speakerTypeId) {
           speakerType = event.speakerTypeId.name;
         }
+        
         var eventDetail = {
           id: id || null,
           title: event.title || null,
@@ -261,7 +286,9 @@ exports.getDetail = async(req, res) => {
           speakerVideoLinks: event.speakerVideoLinks || null,
           imageBase: eventsConfig.imageBase || null,
           organizerImageBase: eventsConfig.organizerImageBase || null,
-          eventSpeakerImageBase: eventSpeakerConfig.imageBase || null
+          eventSpeakerImageBase: eventSpeakerConfig.imageBase || null,
+          isBooked,
+          isParticipated
         }
 
         res.send(eventDetail);
