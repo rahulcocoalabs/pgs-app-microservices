@@ -146,6 +146,9 @@ const UserSchema = mongoose.Schema({
     motherName: String,
     motherNationalityId: { type: mongoose.Schema.Types.ObjectId, ref: 'Nationality' },
     motherProfessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Profession' },
+    countryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
+    stateId: { type: mongoose.Schema.Types.ObjectId, ref: 'State' },
+    cityId: { type: mongoose.Schema.Types.ObjectId, ref: 'City' },
     coinCount: Number,
     
     karmaIndex: String,
