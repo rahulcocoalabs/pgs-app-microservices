@@ -504,13 +504,16 @@ exports.addInterest = async(req,res) => {
     return {success:0,message:"could not count document"}
   });
 
+ 
+  console.log(interestCount)
+  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
+    return res.send(interestCount);
+  }
+
   var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestedCount:1}}).catch(err=>{
     return {success:0, message:err.message};
   })
 
-  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
-    return res.send(interestCount);
-  }
 
   if (update && (update.success != undefined ) && update.success === 0){
     return res.send(update);
