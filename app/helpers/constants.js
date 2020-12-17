@@ -119,7 +119,10 @@ module.exports = Object.freeze({
     APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE : 'Appointment request ',
 
     INDIVIDUAL_NOTIFICATION_TYPE : 'individual',
-    GENERAL_NOTIFICATION_TYPE : 'general'
+    GENERAL_NOTIFICATION_TYPE : 'general',
+
+    EVENT_HISTORY_DATA_PARTITICPATED : "participated",
+    EVENT_HISTORY_DATA_BOOKED : "booked"
  
 
 });

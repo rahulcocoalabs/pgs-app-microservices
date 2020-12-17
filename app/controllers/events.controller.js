@@ -420,14 +420,24 @@ exports.listEventHistory = async (req, res) => {
   perPage = perPage > 0 ? perPage : eventsConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
-  if (params.tabType == "booked"){
-    
+  var findCriteria = {};
+
+  if (params.tabType == constants.EVENT_HISTORY_DATA_BOOKED){
+    findCriteria.isBoked = true;
+    findCriteria.isParticipated = false;
+  }
+  if (params.tabType == constants.EVENT_HISTORY_DATA_PARTITICPATED){
+    findCriteria.isBoked = true;
+    findCriteria.isParticipated = true;
   }
 
-  var findCriteria = {
-    userId,
-    status: 1,
+  if( (params.tabType == "booked") || (params.tabType == "participated")){
+  
   }
+
+  findCriteria.userId = userId;
+  findCriteria.status = 1;
+ 
 
   var eventHistoryData = await EventBooking.find(findCriteria)
     .populate('eventId')
