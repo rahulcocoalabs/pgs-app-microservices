@@ -484,7 +484,7 @@ exports.addInterest = async(req,res) => {
   var eventId = req.params.id;
 
   var event = await Event.find({status: 1,_id: eventId}).catch(err => {
-    return {success:0, message:"some thing ent wrong while fetching database"};
+    return {success:0, message:"some thing went wrong while fetching database"};
   })
   if (event && (event.success != undefined) && event.success == 0){
     return res.send(event);
