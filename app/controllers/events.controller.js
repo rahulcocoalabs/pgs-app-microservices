@@ -399,6 +399,10 @@ exports.listEventHistory = async (req, res) => {
   perPage = perPage > 0 ? perPage : eventsConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
+  if (params.tabType == "booked"){
+    
+  }
+
   var findCriteria = {
     userId,
     status: 1,
@@ -469,4 +473,41 @@ async function getEndTsToday() {
   var endTimestamp = timestamp + 24 * 60 * 60 - 1
   console.log("endTimestamp : " + endTimestamp);
   return endTimestamp;
+}
+
+// add interest 
+
+exports.addInterest = async(req,res) => {
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var eventId = req.params.id;
+
+  var event = await Event.find({status: 1,_id: eventId}).catch(err => {
+    return {success:0, message:err.message};
+  })
+  if (event && event.success && event.success === 0){
+    return res.send(event);
+  }
+
+  if (event.length === 0){
+    return res.send({
+      success:0,
+      message:"this event does not exist"
+    })
+  }
+
+  var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestCount:1}}).catch(err=>{
+    return {success:0, message:err.message};
+  })
+
+  if (update && update.success && update.success === 0){
+    return res.send(update);
+  }
+
+  return res.send({
+    success:1,
+    message:"updated interest count"
+  })
+
 }
