@@ -3,6 +3,8 @@ var gateway = require('../components/gateway.component.js');
 const Event = require('../models/event.model.js');
 const User = require('../models/user.model.js');
 const EventBooking = require('../models/eventBooking.model.js')
+
+const eventUserInterest = require('../models/eventUserInterest.model.js')
 const SpeakerType = require('../models/speakerType.model')
 const Timezone = require('../models/timezone.model')
 var config = require('../../config/app.config.js');
@@ -502,8 +504,24 @@ exports.addInterest = async(req,res) => {
     return {success:0, message:err.message};
   })
 
-  if (update && update.success && update.success === 0){
+  if (update && (update.success != undefined ) && update.success === 0){
     return res.send(update);
+  }
+
+  const newInterest = new eventUserInterest({
+    userId: userId,
+    eventId: eventId,
+    status: 1,
+    tsCreatedAt: Date.now(),
+    tsModifiedAt: null
+  });
+
+  var insert = await newInterest.save().catch(err =>{
+    return {success:0,message:"could not insert data"}
+  });
+
+  if (insert && (insert.success != undefined ) && insert.success === 0){
+    return res.send(insert);
   }
 
   return res.send({
