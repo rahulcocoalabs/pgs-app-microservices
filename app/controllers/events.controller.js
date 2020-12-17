@@ -109,7 +109,7 @@ exports.listAll = async (req, res) => {
   });
 }
 
-exports.getDetail = (req, res) => {
+exports.getDetail = async(req, res) => {
 
   var data = req.identity.data;
   var userId = data.userId
