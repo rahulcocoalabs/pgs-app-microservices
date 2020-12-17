@@ -2710,7 +2710,9 @@ exports.requestAsTutor = async (req, res) => {
     || params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)
     || params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)
     || params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
-    || !params.courceDescription || !file || !params.location
+    || !params.courceDescription 
+    // || !file 
+    || !params.location
     // ||  (params.yearOfExperience === null || params.yearOfExperience === undefined)
     //  ||  !params.achievementsOrAwards || !params.achievementsOrAwards
     //  ||  !params.institution || !params.institution
@@ -2772,12 +2774,12 @@ exports.requestAsTutor = async (req, res) => {
     //     'message': 'institution required',
     //   })
     // }
-    if (!file) {
-      errors.push({
-        'field': 'video',
-        'message': 'sample video required',
-      })
-    }
+    // if (!file) {
+    //   errors.push({
+    //     'field': 'video',
+    //     'message': 'sample video required',
+    //   })
+    // }
 
     return res.send({
       success: 0,
@@ -2862,7 +2864,7 @@ exports.requestAsTutor = async (req, res) => {
   }
 
   newTutorRequestObj.location = params.location;
-  newTutorRequestObj.sampleVideo = file.filename;
+  newTutorRequestObj.sampleVideo = ( file && file.filename )  ? file.filename : null;
   newTutorRequestObj.isApproved = false;
   newTutorRequestObj.isRejected = false;
   newTutorRequestObj.status = 1;
