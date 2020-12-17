@@ -500,9 +500,17 @@ exports.addInterest = async(req,res) => {
     })
   }
 
+  var interestCount = await eventUserInterest.countDocuments({ status: 1,userId:userId,eventId:eventId }).catch(err=>{
+    return {success:0,message:"could not count document"}
+  });
+
   var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestedCount:1}}).catch(err=>{
     return {success:0, message:err.message};
   })
+
+  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
+    return res.send(interestCount);
+  }
 
   if (update && (update.success != undefined ) && update.success === 0){
     return res.send(update);
