@@ -10,6 +10,8 @@ const TutorProfileUpdateRequest = require('../models/tutorProfileUpdateRequest.m
 const OnlineClass = require('../models/onlineClass.model');
 const Rating = require('../models/rating.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
+const EarnCoin = require('../models/earnCoin.model');
+const LoginBanner = require('../models/loginBanner.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
 var config = require('../../config/app.config.js');
@@ -1389,35 +1391,97 @@ exports.checkWeekMostLike = async (req, res) => {
 
 // **** Get coin-count ****
 
-exports.getCoinCount = (req, res) => {
+exports.getCoinCount = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var unReadNotificationCount;
   var coinCount;
   var userImage;
-  Notifications.find({
-    userIds: {
-      $exists: true,
-      $in: [userId]
-    },
-    markAsRead: 0
-  }).then(result => {
-    unReadNotificationCount = result.length;
-    User.findOne({
-      _id: userId
-    }).then(result => {
-      coinCount = result.coinCount;
-      userImage = result.image;
-      var count = {
-        success: 1,
-        userImage: userImage,
-        imageBase: usersConfig.imageBase,
-        unReadNotifications: unReadNotificationCount,
-        coinCount: coinCount
-      }
-      res.send(count)
-    })
+  var coinVideoObj = {};
+  var loginBannerObj = {};
+  var unReadNotificationCount = await Notifications.countDocuments({
+    userId,
+    markAsRead : 0,
+    status : 1
   })
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while getting unread notification count',
+      error: err
+    }
+  })
+if (unReadNotificationCount && unReadNotificationCount.success && (unReadNotificationCount.success === 0)) {
+  return res.send(unReadNotificationCount);
+}
+
+var userData = await User.findOne({
+  _id : userId,
+  status : 1
+})
+.catch(err => {
+  return {
+    success: 0,
+    message: 'Something went wrong while getting user data',
+    error: err
+  }
+})
+if (userData && userData.success && (userData.success === 0)) {
+return res.send(userData);
+}
+
+var earnCoinData = await EarnCoin.findOne({
+  status : 1
+})
+.catch(err => {
+  return {
+    success: 0,
+    message: 'Something went wrong while getting earn coin video details',
+    error: err
+  }
+})
+if (earnCoinData && earnCoinData.success && (earnCoinData.success === 0)) {
+return res.send(earnCoinData);
+}
+if(earnCoinData){
+  coinVideoObj = earnCoinData;
+}else{
+  coinVideoObj = null;
+}
+
+
+var loginBannerData = await LoginBanner.findOne({
+  status : 1
+})
+.catch(err => {
+  return {
+    success: 0,
+    message: 'Something went wrong while getting login banner details',
+    error: err
+  }
+})
+if (loginBannerData && loginBannerData.success && (loginBannerData.success === 0)) {
+return res.send(loginBannerData);
+}
+if(loginBannerData){
+  loginBannerObj = loginBannerData;
+}else{
+  loginBannerObj = null;
+}
+
+coinCount = userData.coinCount;
+userImage = userData.image;
+var responseObj = {
+  success: 1,
+  userImage: userImage,
+  imageBase: usersConfig.imageBase,
+  unReadNotifications: unReadNotificationCount,
+  coinCount: coinCount,
+  loginBannerDetails : loginBannerObj,
+  coinVideoDetails : coinVideoObj,
+}
+
+return res.send(responseObj)
 };
 
 exports.getMyDonations = (req, res) => {
