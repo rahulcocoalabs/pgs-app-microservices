@@ -1,5 +1,4 @@
-function AddressController(methods, options) {
-  this.addAddress = function (req, res) {
+exports.addAddress = async(req,res) =>{
     var Address = methods.loadModel('address');
     var userData = req.identity.data;
     var userId = userData.userId;
@@ -153,8 +152,8 @@ function AddressController(methods, options) {
 
 
   }
+  exports.deleteAddress = async(req,res) =>{
 
-  this.deleteAddress = function (req, res) {
     var Address = methods.loadModel('address');
     var userData = req.identity.data;
     var userId = userData.userId;
@@ -185,7 +184,7 @@ function AddressController(methods, options) {
     })
   };
 
-  this.listAddress = (req,res) => {
+  exports.listAddress = async(req,res) =>{
     var Address = methods.loadModel('address'); 
     var userData = req.identity.data;
     var userId = userData.userId;
@@ -208,7 +207,7 @@ function AddressController(methods, options) {
     })
   };
 
-  this.listCountries = (req,res) => {
+  exports.listCountries = async(req,res) =>{
     var Countries = require('../models/country.model.js');
     Countries.find().then(coutriesData => {
       res.send({
@@ -223,8 +222,7 @@ function AddressController(methods, options) {
         })
       })
   };
-
-  this.listStates = (req,res) => {
+  exports.listStates = async(req,res) =>{
     var States = require('../models/state.model.js');
     var countryId = req.params.countryId;
     var finCriteria = {
@@ -243,8 +241,7 @@ function AddressController(methods, options) {
       })
     })
   };
-
-  this.listCities = (req,res) => {
+  exports.listCities = async(req,res) =>{
     var Cities = require('../models/city.model.js');
     var stateId = req.params.stateId;
     var finCriteria = {
@@ -265,7 +262,5 @@ function AddressController(methods, options) {
   };
 
 
-};
 
 
-module.exports = AddressController;

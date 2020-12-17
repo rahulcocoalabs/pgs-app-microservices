@@ -1,11 +1,12 @@
-module.exports = (app,methods,options) => {
-    const address = methods.loadController('address',options); 
-    
-    address.methods.post('/add-address',address.addAddress,{auth:true});
-    address.methods.delete('/delete-address',address.deleteAddress,{auth:true});
-    address.methods.get('/list-address',address.listAddress,{auth:true});
-    address.methods.get('/list-countries',address.listCountries,{auth:true});
-    address.methods.get('/list-states/:countryId',address.listStates,{auth:true});
-    address.methods.get('/list-cities/:stateId',address.listCities,{auth:true});
+const auth = require('../middleware/auth.js');
 
+module.exports = (app) => {
+    const address = require('../controllers/address.controller');
+
+   app.post('/address/add-address',auth,address.addAddress);
+   app.delete('/address/delete-address',auth,address.deleteAddress);
+   app.get('/address/list-address',auth,address.listAddress);
+   app.get('/address/list-countries',auth,address.listCountries);
+   app.get('/address/list-states/:countryId',auth,address.listStates);
+   app.get('/address/list-cities/:stateId',address.listCities);
 }
