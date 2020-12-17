@@ -490,6 +490,7 @@ exports.addInterest = async(req,res) => {
     return res.send(event);
   }
 
+  console.log(event)
   if (event.length === 0){
     return res.send({
       success:0,
