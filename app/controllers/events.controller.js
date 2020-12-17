@@ -248,8 +248,8 @@ if(eventBookingCheck){
         eventStartTime = event.tsFrom ? event.tsFrom : null;
         eventEndTime = event.tsTo ? event.tsTo : null;
 
-        var startTs = await getStartTsToday();
-        var endTs = await getEndTsToday();
+        var startTs =  getStartTsToday();
+        var endTs =  getEndTsToday();
 
         var eventCompletionStatus = "";
         if (eventStartTime > endTs) {
