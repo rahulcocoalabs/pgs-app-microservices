@@ -253,7 +253,7 @@ exports.getDetail = async(req, res) => {
           isFav: event.isFav || null,
           speakerName: event.speakerName || null,
           speakerType,
-          interestAssigned:interestAssigned,
+          interestAssigned:interestAssigned || false,
           speakerTitle: event.speakerTitle || null,
           speakerOrganisation: event.speakerOrganisation || null,
           speakerImage: event.speakerImage || null,
