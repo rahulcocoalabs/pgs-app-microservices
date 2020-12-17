@@ -497,7 +497,7 @@ exports.addInterest = async(req,res) => {
     })
   }
 
-  var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestCount:1}}).catch(err=>{
+  var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestedCount:1}}).catch(err=>{
     return {success:0, message:err.message};
   })
 
