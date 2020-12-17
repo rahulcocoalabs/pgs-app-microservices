@@ -23,7 +23,7 @@ exports.listAll = async (req, res) => {
     eventDate: 1,
     eventCategoryId: 1,
     category: 1,
-    timeZoneId : 1
+    timeZoneId: 1
   };
 
 
@@ -81,7 +81,7 @@ exports.listAll = async (req, res) => {
   }
 
   filters.status = 1;
-  Event.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['category','timeZoneId']).then(eventsList => {
+  Event.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['category', 'timeZoneId']).then(eventsList => {
     Event.countDocuments(filters, function (err, itemsCount) {
 
       /* var len = eventsList.length;
@@ -109,7 +109,7 @@ exports.listAll = async (req, res) => {
   });
 }
 
-exports.getDetail = async(req, res) => {
+exports.getDetail = async (req, res) => {
 
   var data = req.identity.data;
   var userId = data.userId
@@ -142,17 +142,17 @@ exports.getDetail = async(req, res) => {
     return;
   }
 
-  var interestCount = await eventUserInterest.countDocuments({ status: 1,userId:userId,eventId:id }).catch(err=>{
-    return {success:0,message:"could not count document"}
+  var interestCount = await eventUserInterest.countDocuments({ status: 1, userId: userId, eventId: id }).catch(err => {
+    return { success: 0, message: "could not count document" }
   });
 
- 
- 
-  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
+
+
+  if (interestCount && (interestCount.success != undefined) && interestCount.success === 0) {
     return res.send(interestCount);
   }
   var interestAssigned = false
-  if (interestCount > 0){
+  if (interestCount > 0) {
     interestAssigned = true;
   }
   var filters = {
@@ -170,7 +170,7 @@ exports.getDetail = async(req, res) => {
     venue: 1,
     eventDate: 1,
     tsFrom: 1,
-    timeZoneId:1,
+    timeZoneId: 1,
     tsTo: 1,
     eventOrganizerId: 1,
     organizer: 1,
@@ -182,7 +182,7 @@ exports.getDetail = async(req, res) => {
     speakerImage: 1,
     speakerDescription: 1,
     speakerVideoLinks: 1,
-    timeZoneId : 1
+    timeZoneId: 1
   }
   var findCriteria = {
     userId,
@@ -200,6 +200,8 @@ exports.getDetail = async(req, res) => {
 if (eventBookingCheck && eventBookingCheck.success && (eventBookingCheck.success === 0)) {
   return res.send(eventBookingCheck);
 }
+var startTs = await getStartTsToday();
+var endTs = await getEndTsToday();
 var isBooked = false;
 var isParticipated = false;
 if(eventBookingCheck){
@@ -248,6 +250,22 @@ if(eventBookingCheck){
         eventStartTime = event.tsFrom ? event.tsFrom : null;
         eventEndTime = event.tsTo ? event.tsTo : null;
 
+      
+
+        var eventCompletionStatus = "";
+        console.log("---- test ----");
+        console.log(startTs,endTs,eventCompletionStatus);
+        console.log("---- test ----");
+        if (eventStartTime > endTs) {
+          eventCompletionStatus = "UPCOMING"
+        }
+        if (eventEndTime < startTs) {
+          eventCompletionStatus = "COMPLETED"
+        }
+        if ((eventStartTime > startTs) && (eventStartTime < endTs)) {
+          eventCompletionStatus = "TODAYS_EVENT"
+        }
+
         //  eventStartTime = event.tsFrom ? moment.unix(event.tsFrom).format('hh:mm A , DD MMMM YYYY') : null;
         //  eventEndTime = event.tsTo ? moment.unix(event.tsTo).format('hh:mm A , DD MMMM YYYY') : null;
         console.log("---------after convertion-----------")
@@ -278,7 +296,8 @@ if(eventBookingCheck){
           isFav: event.isFav || null,
           speakerName: event.speakerName || null,
           speakerType,
-          interestAssigned:interestAssigned || false,
+          eventCompletionStatus,
+          interestAssigned: interestAssigned || false,
           speakerTitle: event.speakerTitle || null,
           speakerOrganisation: event.speakerOrganisation || null,
           speakerImage: event.speakerImage || null,
@@ -371,7 +390,7 @@ exports.sendEventBooking = async (req, res) => {
     phoneNumber: params.phoneNumber,
     participateCount: params.participateCount,
     eventId: params.eventId,
-    isParticipated : false,
+    isParticipated: false,
     status: 1,
     tsCreatedAt: Number(moment().unix()),
     tsModifiedAt: null
@@ -388,35 +407,35 @@ exports.sendEventBooking = async (req, res) => {
     return res.send(saveData);
   }
 
- 
-  var updateInfo = {$inc : {'coinCount' : constants.COIN_COUNT_EVENT_PARTICIPATE}};
-  const userUpdate = await User.updateOne({_id:userId},updateInfo).catch(err=>{
+
+  var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
+  const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
     return {
-      success:0,
-      message:err.message
+      success: 0,
+      message: err.message
     }
   })
-  if (userUpdate && userUpdate.success && userUpdate.success === 0){
+  if (userUpdate && userUpdate.success && userUpdate.success === 0) {
     return res.send(userUpdate)
   }
   var coinUpdateObj = {
-    coinType:constants.COIN_PARTICIPATE_EVENT,
-    coinCount:constants.COIN_COUNT_EVENT_PARTICIPATE,
-    coinDate:Date.now()
+    coinType: constants.COIN_PARTICIPATE_EVENT,
+    coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
+    coinDate: Date.now()
   };
-  var updateInfo1 = {$push : {coinHistory:coinUpdateObj}};
-  const userUpdate1 = await User.updateOne({_id:userId},updateInfo1).catch(err=>{
+  var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
+  const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
     return {
-      success:0,
-      message:err.message
+      success: 0,
+      message: err.message
     }
   })
-  if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0){
+  if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
     return res.send(userUpdate1)
   }
   return res.send({
-    success:1,
-    message:"succesfully added booking"
+    success: 1,
+    message: "succesfully added booking"
   })
   // newEvent.save()
   //   .then(data => {
@@ -449,22 +468,22 @@ exports.listEventHistory = async (req, res) => {
 
   var findCriteria = {};
 
-  if (params.tabType == constants.EVENT_HISTORY_DATA_BOOKED){
+  if (params.tabType == constants.EVENT_HISTORY_DATA_BOOKED) {
     findCriteria.isBoked = true;
     findCriteria.isParticipated = false;
   }
-  if (params.tabType == constants.EVENT_HISTORY_DATA_PARTITICPATED){
+  if (params.tabType == constants.EVENT_HISTORY_DATA_PARTITICPATED) {
     findCriteria.isBoked = true;
     findCriteria.isParticipated = true;
   }
 
-  if( (params.tabType == "booked") || (params.tabType == "participated")){
-  
+  if ((params.tabType == "booked") || (params.tabType == "participated")) {
+
   }
 
   findCriteria.userId = userId;
   findCriteria.status = 1;
- 
+
 
   var eventHistoryData = await EventBooking.find(findCriteria)
     .populate('eventId')
@@ -516,84 +535,84 @@ exports.listEventHistory = async (req, res) => {
 
 }
 
-exports.participateEvent = async(req,res) =>{
+exports.participateEvent = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
   var eventId = req.params.id;
 
   var findCriteria = {
-    _id : eventId,
-    status : 1
+    _id: eventId,
+    status: 1
   }
 
   var eventCheck = await Event.findOne(findCriteria)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while checking event exists or not',
-      error: err
-    }
-  })
-if (eventCheck && eventCheck.success && (eventCheck.success === 0)) {
-  return res.send(eventCheck);
-}
-if(eventCheck){
-  findCriteria = {
-    eventId,
-    userId,
-    status : 1
-  }
-  var checkEventBook = await EventBooking.findOne(findCriteria)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while event booked or not',
-      error: err
-    }
-  })
-if (checkEventBook && checkEventBook.success && (checkEventBook.success === 0)) {
-  return res.send(checkEventBook);
-}
-if(checkEventBook){
-  if(checkEventBook.isParticipated){
-    return res.send({
-      success:0,
-      message: "Already participated"
-    })
-  }else{
-    var update = {};
-    update.isParticipated = true;
-    update.tsModifiedAt = Date.now();
-
-    var updateEventParticipate = await EventBooking.updateOne(findCriteria,update)
     .catch(err => {
       return {
         success: 0,
-        message: 'Something went wrong while update event as participated',
+        message: 'Something went wrong while checking event exists or not',
         error: err
       }
     })
-  if (updateEventParticipate && updateEventParticipate.success && (updateEventParticipate.success === 0)) {
-    return res.send(updateEventParticipate);
+  if (eventCheck && eventCheck.success && (eventCheck.success === 0)) {
+    return res.send(eventCheck);
   }
-  return res.send({
-    success: 1,
-    message: 'Event participated successfully'
-  })
+  if (eventCheck) {
+    findCriteria = {
+      eventId,
+      userId,
+      status: 1
+    }
+    var checkEventBook = await EventBooking.findOne(findCriteria)
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while event booked or not',
+          error: err
+        }
+      })
+    if (checkEventBook && checkEventBook.success && (checkEventBook.success === 0)) {
+      return res.send(checkEventBook);
+    }
+    if (checkEventBook) {
+      if (checkEventBook.isParticipated) {
+        return res.send({
+          success: 0,
+          message: "Already participated"
+        })
+      } else {
+        var update = {};
+        update.isParticipated = true;
+        update.tsModifiedAt = Date.now();
+
+        var updateEventParticipate = await EventBooking.updateOne(findCriteria, update)
+          .catch(err => {
+            return {
+              success: 0,
+              message: 'Something went wrong while update event as participated',
+              error: err
+            }
+          })
+        if (updateEventParticipate && updateEventParticipate.success && (updateEventParticipate.success === 0)) {
+          return res.send(updateEventParticipate);
+        }
+        return res.send({
+          success: 1,
+          message: 'Event participated successfully'
+        })
+      }
+    } else {
+      return res.send({
+        success: 0,
+        message: "Event not booked"
+      })
+    }
+  } else {
+    return res.send({
+      success: 0,
+      message: "Event not exists"
+    })
   }
-}else{
-  return res.send({
-    success:0,
-    message: "Event not booked"
-  })
-}
-}else{
-  return res.send({
-    success:0,
-    message: "Event not exists"
-  })
-}
 }
 
 
@@ -615,47 +634,47 @@ async function getEndTsToday() {
 
 // add interest 
 
-exports.addInterest = async(req,res) => {
+exports.addInterest = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
   var eventId = req.params.id;
 
-  var event = await Event.find({status: 1,_id: eventId}).catch(err => {
-    return {success:0, message:"some thing went wrong while fetching database"};
+  var event = await Event.find({ status: 1, _id: eventId }).catch(err => {
+    return { success: 0, message: "some thing went wrong while fetching database" };
   })
-  if (event && (event.success != undefined) && event.success == 0){
+  if (event && (event.success != undefined) && event.success == 0) {
     return res.send(event);
   }
 
-  console.log(event,event.success)
-  if (event.length === 0){
+  console.log(event, event.success)
+  if (event.length === 0) {
     return res.send({
-      success:0,
-      message:"this event does not exist"
+      success: 0,
+      message: "this event does not exist"
     })
   }
 
-  var interestCount = await eventUserInterest.countDocuments({ status: 1,userId:userId,eventId:eventId }).catch(err=>{
-    return {success:0,message:"could not count document"}
+  var interestCount = await eventUserInterest.countDocuments({ status: 1, userId: userId, eventId: eventId }).catch(err => {
+    return { success: 0, message: "could not count document" }
   });
 
- 
+
   console.log(interestCount)
-  if (interestCount && (interestCount.success != undefined ) && interestCount.success === 0){
+  if (interestCount && (interestCount.success != undefined) && interestCount.success === 0) {
     return res.send(interestCount);
   }
 
-  if (interestCount > 0){
-    return res.send({success:0,message:"already assigned your interest"})
+  if (interestCount > 0) {
+    return res.send({ success: 0, message: "already assigned your interest" })
   }
 
-  var update = await Event.updateOne({status:1,_id:eventId},{$inc:{interestedCount:1}}).catch(err=>{
-    return {success:0, message:err.message};
+  var update = await Event.updateOne({ status: 1, _id: eventId }, { $inc: { interestedCount: 1 } }).catch(err => {
+    return { success: 0, message: err.message };
   })
 
 
-  if (update && (update.success != undefined ) && update.success === 0){
+  if (update && (update.success != undefined) && update.success === 0) {
     return res.send(update);
   }
 
@@ -667,17 +686,17 @@ exports.addInterest = async(req,res) => {
     tsModifiedAt: null
   });
 
-  var insert = await newInterest.save().catch(err =>{
-    return {success:0,message:"could not insert data"}
+  var insert = await newInterest.save().catch(err => {
+    return { success: 0, message: "could not insert data" }
   });
 
-  if (insert && (insert.success != undefined ) && insert.success === 0){
+  if (insert && (insert.success != undefined) && insert.success === 0) {
     return res.send(insert);
   }
 
   return res.send({
-    success:1,
-    message:"updated interest count"
+    success: 1,
+    message: "updated interest count"
   })
 
 }
