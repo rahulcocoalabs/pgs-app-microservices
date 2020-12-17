@@ -486,7 +486,7 @@ exports.addInterest = async(req,res) => {
   var event = await Event.find({status: 1,_id: eventId}).catch(err => {
     return {success:0, message:err.message};
   })
-  if (event && event.success && event.success === 0){
+  if (event && event.success && event.success == 0){
     return res.send(event);
   }
 
