@@ -200,6 +200,8 @@ exports.getDetail = async (req, res) => {
 if (eventBookingCheck && eventBookingCheck.success && (eventBookingCheck.success === 0)) {
   return res.send(eventBookingCheck);
 }
+var startTs = await getStartTsToday();
+var endTs = await getEndTsToday();
 var isBooked = false;
 var isParticipated = false;
 if(eventBookingCheck){
@@ -248,8 +250,7 @@ if(eventBookingCheck){
         eventStartTime = event.tsFrom ? event.tsFrom : null;
         eventEndTime = event.tsTo ? event.tsTo : null;
 
-        var startTs =  getStartTsToday();
-        var endTs =  getEndTsToday();
+      
 
         var eventCompletionStatus = "";
         console.log("---- test ----");
