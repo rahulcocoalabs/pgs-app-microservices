@@ -252,6 +252,8 @@ if(eventBookingCheck){
         var endTs =  getEndTsToday();
 
         var eventCompletionStatus = "";
+
+        console.log(startTs,endTs,eventCompletionStatus);
         if (eventStartTime > endTs) {
           eventCompletionStatus = "UPCOMING"
         }
