@@ -165,6 +165,7 @@ exports.listAll = async (req, res) => {
       Feed.countDocuments(filters, async function (err, itemsCount) {
         var i = 0;
         var len = feedsList.length;
+        feedsList = JSON.parse(JSON.stringify(feedsList))
         while (i < len) {
           if (feedsList[i].type == 'image') {
             feedsList[i].documents = null;
@@ -191,12 +192,10 @@ exports.listAll = async (req, res) => {
 
           }
           if(feedsList[i].emotions){
-            console.log("feedsList[i].emotionsInfo")
-            console.log(feedsList[i].emotionsInfo)
-            console.log("feedsList[i].emotionsInfo")
+ 
             var emotionIndex = await feedsList[i].emotions.findIndex(obj => JSON.stringify(obj.userId) === JSON.stringify(userId))
             if(emotionIndex > -1){
-              // feedsList[i].emotionsInfo.userEmotion = feedsList[i].emotions[emotionIndex].emotion
+              feedsList[i].emotionsInfo.userEmotion = feedsList[i].emotions[emotionIndex].emotion
             }
           }
           i++;
@@ -211,7 +210,6 @@ exports.listAll = async (req, res) => {
           let object = feedsList[y];
           let obj = favouriteObject(userId, object.emotions);
           object.emotionsInfo1 = obj;
-          console.log("10/12", obj)
           array.push(object)
         }
         var responseObj = {
