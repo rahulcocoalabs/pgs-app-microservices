@@ -186,30 +186,30 @@ exports.getDetail = async (req, res) => {
   }
   var findCriteria = {
     userId,
-    eventId : id,
-    status : 1
+    eventId: id,
+    status: 1
   }
   var eventBookingCheck = await EventBooking.findOne(findCriteria)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while checking event booking',
-      error: err
-    }
-  })
-if (eventBookingCheck && eventBookingCheck.success && (eventBookingCheck.success === 0)) {
-  return res.send(eventBookingCheck);
-}
-var startTs = await getStartTsToday();
-var endTs = await getEndTsToday();
-var isBooked = false;
-var isParticipated = false;
-if(eventBookingCheck){
-  isBooked = true;
-  if(eventBookingCheck.isParticipated){
-    isParticipated  = true;
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking event booking',
+        error: err
+      }
+    })
+  if (eventBookingCheck && eventBookingCheck.success && (eventBookingCheck.success === 0)) {
+    return res.send(eventBookingCheck);
   }
-}
+  var startTs = await getStartTsToday();
+  var endTs = await getEndTsToday();
+  var isBooked = false;
+  var isParticipated = false;
+  if (eventBookingCheck) {
+    isBooked = true;
+    if (eventBookingCheck.isParticipated) {
+      isParticipated = true;
+    }
+  }
   // get data
   Event.findOne(filters, queryProjection)
     .populate([{
@@ -250,11 +250,11 @@ if(eventBookingCheck){
         eventStartTime = event.tsFrom ? event.tsFrom : null;
         eventEndTime = event.tsTo ? event.tsTo : null;
 
-      
+
 
         var eventCompletionStatus = "";
         console.log("---- test ----");
-        console.log(startTs,endTs,eventCompletionStatus);
+        console.log(startTs, endTs, eventCompletionStatus);
         console.log("---- test ----");
         if (eventStartTime > endTs) {
           eventCompletionStatus = "UPCOMING"
@@ -276,7 +276,7 @@ if(eventBookingCheck){
         if (event.speakerTypeId) {
           speakerType = event.speakerTypeId.name;
         }
-        
+
         var eventDetail = {
           id: id || null,
           title: event.title || null,
@@ -615,6 +615,74 @@ exports.participateEvent = async (req, res) => {
   }
 }
 
+exports.getEventLink = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var eventId = req.params.id;
+
+  var findCriteria = {
+    userId,
+    eventId,
+    status: 1
+  }
+  var eventZoomLink = await Event.findOne(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting zoomlink',
+        error: err
+      }
+    })
+  if (eventZoomLink && eventZoomLink.success && (eventZoomLink.success === 0)) {
+    return res.send(eventZoomLink);
+  }
+  if (eventZoomLink) {
+
+    var checkEventBookResp = await EventBooking.findOne(findCriteria)
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while checking event booked or not',
+          error: err
+        }
+      })
+    if (checkEventBookResp && checkEventBookResp.success && (checkEventBookResp.success === 0)) {
+      return res.send(checkEventBookResp);
+    }
+    if (eventBookingCheck) {
+      findCriteria = {
+        _id: eventId,
+        status: 1
+      }
+
+
+      var responseObj = {}
+      if (eventZoomLink.zoomLink !== null && eventZoomLink.zoomLink !== undefined) {
+        responseObj.success = 1;
+        responseObj.link = eventZoomLink.zoomLink;
+        responseObj.message = 'Event link';
+      } else {
+        responseObj.success = 0;
+        responseObj.link = null;
+        responseObj.message = 'Event link not generated';
+      }
+      return res.send(responseObj)
+
+    } else {
+      return res.send({
+        success: 0,
+        message: "Event not booked"
+      })
+    }
+
+  } else {
+    return res.send({
+      success: 0,
+      message: "Invalid event"
+    })
+  }
+}
 
 async function getStartTsToday() {
   var now = new Date();
