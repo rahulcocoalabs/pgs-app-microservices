@@ -17,6 +17,7 @@ var emotionsConfig = config.emotions;
 const contestsConfig = config.contests;
 var moment = require("moment");
 var ObjectId = require('mongoose').Types.ObjectId;
+const { delete } = require('superagent');
 
 function updateCoinCount(reqObj, callback) {
   // let bearer = reqObj.bearer;
@@ -198,6 +199,7 @@ exports.listAll = async (req, res) => {
               feedsList[i].emotionsInfo.userEmotion = feedsList[i].emotions[emotionIndex].emotion
             }
           }
+          delete feedsList[i].emotions;
           i++;
         }
         //Make other fields null
