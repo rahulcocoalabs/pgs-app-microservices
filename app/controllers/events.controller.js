@@ -621,9 +621,9 @@ exports.getEventLink = async (req, res) => {
 
   var eventId = req.params.id;
 
+ 
   var findCriteria = {
-    userId,
-    eventId,
+    _id: eventId,
     status: 1
   }
   var eventZoomLink = await Event.findOne(findCriteria)
@@ -638,7 +638,11 @@ exports.getEventLink = async (req, res) => {
     return res.send(eventZoomLink);
   }
   if (eventZoomLink) {
-
+     findCriteria = {
+      userId,
+      eventId,
+      status: 1
+    }
     var checkEventBookResp = await EventBooking.findOne(findCriteria)
       .catch(err => {
         return {
@@ -651,10 +655,7 @@ exports.getEventLink = async (req, res) => {
       return res.send(checkEventBookResp);
     }
     if (eventBookingCheck) {
-      findCriteria = {
-        _id: eventId,
-        status: 1
-      }
+     
 
 
       var responseObj = {}
