@@ -17,7 +17,6 @@ var emotionsConfig = config.emotions;
 const contestsConfig = config.contests;
 var moment = require("moment");
 var ObjectId = require('mongoose').Types.ObjectId;
-const { delete } = require('superagent');
 
 function updateCoinCount(reqObj, callback) {
   // let bearer = reqObj.bearer;
