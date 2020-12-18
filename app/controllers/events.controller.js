@@ -366,23 +366,23 @@ exports.sendEventBooking = async (req, res) => {
     eventId: params.eventId,
     status: 1,
   }
-  // EventBooking.find(filters).then(result => {
-  //   if (result.length > 0) {
-  //     var responseErrorObj = {
-  //       success: 0,
-  //       status: 200,
-  //       errors: [{
-  //         field: "id",
-  //         message: "userId already Booked the event"
-  //       }]
-  //     }
-  //     res.send(responseErrorObj);
-  //     return;
-  //   }
-  //   eventSubmit()
-  // })
+  EventBooking.find(filters).then(result => {
+    if (result.length > 0) {
+      var responseErrorObj = {
+        success: 0,
+        status: 200,
+        errors: [{
+          field: "id",
+          message: "userId already Booked the event"
+        }]
+      }
+      res.send(responseErrorObj);
+      return;
+    }
+    eventSubmit()
+  })
 
-  // function eventSubmit() {
+  function eventSubmit() {
   const newEvent = new EventBooking({
     userId: userId,
     name: params.name,
@@ -451,7 +451,7 @@ exports.sendEventBooking = async (req, res) => {
   //       message: err.message || "Some error occurred while booking event."
   //     });
   //   });
-  // }
+  }
 }
 
 // *** Event history ***
