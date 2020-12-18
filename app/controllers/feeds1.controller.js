@@ -116,6 +116,38 @@ exports.getFeedSummary1 = async (req, res) => {
         videoBase: feedsConfig.videoBase,
         documentBase: feedsConfig.documentBase,
         authorImageBase: feedsConfig.authorImageBase,
+        adsImageBase: adsResult.imageBase,
+        totalItems: itemsCount,
+        page: Number(req.params.page || 1),
+        perPage: req.params.perPage || 30,
+        hasNextPage: hasNextPage,
+        totalPages: totalPages,
+        items:array
+      }
+
+      var ads = {
+       
+            items: ads,
+            imageBase: adsConfig.imageBase,
+            page: Number(req.params.page) || 1,
+            perPage: req.params.perPage || 30,
+            hasNextPage: adshasNextPage,
+            totalItems: adsitemsCount,
+            totalPages: adstotalPages
+   
+      }
+
+      const summary = {
+          feeds:feedsSummary,
+          ads:ads
+      }
+
+    var feedsSummary = {
+        imageBase: feedsConfig.imageBase,
+        documentImage: feedsConfig.documentImage,
+        videoBase: feedsConfig.videoBase,
+        documentBase: feedsConfig.documentBase,
+        authorImageBase: feedsConfig.authorImageBase,
         //adsImageBase: adsResult.imageBase,
         totalItems: itemsCount,
         page: Number(req.params.page),
@@ -134,5 +166,5 @@ exports.getFeedSummary1 = async (req, res) => {
         },
         flag: 1
     }
-    return res.send(feedsSummary)
+    return res.send(summary)
 }
