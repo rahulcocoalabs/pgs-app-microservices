@@ -1744,11 +1744,20 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
 
 async function checkIfJoinLinkAvailable(classDetails, userId) {
   if (classDetails.isPublic) {
-    return {
-      success: 1,
-      joinLinkAvailable: true,
-      message: 'Public class'
+    if(JSON.stringify(userId) === JSON.stringify(classDetails.userId.id)){
+      return {
+        success: 1,
+        joinLinkAvailable: false,
+        message: 'Public class'
+      }
+    }else{
+      return {
+        success: 1,
+        joinLinkAvailable: true,
+        message: 'Public class'
+      }
     }
+  
   } else {
     var appointmentCheckResp = await AppointmentClassRequest.findOne({
       userId,
@@ -1770,11 +1779,21 @@ async function checkIfJoinLinkAvailable(classDetails, userId) {
       return appointmentCheckResp;
     }
     if (appointmentCheckResp && appointmentCheckResp !== null) {
+    if(JSON.stringify(userId) === JSON.stringify(classDetails.userId.id)){
+      return {
+        success: 1,
+        joinLinkAvailable: false,
+        message: 'Private class with approved appointment request'
+      }
+    }else{
       return {
         success: 1,
         joinLinkAvailable: true,
         message: 'Private class with approved appointment request'
       }
+    }
+
+    
 
     } else {
       return {
