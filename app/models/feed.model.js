@@ -38,7 +38,7 @@ function transform(record) {
         var i = 0;
         while (i < len) {
             if (ret.emotions[i].user) {
-                delete ret.emotions[i].userId;
+                // delete ret.emotions[i].userId;
                 delete ret.emotions[i].user.dob;
                 delete ret.emotions[i].user.image;
                 delete ret.emotions[i].user.school;
