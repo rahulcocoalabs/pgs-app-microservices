@@ -382,7 +382,7 @@ exports.sendEventBooking = async (req, res) => {
     eventSubmit()
   })
 
-  function eventSubmit() {
+ async function eventSubmit() {
   const newEvent = new EventBooking({
     userId: userId,
     name: params.name,
