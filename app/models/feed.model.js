@@ -38,7 +38,7 @@ function transform(record) {
         var i = 0;
         while (i < len) {
             if (ret.emotions[i].user) {
-                delete ret.emotions[i].userId;
+                // delete ret.emotions[i].userId;
                 delete ret.emotions[i].user.dob;
                 delete ret.emotions[i].user.image;
                 delete ret.emotions[i].user.school;
@@ -75,7 +75,7 @@ function transform(record) {
         heartfilled: 0,
         surprise: 0,
         sad: 0,
-        angry: 0
+        angry: 0,
     };
     if (ret.emotions && Array.isArray(ret.emotions) && ret.emotions.length) {
         ret.emotionsInfo.total = ret.emotions.length;
@@ -95,8 +95,8 @@ function transform(record) {
                 ret.emotionsInfo.sad++;
             if (ret.emotions[j].emotion == "angry")
                 ret.emotionsInfo.angry++;
-            if(ret.emotions[j].userId == ret.authorUserId)
-                ret.emotionsInfo.userEmotion = ret.emotions[j].emotion;
+            // if(ret.emotions[j].userId == ret.authorUserId)
+                ret.emotionsInfo.userEmotion = null;
             j++;
         }
 

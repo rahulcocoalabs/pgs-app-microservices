@@ -146,7 +146,7 @@ exports.listAll = async (req, res) => {
     }, {
       path: 'contest',
       select: 'title place description image'
-    }]).then(feedsList => {
+    }]).then(async feedsList => {
       // Feed.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['authorUser']).then(feedsList => {
       if (!feedsList) {
         var responseObj = {
@@ -160,16 +160,12 @@ exports.listAll = async (req, res) => {
         res.send(responseObj);
         return;
       }
+      console.log("userId : " + userId)
 
-      for (let i = 0; i < feedsList.length; i++) {
-        // console.log("feedId : " + feedsList[i]._id)
-        // console.log("authorUserId : " + feedsList[i].authorUserId)
-
-      }
-
-      Feed.countDocuments(filters, function (err, itemsCount) {
+      Feed.countDocuments(filters, async function (err, itemsCount) {
         var i = 0;
         var len = feedsList.length;
+        feedsList = JSON.parse(JSON.stringify(feedsList))
         while (i < len) {
           if (feedsList[i].type == 'image') {
             feedsList[i].documents = null;
@@ -195,6 +191,14 @@ exports.listAll = async (req, res) => {
             feedsList[i].documents = null;
 
           }
+          if(feedsList[i].emotions){
+ 
+            var emotionIndex = await feedsList[i].emotions.findIndex(obj => JSON.stringify(obj.userId) === JSON.stringify(userId))
+            if(emotionIndex > -1){
+              feedsList[i].emotionsInfo.userEmotion = feedsList[i].emotions[emotionIndex].emotion
+            }
+          }
+          delete feedsList[i].emotions;
           i++;
         }
         //Make other fields null
@@ -207,7 +211,6 @@ exports.listAll = async (req, res) => {
           let object = feedsList[y];
           let obj = favouriteObject(userId, object.emotions);
           object.emotionsInfo1 = obj;
-          console.log("10/12", obj)
           array.push(object)
         }
         var responseObj = {
