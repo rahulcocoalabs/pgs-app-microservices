@@ -160,12 +160,7 @@ exports.listAll = async (req, res) => {
         res.send(responseObj);
         return;
       }
-
-      for (let i = 0; i < feedsList.length; i++) {
-        // console.log("feedId : " + feedsList[i]._id)
-        // console.log("authorUserId : " + feedsList[i].authorUserId)
-
-      }
+      console.log("userId : " + userId)
 
       Feed.countDocuments(filters, async function (err, itemsCount) {
         var i = 0;
@@ -196,6 +191,7 @@ exports.listAll = async (req, res) => {
 
           }
           if(feedsList[i].emotions){
+            
             var emotionIndex = await feedsList[i].emotions.findIndex(obj => JSON.stringify(obj.userId) === JSON.stringify(userId))
             if(emotionIndex > -1){
               feedsList[i].userEmotion = feedsList[i].emotions[emotionIndex].emotion
