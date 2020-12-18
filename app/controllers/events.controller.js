@@ -654,9 +654,7 @@ exports.getEventLink = async (req, res) => {
     if (checkEventBookResp && checkEventBookResp.success && (checkEventBookResp.success === 0)) {
       return res.send(checkEventBookResp);
     }
-    if (eventBookingCheck) {
-     
-
+    if (checkEventBookResp) {
 
       var responseObj = {}
       if (eventZoomLink.zoomLink !== null && eventZoomLink.zoomLink !== undefined) {
