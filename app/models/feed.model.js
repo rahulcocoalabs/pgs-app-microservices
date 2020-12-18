@@ -99,6 +99,7 @@ function transform(record) {
                 ret.emotionsInfo.userEmotion = ret.emotions[j].emotion;
             j++;
         }
+        ret.emotionsInfo.emotions = ret.emotions;
 
     }
 
