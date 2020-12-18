@@ -146,7 +146,7 @@ exports.listAll = async (req, res) => {
     }, {
       path: 'contest',
       select: 'title place description image'
-    }]).then(feedsList => {
+    }]).then(async feedsList => {
       // Feed.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).populate(['authorUser']).then(feedsList => {
       if (!feedsList) {
         var responseObj = {
@@ -167,7 +167,7 @@ exports.listAll = async (req, res) => {
 
       }
 
-      Feed.countDocuments(filters, function (err, itemsCount) {
+      Feed.countDocuments(filters, async function (err, itemsCount) {
         var i = 0;
         var len = feedsList.length;
         while (i < len) {
@@ -194,6 +194,14 @@ exports.listAll = async (req, res) => {
             feedsList[i].images = null;
             feedsList[i].documents = null;
 
+          }
+          if(feedsList[i].emotions){
+            var emotionIndex = await feedsList[i].emotions.findIndex(obj => JSON.stringify(obj.userId) === JSON.stringify(userId))
+            if(emotionIndex > -1){
+              feedsList[i].userEmotion = feedsList[i].emotions[emotionIndex].emotion
+            }else{
+              feedsList[i].userEmotion = null;
+            }
           }
           i++;
         }

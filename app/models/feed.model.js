@@ -76,7 +76,6 @@ function transform(record) {
         surprise: 0,
         sad: 0,
         angry: 0,
-        emotions : ret.emotions
     };
     if (ret.emotions && Array.isArray(ret.emotions) && ret.emotions.length) {
         ret.emotionsInfo.total = ret.emotions.length;
@@ -96,8 +95,8 @@ function transform(record) {
                 ret.emotionsInfo.sad++;
             if (ret.emotions[j].emotion == "angry")
                 ret.emotionsInfo.angry++;
-            if(ret.emotions[j].userId == ret.authorUserId)
-                ret.emotionsInfo.userEmotion = ret.emotions[j].emotion;
+            // if(ret.emotions[j].userId == ret.authorUserId)
+                ret.emotionsInfo.userEmotion = null;
             j++;
         }
 
