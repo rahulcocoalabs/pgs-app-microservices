@@ -191,9 +191,12 @@ exports.listAll = async (req, res) => {
 
           }
           if(feedsList[i].emotions){
+            console.log("feedsList[i].emotionsInfo")
+            console.log(feedsList[i].emotionsInfo)
+            console.log("feedsList[i].emotionsInfo")
             var emotionIndex = await feedsList[i].emotions.findIndex(obj => JSON.stringify(obj.userId) === JSON.stringify(userId))
             if(emotionIndex > -1){
-              feedsList[i].emotionsInfo.userEmotion = feedsList[i].emotions[emotionIndex].emotion
+              // feedsList[i].emotionsInfo.userEmotion = feedsList[i].emotions[emotionIndex].emotion
             }
           }
           i++;
