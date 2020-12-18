@@ -486,12 +486,18 @@ exports.getSummary2 = (req, res) => {
         items: utilities.shuffleArray(items)
       }
       var summary = {
-        item:items
+        item:feedsResult
       }
       res.send(summary);
 
     });
   });
+
+
+}
+
+
+function emotionInfo(items){
 
 
 }
