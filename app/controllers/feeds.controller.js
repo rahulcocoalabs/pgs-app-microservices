@@ -486,7 +486,7 @@ exports.getSummary2 = (req, res) => {
         items: utilities.shuffleArray(items)
       }
       var summary = {
-        item:feedsResult
+        item:feeds
       }
       res.send(summary);
 
