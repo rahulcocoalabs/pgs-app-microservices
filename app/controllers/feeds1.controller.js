@@ -142,29 +142,29 @@ exports.getFeedSummary1 = async (req, res) => {
           ads:ads
       }
 
-    var feedsSummary = {
-        imageBase: feedsConfig.imageBase,
-        documentImage: feedsConfig.documentImage,
-        videoBase: feedsConfig.videoBase,
-        documentBase: feedsConfig.documentBase,
-        authorImageBase: feedsConfig.authorImageBase,
-        //adsImageBase: adsResult.imageBase,
-        totalItems: itemsCount,
-        page: Number(req.params.page),
-        perPage: req.params.perPage,
-        hasNextPage: hasNextPage,
-        totalPages: totalPages,
-        feeds: array,
-        ads: {
-            items: ads,
-            imageBase: adsConfig.imageBase,
-            page: Number(req.params.page),
-            perPage: req.params.perPage,
-            hasNextPage: adshasNextPage,
-            totalItems: adsitemsCount,
-            totalPages: adstotalPages
-        },
-        flag: 1
-    }
+    // var feedsSummary = {
+    //     imageBase: feedsConfig.imageBase,
+    //     documentImage: feedsConfig.documentImage,
+    //     videoBase: feedsConfig.videoBase,
+    //     documentBase: feedsConfig.documentBase,
+    //     authorImageBase: feedsConfig.authorImageBase,
+    //     //adsImageBase: adsResult.imageBase,
+    //     totalItems: itemsCount,
+    //     page: Number(req.params.page),
+    //     perPage: req.params.perPage,
+    //     hasNextPage: hasNextPage,
+    //     totalPages: totalPages,
+    //     feeds: array,
+    //     ads: {
+    //         items: ads,
+    //         imageBase: adsConfig.imageBase,
+    //         page: Number(req.params.page),
+    //         perPage: req.params.perPage,
+    //         hasNextPage: adshasNextPage,
+    //         totalItems: adsitemsCount,
+    //         totalPages: adstotalPages
+    //     },
+    //     flag: 1
+    // }
     return res.send(summary)
 }
