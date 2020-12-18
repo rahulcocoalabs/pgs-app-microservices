@@ -116,23 +116,55 @@ exports.getFeedSummary1 = async (req, res) => {
         videoBase: feedsConfig.videoBase,
         documentBase: feedsConfig.documentBase,
         authorImageBase: feedsConfig.authorImageBase,
-        //adsImageBase: adsResult.imageBase,
+        adsImageBase: adsResult.imageBase,
         totalItems: itemsCount,
-        page: Number(req.params.page),
-        perPage: req.params.perPage,
+        page: Number(req.params.page || 1),
+        perPage: req.params.perPage || 30,
         hasNextPage: hasNextPage,
         totalPages: totalPages,
-        feeds: array,
-        ads: {
+        items:array
+      }
+
+      var ads = {
+       
             items: ads,
             imageBase: adsConfig.imageBase,
-            page: Number(req.params.page),
-            perPage: req.params.perPage,
+            page: Number(req.params.page) || 1,
+            perPage: req.params.perPage || 30,
             hasNextPage: adshasNextPage,
             totalItems: adsitemsCount,
             totalPages: adstotalPages
-        },
-        flag: 1
-    }
-    return res.send(feedsSummary)
+   
+      }
+
+      const summary = {
+          feeds:feedsSummary,
+          ads:ads
+      }
+
+    // var feedsSummary = {
+    //     imageBase: feedsConfig.imageBase,
+    //     documentImage: feedsConfig.documentImage,
+    //     videoBase: feedsConfig.videoBase,
+    //     documentBase: feedsConfig.documentBase,
+    //     authorImageBase: feedsConfig.authorImageBase,
+    //     //adsImageBase: adsResult.imageBase,
+    //     totalItems: itemsCount,
+    //     page: Number(req.params.page),
+    //     perPage: req.params.perPage,
+    //     hasNextPage: hasNextPage,
+    //     totalPages: totalPages,
+    //     feeds: array,
+    //     ads: {
+    //         items: ads,
+    //         imageBase: adsConfig.imageBase,
+    //         page: Number(req.params.page),
+    //         perPage: req.params.perPage,
+    //         hasNextPage: adshasNextPage,
+    //         totalItems: adsitemsCount,
+    //         totalPages: adstotalPages
+    //     },
+    //     flag: 1
+    // }
+    return res.send(summary)
 }

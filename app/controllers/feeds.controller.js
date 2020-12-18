@@ -423,6 +423,85 @@ exports.getSummary = (req, res) => {
 
 }
 
+exports.getSummary2 = (req, res) => {
+  var params = req.query;
+  var page = params.page ? params.page : 1;
+  var perPage = params.perPage ? params.perPage : feedsConfig.perPage;
+  var summary = {};
+  let bearer = req.headers['authorization'];
+  let feedsReqObj = {
+    page: page,
+    perPage: perPage,
+    bearer,
+    url: constants.API_FEEDS
+  };
+
+  getApisWithAuth(feedsReqObj, function (err, feedsResult) {
+    var feeds = {
+      items: []
+    };
+    if (!err) {
+      feeds = JSON.parse(feedsResult);
+    }
+    let adsReqObj = {
+      page: page,
+      perPage: perPage,
+      bearer,
+      url: constants.API_ADS_LIST
+    };
+    getApisWithAuth(adsReqObj, function (err, adsResult) {
+      var ads = {
+        items: []
+      };
+      if (!err) {
+        ads = JSON.parse(adsResult);
+      }
+
+      var items = feeds.items || [];
+      if (ads.items && Array.isArray(ads.items) && ads.items.length) {
+        var k = 0;
+        while (k < ads.items.length) {
+          items.push({
+            type: 'advertisement',
+            id: ads.items[k].id,
+            title: ads.items[k].title,
+            thumbnail: ads.items[k].thumbnail,
+            image: ads.items[k].image
+          });
+          k++;
+        }
+      }
+      var feedsSummary = {
+        imageBase: feedsConfig.imageBase,
+        documentImage: feedsConfig.documentImage,
+        videoBase: feedsConfig.videoBase,
+        documentBase: feedsConfig.documentBase,
+        authorImageBase: feedsConfig.authorImageBase,
+        adsImageBase: adsResult.imageBase,
+        totalItems: feeds.totalItems,
+        page: Number(feeds.page),
+        perPage: feeds.perPage,
+        hasNextPage: feeds.hasNextPage,
+        totalPages: feeds.totalPages,
+        items: utilities.shuffleArray(items)
+      }
+      var summary = {
+        item:feeds
+      }
+      res.send(summary);
+
+    });
+  });
+
+
+}
+
+
+function emotionInfo(items){
+
+
+}
+
 exports.getSummaryForWeb = (req, res) => {
   var params = req.query;
   var page = params.page ? params.page : 1;
