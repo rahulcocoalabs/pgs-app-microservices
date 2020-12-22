@@ -1107,7 +1107,7 @@ exports.update = async (req, res) => {
           flag1:userInfo.gender,
           flag2:userInfo.dob,
           flag3:userInfo.syllabus,
-          flag4:userInfo.nationality,
+          flag4:userInfo.countryId,
           flag5:userInfo.fatherNationality,
           flag6:userInfo.fatherProfession,
           flag7:userInfo.motherNationality,
