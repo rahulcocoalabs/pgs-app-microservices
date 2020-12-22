@@ -439,7 +439,7 @@ exports.getZoomLink = async(req,res) => {
         })
       }
       else {
-        var requestDetailsCount = await AppointmentClassRequest.countDocuments({userId:userId,classId:classDetails.tutorClassId,subjectId:classDetails.tutorSubjectId}).catch(err => {
+        var requestDetailsCount = await AppointmentClassRequest.countDocuments({userId:userId,tutorClassId:classDetails.tutorClassId,subtutorSubjectIdjectId:classDetails.tutorSubjectId}).catch(err => {
           return {
             success:0,
             message:"did not fetch count of documents"
@@ -464,6 +464,11 @@ exports.getZoomLink = async(req,res) => {
           })
         }
       }
+    }else{
+      return res.send({
+        success:0,
+        message:"Class not exists"
+      })
     }
    
 }
