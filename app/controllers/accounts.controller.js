@@ -996,6 +996,7 @@ exports.update = async (req, res) => {
     update.password = checkPasswordObj.password;
   }
 
+  var update1 = update;
   var update = await User.updateOne(filter,update).catch(err=>{
     return {
       success:0,
@@ -1112,7 +1113,7 @@ exports.update = async (req, res) => {
           flag7:userInfo.motherNationality,
           flag8:userInfo.mothersProfession,
           flag10:userInfo,
-          flag11:update,
+          flag11:update1,
           message:"profile updated "
         })
   }}
