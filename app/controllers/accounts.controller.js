@@ -1063,7 +1063,7 @@ exports.update = async (req, res) => {
   if (userInfo.profileCompletion == 0){
 
     var infoFlag = "";
-     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationality != undefined) 
+     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.countryId != undefined) 
      &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)){
 
