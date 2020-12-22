@@ -1039,9 +1039,6 @@ exports.update = async (req, res) => {
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)){
 
 
-
-       
-
         if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
           return res.send({
             success:1,
