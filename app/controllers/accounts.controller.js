@@ -1009,19 +1009,46 @@ exports.update = async (req, res) => {
   }
 
   var proj = {
-    dob:1,
-    profileCompletion:1,
-    syllubus:1,
-    nationality:1,
-    gender:1,
+    firstName: 1,
+    isDeactivated:1,
+    middlename: 1,
+    lastName: 1,
+    dob: 1,
+    image: 1,
+    school: 1,
+    syllabusId: 1,
+    hobbyIds: 1,
+    nationalityId: 1,
+    language: 1,
+    achievements: 1,
+    ambition: 1,
+    genderId: 1,
+    countryCode: 1,
+    phone: 1,
+    email: 1,
+    address: 1,
+    userType: 1,
+    fatherName: 1,
     fatherNationalityId: 1,
-    motherNationalityId:1,
-    fatherProfession:1,
+    fatherProfessionId: 1,
+    motherName: 1,
     motherNationalityId: 1,
-    mothersProfession: 1,
+    motherProfessionId: 1,
+    hobbies: 1,
+    coinCount: 1,
+    karmaIndex: 1,
+    password: 1,
+    isTutor: 1,
+    isDeactivated : 1,
+    countryId : 1,
+    stateId : 1,
+    cityId : 1,
   }
  
-  var userInfo = await User.findOne(filter,proj).catch(err=>{
+  var userInfo = await User.findOne(filters, proj).populate(['syllabusId', {
+    path: 'language',
+    select: 'name'
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).catch(err=>{
     return {
       success:0,
       message:"did not get info of user",
