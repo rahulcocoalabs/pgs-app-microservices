@@ -1055,9 +1055,11 @@ exports.update = async (req, res) => {
       }
       else {
         var array = [];
-        for(var attributename in userInfo){
-          array.push(userInfo[attributename]);
-        }
+        for (var key in userInfo) {
+        
+              console.log(key + " -> " + userInfo[key]);
+         
+      }
         return res.send({
           success:1,
           flag:3,
