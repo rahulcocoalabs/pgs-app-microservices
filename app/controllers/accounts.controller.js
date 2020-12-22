@@ -1042,7 +1042,7 @@ exports.update = async (req, res) => {
         if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
           return res.send({
             success:1,
-            
+            flag:userInfo.gender,
              flag:1,
             message:"profile updated"
           })
