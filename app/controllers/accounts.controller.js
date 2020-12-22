@@ -1066,6 +1066,7 @@ exports.update = async (req, res) => {
             flag6:userInfo.fatherProfession, 
             flag7:userInfo.motherNationality, 
             flag8:userInfo.mothersProfession, 
+            main:userInfo
           },
           message:"profile updated "
         })
