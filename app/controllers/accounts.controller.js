@@ -1017,8 +1017,14 @@ exports.update = async (req, res) => {
   })
  
   if (userInfo.profileCompletion == 0){
-     if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
+
+    var infoFlag = "";
+     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
       && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
+
+
+
+       
 
         if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
           return res.send({
