@@ -1010,6 +1010,7 @@ exports.update = async (req, res) => {
 
   var proj = {
     firstName: 1,
+    profileCompletion,
     isDeactivated:1,
     middlename: 1,
     lastName: 1,
