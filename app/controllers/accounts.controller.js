@@ -1007,23 +1007,42 @@ exports.update = async (req, res) => {
   if (update && update.succes && update.success === 0){
     return res.send(update)
   }
+
+  var proj = {
+    dob:1,
+    profileCompletion:1,
+    syllubus:1,
+    nationality:1,
+    gender:1,
+    fatherNationalityId: 1,
+    motherNationalityId:1,
+    fatherProfession:1,
+    motherNationalityId: 1,
+    mothersProfession: 1,
+  }
  
-  var userInfo = await User.findOne(filter).catch(err=>{
+  var userInfo = await User.findOne(filter,proj).catch(err=>{
     return {
       success:0,
       message:"did not get info of user",
       error:err.message
     }
   })
+
+  userInfo = userInfo.toObject();
  
   if (userInfo.profileCompletion == 0){
-     if ( (userInfo.dob != undefined) && (userInfo.syllabusId != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
-      && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
+
+    var infoFlag = "";
+     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationality != undefined) 
+     &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+      && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)){
+
 
         if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
           return res.send({
             success:1,
-            
+           
              flag:1,
             message:"profile updated"
           })
@@ -1043,14 +1062,21 @@ exports.update = async (req, res) => {
         return res.send({
           success:1,
            flag:2,
-          message:"profile updated 1"
+          message:"profile updated "
         })
       }
       else {
+        var array = [];
+        for (var key in userInfo) {
+        
+              console.log(key + " -> " + userInfo[key]);
+         
+      }
         return res.send({
           success:1,
           flag:3,
-          message:"profile updated 2"
+          flag1:userInfo.gender,
+          message:"profile updated "
         })
   }}
   else {
@@ -1058,7 +1084,7 @@ exports.update = async (req, res) => {
       success:1,
      
       flag:4,
-      message:"profile updatd 3"
+      message:"profile updatd "
     })
   }
 
