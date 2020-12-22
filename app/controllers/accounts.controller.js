@@ -1028,6 +1028,8 @@ exports.update = async (req, res) => {
       error:err.message
     }
   })
+
+  userInfo = userInfo.toObject();
  
   if (userInfo.profileCompletion == 0){
 
