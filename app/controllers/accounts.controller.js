@@ -1045,7 +1045,7 @@ exports.update = async (req, res) => {
     cityId : 1,
   }
  
-  var userInfo = await User.findOne(filters, proj).populate(['syllabusId', {
+  var userInfo = await User.findOne(filter, proj).populate(['syllabusId', {
     path: 'language',
     select: 'name'
   }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).catch(err=>{
