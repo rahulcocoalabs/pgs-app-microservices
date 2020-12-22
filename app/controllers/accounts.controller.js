@@ -1104,6 +1104,13 @@ exports.update = async (req, res) => {
           success:1,
           flag:3,
           flag1:userInfo.gender,
+          flag2:userInfo.dob,
+          flag3:userInfo.syllabus,
+          flag4:userInfo.nationality,
+          flag5:userInfo.fatherNationality,
+          flag6:userInfo.fatherProfession,
+          flag7:userInfo.motherNationality,
+          flag8:userInfo.mothersProfession,
           message:"profile updated "
         })
   }}
