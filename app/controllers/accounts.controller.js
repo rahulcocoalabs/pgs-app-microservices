@@ -1019,8 +1019,8 @@ exports.update = async (req, res) => {
   if (userInfo.profileCompletion == 0){
 
     var infoFlag = "";
-     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationalityId != undefined) &&(userInfo.genderId != undefined) && (userInfo.fatherNationalityId != undefined) && (userInfo.fatherProfessionId != undefined)
-      && (userInfo.motherNationalityId != undefined) && (userInfo.motherProfessionId != undefined)){
+     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationality != undefined) &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+      && (userInfo.motherNationality != undefined) && (userInfo.motherProfession != undefined)){
 
 
 
