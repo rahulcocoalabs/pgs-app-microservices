@@ -1059,7 +1059,8 @@ exports.update = async (req, res) => {
           flag:3,
           debugObject:{ 
             flag1:userInfo.dob, 
-            flag2:userInfo.syllubus, 
+            flag9:"test",
+            flag2:userInfo.syllabus, 
             flag3:userInfo.nationality, 
             flag4:userInfo.gender, 
             flag5:userInfo.fatherNationality, 
