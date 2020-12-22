@@ -7,4 +7,6 @@ module.exports = (app) => {
     app.post('/events/eventbookings',auth,events.sendEventBooking);
     app.get('/events/history',auth,events.listEventHistory);
     app.patch('/events/:id/participate',auth,events.participateEvent);
+    app.get('/events/:id/link', auth,events.getEventLink);
+
 }
