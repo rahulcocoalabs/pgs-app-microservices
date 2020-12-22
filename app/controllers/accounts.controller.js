@@ -1010,6 +1010,7 @@ exports.update = async (req, res) => {
 
   var proj = {
     dob:1,
+    profileCompletion:1,
     syllubus:1,
     nationality:1,
     gender:1,
@@ -1075,18 +1076,7 @@ exports.update = async (req, res) => {
         return res.send({
           success:1,
           flag:3,
-          debugObject:{ 
-            flag1:userInfo.dob, 
-            flag9:"test",
-            flag2:userInfo.syllabus, 
-            flag3:userInfo.nationality, 
-            flag4:userInfo.gender, 
-            flag5:userInfo.fatherNationality, 
-            flag6:userInfo.fatherProfession, 
-            flag7:userInfo.motherNationality, 
-            flag8:userInfo.mothersProfession, 
-            main:array
-          },
+         
           message:"profile updated "
         })
   }}
