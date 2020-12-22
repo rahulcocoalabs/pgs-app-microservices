@@ -2575,7 +2575,9 @@ exports.updateForSocialAccount = async (req, res) => {
   update.school = params.school;
   update.language = params.language;
   update.tsModifiedAt = Date.now();
-
+  console.log("update")
+  console.log(update)
+  console.log("update")
   var updateUser = await User.updateOne(findCriteria, update)
     .catch(err => {
       return {
