@@ -1054,6 +1054,10 @@ exports.update = async (req, res) => {
         })
       }
       else {
+        var array = [];
+        for(var attributename in myobject){
+          array.push(myobject[attributename]);
+        }
         return res.send({
           success:1,
           flag:3,
@@ -1067,7 +1071,7 @@ exports.update = async (req, res) => {
             flag6:userInfo.fatherProfession, 
             flag7:userInfo.motherNationality, 
             flag8:userInfo.mothersProfession, 
-            main:userInfo
+            main:array
           },
           message:"profile updated "
         })
