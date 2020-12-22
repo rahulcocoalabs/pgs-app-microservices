@@ -940,7 +940,7 @@ exports.update = async (req, res) => {
 
   //need to validate country/state & city
   if (update.countryId) {
-    update.countryId = update.countryId;
+    update.nationalityId = update.countryId;
   }
   if (update.stateId) {
     update.stateId = update.stateId;
