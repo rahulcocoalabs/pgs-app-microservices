@@ -939,8 +939,8 @@ exports.update = async (req, res) => {
   }
 
   //need to validate country/state & city
-  if (update.nationalityId) {
-    update.nationalityId = update.nationalityId;
+  if (update.countryId) {
+    update.nationalityId = update.countryId;
   }
   if (update.stateId) {
     update.stateId = update.stateId;
