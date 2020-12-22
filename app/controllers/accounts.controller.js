@@ -1007,8 +1007,20 @@ exports.update = async (req, res) => {
   if (update && update.succes && update.success === 0){
     return res.send(update)
   }
+
+  var proj = {
+    dob:1,
+    syllubus:1,
+    nationality:1,
+    gender:1,
+    fatherNationalityId: 1,
+    motherNationalityId:1,
+    fatherProfession:1,
+    motherNationalityId: 1,
+    mothersProfession: 1,
+  }
  
-  var userInfo = await User.findOne(filter).catch(err=>{
+  var userInfo = await User.findOne(filter,proj).catch(err=>{
     return {
       success:0,
       message:"did not get info of user",
