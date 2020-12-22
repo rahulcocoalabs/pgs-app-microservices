@@ -51,6 +51,7 @@ const EventsSchema = mongoose.Schema({
     isFav : Boolean,
     userIdCreator : mongoose.Schema.Types.ObjectId,
     speakerName : String,
+    zoomLink : String,
     speakerTypeId : { type: mongoose.Schema.Types.ObjectId, ref: 'SpeakerType' },
     speakerTitle  :String,
     speakerOrganisation  :String,

@@ -397,13 +397,7 @@ exports.createTutorRequest = async (req, res) => {
 }
 
 exports.getZoomLink = async(req,res) => {
-  // .populate([{
-  //   path: 'tutorSubjectId',
-  //   select:'_id:1'
-  // }, {
-  //   path: 'tutorClassId',
-  //   select:'_id:1'
-  // }])
+
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.params;
@@ -439,7 +433,16 @@ exports.getZoomLink = async(req,res) => {
         })
       }
       else {
-        var requestDetailsCount = await AppointmentClassRequest.countDocuments({userId:userId,classId:classDetails.tutorClassId,subjectId:classDetails.tutorSubjectId}).catch(err => {
+        var approveRequestCriteria = {
+          userId,
+          tutorClassId:classDetails.tutorClassId,
+          tutorSubjectId:classDetails.tutorSubjectId,
+          isApproved : true,
+          isRejected : false,
+          status : 1
+        }
+      
+        var requestDetailsCount = await AppointmentClassRequest.countDocuments().catch(err => {
           return {
             success:0,
             message:"did not fetch count of documents"
@@ -464,6 +467,11 @@ exports.getZoomLink = async(req,res) => {
           })
         }
       }
+    }else{
+      return res.send({
+        success:0,
+        message:"Class not exists"
+      })
     }
    
 }

@@ -136,7 +136,6 @@ const FeedsSchema = mongoose.Schema({
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
     }],
     youTubeLink: String,
-    zoomLink: String,
     feedType: String,
     type: String,
     sharingUrl: String,
