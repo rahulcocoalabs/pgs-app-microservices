@@ -895,14 +895,14 @@ exports.update = async (req, res) => {
     });
   }
  
-  if (update.dob) {
+  // if (update.dob) {
   
-    console.log("dob : " + update.dob)
-    var formattedDate = moment(update.dob, 'DD MMMM YYYY');
-    update.dob = formattedDate;
-    console.log("formattedDate : " + formattedDate)
+  //   console.log("dob : " + update.dob)
+  //   var formattedDate = moment(update.dob, 'DD MMMM YYYY');
+  //   update.dob = formattedDate;
+  //   console.log("formattedDate : " + formattedDate)
 
-  }
+  // }
 
   
   if (update.syllabusId) {
