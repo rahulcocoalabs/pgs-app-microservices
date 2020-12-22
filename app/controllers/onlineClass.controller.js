@@ -439,7 +439,12 @@ exports.getZoomLink = async(req,res) => {
         })
       }
       else {
-        var requestDetailsCount = await AppointmentClassRequest.countDocuments({userId:userId,tutorClassId:classDetails.tutorClassId,subtutorSubjectIdjectId:classDetails.tutorSubjectId}).catch(err => {
+        var requestDetailsCount = await AppointmentClassRequest.countDocuments({
+          userId:userId,
+          tutorClassId:classDetails.tutorClassId,
+          tutorSubjectId:classDetails.tutorSubjectId,
+          status : 1
+        }).catch(err => {
           return {
             success:0,
             message:"did not fetch count of documents"
