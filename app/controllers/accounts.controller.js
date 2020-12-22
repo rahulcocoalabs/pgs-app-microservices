@@ -1019,7 +1019,8 @@ exports.update = async (req, res) => {
   if (userInfo.profileCompletion == 0){
 
     var infoFlag = "";
-     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationality != undefined) &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationality != undefined) 
+     &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)){
 
 
@@ -1056,7 +1057,16 @@ exports.update = async (req, res) => {
         return res.send({
           success:1,
           flag:3,
-          userInfo,
+          debugObject:{ 
+            flag1:userInfo.dob, 
+            flag2:userInfo.syllubus, 
+            flag3:userInfo.nationality, 
+            flag4:userInfo.gender, 
+            flag5:userInfo.fatherNationality, 
+            flag6:userInfo.fatherProfession, 
+            flag7:userInfo.motherNationality, 
+            flag8:userInfo.mothersProfession, 
+          },
           message:"profile updated "
         })
   }}
