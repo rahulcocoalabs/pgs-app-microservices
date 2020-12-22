@@ -585,7 +585,7 @@ exports.create = async (req, res) => {
 
     var referralCode = makeid(6);
 
-
+   console.log("dob : " + req.body.dob)
 
     const user = new User({
       firstName: req.body.firstName,
@@ -901,7 +901,6 @@ exports.update = async (req, res) => {
   //   var formattedDate = moment(update.dob, 'DD MMMM YYYY');
   //   update.dob = formattedDate;
   //   console.log("formattedDate : " + formattedDate)
-
   // }
 
   
