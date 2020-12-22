@@ -1055,8 +1055,8 @@ exports.update = async (req, res) => {
       }
       else {
         var array = [];
-        for(var attributename in myobject){
-          array.push(myobject[attributename]);
+        for(var attributename in userInfo){
+          array.push(userInfo[attributename]);
         }
         return res.send({
           success:1,
