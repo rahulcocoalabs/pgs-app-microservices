@@ -1013,9 +1013,6 @@ exports.getTutorDetails = async (req, res) => {
       path: 'tutorSubjectId',
     }, {
       path: 'tutorClassId',
-    },
-    {
-      path: 'tutorSyllabusId'
     }])
     .limit(5)
     .skip(0)
