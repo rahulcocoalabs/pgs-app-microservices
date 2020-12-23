@@ -940,7 +940,7 @@ exports.update = async (req, res) => {
 
   //need to validate country/state & city
   if (update.countryId) {
-    update.countryId = update.countryId;
+    update.nationalityId = update.countryId;
   }
   if (update.stateId) {
     update.stateId = update.stateId;
@@ -996,6 +996,7 @@ exports.update = async (req, res) => {
     update.password = checkPasswordObj.password;
   }
 
+  var update1 = update;
   var update = await User.updateOne(filter,update).catch(err=>{
     return {
       success:0,
@@ -1009,19 +1010,47 @@ exports.update = async (req, res) => {
   }
 
   var proj = {
-    dob:1,
+    firstName: 1,
     profileCompletion:1,
-    syllubus:1,
-    nationality:1,
-    gender:1,
+    isDeactivated:1,
+    middlename: 1,
+    lastName: 1,
+    dob: 1,
+    image: 1,
+    school: 1,
+    syllabusId: 1,
+    hobbyIds: 1,
+    nationalityId: 1,
+    language: 1,
+    achievements: 1,
+    ambition: 1,
+    genderId: 1,
+    countryCode: 1,
+    phone: 1,
+    email: 1,
+    address: 1,
+    userType: 1,
+    fatherName: 1,
     fatherNationalityId: 1,
-    motherNationalityId:1,
-    fatherProfession:1,
+    fatherProfessionId: 1,
+    motherName: 1,
     motherNationalityId: 1,
-    mothersProfession: 1,
+    motherProfessionId: 1,
+    hobbies: 1,
+    coinCount: 1,
+    karmaIndex: 1,
+    password: 1,
+    isTutor: 1,
+    isDeactivated : 1,
+    countryId : 1,
+    stateId : 1,
+    cityId : 1,
   }
  
-  var userInfo = await User.findOne(filter,proj).catch(err=>{
+  var userInfo = await User.findOne(filter, proj).populate(['syllabusId', {
+    path: 'language',
+    select: 'name'
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).catch(err=>{
     return {
       success:0,
       message:"did not get info of user",
@@ -1034,7 +1063,7 @@ exports.update = async (req, res) => {
   if (userInfo.profileCompletion == 0){
 
     var infoFlag = "";
-     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.nationality != undefined) 
+     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.countryId != undefined) 
      &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)){
 
@@ -1076,6 +1105,15 @@ exports.update = async (req, res) => {
           success:1,
           flag:3,
           flag1:userInfo.gender,
+          flag2:userInfo.dob,
+          flag3:userInfo.syllabus,
+          flag4:userInfo.countryId,
+          flag5:userInfo.fatherNationality,
+          flag6:userInfo.fatherProfession,
+          flag7:userInfo.motherNationality,
+          flag8:userInfo.mothersProfession,
+          flag10:userInfo,
+          flag11:update1,
           message:"profile updated "
         })
   }}
