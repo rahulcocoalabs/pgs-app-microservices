@@ -977,10 +977,8 @@ exports.getTutorDetails = async (req, res) => {
       path: 'tutorClassIds',
     }, {
       path: 'tutorCategoryIds',
-    },
-    {
-      path: 'tutorSyllabusId'
-    }])
+    }
+   ])
     .catch(err => {
       return {
         success: 0,
@@ -1015,6 +1013,9 @@ exports.getTutorDetails = async (req, res) => {
       path: 'tutorSubjectId',
     }, {
       path: 'tutorClassId',
+    },
+    {
+      path: 'tutorSyllabusId'
     }])
     .limit(5)
     .skip(0)
