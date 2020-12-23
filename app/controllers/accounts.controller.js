@@ -593,7 +593,7 @@ exports.create = async (req, res) => {
       password: hash,
       middlename: req.body.middlename || null,
       lastName: req.body.lastName || null,
-      dob: req.body.dob,
+      dob: new Date(req.body.dob),
       image: imagePath || null,
       school: req.body.school ? req.body.school : null,
       syllabusId: req.body.syllabusId ? req.body.syllabusId : null,
