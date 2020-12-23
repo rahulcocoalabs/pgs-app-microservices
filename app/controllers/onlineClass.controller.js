@@ -60,7 +60,9 @@ exports.createOnlineClass = async (req, res) => {
   var file = req.files;
  
 
-
+  console.log("params")
+  console.log(params)
+  console.log("params")
   if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory )
