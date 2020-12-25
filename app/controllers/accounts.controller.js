@@ -3940,7 +3940,7 @@ return {
     console.log("yearInDob : " + yearInDob)
     var monthInDob = dobDate.getMonth()
     console.log("monthInDob : " + monthInDob)
-    var dayInDob = dobDate.getDay()
+    var dayInDob = dobDate.getDate()
     console.log("dayInDob : " + dayInDob)
 
     var dobObj = {};
