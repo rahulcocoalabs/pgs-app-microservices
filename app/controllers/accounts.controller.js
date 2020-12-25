@@ -586,7 +586,7 @@ exports.create = async (req, res) => {
     var referralCode = makeid(6);
 
    console.log("dob : " + req.body.dob)
-
+    var dobObj = await getDayMonthAndYear(req.body.dob);
     const user = new User({
       firstName: req.body.firstName,
       email: req.body.email,
@@ -594,6 +594,9 @@ exports.create = async (req, res) => {
       middlename: req.body.middlename || null,
       lastName: req.body.lastName || null,
       dob: req.body.dob,
+      dayInDob : dobObj.dayInDob,
+      monthInDob : dobObj.monthInDob,
+      yearInDob : dobObj.yearInDob,
       image: imagePath || null,
       school: req.body.school ? req.body.school : null,
       syllabusId: req.body.syllabusId ? req.body.syllabusId : null,
@@ -3927,4 +3930,27 @@ return {
         message : "User Created Successfully."
       }
     }
+  }
+
+  async function getDayMonthAndYear(dob){
+    console.log("dob : " + dob)
+    var dobDate = new Date(dob);
+    console.log("dobDate : " + dobDate)
+    var yearInDob = dobDate.getFullYear()
+    console.log("yearInDob : " + yearInDob)
+    var monthInDob = dobDate.getMonth()
+    console.log("monthInDob : " + monthInDob)
+    var dayInDob = dobDate.getDay()
+    console.log("dayInDob : " + dayInDob)
+
+    var dobObj = {};
+    dobObj.dayInDob = dayInDob;
+    dobObj.monthInDob = monthInDob;
+    dobObj.yearInDob = yearInDob;
+    console.log("dobObj" ) ;
+    console.log(dayInDob)
+    console.log("dobObj" ) ;
+    return dobObj;
+
+
   }
