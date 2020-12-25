@@ -3945,7 +3945,7 @@ return {
 
     var dobObj = {};
     dobObj.dayInDob = dayInDob;
-    dobObj.monthInDob = monthInDob;
+    dobObj.monthInDob = monthInDob + 1;
     dobObj.yearInDob = yearInDob;
     console.log("dobObj" ) ;
     console.log(dayInDob)
