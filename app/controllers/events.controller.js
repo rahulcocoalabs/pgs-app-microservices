@@ -711,7 +711,8 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
     description : 1,
     tsFrom : 1,
     tsTo : 1,
-    isStudent : 1
+    isStudent : 1,
+    venue : 1
   }
 
    var scholarshipOrPlacementList = await ScholarshipOrPlacement.find(findCriteria,projection)
@@ -777,7 +778,8 @@ exports.getEventScholarshipPlacementDetail = async(req,res) =>{
     description : 1,
     tsFrom : 1,
     tsTo : 1,
-    isStudent : 1
+    isStudent : 1,
+    venue : 1
   }
   var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria,projection)
   .catch(err => {
