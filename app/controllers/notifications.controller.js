@@ -113,9 +113,7 @@ exports.markAsRead = async (req, res) => {
     return res.send( notificationCheck);
   }
   if (notificationCheck) {
-    console.log("notificationCheck")
-    console.log(notificationCheck)
-    console.log("notificationCheck")
+  
     if (notificationCheck.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE
       && JSON.stringify(notificationCheck.userId) !== JSON.stringify(userId)) {
       return res.send({
@@ -134,7 +132,7 @@ exports.markAsRead = async (req, res) => {
         return res.send(updateStatus);
 
       } else if (notificationCheck.markAsRead !== undefined
-        && notificationCheck.markAsRead !== null && notificationCheck.markAsRead === false) {
+        && notificationCheck.markAsRead !== null && notificationCheck.markAsRead === 0) {
         return res.send({
           success: 0,
           message: 'Notification already read'
@@ -153,6 +151,11 @@ exports.markAsRead = async (req, res) => {
           var updateStatus = await updateMarkAsRead(update, findCriteria);
           return res.send(updateStatus);
         }
+      } else {
+        return res.send({
+          success: 0,
+          message: 'Notification already read'
+        });
       }
 
     }
