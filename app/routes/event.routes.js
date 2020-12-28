@@ -9,4 +9,5 @@ module.exports = (app) => {
     app.patch('/events/:id/participate',auth,events.participateEvent);
     app.get('/events/:id/link', auth,events.getEventLink);
     app.get('/events/scholarship-placement/list', auth,events.getEventScholarshipPlacementList);
+    app.get('/events/scholarship-placement/:id/detail', auth,events.getEventScholarshipPlacementDetail);
 }

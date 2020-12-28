@@ -762,6 +762,50 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
  })
 }
 
+exports.getEventScholarshipPlacementDetail = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var eventScholarshipPlacementId = req.params.id;
+
+  var findCriteria = {
+    _id : eventScholarshipPlacementId,
+    status : 1
+  }
+  var projection = {
+    title : 1,
+    image : 1,
+    description : 1,
+    tsFrom : 1,
+    tsTo : 1,
+    isStudent : 1
+  }
+  var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria,projection)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while get details of scholarship orplacement',
+      error: err
+    }
+  })
+if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !== undefined) && (checkEventScholarshipPlacement.success === 0)) {
+  return res.send(checkEventScholarshipPlacement);
+}
+if(checkEventScholarshipPlacement){
+
+    return res.send({
+      success: 1,
+      item: checkEventScholarshipPlacement,
+      imageBase: eventsConfig.imageBase,
+      message: 'Scholaship or placement details'
+    })
+}else{
+  return res.send({
+    success: 0,
+    message: "Scholaship or placement not exists"
+  })
+}
+}
+
 async function getStartTsToday() {
   var now = new Date();
   var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
