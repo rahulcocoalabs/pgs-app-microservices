@@ -1,5 +1,5 @@
 // var commonPath = "http://trackflyvehicle.com/edunet-web/ftp/edunet-admin-portal/common/uploads/";
-var commonPath = "https://pgsedu.com/edunet-portal/common/uploads/";
+var commonPath = "https://www.pgsedu.com/edunet-portal/common/uploads/";
 // var commonPath = "http://139.162.231.108/edunet-portal/common/uploads/";
 
 var storeCommonPath = "http://172.104.61.150/edunet-ecommerce/";
