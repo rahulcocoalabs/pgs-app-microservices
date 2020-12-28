@@ -37,6 +37,7 @@ const ScholarshipOrPlacementSchema = mongoose.Schema({
     title : String,
     description : String,  
     amount : Number, 
+    isStudent : Boolean,
     image : String, 
     lat : Number, 
     interestedCount:Number,
