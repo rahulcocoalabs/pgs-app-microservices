@@ -687,7 +687,8 @@ exports.getEventLink = async (req, res) => {
 exports.getEventScholarshipPlacementList = async(req,res) =>{
   var userData = req.identity.data;
   var userId = userData.userId;
-
+  
+  var params = req.query;
   var page = Number(params.page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(params.perPage) || eventsConfig.resultsPerPage;
