@@ -8,6 +8,7 @@ const eventUserInterest = require('../models/eventUserInterest.model.js')
 const SpeakerType = require('../models/speakerType.model')
 const Timezone = require('../models/timezone.model')
 const ScholarshipOrPlacement = require('../models/scholarshipOrPlacement.model')
+const ScholarshipOrPlacementRequest = require('../models/scholarshipOrPlacementRequest.model')
 var config = require('../../config/app.config.js');
 const constants = require('../helpers/constants.js');
 var eventsConfig = config.events;
@@ -800,6 +801,166 @@ if(checkEventScholarshipPlacement){
       imageBase: eventsConfig.imageBase,
       message: 'Scholaship or placement details'
     })
+}else{
+  return res.send({
+    success: 0,
+    message: "Scholaship or placement not exists"
+  })
+}
+}
+
+exports.applyEventScholarshipPlacement = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var eventScholarshipPlacementId = req.params.id;
+  var params = req.body;
+
+  var findCriteria = {
+    _id : eventScholarshipPlacementId,
+    status : 1
+  }
+  var projection = {
+    title : 1,
+    image : 1,
+    description : 1,
+    tsFrom : 1,
+    tsTo : 1,
+    isStudent : 1,
+    venue : 1
+  }
+  var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria,projection)
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while get details of scholarship orplacement',
+      error: err
+    }
+  })
+if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !== undefined) && (checkEventScholarshipPlacement.success === 0)) {
+  return res.send(checkEventScholarshipPlacement);
+}
+if(checkEventScholarshipPlacement){
+
+    findCriteria = {
+      _id : eventScholarshipPlacementId,
+      userId,
+      status : 1
+    }
+    var checkAlreadyApplied = await ScholarshipOrPlacementRequest.findOne(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking already applied for scholarship or placement',
+        error: err
+      }
+    })
+  if (checkAlreadyApplied && (checkAlreadyApplied.success !== undefined) && (checkAlreadyApplied.success === 0)) {
+    return res.send(checkAlreadyApplied);
+  }
+  if(checkAlreadyApplied){
+    var alreadyExistsMessage = ''
+
+    if(checkEventScholarshipPlacement.isStudent){
+      alreadyExistsMessage = 'Already applied for this scholarship'
+    }else{
+      alreadyExistsMessage = 'Already applied for this placement'
+    }
+    return res.send({
+      success: 0,
+      message: alreadyExistsMessage
+    })
+  }else{
+    var message = '';
+    var eventScholarshipPlacementObj = {};
+    eventScholarshipPlacementObj.userId = userId;
+    eventScholarshipPlacementObj.scholarshipOrPlacementId = eventScholarshipPlacementId;
+    eventScholarshipPlacementObj.isStudent = checkEventScholarshipPlacement.isStudent;
+    if(checkEventScholarshipPlacement.isStudent){
+      if(!params.courceDoing || !params.previousClassDetails || !params.subjectWithGrades){
+        var errors = [];
+        if (!params.courceDoing) {
+          errors.push({
+            field: "courceDoing",
+            message: "courceDoing id missing"
+          });
+        }
+        if (!params.previousClassDetails) {
+          errors.push({
+            field: "previousClassDetails",
+            message: "previousClassDetails id missing"
+          });
+        }
+        if (!params.subjectWithGrades) {
+          errors.push({
+            field: "subjectWithGrades",
+            message: "subjectWithGrades id missing"
+          });
+        }
+        return {
+          success: 0,
+          errors: errors,
+          code: 200
+        };
+      }
+      eventScholarshipPlacementObj.courceDoing = params.courceDoing;
+      eventScholarshipPlacementObj.previousClassDetails = params.previousClassDetails;
+      eventScholarshipPlacementObj.subjectWithGrades = params.subjectWithGrades;
+      message = 'You applied scholarship successfully'
+    }else{
+      if(!params.higherEducation || !params.projectBrief || !params.subjectWithGrades){
+        var errors = [];
+        if (!params.higherEducation) {
+          errors.push({
+            field: "higherEducation",
+            message: "higherEducation id missing"
+          });
+        }
+        if (!params.projectBrief) {
+          errors.push({
+            field: "projectBrief",
+            message: "projectBrief id missing"
+          });
+        }
+        if (!params.subjectWithGrades) {
+          errors.push({
+            field: "subjectWithGrades",
+            message: "subjectWithGrades id missing"
+          });
+        }
+        return {
+          success: 0,
+          errors: errors,
+          code: 200
+        };
+      }
+      eventScholarshipPlacementObj.higherEducation = params.higherEducation;
+      eventScholarshipPlacementObj.projectBrief = params.projectBrief;
+      eventScholarshipPlacementObj.subjectWithGrades = params.subjectWithGrades;
+      message = 'You applied for placement successfully'
+    }
+    eventScholarshipPlacementObj.status = 1;
+    eventScholarshipPlacementObj.tsCreatedAt = Date.now();
+    eventScholarshipPlacementObj.tsModifiedAt = null;
+    var newEventScholarshipPlacement = new ScholarshipOrPlacementRequest(eventScholarshipPlacementObj);
+    var  newEventScholarshipPlacementRequest = await newEventScholarshipPlacement.save()
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while saving scholarship or placement request',
+        error: err
+      }
+    })
+  if (newEventScholarshipPlacementRequest && (newEventScholarshipPlacementRequest.success !== undefined) && (newEventScholarshipPlacementRequest.success === 0)) {
+    return res.send(newEventScholarshipPlacementRequest);
+  }
+  return res.send({
+    success: 1,
+    message
+  })
+
+  }
+  
+  
 }else{
   return res.send({
     success: 0,
