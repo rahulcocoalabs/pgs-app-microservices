@@ -794,10 +794,30 @@ if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !=
   return res.send(checkEventScholarshipPlacement);
 }
 if(checkEventScholarshipPlacement){
-
+  var isApplied = false;
+    findCriteria = {
+      userId,
+      scholarshipOrPlacementId : eventScholarshipPlacementId,
+      status : 1
+    }
+    var checkApplied = await ScholarshipOrPlacementRequest.findOne(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking scholarship or placement applied or not',
+        error: err
+      }
+    })
+  if (checkApplied && (checkApplied.success !== undefined) && (checkApplied.success === 0)) {
+    return res.send(checkApplied);
+  }
+  if(checkApplied){
+    isApplied  = true;
+  }
     return res.send({
       success: 1,
       item: checkEventScholarshipPlacement,
+      isApplied,
       imageBase: eventsConfig.imageBase,
       message: 'Scholaship or placement details'
     })
