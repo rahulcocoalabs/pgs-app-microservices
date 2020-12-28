@@ -1074,11 +1074,11 @@ exports.requestAppointment = async (req, res) => {
         message: "tutor id missing"
       });
     }
-    return {
+    return res.send( {
       success: 0,
       errors: errors,
       code: 200
-    };
+    })
   }
 
 

@@ -905,11 +905,11 @@ if(checkEventScholarshipPlacement){
             message: "subjectWithGrades id missing"
           });
         }
-        return {
+        return res.send({
           success: 0,
           errors: errors,
           code: 200
-        };
+        });
       }
       eventScholarshipPlacementObj.courceDoing = params.courceDoing;
       eventScholarshipPlacementObj.previousClassDetails = params.previousClassDetails;
@@ -936,11 +936,11 @@ if(checkEventScholarshipPlacement){
             message: "subjectWithGrades id missing"
           });
         }
-        return {
+        return res.send({
           success: 0,
           errors: errors,
           code: 200
-        };
+        });
       }
       eventScholarshipPlacementObj.higherEducation = params.higherEducation;
       eventScholarshipPlacementObj.projectBrief = params.projectBrief;
