@@ -709,7 +709,8 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
     image : 1,
     description : 1,
     tsFrom : 1,
-    tsTo : 1
+    tsTo : 1,
+    isStudent : 1
   }
 
    var scholarshipOrPlacementList = await ScholarshipOrPlacement.find(findCriteria,projection)
