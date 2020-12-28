@@ -859,6 +859,9 @@ if(checkEventScholarshipPlacement){
   if (checkAlreadyApplied && (checkAlreadyApplied.success !== undefined) && (checkAlreadyApplied.success === 0)) {
     return res.send(checkAlreadyApplied);
   }
+  console.log("checkAlreadyApplied")
+  console.log(checkAlreadyApplied)
+  console.log("checkAlreadyApplied")
   if(checkAlreadyApplied){
     var alreadyExistsMessage = ''
 
@@ -877,7 +880,9 @@ if(checkEventScholarshipPlacement){
     eventScholarshipPlacementObj.userId = userId;
     eventScholarshipPlacementObj.scholarshipOrPlacementId = eventScholarshipPlacementId;
     eventScholarshipPlacementObj.isStudent = checkEventScholarshipPlacement.isStudent;
-
+    console.log("1eventScholarshipPlacementObj")
+    console.log(eventScholarshipPlacementObj)
+    console.log("1eventScholarshipPlacementObj")
 
     if(checkEventScholarshipPlacement.isStudent){
       if(!params.courceDoing || !params.previousClassDetails || !params.subjectWithGrades){
