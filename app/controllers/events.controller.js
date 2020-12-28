@@ -840,11 +840,9 @@ if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !=
   return res.send(checkEventScholarshipPlacement);
 }
 if(checkEventScholarshipPlacement){
-   console.log("checkEventScholarshipPlacement")
-   console.log(checkEventScholarshipPlacement)
-   console.log("checkEventScholarshipPlacement")
+
     findCriteria = {
-      _id : eventScholarshipPlacementId,
+      scholarshipOrPlacementId : eventScholarshipPlacementId,
       userId,
       status : 1
     }
@@ -859,9 +857,7 @@ if(checkEventScholarshipPlacement){
   if (checkAlreadyApplied && (checkAlreadyApplied.success !== undefined) && (checkAlreadyApplied.success === 0)) {
     return res.send(checkAlreadyApplied);
   }
-  console.log("checkAlreadyApplied")
-  console.log(checkAlreadyApplied)
-  console.log("checkAlreadyApplied")
+
   if(checkAlreadyApplied){
     var alreadyExistsMessage = ''
 
@@ -880,9 +876,7 @@ if(checkEventScholarshipPlacement){
     eventScholarshipPlacementObj.userId = userId;
     eventScholarshipPlacementObj.scholarshipOrPlacementId = eventScholarshipPlacementId;
     eventScholarshipPlacementObj.isStudent = checkEventScholarshipPlacement.isStudent;
-    console.log("1eventScholarshipPlacementObj")
-    console.log(eventScholarshipPlacementObj)
-    console.log("1eventScholarshipPlacementObj")
+ 
 
     if(checkEventScholarshipPlacement.isStudent){
       if(!params.courceDoing || !params.previousClassDetails || !params.subjectWithGrades){
@@ -950,9 +944,7 @@ if(checkEventScholarshipPlacement){
     eventScholarshipPlacementObj.status = 1;
     eventScholarshipPlacementObj.tsCreatedAt = Date.now();
     eventScholarshipPlacementObj.tsModifiedAt = null;
-    console.log("eventScholarshipPlacementObj")
-    console.log(eventScholarshipPlacementObj)
-    console.log("eventScholarshipPlacementObj")
+  
     var newEventScholarshipPlacement = new ScholarshipOrPlacementRequest(eventScholarshipPlacementObj);
     var  newEventScholarshipPlacementRequest = await newEventScholarshipPlacement.save()
     .catch(err => {
