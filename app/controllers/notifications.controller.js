@@ -4,6 +4,7 @@ const MarkasRead = require('../models/notificationStatus.model.js');
 var config = require('../../config/app.config.js');
 var moment = require('moment');
 const constants = require('../helpers/constants.js');
+const { compareSync } = require('bcryptjs');
 
 var notificationsConfig = config.notifications;
 
@@ -109,9 +110,12 @@ exports.markAsRead = async (req, res) => {
       }
     })
   if (notificationCheck && (notificationCheck.success !== undefined) && (notificationCheck.success === 0)) {
-    return notificationCheck;
+    return res.send( notificationCheck);
   }
   if (notificationCheck) {
+    console.log("notificationCheck")
+    console.log(notificationCheck)
+    console.log("notificationCheck")
     if (notificationCheck.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE
       && JSON.stringify(notificationCheck.userId) !== JSON.stringify(userId)) {
       return res.send({
