@@ -688,6 +688,8 @@ exports.getEventLink = async (req, res) => {
 exports.getEventScholarshipPlacementList = async(req,res) =>{
   var userData = req.identity.data;
   var userId = userData.userId;
+
+
   
   var params = req.query;
   var page = Number(params.page) || 1;
@@ -755,11 +757,17 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
    totalItems: totalScholarshipOrPlacementCount,
    totalPages,
  };
+
+ scholarshipOrPlacementList = JSON.parse(JSON.stringify(scholarshipOrPlacementList));
+ scholarshipOrPlacementListObj = await checkAndUpdateIsAppliedField(userId,scholarshipOrPlacementList)
+ if (scholarshipOrPlacementListObj && (scholarshipOrPlacementListObj.success !== undefined) && (scholarshipOrPlacementListObj.success === 0)) {
+  return res.send(scholarshipOrPlacementListObj);
+}
  return res.send({
    success: 1,
    pagination,
    imageBase: eventsConfig.imageBase,
-   items: scholarshipOrPlacementList,
+   items: scholarshipOrPlacementListObj.list,
    message: 'scholarship or placement list'
  })
 }
@@ -1075,4 +1083,57 @@ exports.addInterest = async (req, res) => {
     message: "updated interest count"
   })
 
+}
+
+
+async function checkAndUpdateIsAppliedField(userId,scholarshipOrPlacementList){
+  if(scholarshipOrPlacementList.length > 0){
+  var yourScholarshipOrPlacementData = await ScholarshipOrPlacementRequest.find({
+    userId,
+    status : 1
+  },{
+    scholarshipOrPlacementId : 1
+  })
+  .catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while getting applied scholarships or payments',
+      error: err
+    }
+  })
+if (yourScholarshipOrPlacementData && (yourScholarshipOrPlacementData.success !== undefined) && (yourScholarshipOrPlacementData.success === 0)) {
+  return yourScholarshipOrPlacementData;
+}
+if(yourScholarshipOrPlacementData.length > 0){
+  for(let i = 0; i < scholarshipOrPlacementList.length; i++){
+    var scoloarOrPlacmentObj = scholarshipOrPlacementList[i];
+    var checkIndex = await yourScholarshipOrPlacementData.findIndex(obj => (JSON.stringify(obj.scholarshipOrPlacementId) === JSON.stringify(scoloarOrPlacmentObj.id)))
+    if(checkIndex > -1){
+      scholarshipOrPlacementList[i].isApplied = true;
+    }else{
+      scholarshipOrPlacementList[i].isApplied = false;
+    }
+  }
+  return{
+    success : 1,
+    list : scholarshipOrPlacementList,
+    message : 'Applied list'
+  } 
+}else{
+for(let i = 0; i < scholarshipOrPlacementList.length; i++){
+  scholarshipOrPlacementList[i].isApplied = false;
+  }
+  return{
+    success : 1,
+    list : scholarshipOrPlacementList,
+    message : 'Nothing applied'
+  } 
+}
+  }else{
+    return{
+      success : 1,
+      list : scholarshipOrPlacementList,
+      message : 'Empty list'
+    } 
+  }
 }
