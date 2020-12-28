@@ -3903,7 +3903,8 @@ return {
       middlename: 1,
       image: 1,
       password: 1,
-      isTutor: 1
+      isTutor: 1,
+      dob : 1
     });
     if (!checkUser) {
       return {
