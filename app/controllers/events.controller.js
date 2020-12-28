@@ -840,7 +840,9 @@ if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !=
   return res.send(checkEventScholarshipPlacement);
 }
 if(checkEventScholarshipPlacement){
-
+   console.log("checkEventScholarshipPlacement")
+   console.log(checkEventScholarshipPlacement)
+   console.log("checkEventScholarshipPlacement")
     findCriteria = {
       _id : eventScholarshipPlacementId,
       userId,
@@ -875,6 +877,8 @@ if(checkEventScholarshipPlacement){
     eventScholarshipPlacementObj.userId = userId;
     eventScholarshipPlacementObj.scholarshipOrPlacementId = eventScholarshipPlacementId;
     eventScholarshipPlacementObj.isStudent = checkEventScholarshipPlacement.isStudent;
+
+
     if(checkEventScholarshipPlacement.isStudent){
       if(!params.courceDoing || !params.previousClassDetails || !params.subjectWithGrades){
         var errors = [];
@@ -941,6 +945,9 @@ if(checkEventScholarshipPlacement){
     eventScholarshipPlacementObj.status = 1;
     eventScholarshipPlacementObj.tsCreatedAt = Date.now();
     eventScholarshipPlacementObj.tsModifiedAt = null;
+    console.log("eventScholarshipPlacementObj")
+    console.log(eventScholarshipPlacementObj)
+    console.log("eventScholarshipPlacementObj")
     var newEventScholarshipPlacement = new ScholarshipOrPlacementRequest(eventScholarshipPlacementObj);
     var  newEventScholarshipPlacementRequest = await newEventScholarshipPlacement.save()
     .catch(err => {
@@ -959,7 +966,6 @@ if(checkEventScholarshipPlacement){
   })
 
   }
-  
   
 }else{
   return res.send({
