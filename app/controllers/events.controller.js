@@ -7,6 +7,7 @@ const EventBooking = require('../models/eventBooking.model.js')
 const eventUserInterest = require('../models/eventUserInterest.model.js')
 const SpeakerType = require('../models/speakerType.model')
 const Timezone = require('../models/timezone.model')
+const ScholarshipOrPlacement = require('../models/scholarshipOrPlacement.model')
 var config = require('../../config/app.config.js');
 const constants = require('../helpers/constants.js');
 var eventsConfig = config.events;
@@ -681,6 +682,82 @@ exports.getEventLink = async (req, res) => {
       message: "Invalid event"
     })
   }
+}
+
+exports.getEventScholarshipPlacementList = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var page = Number(params.page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(params.perPage) || eventsConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : eventsConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var endTs = await getEndTsToday();
+
+  var findCriteria ={
+    tsTo: {
+      $gte: endTs
+    }
+  }
+
+  findCriteria.status = 1;
+
+  var projection = {
+    title : 1,
+    image : 1,
+    description : 1,
+    tsFrom : 1,
+    tsTo : 1
+  }
+
+   var scholarshipOrPlacementList = await ScholarshipOrPlacement.find(findCriteria,projection)
+   .limit(perPage)
+   .skip(offset)
+   .sort({
+     'tsCreatedAt': -1
+   })
+   .catch(err => {
+     return {
+       success: 0,
+       message: 'Something went wrong while listing scholarship Or placement',
+       error: err
+     }
+   })
+ if (scholarshipOrPlacementList && (scholarshipOrPlacementList.success !== undefined) && (scholarshipOrPlacementList.success === 0)) {
+   return res.send(scholarshipOrPlacementList);
+ }
+
+ let totalScholarshipOrPlacementCount = await ScholarshipOrPlacement.countDocuments(findCriteria)
+   .catch(err => {
+     return {
+       success: 0,
+       message: 'Something went wrong while getting total total scholarship or placement count',
+       error: err
+     }
+   })
+ if (totalScholarshipOrPlacementCount && totalScholarshipOrPlacementCount.success && (totalScholarshipOrPlacementCount.success === 0)) {
+   return res.send(totalScholarshipOrPlacementCount);
+ }
+
+ var totalPages = totalScholarshipOrPlacementCount / perPage;
+ totalPages = Math.ceil(totalPages);
+ var hasNextPage = page < totalPages;
+ var pagination = {
+   page,
+   perPage,
+   hasNextPage,
+   totalItems: totalScholarshipOrPlacementCount,
+   totalPages,
+ };
+ return res.send({
+   success: 1,
+   pagination,
+   imageBase: eventsConfig.imageBase,
+   items: scholarshipOrPlacementList,
+   message: 'scholarship or placement list'
+ })
 }
 
 async function getStartTsToday() {
