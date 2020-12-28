@@ -1945,7 +1945,8 @@ exports.loginWithEmail = async (req, res) => {
       middlename: 1,
       image: 1,
       password: 1,
-      isTutor: 1
+      isTutor: 1,
+      dob : 1
     });
     if (!checkUser) {
       return res.status(200).send({
