@@ -561,7 +561,7 @@ exports.getSyllubusTutor = async (req,res) => {
 
   exports.searchKeywords = (req, res) => {
     var params = req.query;
-    //console.log(params.keyword);
+    console.log(params.keyword);
     var keyword = params.keyword;
     var regexp = new RegExp(keyword, 'i');
     // var filters = { value: { '$regex': regexp, '$options': 'i' } };
