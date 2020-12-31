@@ -673,6 +673,9 @@ exports.listOnlineClasses = async (req, res) => {
 }
 
 exports.listTutorList = async (req, res) => {
+
+  console.log("test for identifying api success");
+  
   var userData = req.identity.data;
   var userId = userData.userId;
   var favouriteDataResp = await getUserFavouriteData(userId);
@@ -699,7 +702,7 @@ exports.listTutorList = async (req, res) => {
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
-
+  
   var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   return res.send(listTutorResp);
 
