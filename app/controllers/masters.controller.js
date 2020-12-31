@@ -564,13 +564,13 @@ exports.getSyllubusTutor = async (req,res) => {
     console.log(params.keyword);
     var keyword = params.keyword;
     var regexp = new RegExp(keyword, 'i');
-    // var filters = { value: { '$regex': regexp, '$options': 'i' } };
-    var filters = {
-      value: {
-        '$regex': regexp
-      },
-      status : 1
-    };
+     var filters = { value: { '$regex': regexp, '$options': 'i' }, status : 1 };
+    // var filters = {
+    //   value: {
+    //     '$regex': regexp
+    //   },
+    //   status : 1
+    // };
     var queryProjection = {
       value: 1,
       itemId: 1,
