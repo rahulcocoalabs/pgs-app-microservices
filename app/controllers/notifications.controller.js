@@ -4,6 +4,7 @@ const MarkasRead = require('../models/notificationStatus.model.js');
 var config = require('../../config/app.config.js');
 var moment = require('moment');
 const constants = require('../helpers/constants.js');
+const { compareSync } = require('bcryptjs');
 
 var notificationsConfig = config.notifications;
 
@@ -109,9 +110,10 @@ exports.markAsRead = async (req, res) => {
       }
     })
   if (notificationCheck && (notificationCheck.success !== undefined) && (notificationCheck.success === 0)) {
-    return notificationCheck;
+    return res.send( notificationCheck);
   }
   if (notificationCheck) {
+  
     if (notificationCheck.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE
       && JSON.stringify(notificationCheck.userId) !== JSON.stringify(userId)) {
       return res.send({
@@ -121,7 +123,7 @@ exports.markAsRead = async (req, res) => {
     } else {
       if (notificationCheck.markAsRead !== undefined
         && notificationCheck.markAsRead !== null
-        && notificationCheck.markAsRead
+        && notificationCheck.markAsRead !== 1
         && notificationCheck.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE) {
         var update = {};
         update.markAsRead = true;
@@ -130,7 +132,7 @@ exports.markAsRead = async (req, res) => {
         return res.send(updateStatus);
 
       } else if (notificationCheck.markAsRead !== undefined
-        && notificationCheck.markAsRead !== null && notificationCheck.markAsRead === false) {
+        && notificationCheck.markAsRead !== null && notificationCheck.markAsRead === 1) {
         return res.send({
           success: 0,
           message: 'Notification already read'
@@ -149,6 +151,11 @@ exports.markAsRead = async (req, res) => {
           var updateStatus = await updateMarkAsRead(update, findCriteria);
           return res.send(updateStatus);
         }
+      } else {
+        return res.send({
+          success: 0,
+          message: 'Notification already read'
+        });
       }
 
     }

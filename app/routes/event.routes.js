@@ -8,5 +8,7 @@ module.exports = (app) => {
     app.get('/events/history',auth,events.listEventHistory);
     app.patch('/events/:id/participate',auth,events.participateEvent);
     app.get('/events/:id/link', auth,events.getEventLink);
-
+    app.get('/events/scholarship-placement/list', auth,events.getEventScholarshipPlacementList);
+    app.get('/events/scholarship-placement/:id/detail', auth,events.getEventScholarshipPlacementDetail);
+    app.post('/events/scholarship-placement/:id/apply', auth,events.applyEventScholarshipPlacement);
 }

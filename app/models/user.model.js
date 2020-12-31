@@ -21,7 +21,8 @@ function transform(record) {
     delete ret.motherProfessionId;
     delete ret.fatherProfessionId;
 
-    ret.dob = moment(ret.dob).add(1,'days').format("DD MMMM YYYY");
+    // ret.dob = moment(ret.dob).add(1,'days').format("DD MMMM YYYY");
+    ret.dob = moment(ret.dob).format("DD MMMM YYYY");
     if (ret.syllabus) {
         delete ret.syllabusId;
         delete ret.syllabus._id;
@@ -123,6 +124,9 @@ const UserSchema = mongoose.Schema({
     email: String,
     password: String,
     dob: Date,
+    dayInDob:Number,
+    monthInDob:Number,
+    yearInDob:Number,
     image: String,
     school: String,
     syllabusId: { type: mongoose.Schema.Types.ObjectId, ref: 'Syllabus' },
