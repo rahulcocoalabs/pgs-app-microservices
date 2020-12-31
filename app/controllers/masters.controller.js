@@ -589,6 +589,7 @@ exports.getSyllubusTutor = async (req,res) => {
       model: Keyword,
       returnPageData: false
     };
+    console.log(filters)
     utilities.getList(settings, function (result) {
       if (result)
         res.send(result);
