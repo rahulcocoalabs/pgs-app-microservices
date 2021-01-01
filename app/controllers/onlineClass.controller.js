@@ -688,6 +688,7 @@ exports.listOnlineClasses = async (req, res) => {
             }]
         };
   }
+  console.log(findCriteria,"flag",search)
   //end rakesh's mods
   var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData,sortOptions);
   return res.send(listClassResp);
