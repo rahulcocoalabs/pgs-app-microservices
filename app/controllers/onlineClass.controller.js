@@ -684,8 +684,11 @@ exports.listOnlineClasses = async (req, res) => {
                 classDescription: {
                     $regex: search,
                     $options: 'i'
-                }
-            }]
+                }}, {
+                  tutorName: {
+                      $regex: search,
+                      $options: 'i'
+                  }}]
         };
   }
   console.log(findCriteria,"flag",search)
