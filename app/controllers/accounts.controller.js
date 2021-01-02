@@ -2000,6 +2000,14 @@ exports.loginWithEmail = async (req, res) => {
 
 exports.sendOtp = async (req, res) => {
   let email = req.body.email;
+
+  var mobileNo = "+919061955456";
+
+
+msg91.send(mobileNo, "MESSAGE", function(err, response){
+    console.log(err);
+    console.log(response);
+});
   console.log("flag1")
   if (!email) {
     return res.status(400).send({
