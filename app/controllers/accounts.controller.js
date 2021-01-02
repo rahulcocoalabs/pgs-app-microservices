@@ -2100,7 +2100,8 @@ exports.sendOtp = async (req, res) => {
   } catch (err) {
     res.status(500).send({
       success: 0,
-      message: 'something went wrong while sending email'
+      message: 'something went wrong while sending email',
+      err:err.message
     })
   }
 }
