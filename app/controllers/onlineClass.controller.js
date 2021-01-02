@@ -197,6 +197,17 @@ console.log("08/12/202",file.filename)
   onlineClassObj.status = 1;
   onlineClassObj.tsCreatedAt = Date.now();
   onlineClassObj.tsModifiedAt = null;
+  //rakesh 
+
+  var tutorName = await User.findOne({_id:params.userId,status:1},{firstName:1}).catch(err=>{
+    return {success:0,message:err.message};
+  })
+
+  if (tutorName && (tutorName.success !== undefined) && (tutorName.success === 0)) {
+    return res.send(tutorName);
+  }
+
+  onlineClass.tutorName = tutorName;
 
   var newOnlineClassObj = new OnlineCLass(onlineClassObj);
   var onlineClassResponse = await newOnlineClassObj.save()
