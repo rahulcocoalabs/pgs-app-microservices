@@ -2034,7 +2034,7 @@ exports.sendOtp = async (req, res) => {
       resetPasswordToken: resetPasswordToken,
       resetPasswordExpires: resetPasswordExpires
     };
-    let updateUser = await Users.findOneAndUpdate(filter, update).catch(err=>{
+    let updateUser = await User.findOneAndUpdate(filter, update).catch(err=>{
       return {success:0,message:err.message}
     });
     if (updateUser && updateUser.success !== undefined && updateUser.success === 0) {
