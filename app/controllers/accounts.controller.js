@@ -2058,6 +2058,8 @@ exports.sendOtp = async (req, res) => {
     if (info && (info.success != undefined) && info.success === 0){
       return res.send(info);
     }
+
+    console.log(info);
     const newOtp = new Otp({
       email: email,
       isUsed: false,
