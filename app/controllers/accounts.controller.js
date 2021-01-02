@@ -2007,7 +2007,7 @@ exports.sendOtp = async (req, res) => {
 
    var sendotp = await msg91.send(mobileNo, "MESSAGE", function(err, response){
     console.log(err);
-    console.log(response);
+    console.log(response,"flag");
 });
 return  res.send(sendotp);
   console.log("flag1")
