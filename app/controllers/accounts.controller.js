@@ -55,6 +55,7 @@ const Feed = require('../models/feed.model.js');
 const sgMail = require('@sendgrid/mail');
 
 var bcrypt = require('bcryptjs');
+const requestForTutorModel = require('../models/requestForTutor.model.js');
 const salt = bcrypt.genSaltSync(10);
 
 var usersConfig = config.users;
@@ -2008,6 +2009,7 @@ exports.sendOtp = async (req, res) => {
     console.log(err);
     console.log(response);
 });
+return  res.send(sendotp.message);
   console.log("flag1")
   if (!email) {
     return res.status(400).send({
