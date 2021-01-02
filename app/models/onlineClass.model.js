@@ -31,6 +31,7 @@ const OnlineClassSchema = mongoose.Schema({
     currencyId : { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
     tutorSyllabusId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorSyllabus' },
     image : String,
+    tutorName:String,
     video:String,
     title : String,
     avaregeRating:Number,
