@@ -2034,7 +2034,12 @@ exports.sendOtp = async (req, res) => {
       resetPasswordToken: resetPasswordToken,
       resetPasswordExpires: resetPasswordExpires
     };
-    let updateUser = await Users.findOneAndUpdate(filter, update);
+    let updateUser = await Users.findOneAndUpdate(filter, update).catch(err=>{
+      return {success:0,message:err.message}
+    });
+    if (updateUser && updateUser.success !== undefined && updateUser.success === 0) {
+      return res.send(updateUser);
+    }
     let testAccount = await nodemailer.createTestAccount().catch(err=>{
       return {success:0,message:err.message}
     });
