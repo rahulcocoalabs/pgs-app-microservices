@@ -2055,7 +2055,7 @@ exports.sendOtp = async (req, res) => {
       return {success:0,message:err.message}
     });
 
-    if (info && (info.success != undefined) && info.succes === 0){
+    if (info && (info.success != undefined) && info.success === 0){
       return res.send(info);
     }
     const newOtp = new Otp({
