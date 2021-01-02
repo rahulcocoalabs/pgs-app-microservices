@@ -2038,12 +2038,14 @@ exports.sendOtp = async (req, res) => {
       return {success:0,message:err.message}
     });
     if (updateUser && updateUser.success !== undefined && updateUser.success === 0) {
+      console.log("flag7")
       return res.send(updateUser);
     }
     let testAccount = await nodemailer.createTestAccount().catch(err=>{
       return {success:0,message:err.message}
     });
     if (testAccount && testAccount.success !== undefined && testAccount.success === 0) {
+      console.log("flag8")
       return res.send(testAccount);
     }
     console.log("flag4")
