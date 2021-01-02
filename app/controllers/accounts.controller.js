@@ -2000,6 +2000,7 @@ exports.loginWithEmail = async (req, res) => {
 
 exports.sendOtp = async (req, res) => {
   let email = req.body.email;
+  console.log("flag1")
   if (!email) {
     return res.status(400).send({
       success: 0,
@@ -2010,6 +2011,7 @@ exports.sendOtp = async (req, res) => {
   var otp = Math.floor(1000 + Math.random() * 9000);
   const apiToken = uuidv4();
   var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
+  console.log("flag2")
   try {
     let checkUser = await User.findOne({
       email: email,
@@ -2023,6 +2025,7 @@ exports.sendOtp = async (req, res) => {
     }
     var resetPasswordToken = crypto.randomBytes(20).toString('hex');
     var resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+    console.log("flag3")
     var filter = {
       email: email,
       status: 1
@@ -2033,6 +2036,7 @@ exports.sendOtp = async (req, res) => {
     };
     let updateUser = await Users.findOneAndUpdate(filter, update);
     let testAccount = await nodemailer.createTestAccount();
+    console.log("flag4")
     let mailTransporter = await nodemailer.createTransport({
       host: testAccount.smtp.host,
       port: testAccount.smtp.port,
@@ -2059,7 +2063,7 @@ exports.sendOtp = async (req, res) => {
       return res.send(info);
     }
 
-    console.log(info);
+    console.log("flag5")
     const newOtp = new Otp({
       email: email,
       isUsed: false,
