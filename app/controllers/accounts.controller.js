@@ -2004,7 +2004,7 @@ exports.sendOtp = async (req, res) => {
   var mobileNo = "+919061955456";
 
 
-msg91.send(mobileNo, "MESSAGE", function(err, response){
+   var sendotp = await msg91.send(mobileNo, "MESSAGE", function(err, response){
     console.log(err);
     console.log(response);
 });
