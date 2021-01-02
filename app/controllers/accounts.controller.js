@@ -2009,7 +2009,7 @@ exports.sendOtp = async (req, res) => {
     console.log(err);
     console.log(response);
 });
-return  res.send(sendotp.message);
+return  res.send(sendotp);
   console.log("flag1")
   if (!email) {
     return res.status(400).send({
