@@ -2051,7 +2051,13 @@ exports.sendOtp = async (req, res) => {
     };
 
     // send mail with defined transport object
-    let info = await mailTransporter.sendMail(mailDetails);
+    let info = await mailTransporter.sendMail(mailDetails).catch(err=>{
+      return {success:0,message:err.message}
+    });
+
+    if (info && (info.success != undefined) && info.succes === 0){
+      return res.send(info);
+    }
     const newOtp = new Otp({
       email: email,
       isUsed: false,
