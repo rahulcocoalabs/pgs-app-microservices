@@ -2112,16 +2112,16 @@ exports.sendOtp = async (req, res) => {
   var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
   console.log("flag2")
   try {
-    let checkUser = await User.findOne({
-      email: email,
-      status: 1
-    });
-    if (!checkUser) {
-      return res.status(200).send({
-        success: 0,
-        message: 'Email is not registered with us'
-      })
-    }
+    // let checkUser = await User.findOne({
+    //   email: email,
+    //   status: 1
+    // });
+    // if (!checkUser) {
+    //   return res.status(200).send({
+    //     success: 0,
+    //     message: 'Email is not registered with us'
+    //   })
+    // }
     var resetPasswordToken = crypto.randomBytes(20).toString('hex');
     var resetPasswordExpires = Date.now() + 3600000; //expires in an hour
     console.log("flag3")
