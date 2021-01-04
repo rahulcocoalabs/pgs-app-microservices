@@ -12,6 +12,8 @@ const Rating = require('../models/rating.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const EarnCoin = require('../models/earnCoin.model');
 const LoginBanner = require('../models/loginBanner.model');
+
+const InnovationChallenge = require('../models/InnovationChallenge.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
 var config = require('../../config/app.config.js');
@@ -93,8 +95,90 @@ function updateCoin(reqObj, callback) {
 
 // function accountsController(methods, options) {
 
-// *** Gennerate and send OTP ***
 
+//rakesh 
+// innovation challenge
+exports.addNewinnovation= async (req, res) => {
+
+  let userId = req.identity.data.userId;
+  if (userId != undefined){
+    return res.send({
+      success:0,
+      message:"user id not available"
+    })
+  }
+
+  var params = req.body;
+
+  if (!params){
+    return res.send({
+      success:0,
+      message:"body not available"
+    })
+  }
+
+  if (!params.title){
+    return res.send({
+    success:0,
+    message:"title not available"
+  })
+}
+
+  if (!params.price){
+    return res.send({
+      success:0,
+      message:"price not available"
+    })
+  }
+  if (!params.description){
+    return res.send({
+      success:0,
+      message:"description not available"
+    })
+
+  }
+
+  const count = await  InnovationChallenge.countDocuments({status: 1,userId:userId}).catch(err=>{
+    return {
+      success:0,
+      message:err.message
+    }
+  })
+
+  if (count && (count.success !== undefined) && (count.success === 0)){
+    return res.send(count);
+  }
+
+  if (count >= 1){
+    return res.send({
+      success:0,
+      message:"you have already submitted  a challenge"
+    })
+  }
+
+  const newInnovationChallenge = new InnovationChallenge({
+    userId:userId,
+    title : params.title,
+    description : params.description,
+    price:params.price,
+    status : 1,
+    tsCreatedAt : Date.now(),
+    tsModifiedAt : null
+  })
+
+  var saved = await newInnovationChallenge.save().catch((err) =>{return {succes:0,message:err.message}})
+
+  if (saved && saved.success != undefined && saved.success === 0){
+    return res.send(saved)
+  }
+
+  return res.send({
+    success:1,
+    message:"saved successfully"
+  })
+}
+
+// *** Gennerate and send OTP ***
 exports.generate = async (req, res) => {
   if (!req.body.countryCode || !req.body.phone) {
     var errors = [];

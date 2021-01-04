@@ -82,4 +82,7 @@ module.exports = (app) => {
     app.post('/accounts/add-rating-class/:id',auth,accounts.addratingToClass)
     app.post('/accounts/add-rating-tutor/:id',auth,accounts.addratingTutor)
 
+    //innovation challenge
+    app.post('/accounts/add-innovation-challenge/',auth,accounts.addNewinnovation)
+
 };
