@@ -562,12 +562,12 @@ exports.getRegisterMasters = (req, res) => {
 exports.searchKeywords = async(req, res) => {
   var params = req.query;
   console.log(params.keyword);
-  var keywords = params.keyword;
-  var regexp = new RegExp(keywords);
+  var keyword = params.keyword;
+  var regexp = new RegExp(keyword);
  // var filters = { value: { '$regex': regexp, '$options': 'i' }, status: 1 };
   var filters = {
     value: {
-      $regex: keywords,
+      $regex: keyword,
       $options: 'i'
     },
     status: 1
@@ -578,7 +578,7 @@ exports.searchKeywords = async(req, res) => {
     itemType: 1
   };
 
-  var result = await keyword.find(filters, queryProjection).catch(err => {return {success:0, message:err.message}});
+  var result = await Keyword.find(filters, queryProjection).catch(err => {return {success:0, message:err.message}});
 
   if (result && result.sucess !== undefined && result.success ==0){
     return res.send(result);
