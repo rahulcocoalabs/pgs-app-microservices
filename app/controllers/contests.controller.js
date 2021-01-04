@@ -103,7 +103,8 @@ exports.detail = async (req, res) => {
     } catch (err) {
         res.status(500).send({
             success: 0,
-            message: 'something went wrong while fetching details'
+            message: 'something went wrong while fetching details',
+            error:err.message
         })
     }
 }
