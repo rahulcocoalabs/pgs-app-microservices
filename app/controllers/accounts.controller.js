@@ -2174,7 +2174,7 @@ exports.sendOtp = async (req, res) => {
     //   return res.send(info);
     // }
 
-    var otpResponse = await otp(phone);
+    var otpResponse = await otp(mobile);
     if (otpResponse == undefined) {
       return res.send({
         success: 0,
