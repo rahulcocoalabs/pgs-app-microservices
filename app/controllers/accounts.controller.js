@@ -149,7 +149,7 @@ exports.addNewinnovation= async (req, res) => {
 
   }
 
-  const count = await  InnovationChallenge.countDocuments({status: 1,userId:userId}).catch(err=>{
+  const count = await  InnovationChallenge.countDocuments({status: 1,userId:userId,contestId:contestId}).catch(err=>{
     return {
       success:0,
       message:err.message
