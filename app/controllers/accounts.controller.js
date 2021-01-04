@@ -2122,32 +2122,32 @@ exports.sendOtp = async (req, res) => {
     //     message: 'Email is not registered with us'
     //   })
     // }
-    var resetPasswordToken = crypto.randomBytes(20).toString('hex');
-    var resetPasswordExpires = Date.now() + 3600000; //expires in an hour
-    console.log("flag3")
-    var filter = {
-      email: email,
-      status: 1
-    };
-    var update = {
-      resetPasswordToken: resetPasswordToken,
-      resetPasswordExpires: resetPasswordExpires
-    };
-    let updateUser = await User.findOneAndUpdate(filter, update).catch(err=>{
-      return {success:0,message:err.message}
-    });
-    if (updateUser && updateUser.success !== undefined && updateUser.success === 0) {
-      console.log("flag7")
-      return res.send(updateUser);
-    }
-    let testAccount = await nodemailer.createTestAccount().catch(err=>{
-      return {success:0,message:err.message}
-    });
-    if (testAccount && testAccount.success !== undefined && testAccount.success === 0) {
-      console.log("flag8")
-      return res.send(testAccount);
-    }
-    console.log("flag4")
+    // var resetPasswordToken = crypto.randomBytes(20).toString('hex');
+    // var resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+    // console.log("flag3")
+    // var filter = {
+    //   email: email,
+    //   status: 1
+    // };
+    // var update = {
+    //   resetPasswordToken: resetPasswordToken,
+    //   resetPasswordExpires: resetPasswordExpires
+    // };
+    // let updateUser = await User.findOneAndUpdate(filter, update).catch(err=>{
+    //   return {success:0,message:err.message}
+    // });
+    // if (updateUser && updateUser.success !== undefined && updateUser.success === 0) {
+    //   console.log("flag7")
+    //   return res.send(updateUser);
+    // }
+    // let testAccount = await nodemailer.createTestAccount().catch(err=>{
+    //   return {success:0,message:err.message}
+    // });
+    // if (testAccount && testAccount.success !== undefined && testAccount.success === 0) {
+    //   console.log("flag8")
+    //   return res.send(testAccount);
+    // }
+    // console.log("flag4")
     // let mailTransporter = await nodemailer.createTransport({
     //   host: testAccount.smtp.host,
     //   port: testAccount.smtp.port,
