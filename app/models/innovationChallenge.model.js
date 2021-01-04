@@ -11,6 +11,6 @@ const InnovationSchema = mongoose.Schema({
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number
-}, options)
+})
 
 module.exports = mongoose.model('InnovationChallenge', InnovationSchema, 'InnovationChallenges');
