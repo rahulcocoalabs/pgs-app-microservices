@@ -59,6 +59,8 @@ exports.listAll = async (req, res) => {
 // *** Contest detail ***
 exports.detail = async (req, res) => {
     let id = req.params.id;
+    let data = req.identity.data;
+    let userId = data.userId;
     var isValidId = ObjectId.isValid(id);
     if (!isValidId) {
         var responseObj = {
@@ -90,7 +92,7 @@ exports.detail = async (req, res) => {
         let contestId = contestDetail.id;
         var count = 0
         var isApplied = false ;
-        count = InnovationChallenge.countDocuments({status:1,userId:userId,contestId:contestId});
+        count = InnovationChallenge.countDocuments({status:1,userId:userId,contestId:id});
         if (count >= 1){
             isApplied = true;
         }
