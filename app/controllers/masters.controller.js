@@ -578,7 +578,7 @@ exports.searchKeywords = async(req, res) => {
     itemType: 1
   };
 
-  var result = await keyword.find(filters, queryProjection).catch(err => {return {success:0, message:err.message}});
+  var result = await keyword.Find(filters, queryProjection).catch(err => {return {success:0, message:err.message}});
 
   if (result && result.sucess !== undefined && result.success ==0){
     return res.send(result);
