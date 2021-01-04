@@ -103,7 +103,7 @@ exports.addNewinnovation= async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
-  var contestId = req.params.contest-id;
+  var contestId = req.params.id;
   if (!contextId){
     return res.send({
       success:0,
