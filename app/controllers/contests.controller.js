@@ -6,6 +6,7 @@ const constants = require('../helpers/constants');
 const contestsConfig = config.contests;
 const feedsConfig = config.feeds;
 const usersConfig = config.users;
+const InnovationChallenge = require('../models/innovationChallenge.model');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 // *** List all contests ***
@@ -85,10 +86,19 @@ exports.detail = async (req, res) => {
             aboutContest : 1
         };
         let contestDetail = await Contests.findOne(filter, projection);
+
+        let contestId = contestDetail.id;
+        var count = 0
+        var isApplied = false ;
+        count = InnovationChallenge.countDocuments({status:1,userId:userId,contestId:contestId});
+        if (count >= 1){
+            isApplied = true;
+        }
         res.status(200).send({
             success: 1,
             imageBase: contestsConfig.imageBase,
-            item: contestDetail
+            item: contestDetail,
+            isApplied: isApplied
         })
     } catch (err) {
         res.status(500).send({
