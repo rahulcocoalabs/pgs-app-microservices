@@ -104,7 +104,7 @@ exports.addNewinnovation= async (req, res) => {
   var userId = userData.userId;
 
   var contestId = req.params.id;
-  if (!contextId){
+  if (!contestId){
     return res.send({
       success:0,
       message:"context id not available"
