@@ -100,8 +100,9 @@ function updateCoin(reqObj, callback) {
 // innovation challenge
 exports.addNewinnovation= async (req, res) => {
 
-  let userId = req.identity.data.userId;
-  if (userId != undefined){
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  if (userId == undefined){
     return res.send({
       success:0,
       message:"user id not available"
