@@ -567,7 +567,7 @@ exports.searchKeywords = async(req, res) => {
  // var filters = { value: { '$regex': regexp, '$options': 'i' }, status: 1 };
   var filters = {
     value: {
-      $regex: keyword,
+      $regex: regexp,
       $options: 'i'
     },
     status: 1
