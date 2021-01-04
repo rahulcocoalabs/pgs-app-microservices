@@ -24,7 +24,7 @@ var tutorsConfig = config.tutors;
 var classConfig = config.class;
 
 const superagent = require('superagent');
-const uuidv4 = require('uuid/v4');
+
 const JWT_KEY = config.jwt.key;
 const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
 
