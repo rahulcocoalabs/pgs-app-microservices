@@ -92,7 +92,7 @@ exports.detail = async (req, res) => {
         let contestId = contestDetail.id;
         var count = 0
         var isApplied = false ;
-        count = InnovationChallenge.countDocuments({status:1,userId:userId,contest:id});
+        count = InnovationChallenge.countDocuments({status:1,userId:userId,contestId:id});
         if (count >= 1){
             isApplied = true;
         }

@@ -149,7 +149,7 @@ exports.addNewinnovation= async (req, res) => {
 
   }
 
-  const count = await  InnovationChallenge.countDocuments({status: 1,userId:userId,contest:contestId}).catch(err=>{
+  const count = await  InnovationChallenge.countDocuments({status: 1,userId:userId,contestId:contestId}).catch(err=>{
     return {
       success:0,
       message:err.message
@@ -170,7 +170,7 @@ exports.addNewinnovation= async (req, res) => {
   const newInnovationChallenge = new InnovationChallenge({
     userId:userId,
     title : params.title,
-    contest:contestId,
+    contestId:contestId,
     description : params.description,
     price:params.price,
     status : 1,
