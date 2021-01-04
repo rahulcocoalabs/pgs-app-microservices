@@ -2174,7 +2174,7 @@ exports.sendOtp = async (req, res) => {
     //   return res.send(info);
     // }
 
-    var otpResponse = await otp(mobile);
+    var otpResponse = await send_otp(mobile);
     if (otpResponse == undefined) {
       return res.send({
         success: 0,
@@ -4096,7 +4096,7 @@ return {
 
 
 
-  async function otp(phone) {
+  async function send_otp(phone) {
     var otp = Math.floor(1000 + Math.random() * 9000);
     const apiToken = uuidv4();
     var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
