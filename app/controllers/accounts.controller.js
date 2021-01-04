@@ -23,10 +23,12 @@ var eventsConfig = config.events;
 var tutorsConfig = config.tutors;
 var classConfig = config.class;
 
+const superagent = require('superagent');
+const uuidv4 = require('uuid/v4');
 const JWT_KEY = config.jwt.key;
 const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
 
-var msg91 = require("msg91")(smsConfig.key, smsConfig.fromNo, smsConfig.route);
+
 
 var jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -2094,16 +2096,7 @@ exports.loginWithEmail = async (req, res) => {
 // *** Send OTP to registered email to reset password ***
 
 exports.sendOtp = async (req, res) => {
-  let email = req.body.email;
-
-  var mobileNo = "+919061955456";
-
-
-   var sendotp = await msg91.send(mobileNo, "MESSAGE", function(err, response){
-    console.log(err);
-    console.log(response.message,"flag");
-});
-return  res.send(sendotp);
+  
   console.log("flag1")
   if (!email) {
     return res.status(400).send({
@@ -2153,54 +2146,67 @@ return  res.send(sendotp);
       return res.send(testAccount);
     }
     console.log("flag4")
-    let mailTransporter = await nodemailer.createTransport({
-      host: testAccount.smtp.host,
-      port: testAccount.smtp.port,
-      secure: testAccount.smtp.secure,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass
-      }
-    });
+    // let mailTransporter = await nodemailer.createTransport({
+    //   host: testAccount.smtp.host,
+    //   port: testAccount.smtp.port,
+    //   secure: testAccount.smtp.secure,
+    //   auth: {
+    //     user: testAccount.user,
+    //     pass: testAccount.pass
+    //   }
+    // });
 
-    let mailDetails = {
-      from: 'xyz@gmail.com',
-      to: 'shefinshafi54@gmail.com',
-      subject: 'Test mail',
-      text: `OTP is ${otp} `
-    };
+    // let mailDetails = {
+    //   from: 'xyz@gmail.com',
+    //   to: 'shefinshafi54@gmail.com',
+    //   subject: 'Test mail',
+    //   text: `OTP is ${otp} `
+    // };
 
-    // send mail with defined transport object
-    let info = await mailTransporter.sendMail(mailDetails).catch(err=>{
-      return {success:0,message:err.message}
-    });
+    // // send mail with defined transport object
+    // let info = await mailTransporter.sendMail(mailDetails).catch(err=>{
+    //   return {success:0,message:err.message}
+    // });
 
-    if (info && (info.success != undefined) && info.success === 0){
-      return res.send(info);
+    // if (info && (info.success != undefined) && info.success === 0){
+    //   return res.send(info);
+    // }
+
+    var otpResponse = await otp(phone);
+    if (otpResponse == undefined) {
+      return res.send({
+        success: 0,
+        message: 'Something went wrong while sending OTP'
+      })
     }
-
-    console.log("flag5")
-    const newOtp = new Otp({
-      email: email,
-      isUsed: false,
-      userToken: otp,
-      apiToken: apiToken,
-      expiry: expiry,
-      status: 1,
-      tsCreatedAt: new Date(),
-      tsModifiedAt: null
-    });
-    var saveOtp = await newOtp.save();
     res.status(200).send({
       success: 1,
-      email: email,
-      otp: otp,
-      resetPasswordToken: resetPasswordToken,
-      apiToken: apiToken,
-      messageSentTo: info.messageId,
-      previewURL: nodemailer.getTestMessageUrl(info),
-      message: 'mail sent successfully'
+      message: 'OTP is sent to your registered phone number for verification',
+      item: otpResponse
     });
+
+    // console.log("flag5")
+    // const newOtp = new Otp({
+    //   email: email,
+    //   isUsed: false,
+    //   userToken: otp,
+    //   apiToken: apiToken,
+    //   expiry: expiry,
+    //   status: 1,
+    //   tsCreatedAt: new Date(),
+    //   tsModifiedAt: null
+    // });
+    // var saveOtp = await newOtp.save();
+    // res.status(200).send({
+    //   success: 1,
+    //   email: email,
+    //   otp: otp,
+    //   resetPasswordToken: resetPasswordToken,
+    //   apiToken: apiToken,
+    //   messageSentTo: info.messageId,
+    //   previewURL: nodemailer.getTestMessageUrl(info),
+    //   message: 'mail sent successfully'
+    // });
   } catch (err) {
     res.status(500).send({
       success: 0,
@@ -4084,4 +4090,35 @@ return {
     return dobObj;
 
 
+  }
+
+
+
+  async function otp(phone) {
+    var otp = Math.floor(1000 + Math.random() * 9000);
+    const apiToken = uuidv4();
+    var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
+    try {
+      const smsurl = await superagent.get(`http://thesmsbuddy.com/api/v1/sms/send?key=zOxsbDOn4iK8MBfNTyqxTlrcqM8WD3Ms&type=1&to=${phone}&sender=INFSMS&message=${otp} is the OTP for login to The Genesis Apostolic Church App&flash=0`);
+      const newOtp = new Otp({
+        phone: phone,
+        isUsed: false,
+        otp: otp,
+        apiToken: apiToken,
+        expiry: expiry,
+        status: 1,
+        tsCreatedAt: new Date(),
+        tsModifiedAt: null
+      });
+      var saveOtp = await newOtp.save();
+      var otpResponse = {
+        phone: saveOtp.phone,
+        otp: saveOtp.otp,
+        apiToken: saveOtp.apiToken,
+      };
+      return otpResponse
+    } catch (error) {
+      console.log(error.response.body);
+    }
+  
   }
