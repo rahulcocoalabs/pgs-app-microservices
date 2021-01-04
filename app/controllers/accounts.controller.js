@@ -102,6 +102,14 @@ exports.addNewinnovation= async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
+
+  var contestId = req.params.contest-id;
+  if (!contextId){
+    return res.send({
+      success:0,
+      message:"context id not available"
+    })
+  }
   if (userId == undefined){
     return res.send({
       success:0,
@@ -160,6 +168,7 @@ exports.addNewinnovation= async (req, res) => {
   const newInnovationChallenge = new InnovationChallenge({
     userId:userId,
     title : params.title,
+    contest:contestId,
     description : params.description,
     price:params.price,
     status : 1,
