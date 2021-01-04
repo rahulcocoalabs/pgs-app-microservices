@@ -569,8 +569,8 @@ exports.searchKeywords = async(req, res) => {
     value: {
       $regex: regexp,
       $options: 'i'
-    },
-    status: 1
+    }
+  
   };
   var queryProjection = {
     value: 1,
