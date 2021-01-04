@@ -2097,12 +2097,14 @@ exports.loginWithEmail = async (req, res) => {
 
 exports.sendOtp = async (req, res) => {
   
+  let params = req.body;
+  let mobile = params.mobile;
   console.log("flag1")
-  if (!email) {
+  if (!mobile) {
     return res.status(400).send({
       success: 0,
-      field: 'email',
-      message: 'email cannot be empty'
+      field: 'mobile',
+      message: 'mobile cannot be empty'
     })
   }
   var otp = Math.floor(1000 + Math.random() * 9000);
