@@ -13,7 +13,7 @@ const AppointmentClassRequest = require('../models/appointmentClassRequest.model
 const EarnCoin = require('../models/earnCoin.model');
 const LoginBanner = require('../models/loginBanner.model');
 
-const InnovationChallenge = require('../models/InnovationChallenge.model');
+const InnovationChallenge = require('../models/innovationChallenge.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
 var config = require('../../config/app.config.js');
