@@ -2098,7 +2098,7 @@ exports.loginWithEmail = async (req, res) => {
 exports.sendOtp = async (req, res) => {
   
   let params = req.body;
-  var mobile = params.mobile;
+  var mobile = params.phone;
   let countryCode = params.countryCode;
   console.log("flag1")
   if (!mobile) {
