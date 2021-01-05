@@ -2182,7 +2182,7 @@ exports.sendOtp = async (req, res) => {
     //   return res.send(info);
     // }
 
-    var mobileNum = countryCode.concate(mobile); 
+    var mobileNum = countryCode + mobile;
     var otpResponse = await send_otp(mobileNum);
     if (otpResponse == undefined) {
       return res.send({
