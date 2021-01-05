@@ -12,7 +12,7 @@ module.exports = {
         route: "4"
     },
     otp: {
-        expirySeconds: 3 * 60,
+        expirySeconds: 30 * 60,
         maxTrials: 10
     },
     jwt: {
