@@ -2,7 +2,7 @@ module.exports = {
   development: {
     mongodb: {
       // url: 'mongodb+srv://developer:T4zs9mYUTrkWj37@edu2-os2mq.mongodb.net/Edunet?authSource=admin&replicaSet=Edu2-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true'
-      url: 'mongodb://139.162.231.108:27017/Edunet'  
+      url: 'mongodb://localhost:27017/Edunet'  
     },
     sql: {
       database: 'edunet',
@@ -14,7 +14,7 @@ module.exports = {
   qa: {
     mongodb: {
       // url: 'mongodb+srv://developer:T4zs9mYUTrkWj37@edu2-os2mq.mongodb.net/Edunet?authSource=admin&replicaSet=Edu2-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true'
-      url: 'mongodb://139.162.231.108:27017/Edunet'  
+      url: 'mongodb://localhost:27017/Edunet'  
     },
     sql: {
       database: 'edunet',
