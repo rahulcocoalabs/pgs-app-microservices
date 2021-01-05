@@ -418,7 +418,7 @@ exports.create = async (req, res) => {
       || !req.body.email || !req.body.school
        || !req.body.password || !req.body.countryCode
        || !req.body.countryId || !req.body.stateId
-       || !req.body.city  ) {
+       || !req.body.cityId  ) {
     var errors = [];
     if (!req.body.firstName) {
       errors.push({
@@ -468,7 +468,7 @@ exports.create = async (req, res) => {
         message: "stateId cannot be empty"
       });
     }
-    if (!req.body.city) {
+    if (!req.body.cityId) {
       errors.push({
         field: "city",
         message: "city cannot be empty"
@@ -707,7 +707,7 @@ exports.create = async (req, res) => {
       genderId: req.body.genderId ? req.body.genderId : null,
       countryId : req.body.countryId,
       stateId : req.body.stateId,
-      city : req.body.city,
+      city : req.body.cityId,
       countryCode: req.body.countryCode,
       phone: req.body.phone,
       address: req.body.address ? req.body.address : null,
