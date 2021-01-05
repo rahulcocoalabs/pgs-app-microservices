@@ -2095,7 +2095,7 @@ exports.loginWithEmail = async (req, res) => {
 
 // *** Send OTP to registered email to reset password ***
 
-exports.sendOtp = async (req, res) => {
+exports.sendOtp_1 = async (req, res) => {
   console.log("flag1")
   let params = req.body;
   var mobile = params.phone;

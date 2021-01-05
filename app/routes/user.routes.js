@@ -46,7 +46,7 @@ module.exports = (app) => {
     app.post('/accounts', accounts.create);
     app.post('/accounts/login-email', accounts.loginWithEmail);
     console.log("flag 8901");
-    app.post('/accounts/otp', accounts.sendOtp);
+    app.post('/accounts/otp', accounts.sendOtp_1);
     app.post('/accounts/otp/verify', accounts.verifyOtp);
     app.post('/accounts/recover', accounts.recover);
     app.post('/accounts/reset/:token',accounts.resetPassword);
