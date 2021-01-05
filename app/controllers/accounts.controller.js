@@ -2096,11 +2096,11 @@ exports.loginWithEmail = async (req, res) => {
 // *** Send OTP to registered email to reset password ***
 
 exports.sendOtp = async (req, res) => {
-  
+  console.log("flag1")
   let params = req.body;
   var mobile = params.phone;
   let countryCode = params.countryCode;
-  console.log("flag1")
+ 
   if (!mobile) {
     return res.status(400).send({
       success: 0,
