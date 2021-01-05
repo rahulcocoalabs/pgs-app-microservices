@@ -2223,14 +2223,14 @@ exports.sendOtp = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
   var params = req.body;
   var otp = params.otp;
-  var email = params.email;
+  var phone = params.phone;
   var apiToken = params.apiToken;
   if (!email || !otp || !apiToken) {
     let errors = [];
-    if (!email) {
+    if (!phone) {
       errors.push({
-        field: 'email',
-        message: 'email cannot be empty'
+        field: 'phone',
+        message: 'phone cannot be empty'
       })
     }
     if (!otp) {
