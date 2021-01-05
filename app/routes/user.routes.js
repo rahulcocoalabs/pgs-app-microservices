@@ -45,8 +45,8 @@ module.exports = (app) => {
     app.post('/accounts', fileUpload.single('image'), accounts.create); 
     app.post('/accounts', accounts.create);
     app.post('/accounts/login-email', accounts.loginWithEmail);
-    app.post('/accounts/send-otp', accounts.sendOtp);
-    app.post('/accounts/verify-otp', accounts.verifyOtp);
+    app.post('/accounts/otp', accounts.sendOtp);
+    app.post('/accounts/otp/verify', accounts.verifyOtp);
     app.post('/accounts/recover', accounts.recover);
     app.post('/accounts/reset/:token',accounts.resetPassword);
     app.get('/accounts/self',auth, accounts.getUserDetails);
