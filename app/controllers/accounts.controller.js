@@ -2253,7 +2253,7 @@ exports.verifyOtp = async (req, res) => {
   try {
     var filter = {
       userToken: otp,
-      email: email,
+      phone: phone,
       apiToken: apiToken,
       isUsed: false
     };
@@ -2263,7 +2263,7 @@ exports.verifyOtp = async (req, res) => {
       var currentTime = Date.now();
 
       var otpData1 = await Otp.findOne({
-        email: email,
+        phone: phone,
         userToken: otp,
         apiToken: apiToken,
         isUsed: false,
@@ -2278,7 +2278,7 @@ exports.verifyOtp = async (req, res) => {
         })
       } else {
         var filter = {
-          email: email,
+          phone: phone,
           userToken: otp,
           apiToken: apiToken
         };
