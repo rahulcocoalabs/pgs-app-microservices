@@ -8,5 +8,5 @@ module.exports = (app) => {
    app.get('/address/list-address',auth,address.listAddress);
    app.get('/address/list-countries',address.listCountries);
    app.get('/address/list-states/:countryId',address.listStates);
-   app.get('/address/list-cities/:stateId',address.listCities);
+  // app.get('/address/list-cities/:stateId',address.listCities);
 }

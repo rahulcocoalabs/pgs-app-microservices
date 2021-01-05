@@ -2098,7 +2098,8 @@ exports.loginWithEmail = async (req, res) => {
 exports.sendOtp = async (req, res) => {
   
   let params = req.body;
-  let mobile = params.mobile;
+  var mobile = params.mobile;
+  let countryCode = params.countryCode;
   console.log("flag1")
   if (!mobile) {
     return res.status(400).send({
@@ -2107,10 +2108,17 @@ exports.sendOtp = async (req, res) => {
       message: 'mobile cannot be empty'
     })
   }
-  var otp = Math.floor(1000 + Math.random() * 9000);
-  const apiToken = uuidv4();
-  var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
-  console.log("flag2")
+  if (!countryCode) {
+    return res.status(400).send({
+      success: 0,
+      field: 'countryCode',
+      message: 'countryCode cannot be empty'
+    })
+  }
+  // var otp = Math.floor(1000 + Math.random() * 9000);
+  // const apiToken = uuidv4();
+  // var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
+  // console.log("flag2")
   try {
     // let checkUser = await User.findOne({
     //   email: email,
@@ -2174,7 +2182,8 @@ exports.sendOtp = async (req, res) => {
     //   return res.send(info);
     // }
 
-    var otpResponse = await send_otp(mobile);
+    var mobileNum = countryCode.concate(mobile); 
+    var otpResponse = await send_otp(mobileNum);
     if (otpResponse == undefined) {
       return res.send({
         success: 0,
