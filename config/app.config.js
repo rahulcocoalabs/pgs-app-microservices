@@ -168,7 +168,7 @@ module.exports = {
         itemTypes: ["book", "video", "game", "product", "charity", "test"]
     },
     gateway: {
-        url: "http://localhost:8000"
+        url: "http://localhost:6300"//8000
     },
     emotions: {
         emotionsList: ["love", "happy", "heartfilled", "surprise", "sad", "angry"]
