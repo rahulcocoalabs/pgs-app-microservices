@@ -4105,7 +4105,7 @@ return {
       const newOtp = new Otp({
         phone: phone,
         isUsed: false,
-        otp: otp,
+        userToken: otp,
         apiToken: apiToken,
         expiry: expiry,
         status: 1,
