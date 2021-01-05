@@ -2257,6 +2257,8 @@ exports.verifyOtp = async (req, res) => {
       apiToken: apiToken,
       isUsed: false
     };
+
+    console.log(filter,"flag");
     var otpData = await Otp.findOne(filter);
 
     if (otpData) {
