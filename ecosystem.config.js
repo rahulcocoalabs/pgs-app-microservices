@@ -11,7 +11,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 7000
+        port : 6301  //7000
       }
     },
     {
@@ -25,7 +25,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 7001
+        port :   6302//7001
       }
     },
     {
@@ -291,7 +291,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 7020
+        port : 6321//7020
       }
     },
     {
