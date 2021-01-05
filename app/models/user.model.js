@@ -153,6 +153,7 @@ const UserSchema = mongoose.Schema({
     countryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
     stateId: { type: mongoose.Schema.Types.ObjectId, ref: 'State' },
     cityId: { type: mongoose.Schema.Types.ObjectId, ref: 'City' },
+    city:String,
     coinCount: Number,
     
     karmaIndex: String,

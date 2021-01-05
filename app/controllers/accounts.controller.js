@@ -418,7 +418,7 @@ exports.create = async (req, res) => {
       || !req.body.email || !req.body.school
        || !req.body.password || !req.body.countryCode
        || !req.body.countryId || !req.body.stateId
-       || !req.body.cityId  ) {
+       || !req.body.city  ) {
     var errors = [];
     if (!req.body.firstName) {
       errors.push({
@@ -468,10 +468,10 @@ exports.create = async (req, res) => {
         message: "stateId cannot be empty"
       });
     }
-    if (!req.body.cityId) {
+    if (!req.body.city) {
       errors.push({
-        field: "cityId",
-        message: "cityId cannot be empty"
+        field: "city",
+        message: "city cannot be empty"
       });
     }
     // if (req.body.nationalityId && !ObjectId.isValid(req.body.nationalityId)) {
@@ -707,7 +707,7 @@ exports.create = async (req, res) => {
       genderId: req.body.genderId ? req.body.genderId : null,
       countryId : req.body.countryId,
       stateId : req.body.stateId,
-      cityId : req.body.cityId,
+      city : req.body.city,
       countryCode: req.body.countryCode,
       phone: req.body.phone,
       address: req.body.address ? req.body.address : null,
@@ -880,13 +880,13 @@ exports.getUserDetails = (req, res) => {
     isDeactivated : 1,
     countryId : 1,
     stateId : 1,
-    cityId : 1,
+    city : 1,
   }
   // get data
   User.findOne(filters, queryProjection).populate(['syllabusId', {
     path: 'language',
     select: 'name'
-  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).then(userDetail => {
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId']).then(userDetail => {
     if (!userDetail) {
       var responseObj = {
         success: 0,
@@ -1045,8 +1045,8 @@ exports.update = async (req, res) => {
   if (update.stateId) {
     update.stateId = update.stateId;
   }
-  if (update.cityId) {
-    update.cityId = update.cityId;
+  if (update.city) {
+    update.city = update.city;
   }
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
@@ -1144,13 +1144,13 @@ exports.update = async (req, res) => {
     isDeactivated : 1,
     countryId : 1,
     stateId : 1,
-    cityId : 1,
+    city : 1,
   }
  
   var userInfo = await User.findOne(filter, proj).populate(['syllabusId', {
     path: 'language',
     select: 'name'
-  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).catch(err=>{
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId']).catch(err=>{
     return {
       success:0,
       message:"did not get info of user",
@@ -2685,7 +2685,7 @@ exports.updateForSocialAccount = async (req, res) => {
   if (!params.dob || !params.language 
     || !params.token || !params.school 
     || !params.countryId || !params.stateId
-    || !params.cityId) {
+    || !params.city) {
     if (!params.dob) {
       errors.push({
         field: "dob",
@@ -2722,10 +2722,10 @@ exports.updateForSocialAccount = async (req, res) => {
         message: "stateId missing"
       });
     }
-    if (!params.cityId) {
+    if (!params.city) {
       errors.push({
-        field: "cityId",
-        message: "cityId missing"
+        field: "city",
+        message: "city missing"
       });
     }
     return res.status(200).send({
@@ -2787,7 +2787,7 @@ exports.updateForSocialAccount = async (req, res) => {
   update.dob = params.dob;
   update.countryId = params.countryId;
   update.stateId = params.stateId;
-  update.cityId = params.cityId;
+  update.city = params.city;
   update.school = params.school;
   update.language = params.language;
   update.tsModifiedAt = Date.now();
