@@ -2225,7 +2225,7 @@ exports.verifyOtp = async (req, res) => {
   var otp = params.otp;
   var phone = params.phone;
   var apiToken = params.apiToken;
-  if (!email || !otp || !apiToken) {
+  if (!phone || !otp || !apiToken) {
     let errors = [];
     if (!phone) {
       errors.push({
