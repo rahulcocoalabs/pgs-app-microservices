@@ -886,7 +886,7 @@ exports.getUserDetails = (req, res) => {
   User.findOne(filters, queryProjection).populate(['syllabusId', {
     path: 'language',
     select: 'name'
-  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId']).then(userDetail => {
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).then(userDetail => {
     if (!userDetail) {
       var responseObj = {
         success: 0,

@@ -337,8 +337,8 @@ module.exports = {
       }
     },
     {
-      name: 'test - Edunet Microservices',
-      script: 'test.service.js',
+      name: 'trial - Edunet Microservices',
+      script: 'trial.service.js',
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
       instances: 1,
       autorestart: true,
