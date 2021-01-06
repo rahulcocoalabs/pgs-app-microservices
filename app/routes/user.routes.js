@@ -67,7 +67,7 @@ module.exports = (app) => {
 
     //After social signup screen
     app.patch('/accounts/update1',accounts.updateForSocialAccount);
-    app.patch('/accounts/update',auth,accounts.update1);
+    app.patch('/accounts/update',auth,accounts.updateProfile);
 
     //Request as become tutor
     app.post('/accounts/request-as-tutor',auth,fileUpload.single('video'), accounts.requestAsTutor); 

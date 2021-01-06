@@ -1388,6 +1388,84 @@ exports.getKarmaIndex = (req, res) => {
   res.send(responseObj);
 }
 
+
+exports.updateProfile = async (req, res) => {
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var update = {};
+  const params = req.body;
+
+  if (!params){
+    return res.send({
+      success:0,
+      message:"no parameter found"
+    });
+  }
+
+  if (params.syllabusId) {
+    update.syllabusId = ObjectId(params.syllabusId);
+  }
+  if (params.nationalityId) {
+    update.nationalityId = ObjectId(params.nationalityId);
+  }
+  if (params.language) {
+    update.language = params.language;
+  }
+  if (params.genderId) {
+    update.genderId = ObjectId(params.genderId);
+  }
+  if (params.fatherNationalityId) {
+    update.fatherNationalityId = ObjectId(params.fatherNationalityId);
+  }
+  if (params.fatherProfessionId) {
+    update.fatherProfessionId = ObjectId(params.fatherProfessionId);
+  }
+  if (params.motherNationalityId) {
+    update.motherNationalityId = ObjectId(params.motherNationalityId);
+  }
+  if (params.motherProfessionId) {
+    update.motherProfessionId = ObjectId(params.motherProfessionId);
+  }
+  if (params.phone) {
+    update.phone = params.phone;
+  }
+  if (params.countryCode) {
+    update.countryCode = params.countryCode;
+  }
+  if (params.school) {
+    update.school = params.school;
+  }
+
+  //need to validate country/state & city
+  if (params.countryId) {
+    update.nationalityId = params.countryId;
+  }
+  if (params.stateId) {
+    update.stateId = params.stateId;
+  }
+  if (params.city) {
+    update.city = params.city;
+  }
+  if (params.cityId) {
+    update.cityId = params.cityId;
+  }
+
+
+  let value = await User.updateOne({ status: 1, _id: userId},update).catch(err=>{return {succes: 0, message: err.message }});
+  if (value && value.success != undefined && value.success === 0){
+    return res.send(value);
+  }
+
+  return res.send(
+    {
+      success:1,
+      message:"updated successfully"
+    }
+  )
+}
+
 exports.update = async (req, res) => {
 
   
