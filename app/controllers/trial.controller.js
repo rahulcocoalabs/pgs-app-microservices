@@ -489,3 +489,25 @@ exports.create = async (req, res) => {
         }
     }
 };
+async function getDayMonthAndYear(dob){
+    console.log("dob : " + dob)
+    var dobDate = new Date(dob);
+    console.log("dobDate : " + dobDate)
+    var yearInDob = dobDate.getFullYear()
+    console.log("yearInDob : " + yearInDob)
+    var monthInDob = dobDate.getMonth()
+    console.log("monthInDob : " + monthInDob)
+    var dayInDob = dobDate.getDate()
+    console.log("dayInDob : " + dayInDob)
+
+    var dobObj = {};
+    dobObj.dayInDob = dayInDob;
+    dobObj.monthInDob = monthInDob + 1;
+    dobObj.yearInDob = yearInDob;
+    console.log("dobObj" ) ;
+    console.log(dayInDob)
+    console.log("dobObj" ) ;
+    return dobObj;
+
+
+  }
