@@ -511,3 +511,45 @@ async function getDayMonthAndYear(dob){
 
 
   }
+
+  async function getLoginResponse(email){
+    let checkUser = await User.findOne({
+      email: email,
+      status: 1
+    }, {
+      coinCount: 1,
+      email: 1,
+      firstName: 1,
+      lastName: 1,
+      middlename: 1,
+      image: 1,
+      password: 1,
+      isTutor: 1,
+      dob : 1
+    });
+    if (!checkUser) {
+      return {
+        success: 0,
+        message: 'User not found'
+      }
+    }else{
+      var payload = {
+        userId: checkUser.id
+      };
+      var token = jwt.sign({
+        data: payload,
+      }, JWT_KEY, {
+        expiresIn: '30 days'
+      });
+
+      return {
+        success: 1,
+        statusCode: 200,
+        userDetails: checkUser,
+        token,
+        flag:"ok",
+        // message: 'Successfully logged in',
+        message : "User Created Successfully."
+      }
+    }
+  }
