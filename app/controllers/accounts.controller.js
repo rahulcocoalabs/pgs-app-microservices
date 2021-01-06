@@ -1451,7 +1451,13 @@ exports.updateProfile = async (req, res) => {
   if (params.cityId) {
     update.cityId = params.cityId;
   }
-
+  if (params.firstName) {
+    update.firstName = params.firstName;
+  }
+  if (params.countryCode) {
+    update.countryCode = params.countryCode;
+  }
+ 
 
   let value = await User.updateOne({ status: 1, _id: userId},update).catch(err=>{return {succes: 0, message: err.message }});
   if (value && value.success != undefined && value.success === 0){
