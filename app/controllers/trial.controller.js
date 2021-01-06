@@ -67,6 +67,7 @@ karmaConfig = config.karma;
 
 
 exports.create = async (req, res) => {
+    console.log('flag ..1');
     var warnings = [];
     var profileCompletion;
     var hobbyIds = [];
