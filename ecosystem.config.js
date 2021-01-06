@@ -11,7 +11,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6301  //7000
+        port : 7000
       }
     },
     {
@@ -25,7 +25,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port :   6302//7001
+        port :   7001
       }
     },
     {
@@ -39,7 +39,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6303//7002
+        port : 7002
       }
     },
     {
@@ -53,7 +53,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6304//7003
+        port : 7003
       }
     },
     {
@@ -67,7 +67,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6305//7004
+        port : 7004
       }
     },
     {
@@ -81,7 +81,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6306//7005
+        port : 7005
       }
     },
     {
@@ -95,7 +95,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6307//7006
+        port : 7006
       }
     },
     {
@@ -109,7 +109,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6308//7007
+        port : 7007
       }
     },
     {
@@ -123,7 +123,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6309//7008
+        port : 7008
       }
     },
     {
@@ -137,7 +137,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6310//7009
+        port : 7009
       }
     },
     {
@@ -151,7 +151,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6311//7010
+        port : 7010
       }
     },
     {
@@ -165,7 +165,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6312//7011
+        port : 7011
       }
     },
     {
@@ -179,7 +179,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6313//7012
+        port : 7012
       }
     },
     {
@@ -193,7 +193,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6314//7013
+        port : 7013
       }
     },
     {
@@ -207,7 +207,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6315//7014
+        port : 7014
       }
     },
     {
@@ -221,7 +221,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6316//7015
+        port : 7015
       }
     },
     {
@@ -235,7 +235,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6318//7016
+        port : 7016
       }
     },
     {
@@ -249,7 +249,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6318//7017
+        port : 7017
       }
     },
     {
@@ -263,7 +263,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6319//7018
+        port : 7018
       }
     },
     {
@@ -277,7 +277,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6320//7019
+        port : 7019
       }
     },
     {
@@ -291,7 +291,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6321//7020
+        port : 7020
       }
     },
     {
@@ -305,7 +305,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6322//7021
+        port : 7021
       }
     },
     {
@@ -319,7 +319,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6323//7022
+        port : 7022
       }
     },
     {
@@ -333,7 +333,7 @@ module.exports = {
       //cron_restart
       env: {
         NODE_ENV: 'qa',
-        port : 6324//7023
+        port : 7023
       }
     },
     ]
