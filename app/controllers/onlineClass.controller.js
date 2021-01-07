@@ -61,10 +61,10 @@ exports.createOnlineClass = async (req, res) => {
  
 
 
-  if (!file || !params.tutorSubjectId || !params.title || params.title === undefined || !params.tutorClassId || !params.classDescription || params.isPaid === undefined
+  if (!file || !(params.tutorSubjectId || params.tutorSubject)|| !params.title || params.title === undefined || !(params.tutorClassId || params.tutorClass)|| !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
     || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory )
-    ||  (params.isPaid === 'true' && !params.currencyId && !params.tutorSyllabusId)
+    ||  (params.isPaid === 'true' && !params.currencyId && !(params.tutorSyllabusId || params.tutorSyllabus))
   ) {
     var errors = [];
 
