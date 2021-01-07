@@ -3497,8 +3497,8 @@ exports.requestAsTutor = async (req, res) => {
   var file = req.file;
 
   if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || (params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)
-    || params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)
-    || params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)
+    
+    
     || params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
     || !params.courceDescription 
     // || !file 
