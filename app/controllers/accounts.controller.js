@@ -474,12 +474,12 @@ exports.create = async (req, res) => {
       //         message: "city cannot be empty"
       //     });
       // }
-      if (!req.body.city) {
-          errors.push({
-              field: "city",
-              message: "city cannot be empty"
-          });
-      }
+      // if (!req.body.city) {
+      //     errors.push({
+      //         field: "city",
+      //         message: "city cannot be empty"
+      //     });
+      // }
       // if (req.body.nationalityId && !ObjectId.isValid(req.body.nationalityId)) {
       //     errors.push({
       //         field: "nationalityId",
