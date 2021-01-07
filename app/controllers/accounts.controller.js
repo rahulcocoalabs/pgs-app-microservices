@@ -418,8 +418,7 @@ exports.create = async (req, res) => {
       || !req.body.dob || !req.body.language
       || !req.body.email || !req.body.school
       || !req.body.password || !req.body.countryCode
-      || !req.body.countryId || !req.body.stateId
-      || !(req.body.cityId || req.body.city)) {
+      || !req.body.countryId ) {
       var errors = [];
       if (!req.body.firstName) {
           errors.push({

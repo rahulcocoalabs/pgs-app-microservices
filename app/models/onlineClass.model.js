@@ -33,6 +33,8 @@ const OnlineClassSchema = mongoose.Schema({
     tutorSubject:String,
     tutorClass:String,
     tutorSyllabus:String,
+    qualification:String,
+    category : String,
     image : String,
     tutorName:String,
     video:String,

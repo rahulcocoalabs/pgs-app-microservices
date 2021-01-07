@@ -58,14 +58,13 @@ exports.createOnlineClass = async (req, res) => {
   var params = req.body;
 
   var file = req.files;
- 
 
 
-  if (!file || !(params.tutorSubjectId || params.tutorSubject)|| !params.title || params.title === undefined || !(params.tutorClassId || params.tutorClass)|| !params.classDescription || params.isPaid === undefined
+
+  if (!file || !(params.tutorSubjectId || params.tutorSubject) || !params.title || params.title === undefined || !(params.tutorClassId || params.tutorClass) || !params.classDescription || params.isPaid === undefined
     || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
-    || params.isPublic === undefined || (params.isPaid === 'true' &&!params.classTimeCategory )
-    ||  (params.isPaid === 'true' && !params.currencyId && !(params.tutorSyllabusId || params.tutorSyllabus))
-  ) {
+    || params.isPublic === undefined || (params.isPaid === 'true' && !params.classTimeCategory)
+    || (params.isPaid === 'true' && !params.currencyId) || !(params.tutorSyllabusId || params.tutorSyllabus)) {
     var errors = [];
 
     if (!req.body.tutorSubjectId) {
@@ -119,7 +118,7 @@ exports.createOnlineClass = async (req, res) => {
         message: "classTimeCategory cannot be empty"
       })
     }
-    if((params.isPaid === 'true' && !params.currencyId )){
+    if ((params.isPaid === 'true' && !params.currencyId)) {
       errors.push({
         field: "currencyId",
         message: "currencyId cannot be empty"
@@ -144,7 +143,7 @@ exports.createOnlineClass = async (req, res) => {
         message: "availableTime cannot be empty"
       })
     }
-    if( !params.tutorSyllabusId){
+    if (!params.tutorSyllabusId) {
       errors.push({
         field: "tutorSyllabusId",
         message: "tutorSyllabusId cannot be empty"
@@ -154,18 +153,18 @@ exports.createOnlineClass = async (req, res) => {
     return res.status(200).send({
       success: 0,
       errors: errors,
-    
+
       code: 200
     });
   }
-console.log("08/12/202",file.filename)
+  console.log("08/12/202", file.filename)
   var onlineClassObj = {};
   onlineClassObj.userId = userId;
   onlineClassObj.tutorClassId = params.tutorClassId;
   onlineClassObj.tutorSubjectId = params.tutorSubjectId;
   onlineClassObj.classDescription = params.classDescription;
   onlineClassObj.image = file.image[0].filename;
-  if (file.video && file.video.length > 0){
+  if (file.video && file.video.length > 0) {
     onlineClassObj.video = file.video[0].filename;
   }
   onlineClassObj.isPaid = params.isPaid;
@@ -199,8 +198,8 @@ console.log("08/12/202",file.filename)
   onlineClassObj.tsModifiedAt = null;
   //rakesh 
 
-  var tutorName = await User.findOne({_id:params.userId,status:1},{firstName:1}).catch(err=>{
-    return {success:0,message:err.message};
+  var tutorName = await User.findOne({ _id: params.userId, status: 1 }, { firstName: 1 }).catch(err => {
+    return { success: 0, message: err.message };
   })
 
   if (tutorName && (tutorName.success !== undefined) && (tutorName.success === 0)) {
@@ -208,6 +207,12 @@ console.log("08/12/202",file.filename)
   }
 
   onlineClass.tutorName = tutorName;
+
+  onlineClass.tutorSubject= params.tutorSubject;
+  onlineClass.tutorClass = params.tutorClass;
+  onlineClass.tutorSyllabus = params.tutorSyllabus;
+  onlineClass.qualification = params.qualification;
+  onlineClass.category = params.category;
 
   var newOnlineClassObj = new OnlineCLass(onlineClassObj);
   var onlineClassResponse = await newOnlineClassObj.save()
@@ -224,7 +229,7 @@ console.log("08/12/202",file.filename)
   return res.send({
     success: 1,
     statusCode: 200,
-    filename:file.filename,
+    filename: file.filename,
     message: 'Created a class..waiting for admin approval',
   })
 
@@ -290,7 +295,7 @@ console.log("08/12/202",file.filename)
 //       classDetails.isFavourite = false;
 //     }
 
-    
+
 
 //     return res.send({
 //       success: 1,
@@ -315,9 +320,9 @@ console.log("08/12/202",file.filename)
 exports.createTutorRequest = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
- var params = req.body;
+  var params = req.body;
 
-  if ( !params.tutorSubjectId || !params.tutorClassId || !params.classDescription) {
+  if (!params.tutorSubjectId || !params.tutorClassId || !params.classDescription) {
     var errors = [];
 
     if (!req.body.tutorSubjectId) {
@@ -351,32 +356,32 @@ exports.createTutorRequest = async (req, res) => {
   }
   // validating inputn data 
 
-    var subjectCount = await tutorSubjectModel.countDocuments({status:1,_id:req.body.tutorSubjectId}).catch(err=>{
-      return {success:0,message:"could not read document count of subjects"}
-    })
-    if (subjectCount && subjectCount.success && subjectCount.success === 0){
-      return res.send(subjectCount)
-    }
+  var subjectCount = await tutorSubjectModel.countDocuments({ status: 1, _id: req.body.tutorSubjectId }).catch(err => {
+    return { success: 0, message: "could not read document count of subjects" }
+  })
+  if (subjectCount && subjectCount.success && subjectCount.success === 0) {
+    return res.send(subjectCount)
+  }
 
-    var classCount = await TutorClass.countDocuments({status:1,_id:req.body.tutorClassId}).catch(err=>{
-      return {success:0,message:"could not read document count of subjects"}
-    })
-    if (classCount && classCount.success && classCount.success === 0){
-      return res.send(subjectCount)
-    }
+  var classCount = await TutorClass.countDocuments({ status: 1, _id: req.body.tutorClassId }).catch(err => {
+    return { success: 0, message: "could not read document count of subjects" }
+  })
+  if (classCount && classCount.success && classCount.success === 0) {
+    return res.send(subjectCount)
+  }
 
-    if (classCount == 0){
-      return res.send({
-        success:0,
-        message:"specified class is deleted or does not exist"
-      })
-    }
-    if (subjectCount == 0){
-      return res.send({
-        success:0,
-        message:"specified subject is deleted or does not exist"
-      })
-    }
+  if (classCount == 0) {
+    return res.send({
+      success: 0,
+      message: "specified class is deleted or does not exist"
+    })
+  }
+  if (subjectCount == 0) {
+    return res.send({
+      success: 0,
+      message: "specified subject is deleted or does not exist"
+    })
+  }
   //end
 
   var requestObject = {};
@@ -407,7 +412,7 @@ exports.createTutorRequest = async (req, res) => {
 
 }
 
-exports.getZoomLink = async(req,res) => {
+exports.getZoomLink = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -419,75 +424,75 @@ exports.getZoomLink = async(req,res) => {
     isRejected: false,
     status: 1
   }).populate([{
-      path: 'tutorSubjectId',
-      select:'_id:1'
-    }, {
-     path: 'tutorClassId',
-      select:'_id:1'
-    }]).catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while get class details',
-        error: err
-      }
-    })
-    if (classDetails && classDetails.success && classDetails.success === 0){
-      return res.send(classDetails);
+    path: 'tutorSubjectId',
+    select: '_id:1'
+  }, {
+    path: 'tutorClassId',
+    select: '_id:1'
+  }]).catch(err => {
+    return {
+      success: 0,
+      message: 'Something went wrong while get class details',
+      error: err
     }
+  })
+  if (classDetails && classDetails.success && classDetails.success === 0) {
+    return res.send(classDetails);
+  }
 
-    if (classDetails){
-      if (classDetails.isPublic === true){
-        return res.send({
-          success:1,
-          message:"link to join class",
-          link:classDetails.zoomLink
-        })
-      }
-      else {
-        var approveRequestCriteria = {
-          userId,
-          tutorClassId:classDetails.tutorClassId,
-          tutorSubjectId:classDetails.tutorSubjectId,
-          isApproved : true,
-          isRejected : false,
-          status : 1
-        }
-      
-        var requestDetailsCount = await AppointmentClassRequest.countDocuments().catch(err => {
-          return {
-            success:0,
-            message:"did not fetch count of documents"
-          }
-        })
-        if (requestDetailsCount && requestDetailsCount.success && requestDetailsCount.success ===0){
-          return res.send(requestDetailsCount);
-        }
-        if (requestDetailsCount > 0){
-          return res.send({
-            success:1,
-            message:"link to join class",
-            link:classDetails.zoomLink
-          })
-          
-        }
-        else {
-          return res.send({
-            success:0,
-            message:"link to join class can not be provided since class is private and you have not requested or request is approved"
-          
-          })
-        }
-      }
-    }else{
+  if (classDetails) {
+    if (classDetails.isPublic === true) {
       return res.send({
-        success:0,
-        message:"Class not exists"
+        success: 1,
+        message: "link to join class",
+        link: classDetails.zoomLink
       })
     }
-   
+    else {
+      var approveRequestCriteria = {
+        userId,
+        tutorClassId: classDetails.tutorClassId,
+        tutorSubjectId: classDetails.tutorSubjectId,
+        isApproved: true,
+        isRejected: false,
+        status: 1
+      }
+
+      var requestDetailsCount = await AppointmentClassRequest.countDocuments().catch(err => {
+        return {
+          success: 0,
+          message: "did not fetch count of documents"
+        }
+      })
+      if (requestDetailsCount && requestDetailsCount.success && requestDetailsCount.success === 0) {
+        return res.send(requestDetailsCount);
+      }
+      if (requestDetailsCount > 0) {
+        return res.send({
+          success: 1,
+          message: "link to join class",
+          link: classDetails.zoomLink
+        })
+
+      }
+      else {
+        return res.send({
+          success: 0,
+          message: "link to join class can not be provided since class is private and you have not requested or request is approved"
+
+        })
+      }
+    }
+  } else {
+    return res.send({
+      success: 0,
+      message: "Class not exists"
+    })
+  }
+
 }
 
-exports.getZoomStartLink = async(req,res) =>{
+exports.getZoomStartLink = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.params;
@@ -498,46 +503,46 @@ exports.getZoomStartLink = async(req,res) =>{
     return res.send(tutorCheck);
   }
   var findCriteria = {
-    _id : classId,
+    _id: classId,
     userId,
-    status : 1
+    status: 1
   }
-   var projection = {
-    startUrl : 1,
-    isApproved : 1,
-   }
-  var checkClassResp = await OnlineCLass.findOne(findCriteria,projection)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while get class details',
-      error: err
+  var projection = {
+    startUrl: 1,
+    isApproved: 1,
+  }
+  var checkClassResp = await OnlineCLass.findOne(findCriteria, projection)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get class details',
+        error: err
+      }
+    })
+  if (checkClassResp && (checkClassResp.success !== undefined) && (checkClassResp.success === 0)) {
+    return res.send(checkClassResp);
+  }
+  if (checkClassResp) {
+    console.log()
+    if (checkClassResp.isApproved) {
+      return res.send({
+        success: 1,
+        message: "Zoom link to start class",
+        link: checkClassResp.startUrl
+      })
+    } else {
+      return res.send({
+        success: 0,
+        message: "Not approved class"
+      })
     }
-  })
-if (checkClassResp && (checkClassResp.success !== undefined) && (checkClassResp.success === 0)) {
-  return res.send(checkClassResp);
-}
-if(checkClassResp){
-  console.log()
-  if(checkClassResp.isApproved){
-    return res.send({
-      success:1,
-      message:"Zoom link to start class",
-      link:checkClassResp.startUrl
-    })
-  }else{
+
+  } else {
     return res.send({
       success: 0,
-      message: "Not approved class"
+      message: "Class not exists"
     })
   }
-
-}else{
-  return res.send({
-    success: 0,
-    message: "Class not exists"
-  })
-}
 }
 
 exports.getClassDetails = async (req, res) => {
@@ -599,7 +604,7 @@ exports.getClassDetails = async (req, res) => {
 
     return res.send({
       success: 1,
-      flag:1,
+      flag: 1,
       item: classDetails,
       joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
@@ -636,17 +641,17 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
-  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
-    findCriteria.userId =  { $ne: userId } 
+  if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
+    findCriteria.userId = { $ne: userId }
   }
 
-  if(params.filters){
+  if (params.filters) {
 
     var reqFilters = JSON.parse(params.filters);
 
     var availableFilters = constants.ONLINE_CLASS_FILTERS;
 
-    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+    findCriteria = await setFIlter(reqFilters, availableFilters, findCriteria)
   }
   if (params.isPublic !== undefined && params.isPublic === 'true') {
     findCriteria.isPublic = true;
@@ -658,58 +663,60 @@ exports.listOnlineClasses = async (req, res) => {
     findCriteria.isPopular = true;
   }
 
-  if(params.isFeeLowToHigh === 'true'){
-       sortOptions = {
-        'fee' : 1
-       }
-  }else if(params.isFeeLowToHigh === 'false'){
+  if (params.isFeeLowToHigh === 'true') {
     sortOptions = {
-      'fee' : -1
+      'fee': 1
     }
-  }else{
+  } else if (params.isFeeLowToHigh === 'false') {
+    sortOptions = {
+      'fee': -1
+    }
+  } else {
     sortOptions = {
       'tsCreatedAt': -1
     }
   }
 
-  if(params.itemType === constants.SUBJECT_SEARCH_TYPE 
-    && params.itemId !== undefined && params.itemId !== null){
-      findCriteria.tutorSubjectId = params.itemId
-    }
+  if (params.itemType === constants.SUBJECT_SEARCH_TYPE
+    && params.itemId !== undefined && params.itemId !== null) {
+    findCriteria.tutorSubjectId = params.itemId
+  }
 
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
-  
+
   //rakesh 
 
   if (params.search != undefined) {
-        var search = params.search;
-        findCriteria = {
-            $or: [{
-                title: {
-                    $regex: search,
-                    $options: 'i',
-                }
-            }, {
-                classDescription: {
-                    $regex: search,
-                    $options: 'i'
-                }}, {
-                  tutorName: {
-                      $regex: search,
-                      $options: 'i'
-                  }}]
-        };
+    var search = params.search;
+    findCriteria = {
+      $or: [{
+        title: {
+          $regex: search,
+          $options: 'i',
+        }
+      }, {
+        classDescription: {
+          $regex: search,
+          $options: 'i'
+        }
+      }, {
+        tutorName: {
+          $regex: search,
+          $options: 'i'
+        }
+      }]
+    };
   }
-  console.log(findCriteria,"flag",search)
+  console.log(findCriteria, "flag", search)
   //end rakesh's mods
-  var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData,sortOptions);
+  var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData, sortOptions);
   return res.send(listClassResp);
 }
 
 exports.listTutorList = async (req, res) => {
-  
+
   var userData = req.identity.data;
   var userId = userData.userId;
   var favouriteDataResp = await getUserFavouriteData(userId);
@@ -722,21 +729,21 @@ exports.listTutorList = async (req, res) => {
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteTutor } };
   }
-  if(params.filters){
+  if (params.filters) {
     var reqFilters = JSON.parse(params.filters);
     var availableFilters = constants.TUTOR_FILTERS;
-    findCriteria  = await setFIlter(reqFilters,availableFilters,findCriteria)
+    findCriteria = await setFIlter(reqFilters, availableFilters, findCriteria)
   }
   if (params.isPopular === 'true') {
     findCriteria.isPopular = true;
   }
-  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
-    findCriteria._id =  { $ne: userId } 
+  if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
+    findCriteria._id = { $ne: userId }
   }
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
-  
+
   var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   return res.send(listTutorResp);
 
@@ -899,19 +906,19 @@ exports.getStudentHome = async (req, res) => {
   var findCriteria = {};
   if (tabCheckData.isPublic !== null) {
     findCriteria.isPublic = tabCheckData.isPublic
-  } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
+  } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
     // if (tabCheckData.favourites.favouriteClasses) {
-      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
+    findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
     // }
   }
 
-  if(params.keyword){
+  if (params.keyword) {
     findCriteria.title = {
       $regex: `.*${params.keyword}.*`,
+    }
   }
-  }
-  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
-    findCriteria.userId =  { $ne: userId } 
+  if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
+    findCriteria.userId = { $ne: userId }
   }
 
   findCriteria.isPopular = true;
@@ -928,24 +935,24 @@ exports.getStudentHome = async (req, res) => {
 
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
-  if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite ) {
+  if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
     // if (tabCheckData.favourites.favouriteTutors) {
-      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
+    findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
     // }
   }
-  if(params.keyword){
+  if (params.keyword) {
     findCriteria.firstName = {
       $regex: `.*${params.keyword}.*`,
+    }
   }
-  }
-  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
-    findCriteria._id =  { $ne: userId } 
+  if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
+    findCriteria._id = { $ne: userId }
   }
 
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
- 
+
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
@@ -959,19 +966,19 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.isPublic = tabCheckData.isPublic
   } else if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
     // if (tabCheckData.favourites.favouriteClasses) {
-      findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
+    findCriteria = { _id: { $in: tabCheckData.favourites.favouriteClasses } };
     // }
   }
   findCriteria.status = 1;
   findCriteria.isApproved = true;
   findCriteria.isRejected = false;
-  if(params.keyword){
+  if (params.keyword) {
     findCriteria.title = {
       $regex: `.*${params.keyword}.*`,
+    }
   }
-  }
-  if(favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor){
-    findCriteria.userId =  { $ne: userId } 
+  if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
+    findCriteria.userId = { $ne: userId }
   }
 
 
@@ -1015,7 +1022,7 @@ exports.getTutorDetails = async (req, res) => {
     }, {
       path: 'tutorCategoryIds',
     }
-   ])
+    ])
     .catch(err => {
       return {
         success: 0,
@@ -1038,41 +1045,41 @@ exports.getTutorDetails = async (req, res) => {
     } else {
       tutorDetails.isFavourite = false;
     }
-    var onlineClassData = await OnlineCLass.find({status: 1,userId:tutorId,isApproved:true,isPublic:true},{zoomLink : 0, startUrl : 0})
-    .populate([{
-      path: 'userId',
-      select: {
-        firstName: 1,
-        image: 1,
-        socialPhotoUrl: 1
-      }
-    }, {
-      path: 'tutorSubjectId',
-    }, {
-      path: 'tutorClassId',
-    }])
-    .limit(5)
-    .skip(0)
-    .sort({
-      'tsCreatedAt': -1
-    }).catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while getting classes',
-        error: err
-      }
-    })
-  if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
-    return onlineClassData;
-  }
-  
+    var onlineClassData = await OnlineCLass.find({ status: 1, userId: tutorId, isApproved: true, isPublic: true }, { zoomLink: 0, startUrl: 0 })
+      .populate([{
+        path: 'userId',
+        select: {
+          firstName: 1,
+          image: 1,
+          socialPhotoUrl: 1
+        }
+      }, {
+        path: 'tutorSubjectId',
+      }, {
+        path: 'tutorClassId',
+      }])
+      .limit(5)
+      .skip(0)
+      .sort({
+        'tsCreatedAt': -1
+      }).catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while getting classes',
+          error: err
+        }
+      })
+    if (onlineClassData && (onlineClassData.success !== undefined) && (onlineClassData.success === 0)) {
+      return onlineClassData;
+    }
+
     return res.send({
       success: 1,
       item: tutorDetails,
       tutorVideoBase: tutorConfig.videoBase,
       tutorImageBase: usersConfig.imageBase,
-      classImageBase:classConfig.imageBase,
-      previousClasses:onlineClassData,
+      classImageBase: classConfig.imageBase,
+      previousClasses: onlineClassData,
       message: 'Tutor details'
     })
   } else {
@@ -1184,7 +1191,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         'message': 'Invalid status',
       })
     }
-    if( (params.status && params.status === constants.REJECTED_STATUS && !params.comments)){
+    if ((params.status && params.status === constants.REJECTED_STATUS && !params.comments)) {
       errors.push({
         'field': 'comments',
         'message': 'comments required',
@@ -1208,13 +1215,13 @@ exports.updateAppointmentStatus = async (req, res) => {
     tutorId: userId,
     status: 1
   })
-  .populate([{
-    path : 'tutorId'
-  },{
-    path: 'tutorSubjectId',
-  }, {
-    path: 'tutorClassId',
-  }])
+    .populate([{
+      path: 'tutorId'
+    }, {
+      path: 'tutorSubjectId',
+    }, {
+      path: 'tutorClassId',
+    }])
     .catch(err => {
       return {
         success: 0,
@@ -1234,7 +1241,7 @@ exports.updateAppointmentStatus = async (req, res) => {
       isApproved = true;
       comments = null;
       message = 'Appointment accepted successfully'
-  
+
       notificationMessage = tutorName + ' accepted your subject ' + subjectName + ' for class ' + className;
     } else {
       message = 'Appointment rejected successfully'
@@ -1243,7 +1250,7 @@ exports.updateAppointmentStatus = async (req, res) => {
       isRejected = false;
       comments = params.comments;
     }
-    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected,comments)
+    var checkAppointmentResp = await checkAppointmentStatusCheck(checkAppointment, isApproved, isRejected, comments)
     if (checkAppointmentResp && (checkAppointmentResp.success !== undefined) && (checkAppointmentResp.success === 0)) {
       return res.send(checkAppointmentResp);
     }
@@ -1267,18 +1274,18 @@ exports.updateAppointmentStatus = async (req, res) => {
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": checkAppointment.userId }]
     // var metaInfo = {"type":"event","reference_id":eventData.id}
     var notificationObj = {
-        title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
-        message: notificationMessage ,
-        type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
-        referenceId: appointmentId,
-        filtersJsonArr,
-        // metaInfo,
-        tutorId : userId,
-        userId : checkAppointment.userId ,
-        notificationType : constants.INDIVIDUAL_NOTIFICATION_TYPE
+      title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
+      message: notificationMessage,
+      type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+      referenceId: appointmentId,
+      filtersJsonArr,
+      // metaInfo,
+      tutorId: userId,
+      userId: checkAppointment.userId,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
     let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
-    
+
 
     return res.send({
       success: 1,
@@ -1293,7 +1300,7 @@ exports.updateAppointmentStatus = async (req, res) => {
 
 }
 
-exports.deleteStudentAppointmentHistory = async(req,res) =>{
+exports.deleteStudentAppointmentHistory = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var appointmentId = req.params.id;
@@ -1302,7 +1309,7 @@ exports.deleteStudentAppointmentHistory = async(req,res) =>{
   findCriteria._id = appointmentId;
   findCriteria.userId = userId;
   findCriteria.status = 1;
-  var checkAppointmentHistoryResp = await checkAppointmentHistoryRequest(findCriteria,constants.STUDENT_TYPE)
+  var checkAppointmentHistoryResp = await checkAppointmentHistoryRequest(findCriteria, constants.STUDENT_TYPE)
   if (checkAppointmentHistoryResp && (checkAppointmentHistoryResp.success !== undefined) && (checkAppointmentHistoryResp.success === 0)) {
     return res.send(checkAppointmentHistoryResp);
   }
@@ -1310,12 +1317,12 @@ exports.deleteStudentAppointmentHistory = async(req,res) =>{
   var update = {};
   update.isStudentDeleted = true;
   update.tsModifiedAt = Date.now();
-  var updateAppointmentHistoryResp = await updateAppointmentHistoryRequest(findCriteria,update);
+  var updateAppointmentHistoryResp = await updateAppointmentHistoryRequest(findCriteria, update);
   return res.send(updateAppointmentHistoryResp);
 }
 
 
-exports.deleteTutorDeleteAppointmentHistory = async(req,res) =>{
+exports.deleteTutorDeleteAppointmentHistory = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
@@ -1330,7 +1337,7 @@ exports.deleteTutorDeleteAppointmentHistory = async(req,res) =>{
   findCriteria._id = appointmentId;
   findCriteria.tutorId = userId;
   findCriteria.status = 1;
-  var checkAppointmentHistoryResp = await checkAppointmentHistoryRequest(findCriteria,constants.TUTOR_TYPE)
+  var checkAppointmentHistoryResp = await checkAppointmentHistoryRequest(findCriteria, constants.TUTOR_TYPE)
   if (checkAppointmentHistoryResp && (checkAppointmentHistoryResp.success !== undefined) && (checkAppointmentHistoryResp.success === 0)) {
     return res.send(checkAppointmentHistoryResp);
   }
@@ -1338,11 +1345,11 @@ exports.deleteTutorDeleteAppointmentHistory = async(req,res) =>{
   var update = {};
   update.isTutorDeleted = true;
   update.tsModifiedAt = Date.now();
-  var updateAppointmentHistoryResp = await updateAppointmentHistoryRequest(findCriteria,update);
+  var updateAppointmentHistoryResp = await updateAppointmentHistoryRequest(findCriteria, update);
   return res.send(updateAppointmentHistoryResp);
 }
 
-exports.getStudentAppointmentRequestList = async(req,res) =>{
+exports.getStudentAppointmentRequestList = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
@@ -1351,13 +1358,13 @@ exports.getStudentAppointmentRequestList = async(req,res) =>{
   findCriteria.userId = userId;
   findCriteria.isStudentDeleted = false;
   findCriteria.status = 1;
- 
-  var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
+
+  var appointmentRequestListResp = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
 
   return res.send(appointmentRequestListResp);
 }
 
-exports.getTutorAppointmentRequestList = async(req,res) =>{
+exports.getTutorAppointmentRequestList = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
@@ -1373,7 +1380,7 @@ exports.getTutorAppointmentRequestList = async(req,res) =>{
   findCriteria.isTutorDeleted = false;
   findCriteria.status = 1;
 
-  var appointmentRequestListResp  = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
+  var appointmentRequestListResp = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
   return res.send(appointmentRequestListResp);
 }
 
@@ -1415,7 +1422,7 @@ async function checkUserIsTutor(userId) {
   }
 }
 
-async function listClasses(findCriteria, perPage, page, favouriteData,sortOptions) {
+async function listClasses(findCriteria, perPage, page, favouriteData, sortOptions) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || classConfig.resultsPerPage;
@@ -1423,7 +1430,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData,sortOption
   var offset = (page - 1) * perPage;
 
 
-  var onlineClassData = await OnlineCLass.find(findCriteria,{zoomLink : 0, startUrl : 0})
+  var onlineClassData = await OnlineCLass.find(findCriteria, { zoomLink: 0, startUrl: 0 })
     .populate([{
       path: 'userId',
       select: {
@@ -1483,7 +1490,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData,sortOption
     success: 1,
     pagination,
     imageBase: classConfig.imageBase,
-    videoBase:classConfig.videoBase,
+    videoBase: classConfig.videoBase,
     items: onlineClassData,
     message: 'List latest class'
   }
@@ -1726,7 +1733,7 @@ async function checkClassIsPrivate(params) {
 
 
 
-async function checkAppointmentStatusCheck(appointmentData, isApproved, isRejected,comments) {
+async function checkAppointmentStatusCheck(appointmentData, isApproved, isRejected, comments) {
   if (appointmentData.isApproved && isApproved) {
     return {
       success: 0,
@@ -1790,20 +1797,20 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
 
 async function checkIfJoinLinkAvailable(classDetails, userId) {
   if (classDetails.isPublic) {
-    if(JSON.stringify(userId) === JSON.stringify(classDetails.userId.id)){
+    if (JSON.stringify(userId) === JSON.stringify(classDetails.userId.id)) {
       return {
         success: 1,
         joinLinkAvailable: false,
         message: 'Public class'
       }
-    }else{
+    } else {
       return {
         success: 1,
         joinLinkAvailable: true,
         message: 'Public class'
       }
     }
-  
+
   } else {
     var appointmentCheckResp = await AppointmentClassRequest.findOne({
       userId,
@@ -1825,21 +1832,21 @@ async function checkIfJoinLinkAvailable(classDetails, userId) {
       return appointmentCheckResp;
     }
     if (appointmentCheckResp && appointmentCheckResp !== null) {
-    if(JSON.stringify(userId) === JSON.stringify(classDetails.userId.id)){
-      return {
-        success: 1,
-        joinLinkAvailable: false,
-        message: 'Private class with approved appointment request'
+      if (JSON.stringify(userId) === JSON.stringify(classDetails.userId.id)) {
+        return {
+          success: 1,
+          joinLinkAvailable: false,
+          message: 'Private class with approved appointment request'
+        }
+      } else {
+        return {
+          success: 1,
+          joinLinkAvailable: true,
+          message: 'Private class with approved appointment request'
+        }
       }
-    }else{
-      return {
-        success: 1,
-        joinLinkAvailable: true,
-        message: 'Private class with approved appointment request'
-      }
-    }
 
-    
+
 
     } else {
       return {
@@ -1858,7 +1865,7 @@ async function getUserFavouriteData(userId) {
   }, {
     favouriteTutor: 1,
     favouriteClass: 1,
-    isTutor : 1
+    isTutor: 1
   })
     .catch(err => {
       return {
@@ -1904,40 +1911,40 @@ async function checkAndSetFavourite(listData, favouriteData) {
 }
 
 
-async function setFIlter(reqFilters,availableFilters,findCriteria){
-    var i = 0;
-    var j;
-    var k;
-    while(i < availableFilters.length){
-      j = 0;
-      filtersLen = reqFilters.length;
-      console.log("User entered filters length is " + filtersLen);
-      while (j < filtersLen) {
-        if (reqFilters[j].name == availableFilters[i].name) {
-          var reqValues = [];
-          if (reqFilters[j].values && Array.isArray(reqFilters[j].values) && reqFilters[j].values.length) {
-            k = 0;
-            while (k < reqFilters[j].values.length) {
-              if (ObjectId.isValid(reqFilters[j].values[k]))
-                reqValues.push(reqFilters[j].values[k]);
-              k++;
-            }
-            findCriteria[String(availableFilters[i].value)] = {
-              $in: reqValues
-            };
-            console.log("Filters Upadated" + JSON.stringify(findCriteria));
+async function setFIlter(reqFilters, availableFilters, findCriteria) {
+  var i = 0;
+  var j;
+  var k;
+  while (i < availableFilters.length) {
+    j = 0;
+    filtersLen = reqFilters.length;
+    console.log("User entered filters length is " + filtersLen);
+    while (j < filtersLen) {
+      if (reqFilters[j].name == availableFilters[i].name) {
+        var reqValues = [];
+        if (reqFilters[j].values && Array.isArray(reqFilters[j].values) && reqFilters[j].values.length) {
+          k = 0;
+          while (k < reqFilters[j].values.length) {
+            if (ObjectId.isValid(reqFilters[j].values[k]))
+              reqValues.push(reqFilters[j].values[k]);
+            k++;
           }
+          findCriteria[String(availableFilters[i].value)] = {
+            $in: reqValues
+          };
+          console.log("Filters Upadated" + JSON.stringify(findCriteria));
         }
-        j++;
       }
-      i++;
+      j++;
     }
+    i++;
+  }
 
-    return findCriteria;
+  return findCriteria;
 }
 
 
-async function getAppointmentRequestList(findCriteria, perPage, page){
+async function getAppointmentRequestList(findCriteria, perPage, page) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || appointmentConfig.resultsPerPage;
@@ -1952,7 +1959,7 @@ async function getAppointmentRequestList(findCriteria, perPage, page){
         image: 1,
         socialPhotoUrl: 1
       }
-    },{
+    }, {
       path: 'tutorId',
       select: {
         firstName: 1,
@@ -2004,75 +2011,75 @@ async function getAppointmentRequestList(findCriteria, perPage, page){
   return {
     success: 1,
     pagination,
-    imageBase : usersConfig.imageBase,
+    imageBase: usersConfig.imageBase,
     items: appointmentClassRequestData,
     message: 'List appointment request'
   }
 }
 
 
-async function checkAppointmentHistoryRequest(findCriteria,type){
+async function checkAppointmentHistoryRequest(findCriteria, type) {
   var appointmentCheck = await AppointmentClassRequest.findOne(findCriteria)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while checking appointment class request',
-      error: err
-    }
-  })
-if (appointmentCheck && (appointmentCheck.success !== undefined) && (appointmentCheck.success === 0)) {
-  return appointmentCheck;
-}
-if(appointmentCheck){
-  if(appointmentCheck.isApproved === false && appointmentCheck.isRejected === false){
-    return {
-      success: 0,
-      message: 'Appointment is currently pending..so can not delete',
-    }
-  }else{
-    if(type === constants.STUDENT_TYPE && appointmentCheck.isStudentDeleted){
+    .catch(err => {
       return {
         success: 0,
-        message: 'Appointment request is already deleted',
+        message: 'Something went wrong while checking appointment class request',
+        error: err
       }
-    }else if(type === constants.TUTOR_TYPE && appointmentCheck.isTutorDeleted){
-      return {
-        success: 0,
-        message: 'Appointment request is already deleted',
-      }
-    }else{
-      return {
-        success: 1,
-        message: 'Appointment check OK..',
-      }
-    }
-   
+    })
+  if (appointmentCheck && (appointmentCheck.success !== undefined) && (appointmentCheck.success === 0)) {
+    return appointmentCheck;
   }
-}else{
+  if (appointmentCheck) {
+    if (appointmentCheck.isApproved === false && appointmentCheck.isRejected === false) {
+      return {
+        success: 0,
+        message: 'Appointment is currently pending..so can not delete',
+      }
+    } else {
+      if (type === constants.STUDENT_TYPE && appointmentCheck.isStudentDeleted) {
+        return {
+          success: 0,
+          message: 'Appointment request is already deleted',
+        }
+      } else if (type === constants.TUTOR_TYPE && appointmentCheck.isTutorDeleted) {
+        return {
+          success: 0,
+          message: 'Appointment request is already deleted',
+        }
+      } else {
+        return {
+          success: 1,
+          message: 'Appointment check OK..',
+        }
+      }
+
+    }
+  } else {
+    return {
+      success: 0,
+      message: 'Invalid appointment',
+    }
+  }
+}
+
+
+async function updateAppointmentHistoryRequest(findCriteria, update) {
+  var updateAppointmentRequest = await AppointmentClassRequest.updateOne(findCriteria, update)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while deleting appointment class request from history',
+        error: err
+      }
+    })
+  if (updateAppointmentRequest && (updateAppointmentRequest.success !== undefined) && (updateAppointmentRequest.success === 0)) {
+    return updateAppointmentRequest;
+  }
   return {
-    success: 0,
-    message: 'Invalid appointment',
+    success: 1,
+    message: 'Deleted appointment from history'
   }
-}
-}
-
-
-async function updateAppointmentHistoryRequest(findCriteria,update){
-  var updateAppointmentRequest = await AppointmentClassRequest.updateOne(findCriteria,update)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while deleting appointment class request from history',
-      error: err
-    }
-  })
-if (updateAppointmentRequest && (updateAppointmentRequest.success !== undefined) && (updateAppointmentRequest.success === 0)) {
-  return updateAppointmentRequest;
-}
-return {
-  success : 1,
-  message : 'Deleted appointment from history'
-}
 }
 
 
