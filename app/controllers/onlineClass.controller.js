@@ -163,7 +163,9 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.tutorClassId = params.tutorClassId;
   onlineClassObj.tutorSubjectId = params.tutorSubjectId;
   onlineClassObj.classDescription = params.classDescription;
-  onlineClassObj.image = file.image[0].filename;
+  if (file.image && file.image.length > 0) {
+    onlineClassObj.image = file.image[0].filename;
+  }
   if (file.video && file.video.length > 0) {
     onlineClassObj.video = file.video[0].filename;
   }
@@ -206,13 +208,13 @@ exports.createOnlineClass = async (req, res) => {
     return res.send(tutorName);
   }
 
-  onlineClass.tutorName = tutorName;
+  onlineClassObj.tutorName = tutorName;
 
-  onlineClass.tutorSubject= params.tutorSubject;
-  onlineClass.tutorClass = params.tutorClass;
-  onlineClass.tutorSyllabus = params.tutorSyllabus;
-  onlineClass.qualification = params.qualification;
-  onlineClass.category = params.category;
+  onlineClassObj.tutorSubject= params.tutorSubject;
+  onlineClassObj.tutorClass = params.tutorClass;
+  onlineClassObj.tutorSyllabus = params.tutorSyllabus;
+  onlineClassObj.qualification = params.qualification;
+  onlineClassObj.category = params;
 
   var newOnlineClassObj = new OnlineCLass(onlineClassObj);
   var onlineClassResponse = await newOnlineClassObj.save()
