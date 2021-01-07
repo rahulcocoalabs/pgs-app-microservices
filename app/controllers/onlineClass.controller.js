@@ -214,7 +214,7 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.tutorClass = params.tutorClass;
   onlineClassObj.tutorSyllabus = params.tutorSyllabus;
   onlineClassObj.qualification = params.qualification;
-  onlineClassObj.category = params;
+  onlineClassObj.category = params.category;
 
   var newOnlineClassObj = new OnlineCLass(onlineClassObj);
   var onlineClassResponse = await newOnlineClassObj.save()
