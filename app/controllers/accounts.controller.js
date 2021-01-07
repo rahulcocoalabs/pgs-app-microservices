@@ -462,18 +462,18 @@ exports.create = async (req, res) => {
               message: "countryId cannot be empty"
           });
       }
-      if (!req.body.stateId) {
-          errors.push({
-              field: "stateId",
-              message: "stateId cannot be empty"
-          });
-      }
-      if (!req.body.cityId) {
-          errors.push({
-              field: "city",
-              message: "city cannot be empty"
-          });
-      }
+      // if (!req.body.stateId) {
+      //     errors.push({
+      //         field: "stateId",
+      //         message: "stateId cannot be empty"
+      //     });
+      // }
+      // if (!req.body.cityId) {
+      //     errors.push({
+      //         field: "city",
+      //         message: "city cannot be empty"
+      //     });
+      // }
       if (!req.body.city) {
           errors.push({
               field: "city",
