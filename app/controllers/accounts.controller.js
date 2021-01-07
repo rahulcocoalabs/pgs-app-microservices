@@ -3515,18 +3515,18 @@ exports.requestAsTutor = async (req, res) => {
         'message': 'tutorCourseId required',
       })
     }
-    if (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)) {
-      errors.push({
-        'field': 'tutorSubjectIds',
-        'message': 'tutorSubjectIds required',
-      })
-    }
-    if (params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)) {
-      errors.push({
-        'field': 'tutorClassIds',
-        'message': 'tutorClassIds required',
-      })
-    }
+    // if (params.tutorSubjectIds === null || params.tutorSubjectIds === undefined || (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length < 1)) {
+    //   errors.push({
+    //     'field': 'tutorSubjectIds',
+    //     'message': 'tutorSubjectIds required',
+    //   })
+    // }
+    // if (params.tutorClassIds === null || params.tutorClassIds === undefined || (params.tutorClassIds !== undefined && params.tutorClassIds.length < 1)) {
+    //   errors.push({
+    //     'field': 'tutorClassIds',
+    //     'message': 'tutorClassIds required',
+    //   })
+    // }
     if (params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)) {
       errors.push({
         'field': 'tutorCategoryIds',
