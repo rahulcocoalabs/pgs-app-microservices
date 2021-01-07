@@ -2789,7 +2789,7 @@ exports.verifyOtp = async (req, res) => {
       var currentTime = Date.now();
        console.log(currentTime)
       var otpData1 = await Otp.findOne({
-        phone: phone,
+        phone: phoneNo,
         userToken: otp,
         apiToken: apiToken,
         isUsed: false,
