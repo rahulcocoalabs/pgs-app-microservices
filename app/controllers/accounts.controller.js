@@ -2742,7 +2742,7 @@ exports.verifyOtp = async (req, res) => {
   var phone = params.phone;
   var countryCode = params.countryCode;
   var apiToken = params.apiToken;
-  if (!phone || !otp || !apiToken || !countryCode) {
+  if (!phone || !otp || !apiToken) {
     let errors = [];
     if (!phone) {
       errors.push({
@@ -2762,18 +2762,13 @@ exports.verifyOtp = async (req, res) => {
         message: 'apiToken cannot be empty'
       })
     }
-    if (!countryCode) {
-      errors.push({
-        field: 'countryCode',
-        message: 'countryCode cannot be empty'
-      })
-    }
+  
     return res.status(400).send({
       success: 0,
       errors: errors
     })
   }
-  var phoneNo = countryCode + phone;
+  var phoneNo =  phone;
   try {
     var filter = {
       userToken: otp,
