@@ -7,7 +7,7 @@ const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
 
 
-exports.getSettingData = async () => {
+async function getSettingData()  {
 
   var keyId = await Setting.findOne({
     key: constants.RAZORPAY_KEY_ID,
