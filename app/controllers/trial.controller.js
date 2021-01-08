@@ -2,12 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 app.use(cors());
+const Razorpay = require('razorpay')
 const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
-const instance = new Razorpay({
-  key_id: "rzp_live_csTnIwi4JddAw7",
-  key_secret: "EalJhgAjPCqV97xMqnJYI0Nj",
-});
+
 
 exports.getSettingData = async () => {
 
