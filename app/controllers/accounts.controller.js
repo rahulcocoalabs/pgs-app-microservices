@@ -4622,7 +4622,7 @@ return {
     const apiToken = uuidv4();
     var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
     try {
-      //const smsurl = await superagent.get(`http://thesmsbuddy.com/api/v1/sms/send?key=zOxsbDOn4iK8MBfNTyqxTlrcqM8WD3Ms&type=1&to=${phone}&sender=INFSMS&message=${otp} is the OTP for login to The PG  App&flash=0`);
+      const smsurl = await superagent.get(`http://thesmsbuddy.com/api/v1/sms/send?key=zOxsbDOn4iK8MBfNTyqxTlrcqM8WD3Ms&type=1&to=${phone}&sender=INFSMS&message=${otp} is the OTP for login to The PG  App&flash=0`);
       const newOtp = new Otp({
         phone: phone,
         isUsed: false,
