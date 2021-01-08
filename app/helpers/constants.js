@@ -122,7 +122,9 @@ module.exports = Object.freeze({
     GENERAL_NOTIFICATION_TYPE : 'general',
 
     EVENT_HISTORY_DATA_PARTITICPATED : "participated",
-    EVENT_HISTORY_DATA_BOOKED : "booked"
- 
+    EVENT_HISTORY_DATA_BOOKED : "booked",
+
+    RAZORPAY_KEY_ID : "RAZORPAY_KEY_ID",
+    RAZORPAY_KEY_SECRET : "RAZORPAY_KEY_SECRET"
 
 });
