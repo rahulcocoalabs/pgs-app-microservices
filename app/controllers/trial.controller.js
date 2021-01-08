@@ -48,7 +48,7 @@ exports.getSettingData = async () => {
 }
 exports.getCredentials = async (req, res) => {
 
-  let object = getSettingData();
+  let object = await getSettingData();
   const instance = new Razorpay({
     key_id: object.key,
     key_secret: object.secret,
