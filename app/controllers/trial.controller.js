@@ -91,7 +91,11 @@ exports.getCredentials = async (req, res) => {
           message: "Something Went Wrong",
         });
       }
-      return res.status(200).json(order);
+      return res.status(200).json({
+        success:1,
+        message:"fetched successfully credentials for payments",
+        item:order
+      });
     });
   } catch (err) {
     return res.status(500).json({
