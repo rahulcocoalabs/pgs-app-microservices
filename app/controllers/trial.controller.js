@@ -7,7 +7,7 @@ const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
 
 
-async function getSettingData()  {
+async function getSettingData() {
 
   var keyId = await Setting.findOne({
     key: constants.RAZORPAY_KEY_ID,
@@ -52,20 +52,20 @@ exports.getKey = async (req, res) => {
   if (object === undefined) {
     return res.status(200).json({
       success: 0,
-      message:"something went wrong in ftching key"
+      message: "something went wrong in ftching key"
     })
   }
   let key = object.key;
   if (key === undefined) {
     return res.status(200).json({
       success: 0,
-      message:"something went wrong in ftching key"
+      message: "something went wrong in ftching key"
     })
   }
   return res.status(200).json({
     success: 1,
-    message:"obtained key successfully",
-    key:key
+    message: "obtained key successfully",
+    key: key
   })
 }
 
@@ -92,9 +92,9 @@ exports.getCredentials = async (req, res) => {
         });
       }
       return res.status(200).json({
-        success:1,
-        message:"fetched successfully credentials for payments",
-        item:order
+        success: 1,
+        message: "fetched successfully credentials for payments",
+        item: order
       });
     });
   } catch (err) {
@@ -104,35 +104,39 @@ exports.getCredentials = async (req, res) => {
   }
 };
 
-exports.updatePayment= async (req, res) => {
+exports.updatePayment = async (req, res) => {
 
-  let object = getSettingData();
-  let paymentId = req.params.id;
-  let amount = req.body.amount;
-  try {
-    return request(
-     {
-     method: "POST",
-     url: `https://${object.key}:${config.object.secret}@api.razorpay.com/v1/payments/${paymentId}/capture`,
-     form: {
-        amount: amount * 100, // amount == Rs 10 // Same As Order amount
-        currency: "INR",
-      },
-    },
-   async function (err, response, body) {
-     if (err) {
-      return res.status(500).json({
-         message: "Something Went Wrong",
-       }); 
-     }
-      console.log("Status:", response.statusCode);
-      console.log("Headers:", JSON.stringify(response.headers));
-      console.log("Response:", body);
-      return res.status(200).json(body);
-    });
-  } catch (err) {
-    return res.status(500).json({
-      message: "Something Went Wrong",
-   });
+  var identity = req.identity.data;
+  var userId = identity.id;
+  var params = req.body;
+
+  var transactionId = params.transactionId;
+  var amount = params.amount;
+  var paidStatus = params.paidStatus;
+  var paidOn = params.paidOn;
+
+  const newPayment = new Payment({
+    userId: userId,
+
+    transactionId: transactionId,
+    amount: amount,
+    paidStatus: paidStatus,
+    paidOn: paidOn,
+    status: 1,
+    tsCreatedAt: Date.now(),
+    tsModifiedAt: null
+  });
+  var savePayment = await newPayment.save().catch(err => {
+    return { success: 0, message: err.message }
+  });
+
+  if (savePayment && savePayment.success != undefined && savePayment.success === 0) {
+    return res.status(200).send(savePayment);
   }
+
+  res.status(200).send({
+    success: 1,
+    message: 'Payment successfully added'
+  })
+
 }
