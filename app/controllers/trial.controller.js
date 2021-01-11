@@ -5,6 +5,7 @@ app.use(cors());
 const Razorpay = require('razorpay')
 const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
+const Payment = require('../models/payment.model');
 
 
 async function getSettingData() {
