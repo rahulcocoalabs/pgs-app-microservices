@@ -49,13 +49,14 @@ async function getSettingData()  {
 exports.getCredentials = async (req, res) => {
 
   let object = await getSettingData();
+  let amount = req.query.amount;
   const instance = new Razorpay({
     key_id: object.key,
     key_secret: object.secret,
   });
   try {
     const options = {
-      amount: 10 * 100, // amount == Rs 10
+      amount: amount * 100, // amount == Rs 10
       currency: "INR",
       receipt: "receipt#1",
       payment_capture: 0,
