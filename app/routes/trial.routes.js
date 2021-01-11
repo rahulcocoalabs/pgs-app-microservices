@@ -5,5 +5,6 @@ module.exports = (app) => {
     
     app.get('/trial/get-credentials',auth, tests.getCredentials);
     app.post('/trial/update-payments/:id',auth, tests.updatePayment);
+    app.get('/trial/get-key/:id',auth, tests.getKey);
    
 }

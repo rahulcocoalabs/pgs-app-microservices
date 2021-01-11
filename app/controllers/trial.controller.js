@@ -46,6 +46,29 @@ async function getSettingData()  {
 
 
 }
+exports.getKey = async (req, res) => {
+
+  let object = await getSettingData();
+  if (object === undefined) {
+    return res.status(200).json({
+      success: 0,
+      message:"something went wrong in ftching key"
+    })
+  }
+  let key = object.key;
+  if (key === undefined) {
+    return res.status(200).json({
+      success: 0,
+      message:"something went wrong in ftching key"
+    })
+  }
+  return res.status(200).json({
+    success: 1,
+    message:"obtained key successfully",
+    key:key
+  })
+}
+
 exports.getCredentials = async (req, res) => {
 
   let object = await getSettingData();
