@@ -80,13 +80,14 @@ exports.updatePayment= async (req, res) => {
 
   let object = getSettingData();
   let paymentId = req.params.id;
+  let amount = req.body.amount;
   try {
     return request(
      {
      method: "POST",
      url: `https://${object.key}:${config.object.secret}@api.razorpay.com/v1/payments/${paymentId}/capture`,
      form: {
-        amount: 10 * 100, // amount == Rs 10 // Same As Order amount
+        amount: amount * 100, // amount == Rs 10 // Same As Order amount
         currency: "INR",
       },
     },
