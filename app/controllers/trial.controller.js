@@ -105,7 +105,7 @@ exports.getCredentials = async (req, res) => {
   }
 };
 
-exports.updatePayment = async (req, res) => {
+exports.savePayment = async (req, res) => {
 
   var identity = req.identity.data;
   var userId = identity.id;
