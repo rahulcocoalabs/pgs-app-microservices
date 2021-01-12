@@ -30,6 +30,7 @@ const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
 
 
 
+
 var jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var crypto = require("crypto");
@@ -100,93 +101,93 @@ function updateCoin(reqObj, callback) {
 
 //rakesh 
 // innovation challenge
-exports.addNewinnovation= async (req, res) => {
+exports.addNewinnovation = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
 
   var contestId = req.params.id;
-  if (!contestId){
+  if (!contestId) {
     return res.send({
-      success:0,
-      message:"context id not available"
+      success: 0,
+      message: "context id not available"
     })
   }
-  if (userId == undefined){
+  if (userId == undefined) {
     return res.send({
-      success:0,
-      message:"user id not available"
+      success: 0,
+      message: "user id not available"
     })
   }
 
   var params = req.body;
 
-  if (!params){
+  if (!params) {
     return res.send({
-      success:0,
-      message:"body not available"
+      success: 0,
+      message: "body not available"
     })
   }
 
-  if (!params.title){
+  if (!params.title) {
     return res.send({
-    success:0,
-    message:"title not available"
-  })
-}
-
-  if (!params.price){
-    return res.send({
-      success:0,
-      message:"price not available"
+      success: 0,
+      message: "title not available"
     })
   }
-  if (!params.description){
+
+  if (!params.price) {
     return res.send({
-      success:0,
-      message:"description not available"
+      success: 0,
+      message: "price not available"
+    })
+  }
+  if (!params.description) {
+    return res.send({
+      success: 0,
+      message: "description not available"
     })
 
   }
 
-  const count = await  InnovationChallenge.countDocuments({status: 1,userId:userId,contestId:contestId}).catch(err=>{
+  const count = await InnovationChallenge.countDocuments({ status: 1, userId: userId, contestId: contestId }).catch(err => {
     return {
-      success:0,
-      message:err.message
+      success: 0,
+      message: err.message
     }
   })
 
-  if (count && (count.success !== undefined) && (count.success === 0)){
+  if (count && (count.success !== undefined) && (count.success === 0)) {
     return res.send(count);
   }
 
-  if (count >= 1){
+  if (count >= 1) {
     return res.send({
-      success:0,
-      message:"you have already submitted  a challenge"
+      success: 0,
+      message: "you have already submitted  a challenge"
     })
   }
 
   const newInnovationChallenge = new InnovationChallenge({
-    userId:userId,
-    title : params.title,
-    contestId:contestId,
-    description : params.description,
-    price:params.price,
-    status : 1,
-    tsCreatedAt : Date.now(),
-    tsModifiedAt : null
+    userId: userId,
+    title: params.title,
+    contestId: contestId,
+    description: params.description,
+    price: params.price,
+    status: 1,
+    tsCreatedAt: Date.now(),
+    tsModifiedAt: null
   })
 
-  var saved = await newInnovationChallenge.save().catch((err) =>{return {succes:0,message:err.message}})
+  var saved = await newInnovationChallenge.save().catch((err) => { return { succes: 0, message: err.message } })
 
-  if (saved && saved.success != undefined && saved.success === 0){
+  if (saved && saved.success != undefined && saved.success === 0) {
     return res.send(saved)
   }
 
   return res.send({
-    success:1,
-    message:"saved successfully"
+    success: 1,
+    message: "saved successfully"
   })
 }
 
@@ -415,418 +416,418 @@ exports.create = async (req, res) => {
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
   if (!req.body.firstName || !req.body.phone
-      || !req.body.dob || !req.body.language
-      || !req.body.email || !req.body.school
-      || !req.body.password || !req.body.countryCode
-      || !req.body.countryId ) {
-      var errors = [];
-      if (!req.body.firstName) {
-          errors.push({
-              field: "firstName",
-              message: "First Name cannot be empty"
-          });
-      }
-      if (!req.body.dob) {
-          errors.push({
-              field: "dob",
-              message: "Date of Birth cannot be empty"
-          });
-      }
-      if (!req.body.school) {
-          errors.push({
-              field: "school",
-              message: "School Name cannot be empty"
-          });
-      }
-      // if (!req.body.syllabusId) {
-      //     errors.push({
-      //         field: "syllabusId",
-      //         message: "Syllabus Id cannot be empty"
-      //     });
-      // }
-      // if (req.body.syllabusId && !ObjectId.isValid(req.body.syllabusId)) {
-      //     errors.push({
-      //         field: "syllabusId",
-      //         message: "Syllabus Id is not a valid objectId"
-      //     });
-      // }
-      if (!req.body.language) {
-          errors.push({
-              field: "language",
-              message: "Array of language Ids cannot be empty"
-          });
-      }
-      if (!req.body.countryId) {
-          errors.push({
-              field: "countryId",
-              message: "countryId cannot be empty"
-          });
-      }
-      // if (!req.body.stateId) {
-      //     errors.push({
-      //         field: "stateId",
-      //         message: "stateId cannot be empty"
-      //     });
-      // }
-      // if (!req.body.cityId) {
-      //     errors.push({
-      //         field: "city",
-      //         message: "city cannot be empty"
-      //     });
-      // }
-      // if (!req.body.city) {
-      //     errors.push({
-      //         field: "city",
-      //         message: "city cannot be empty"
-      //     });
-      // }
-      // if (req.body.nationalityId && !ObjectId.isValid(req.body.nationalityId)) {
-      //     errors.push({
-      //         field: "nationalityId",
-      //         message: "nationalityId is not a valid objectId"
-      //     });
-      // }
-      // if (!req.body.genderId) {
-      //     errors.push({
-      //         field: "genderId",
-      //         message: "Gender Id cannot be empty"
-      //     });
-      // }
-      // if (req.body.genderId && !ObjectId.isValid(req.body.genderId)) {
-      //     errors.push({
-      //         field: "genderId",
-      //         message: "genderId is not a valid objectId"
-      //     });
-      // }
-      if (!req.body.countryCode) {
-          errors.push({
-              field: "countryCode",
-              message: "countryCode cannot be empty"
-          });
-      }
-      if (!req.body.phone) {
-          errors.push({
-              field: "phone",
-              message: "Phone cannot be empty"
-          });
-      }
-
-      if (!req.body.email) {
-          errors.push({
-              field: "email",
-              message: "email cannot be empty"
-          })
-      }
-
-      if (!req.body.password) {
-          errors.push({
-              field: "password",
-              message: "password cannot be empty"
-          })
-      }
-      // if (!req.body.fatherName) {
-      //     errors.push({
-      //         field: "fatherName",
-      //         message: "Father's Name cannot be empty"
-      //     });
-      // }
-      // if (!req.body.fatherNationalityId) {
-      //     errors.push({
-      //         field: "fatherNationalityId",
-      //         message: "Father's Nationality Id cannot be empty"
-      //     });
-      // }
-
-      // if (req.body.fatherNationalityId && !ObjectId.isValid(req.body.fatherNationalityId)) {
-      //     errors.push({
-      //         field: "fatherNationalityId",
-      //         message: "fatherNationalityId is not a valid objectId"
-      //     });
-      // }
-      // if (!req.body.fatherProfessionId) {
-      //     errors.push({
-      //         field: "fatherProfessionId",
-      //         message: "Father's Profession Id cannot be empty"
-      //     });
-      // }
-
-      // if (req.body.fatherProfessionId && !ObjectId.isValid(req.body.fatherProfessionId)) {
-      //     errors.push({
-      //         field: "fatherProfessionId",
-      //         message: "fatherProfessionId is not a valid objectId"
-      //     });
-      // }
-      // if (!req.body.motherName) {
-      //     errors.push({
-      //         field: "motherName",
-      //         message: "Mother's Name cannot be empty"
-      //     });
-      // }
-      // if (!req.body.motherNationalityId) {
-      //     errors.push({
-      //         field: "motherNationalityId",
-      //         message: "Mother's Nationality Id cannot be empty"
-      //     });
-      // }
-
-      // if (req.body.motherNationalityId && !ObjectId.isValid(req.body.motherNationalityId)) {
-      //     errors.push({
-      //         field: "motherNationalityId",
-      //         message: "motherNationalityId is not a valid objectId"
-      //     });
-      // }
-      // if (!req.body.motherProfessionId) {
-      //     errors.push({
-      //         field: "motherProfessionId",
-      //         message: "Mother's Profession Id cannot be empty"
-      //     });
-      // }
-      // if (!req.file) {
-      //   errors.push({
-      //     field: "image",
-      //     message: "image is missing"
-      //   });
-      // }
-      if (req.file) {
-          if (req.file.mimetype !== 'image/jpeg' && req.file.mimetype !== 'image/png') {
-              errors.push({
-                  field: "image",
-                  message: "Unsupported image format. Can upload only jpg/png"
-              });
-          }
-          if (req.file.size > 2097152) {
-              errors.push({
-                  field: "image",
-                  message: "Image File size exceeded 2mb limit"
-              });
-          }
-      }
-      return res.status(200).send({
-          success: 0,
-          errors: errors,
-          code: 200
+    || !req.body.dob || !req.body.language
+    || !req.body.email || !req.body.school
+    || !req.body.password || !req.body.countryCode
+    || !req.body.countryId) {
+    var errors = [];
+    if (!req.body.firstName) {
+      errors.push({
+        field: "firstName",
+        message: "First Name cannot be empty"
       });
+    }
+    if (!req.body.dob) {
+      errors.push({
+        field: "dob",
+        message: "Date of Birth cannot be empty"
+      });
+    }
+    if (!req.body.school) {
+      errors.push({
+        field: "school",
+        message: "School Name cannot be empty"
+      });
+    }
+    // if (!req.body.syllabusId) {
+    //     errors.push({
+    //         field: "syllabusId",
+    //         message: "Syllabus Id cannot be empty"
+    //     });
+    // }
+    // if (req.body.syllabusId && !ObjectId.isValid(req.body.syllabusId)) {
+    //     errors.push({
+    //         field: "syllabusId",
+    //         message: "Syllabus Id is not a valid objectId"
+    //     });
+    // }
+    if (!req.body.language) {
+      errors.push({
+        field: "language",
+        message: "Array of language Ids cannot be empty"
+      });
+    }
+    if (!req.body.countryId) {
+      errors.push({
+        field: "countryId",
+        message: "countryId cannot be empty"
+      });
+    }
+    // if (!req.body.stateId) {
+    //     errors.push({
+    //         field: "stateId",
+    //         message: "stateId cannot be empty"
+    //     });
+    // }
+    // if (!req.body.cityId) {
+    //     errors.push({
+    //         field: "city",
+    //         message: "city cannot be empty"
+    //     });
+    // }
+    // if (!req.body.city) {
+    //     errors.push({
+    //         field: "city",
+    //         message: "city cannot be empty"
+    //     });
+    // }
+    // if (req.body.nationalityId && !ObjectId.isValid(req.body.nationalityId)) {
+    //     errors.push({
+    //         field: "nationalityId",
+    //         message: "nationalityId is not a valid objectId"
+    //     });
+    // }
+    // if (!req.body.genderId) {
+    //     errors.push({
+    //         field: "genderId",
+    //         message: "Gender Id cannot be empty"
+    //     });
+    // }
+    // if (req.body.genderId && !ObjectId.isValid(req.body.genderId)) {
+    //     errors.push({
+    //         field: "genderId",
+    //         message: "genderId is not a valid objectId"
+    //     });
+    // }
+    if (!req.body.countryCode) {
+      errors.push({
+        field: "countryCode",
+        message: "countryCode cannot be empty"
+      });
+    }
+    if (!req.body.phone) {
+      errors.push({
+        field: "phone",
+        message: "Phone cannot be empty"
+      });
+    }
+
+    if (!req.body.email) {
+      errors.push({
+        field: "email",
+        message: "email cannot be empty"
+      })
+    }
+
+    if (!req.body.password) {
+      errors.push({
+        field: "password",
+        message: "password cannot be empty"
+      })
+    }
+    // if (!req.body.fatherName) {
+    //     errors.push({
+    //         field: "fatherName",
+    //         message: "Father's Name cannot be empty"
+    //     });
+    // }
+    // if (!req.body.fatherNationalityId) {
+    //     errors.push({
+    //         field: "fatherNationalityId",
+    //         message: "Father's Nationality Id cannot be empty"
+    //     });
+    // }
+
+    // if (req.body.fatherNationalityId && !ObjectId.isValid(req.body.fatherNationalityId)) {
+    //     errors.push({
+    //         field: "fatherNationalityId",
+    //         message: "fatherNationalityId is not a valid objectId"
+    //     });
+    // }
+    // if (!req.body.fatherProfessionId) {
+    //     errors.push({
+    //         field: "fatherProfessionId",
+    //         message: "Father's Profession Id cannot be empty"
+    //     });
+    // }
+
+    // if (req.body.fatherProfessionId && !ObjectId.isValid(req.body.fatherProfessionId)) {
+    //     errors.push({
+    //         field: "fatherProfessionId",
+    //         message: "fatherProfessionId is not a valid objectId"
+    //     });
+    // }
+    // if (!req.body.motherName) {
+    //     errors.push({
+    //         field: "motherName",
+    //         message: "Mother's Name cannot be empty"
+    //     });
+    // }
+    // if (!req.body.motherNationalityId) {
+    //     errors.push({
+    //         field: "motherNationalityId",
+    //         message: "Mother's Nationality Id cannot be empty"
+    //     });
+    // }
+
+    // if (req.body.motherNationalityId && !ObjectId.isValid(req.body.motherNationalityId)) {
+    //     errors.push({
+    //         field: "motherNationalityId",
+    //         message: "motherNationalityId is not a valid objectId"
+    //     });
+    // }
+    // if (!req.body.motherProfessionId) {
+    //     errors.push({
+    //         field: "motherProfessionId",
+    //         message: "Mother's Profession Id cannot be empty"
+    //     });
+    // }
+    // if (!req.file) {
+    //   errors.push({
+    //     field: "image",
+    //     message: "image is missing"
+    //   });
+    // }
+    if (req.file) {
+      if (req.file.mimetype !== 'image/jpeg' && req.file.mimetype !== 'image/png') {
+        errors.push({
+          field: "image",
+          message: "Unsupported image format. Can upload only jpg/png"
+        });
+      }
+      if (req.file.size > 2097152) {
+        errors.push({
+          field: "image",
+          message: "Image File size exceeded 2mb limit"
+        });
+      }
+    }
+    return res.status(200).send({
+      success: 0,
+      errors: errors,
+      code: 200
+    });
   }
 
   var emailCheck = await User.findOne({
-      email: req.body.email,
-      status: 1
+    email: req.body.email,
+    status: 1
   })
-      .catch(err => {
-          return {
-              success: 0,
-              message: 'Something went wrong while checking email already exists or not',
-              error: err
-          }
-      })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking email already exists or not',
+        error: err
+      }
+    })
   if (emailCheck && (emailCheck.success !== undefined) && (emailCheck.success === 0)) {
-      return res.send(emailCheck);
+    return res.send(emailCheck);
   }
 
   if (emailCheck) {
-      return res.send({
-          success: 0,
-          message: "Email ID already exists"
-      })
+    return res.send({
+      success: 0,
+      message: "Email ID already exists"
+    })
   } else {
 
-      if (req.body.hobbyIds && req.body.hobbyIds.length) {
-          var i = 0;
-          var len = req.body.hobbyIds.length;
-          var hobbyIds = [];
-          while (i < len) {
-              if (ObjectId.isValid(req.body.hobbyIds[i]))
-                  hobbyIds.push(ObjectId(req.body.hobbyIds[i]));
-              else
-                  warnings.push({
-                      field: hobbyIds,
-                      message: "Invalid hobby Id"
-                  });
-              i++;
-          }
-          console.log(warnings);
+    if (req.body.hobbyIds && req.body.hobbyIds.length) {
+      var i = 0;
+      var len = req.body.hobbyIds.length;
+      var hobbyIds = [];
+      while (i < len) {
+        if (ObjectId.isValid(req.body.hobbyIds[i]))
+          hobbyIds.push(ObjectId(req.body.hobbyIds[i]));
+        else
+          warnings.push({
+            field: hobbyIds,
+            message: "Invalid hobby Id"
+          });
+        i++;
       }
+      console.log(warnings);
+    }
 
-      if (req.body.hobbyIds) {
-          if (req.body.hobbyIds.length > 0) {
-              hobbyIds = [];
-              var i = 0;
-              var len = req.body.hobbyIds.length;
-              hobbies = [];
-              while (i < len) {
-                  hobbyIds[i] = req.body.hobbyIds[i].id;
-                  i++;
-              }
+    if (req.body.hobbyIds) {
+      if (req.body.hobbyIds.length > 0) {
+        hobbyIds = [];
+        var i = 0;
+        var len = req.body.hobbyIds.length;
+        hobbies = [];
+        while (i < len) {
+          hobbyIds[i] = req.body.hobbyIds[i].id;
+          i++;
+        }
 
-          }
       }
+    }
 
 
 
 
-      var imagePath = req.file ? req.file.filename : null;
+    var imagePath = req.file ? req.file.filename : null;
 
-      if (req.body.firstName && req.body.middlename && req.body.lastName && req.body.dob && req.body.school && req.body.syllabusId && req.body.nationalityId && req.body.achievements && req.body.ambition && req.body.genderId && req.body.phone && req.body.address && req.body.fatherName && req.body.fatherNationalityId && req.body.fatherProfessionId && req.body.motherName && req.body.motherNationalityId && req.body.motherProfessionId) {
-          profileCompletion = 1;
-          // coinCount = 10;
-      } else {
-          profileCompletion = 0;
-          coinCount = 0;
+    if (req.body.firstName && req.body.middlename && req.body.lastName && req.body.dob && req.body.school && req.body.syllabusId && req.body.nationalityId && req.body.achievements && req.body.ambition && req.body.genderId && req.body.phone && req.body.address && req.body.fatherName && req.body.fatherNationalityId && req.body.fatherProfessionId && req.body.motherName && req.body.motherNationalityId && req.body.motherProfessionId) {
+      profileCompletion = 1;
+      // coinCount = 10;
+    } else {
+      profileCompletion = 0;
+      coinCount = 0;
+    }
+
+    function makeid(length) {
+      var result = '';
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
       }
+      return result;
+    }
 
-      function makeid(length) {
-          var result = '';
-          var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-          var charactersLength = characters.length;
-          for (var i = 0; i < length; i++) {
-              result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          }
-          return result;
+    const hash = bcrypt.hashSync(req.body.password, salt);
+
+    var referralCode = makeid(6);
+
+    console.log("dob : " + req.body.dob)
+    var dobObj = await getDayMonthAndYear(req.body.dob);
+    const user = new User({
+      firstName: req.body.firstName,
+      email: req.body.email,
+      password: hash,
+      middlename: req.body.middlename || null,
+      lastName: req.body.lastName || null,
+      dob: req.body.dob,
+      dayInDob: dobObj.dayInDob,
+      monthInDob: dobObj.monthInDob,
+      yearInDob: dobObj.yearInDob,
+      image: imagePath || null,
+      school: req.body.school ? req.body.school : null,
+      syllabusId: req.body.syllabusId ? req.body.syllabusId : null,
+      hobbyIds: hobbyIds || null,
+      // hobbies: hobbyIds || null,
+      language: req.body.language ? req.body.language : null,
+      nationalityId: req.body.nationalityId ? req.body.nationalityId : null,
+      achievements: req.body.achievements ? req.body.achievements : null,
+      ambition: req.body.ambition ? req.body.ambition : null,
+      status: 1,
+      genderId: req.body.genderId ? req.body.genderId : null,
+      countryId: req.body.countryId,
+      stateId: req.body.stateId ? req.body.stateId : null,
+      cityId: req.body.cityId ? req.body.cityId : null,
+      city: req.body.city,
+      countryCode: req.body.countryCode,
+      phone: req.body.phone,
+      address: req.body.address ? req.body.address : null,
+      userType: req.body.userType || "Student",
+      fatherName: req.body.fatherName ? req.body.fatherName : null,
+      fatherNationalityId: req.body.fatherNationalityId ? req.body.fatherNationalityId : null,
+      fatherProfessionId: req.body.fatherProfessionId ? req.body.fatherProfessionId : null,
+      motherName: req.body.motherName ? req.body.motherName : null,
+      motherNationalityId: req.body.motherNationalityId ? req.body.motherNationalityId : null,
+      motherProfessionId: req.body.motherProfessionId ? req.body.motherProfessionId : null,
+      profileCompletion: profileCompletion,
+      referralCode: referralCode,
+      isTutor: false,
+      isDeactivated: false,
+      coinCount: 0,
+      isSocialLogin: false,
+      coinHistory: [],
+      karmaIndex: null,
+      avaregeRating: 0
+    });
+
+    if (req.body.referralCode) {
+      var checkReferral = req.body.referralCode;
+      var filterReferralCode = {
+        referralCode: checkReferral
       }
-
-      const hash = bcrypt.hashSync(req.body.password, salt);
-
-      var referralCode = makeid(6);
-
-      console.log("dob : " + req.body.dob)
-      var dobObj = await getDayMonthAndYear(req.body.dob);
-      const user = new User({
-          firstName: req.body.firstName,
-          email: req.body.email,
-          password: hash,
-          middlename: req.body.middlename || null,
-          lastName: req.body.lastName || null,
-          dob: req.body.dob,
-          dayInDob: dobObj.dayInDob,
-          monthInDob: dobObj.monthInDob,
-          yearInDob: dobObj.yearInDob,
-          image: imagePath || null,
-          school: req.body.school ? req.body.school : null,
-          syllabusId: req.body.syllabusId ? req.body.syllabusId : null,
-          hobbyIds: hobbyIds || null,
-          // hobbies: hobbyIds || null,
-          language: req.body.language ? req.body.language : null,
-          nationalityId: req.body.nationalityId ? req.body.nationalityId : null,
-          achievements: req.body.achievements ? req.body.achievements : null,
-          ambition: req.body.ambition ? req.body.ambition : null,
-          status: 1,
-          genderId: req.body.genderId ? req.body.genderId : null,
-          countryId: req.body.countryId,
-          stateId: req.body.stateId ? req.body.stateId : null,
-          cityId: req.body.cityId ? req.body.cityId : null,
-          city: req.body.city,
-          countryCode: req.body.countryCode,
-          phone: req.body.phone,
-          address: req.body.address ? req.body.address : null,
-          userType: req.body.userType || "Student",
-          fatherName: req.body.fatherName ? req.body.fatherName : null,
-          fatherNationalityId: req.body.fatherNationalityId ? req.body.fatherNationalityId : null,
-          fatherProfessionId: req.body.fatherProfessionId ? req.body.fatherProfessionId : null,
-          motherName: req.body.motherName ? req.body.motherName : null,
-          motherNationalityId: req.body.motherNationalityId ? req.body.motherNationalityId : null,
-          motherProfessionId: req.body.motherProfessionId ? req.body.motherProfessionId : null,
-          profileCompletion: profileCompletion,
-          referralCode: referralCode,
-          isTutor: false,
-          isDeactivated: false,
-          coinCount: 0,
-          isSocialLogin: false,
-          coinHistory: [],
-          karmaIndex: null,
-          avaregeRating: 0
-      });
-
-      if (req.body.referralCode) {
-          var checkReferral = req.body.referralCode;
-          var filterReferralCode = {
-              referralCode: checkReferral
-          }
-          // User.findOne({
-          //   email: req.body.email,
-          //   status: 1
-          // }).then(result => {
-          //   if (result) {
-          //     return res.send({
-          //       success: 0,
-          //       message: 'User already exists'
-          //     })
-          //   }
-          User.findOne(filterReferralCode).then(async result => {
-              if (!result) {
-                  return res.send({
-                      success: 0,
-                      message: `user with referral code ${checkReferral} not found`
-                  })
-              } else {
-                  // updateCoinCount(result._id, inviteApp, function (err, profileCompletionRes) {})
-                  User.findOne({
-                      phone: req.body.phone,
-                      email: req.body.email,
-                      status: 1
-                  }).then(result => {
-                      if (result) {
-                          return res.send({
-                              success: 0,
-                              message: 'User already exists.Try with a different number'
-                          })
-                      } else {
-                          user.save()
-                              .then(async data => {
-                                  let updateCoinReqObj = {
-                                      userId: result._id,
-                                      coinType: inviteApp,
-                                      url: constants.API_UPDATE_COIN,
-                                  };
-
-                                  updateCoinCount(updateCoinReqObj, function (err, trendingBooksRes) { });
-                                  var loginResponse = await getLoginResponse(req.body.email)
-                                  loginResponse.referralCode = data.referralCode;
-                                  return res.status(200).send(loginResponse);
-                              });
-                      }
-                  });
-
-
-              }
+      // User.findOne({
+      //   email: req.body.email,
+      //   status: 1
+      // }).then(result => {
+      //   if (result) {
+      //     return res.send({
+      //       success: 0,
+      //       message: 'User already exists'
+      //     })
+      //   }
+      User.findOne(filterReferralCode).then(async result => {
+        if (!result) {
+          return res.send({
+            success: 0,
+            message: `user with referral code ${checkReferral} not found`
           })
-          // })
-      } else {
+        } else {
+          // updateCoinCount(result._id, inviteApp, function (err, profileCompletionRes) {})
           User.findOne({
-              phone: req.body.phone,
-              status: 1
-          }).then(async result => {
-              if (result) {
-                  return res.send({
-                      success: 0,
-                      message: 'User already exists.Try with a different number'
-                  })
-              } else {
-                  user.save()
-                      .then(async data => {
-                          if (profileCompletion == 1) {
-                              // updateCoinCount(data.id, coinType, function (err, profileCompletionRes) {});
+            phone: req.body.phone,
+            email: req.body.email,
+            status: 1
+          }).then(result => {
+            if (result) {
+              return res.send({
+                success: 0,
+                message: 'User already exists.Try with a different number'
+              })
+            } else {
+              user.save()
+                .then(async data => {
+                  let updateCoinReqObj = {
+                    userId: result._id,
+                    coinType: inviteApp,
+                    url: constants.API_UPDATE_COIN,
+                  };
 
-                              let updateCoinReqObj = {
-                                  userId: data.id,
-                                  coinType,
-                                  url: constants.API_UPDATE_COIN,
-                              };
+                  updateCoinCount(updateCoinReqObj, function (err, trendingBooksRes) { });
+                  var loginResponse = await getLoginResponse(req.body.email)
+                  loginResponse.referralCode = data.referralCode;
+                  return res.status(200).send(loginResponse);
+                });
+            }
+          });
 
-                              updateCoinCount(updateCoinReqObj, function (err, trendingBooksRes) { });
-                          }
-                          var loginResponse = await getLoginResponse(req.body.email)
-                          loginResponse.referralCode = data.referralCode;
-                          return res.status(200).send(loginResponse);
 
-                      }).catch(err => {
-                          res.status(500).send({
-                              success: 0,
-                              message: err.message || "Some error occurred while creating the User."
-                          });
-                      });
-              }
+        }
+      })
+      // })
+    } else {
+      User.findOne({
+        phone: req.body.phone,
+        status: 1
+      }).then(async result => {
+        if (result) {
+          return res.send({
+            success: 0,
+            message: 'User already exists.Try with a different number'
           })
-      }
+        } else {
+          user.save()
+            .then(async data => {
+              if (profileCompletion == 1) {
+                // updateCoinCount(data.id, coinType, function (err, profileCompletionRes) {});
+
+                let updateCoinReqObj = {
+                  userId: data.id,
+                  coinType,
+                  url: constants.API_UPDATE_COIN,
+                };
+
+                updateCoinCount(updateCoinReqObj, function (err, trendingBooksRes) { });
+              }
+              var loginResponse = await getLoginResponse(req.body.email)
+              loginResponse.referralCode = data.referralCode;
+              return res.status(200).send(loginResponse);
+
+            }).catch(err => {
+              res.status(500).send({
+                success: 0,
+                message: err.message || "Some error occurred while creating the User."
+              });
+            });
+        }
+      })
+    }
   }
 };
 
@@ -837,11 +838,11 @@ exports.create1 = async (req, res) => {
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
   if (!req.body.firstName || !req.body.phone
-     || !req.body.dob || !req.body.language
-      || !req.body.email || !req.body.school
-       || !req.body.password || !req.body.countryCode
-       || !req.body.countryId || !req.body.stateId
-       || !req.body.cityId  ) {
+    || !req.body.dob || !req.body.language
+    || !req.body.email || !req.body.school
+    || !req.body.password || !req.body.countryCode
+    || !req.body.countryId || !req.body.stateId
+    || !req.body.cityId) {
     var errors = [];
     if (!req.body.firstName) {
       errors.push({
@@ -1105,7 +1106,7 @@ exports.create1 = async (req, res) => {
 
     var referralCode = makeid(6);
 
-   console.log("dob : " + req.body.dob)
+    console.log("dob : " + req.body.dob)
     var dobObj = await getDayMonthAndYear(req.body.dob);
     const user = new User({
       firstName: req.body.firstName,
@@ -1114,9 +1115,9 @@ exports.create1 = async (req, res) => {
       middlename: req.body.middlename || null,
       lastName: req.body.lastName || null,
       dob: req.body.dob,
-      dayInDob : dobObj.dayInDob,
-      monthInDob : dobObj.monthInDob,
-      yearInDob : dobObj.yearInDob,
+      dayInDob: dobObj.dayInDob,
+      monthInDob: dobObj.monthInDob,
+      yearInDob: dobObj.yearInDob,
       image: imagePath || null,
       school: req.body.school ? req.body.school : null,
       syllabusId: req.body.syllabusId ? req.body.syllabusId : null,
@@ -1128,9 +1129,9 @@ exports.create1 = async (req, res) => {
       ambition: req.body.ambition ? req.body.ambition : null,
       status: 1,
       genderId: req.body.genderId ? req.body.genderId : null,
-      countryId : req.body.countryId,
-      stateId : req.body.stateId,
-      city : req.body.cityId,
+      countryId: req.body.countryId,
+      stateId: req.body.stateId,
+      city: req.body.cityId,
       countryCode: req.body.countryCode,
       phone: req.body.phone,
       address: req.body.address ? req.body.address : null,
@@ -1149,7 +1150,7 @@ exports.create1 = async (req, res) => {
       isSocialLogin: false,
       coinHistory: [],
       karmaIndex: null,
-      avaregeRating : 0
+      avaregeRating: 0
     });
 
     if (req.body.referralCode) {
@@ -1195,7 +1196,7 @@ exports.create1 = async (req, res) => {
                   };
 
                   updateCoinCount(updateCoinReqObj, function (err, trendingBooksRes) { });
-                  var loginResponse = await getLoginResponse( req.body.email)
+                  var loginResponse = await getLoginResponse(req.body.email)
                   loginResponse.referralCode = data.referralCode;
                   return res.status(200).send(loginResponse);
                 });
@@ -1230,7 +1231,7 @@ exports.create1 = async (req, res) => {
 
                 updateCoinCount(updateCoinReqObj, function (err, trendingBooksRes) { });
               }
-              var loginResponse = await getLoginResponse( req.body.email)
+              var loginResponse = await getLoginResponse(req.body.email)
               loginResponse.referralCode = data.referralCode;
               return res.status(200).send(loginResponse);
 
@@ -1271,7 +1272,7 @@ exports.getUserDetails = (req, res) => {
   }
   var queryProjection = {
     firstName: 1,
-    isDeactivated:1,
+    isDeactivated: 1,
     middlename: 1,
     lastName: 1,
     dob: 1,
@@ -1300,16 +1301,16 @@ exports.getUserDetails = (req, res) => {
     karmaIndex: 1,
     password: 1,
     isTutor: 1,
-    isDeactivated : 1,
-    countryId : 1,
-    stateId : 1,
-    city : 1,
+    isDeactivated: 1,
+    countryId: 1,
+    stateId: 1,
+    city: 1,
   }
   // get data
   User.findOne(filters, queryProjection).populate(['syllabusId', {
     path: 'language',
     select: 'name'
-  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId','cityId']).then(userDetail => {
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds', 'countryId', 'stateId', 'cityId']).then(userDetail => {
     if (!userDetail) {
       var responseObj = {
         success: 0,
@@ -1390,16 +1391,43 @@ exports.getKarmaIndex = (req, res) => {
 
 exports.updateProfile = async (req, res) => {
 
+ 
+
+  // verification 
+
+  try {
+    const token = req.body.token;
+    const userDetails = jwt.verify(token, JWT_KEY);
+    const data = userDetails.data;
+    const userId = data.userId;
+    const user = await User.findOne({
+      _id: userId,
+      status: 1
+    });
+    if (!user) {
+      throw new Error()
+    }
+    req.identity = userDetails;
+    req.token = token;
+    
+
+  } catch (error) {
+    res.status(401).send({
+      error: 'Not authorized to access this resource'
+    })
+  }
+
   var userData = req.identity.data;
   var userId = userData.userId;
+
 
   var update = {};
   const params = req.body;
 
-  if (!params){
+  if (!params) {
     return res.send({
-      success:0,
-      message:"no parameter found"
+      success: 0,
+      message: "no parameter found"
     });
   }
 
@@ -1456,24 +1484,24 @@ exports.updateProfile = async (req, res) => {
   if (params.countryCode) {
     update.countryCode = params.countryCode;
   }
- 
 
-  let value = await User.updateOne({ status: 1, _id: userId},update).catch(err=>{return {succes: 0, message: err.message }});
-  if (value && value.success != undefined && value.success === 0){
+
+  let value = await User.updateOne({ status: 1, _id: userId }, update).catch(err => { return { succes: 0, message: err.message } });
+  if (value && value.success != undefined && value.success === 0) {
     return res.send(value);
   }
 
   return res.send(
     {
-      success:1,
-      message:"updated successfully"
+      success: 1,
+      message: "updated successfully"
     }
   )
 }
 
 exports.update = async (req, res) => {
 
-  
+
   var params = req.body;
   var reqFields = [];
   var hobbyIds = [];
@@ -1495,22 +1523,22 @@ exports.update = async (req, res) => {
 
   var update = params;
 
-  if (!update){
+  if (!update) {
     return res.send({
-      success:0,
-      message:"no parameter found"
+      success: 0,
+      message: "no parameter found"
     });
   }
- 
+
   // if (update.dob) {
-  
+
   //   console.log("dob : " + update.dob)
   //   var formattedDate = moment(update.dob, 'DD MMMM YYYY');
   //   update.dob = formattedDate;
   //   console.log("formattedDate : " + formattedDate)
   // }
 
-  
+
   if (update.syllabusId) {
     update.syllabusId = ObjectId(update.syllabusId);
   }
@@ -1571,7 +1599,7 @@ exports.update = async (req, res) => {
     }
   }
 
- 
+
   if (req.file) {
     update.image = req.file.filename
   }
@@ -1593,7 +1621,7 @@ exports.update = async (req, res) => {
   var options = {
     new: true
   };
- 
+
   var checkPasswordObj = await checkPassword(update, userId)
   if (checkPasswordObj && (checkPasswordObj.success !== undefined) && (checkPasswordObj.success === 0)) {
     return res.send(checkPasswordObj);
@@ -1604,22 +1632,22 @@ exports.update = async (req, res) => {
   }
 
   var update1 = update;
-  var update = await User.updateOne(filter,update).catch(err=>{
+  var update = await User.updateOne(filter, update).catch(err => {
     return {
-      success:0,
-      message:"updation failed",
-      error:err.message
+      success: 0,
+      message: "updation failed",
+      error: err.message
     }
   })
 
-  if (update && update.succes && update.success === 0){
+  if (update && update.succes && update.success === 0) {
     return res.send(update)
   }
 
   var proj = {
     firstName: 1,
-    profileCompletion:1,
-    isDeactivated:1,
+    profileCompletion: 1,
+    isDeactivated: 1,
     middlename: 1,
     lastName: 1,
     dob: 1,
@@ -1648,88 +1676,89 @@ exports.update = async (req, res) => {
     karmaIndex: 1,
     password: 1,
     isTutor: 1,
-    isDeactivated : 1,
-    countryId : 1,
-    stateId : 1,
-    city : 1,
+    isDeactivated: 1,
+    countryId: 1,
+    stateId: 1,
+    city: 1,
   }
- 
+
   var userInfo = await User.findOne(filter, proj).populate(['syllabusId', {
     path: 'language',
     select: 'name'
-  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds','countryId','stateId']).catch(err=>{
+  }, 'nationalityId', 'genderId', 'fatherNationalityId', 'fatherProfessionId', 'motherNationalityId', 'motherProfessionId', 'hobbyIds', 'countryId', 'stateId']).catch(err => {
     return {
-      success:0,
-      message:"did not get info of user",
-      error:err.message
+      success: 0,
+      message: "did not get info of user",
+      error: err.message
     }
   })
 
   userInfo = userInfo.toObject();
- 
-  if (userInfo.profileCompletion == 0){
+
+  if (userInfo.profileCompletion == 0) {
 
     var infoFlag = "";
-     if ( (userInfo.dob != undefined) && (userInfo.syllabus != undefined) &&(userInfo.countryId != undefined) 
-     &&(userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
-      && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)){
+    if ((userInfo.dob != undefined) && (userInfo.syllabus != undefined) && (userInfo.countryId != undefined)
+      && (userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+      && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)) {
 
 
-        if ((userInfo.language == undefined) || ( userInfo.language.length == 0)) {
-          return res.send({
-            success:1,
-           
-             flag:1,
-            message:"profile updated"
-          })
-        }
-        
-        var updateProfCompletion = await User.updateOne(filter,{profileCompletion :1,$inc : {coinCount:10 }}).catch(err => {
-          return {
-            success:0,
-            message:"profile updation related with coin count failed",
-            error:err.message
-          }
-        })
-
-        if (updateProfCompletion && updateProfCompletion.success && updateProfCompletion.success === 0) {
-          return res.send(updateTutorProfile);
-        }
+      if ((userInfo.language == undefined) || (userInfo.language.length == 0)) {
         return res.send({
-          success:1,
-           flag:2,
-          message:"profile updated "
+          success: 1,
+
+          flag: 1,
+          message: "profile updated"
         })
       }
-      else {
-        var array = [];
-        for (var key in userInfo) {
-        
-              console.log(key + " -> " + userInfo[key]);
-         
+
+      var updateProfCompletion = await User.updateOne(filter, { profileCompletion: 1, $inc: { coinCount: 10 } }).catch(err => {
+        return {
+          success: 0,
+          message: "profile updation related with coin count failed",
+          error: err.message
+        }
+      })
+
+      if (updateProfCompletion && updateProfCompletion.success && updateProfCompletion.success === 0) {
+        return res.send(updateTutorProfile);
       }
-        return res.send({
-          success:1,
-          flag:3,
-          flag1:userInfo.gender,
-          flag2:userInfo.dob,
-          flag3:userInfo.syllabus,
-          flag4:userInfo.countryId,
-          flag5:userInfo.fatherNationality,
-          flag6:userInfo.fatherProfession,
-          flag7:userInfo.motherNationality,
-          flag8:userInfo.mothersProfession,
-          flag10:userInfo,
-          flag11:update1,
-          message:"profile updated "
-        })
-  }}
+      return res.send({
+        success: 1,
+        flag: 2,
+        message: "profile updated "
+      })
+    }
+    else {
+      var array = [];
+      for (var key in userInfo) {
+
+        console.log(key + " -> " + userInfo[key]);
+
+      }
+      return res.send({
+        success: 1,
+        flag: 3,
+        flag1: userInfo.gender,
+        flag2: userInfo.dob,
+        flag3: userInfo.syllabus,
+        flag4: userInfo.countryId,
+        flag5: userInfo.fatherNationality,
+        flag6: userInfo.fatherProfession,
+        flag7: userInfo.motherNationality,
+        flag8: userInfo.mothersProfession,
+        flag10: userInfo,
+        flag11: update1,
+        message: "profile updated "
+      })
+    }
+  }
   else {
     return res.send({
-      success:1,
-     
-      flag:4,
-      message:"profile updatd "
+      success: 1,
+
+      flag: 4,
+      message: "profile updatd "
     })
   }
 
@@ -2072,87 +2101,87 @@ exports.getCoinCount = async (req, res) => {
   var loginBannerObj = {};
   var unReadNotificationCount = await Notifications.countDocuments({
     userId,
-    markAsRead : 0,
-    status : 1
+    markAsRead: 0,
+    status: 1
   })
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while getting unread notification count',
-      error: err
-    }
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting unread notification count',
+        error: err
+      }
+    })
+  if (unReadNotificationCount && unReadNotificationCount.success && (unReadNotificationCount.success === 0)) {
+    return res.send(unReadNotificationCount);
+  }
+
+  var userData = await User.findOne({
+    _id: userId,
+    status: 1
   })
-if (unReadNotificationCount && unReadNotificationCount.success && (unReadNotificationCount.success === 0)) {
-  return res.send(unReadNotificationCount);
-}
-
-var userData = await User.findOne({
-  _id : userId,
-  status : 1
-})
-.catch(err => {
-  return {
-    success: 0,
-    message: 'Something went wrong while getting user data',
-    error: err
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting user data',
+        error: err
+      }
+    })
+  if (userData && userData.success && (userData.success === 0)) {
+    return res.send(userData);
   }
-})
-if (userData && userData.success && (userData.success === 0)) {
-return res.send(userData);
-}
 
-var earnCoinData = await EarnCoin.findOne({
-  status : 1
-})
-.catch(err => {
-  return {
-    success: 0,
-    message: 'Something went wrong while getting earn coin video details',
-    error: err
+  var earnCoinData = await EarnCoin.findOne({
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting earn coin video details',
+        error: err
+      }
+    })
+  if (earnCoinData && earnCoinData.success && (earnCoinData.success === 0)) {
+    return res.send(earnCoinData);
   }
-})
-if (earnCoinData && earnCoinData.success && (earnCoinData.success === 0)) {
-return res.send(earnCoinData);
-}
-if(earnCoinData){
-  coinVideoObj = earnCoinData;
-}else{
-  coinVideoObj = null;
-}
-
-
-var loginBannerData = await LoginBanner.findOne({
-  status : 1
-})
-.catch(err => {
-  return {
-    success: 0,
-    message: 'Something went wrong while getting login banner details',
-    error: err
+  if (earnCoinData) {
+    coinVideoObj = earnCoinData;
+  } else {
+    coinVideoObj = null;
   }
-})
-if (loginBannerData && loginBannerData.success && (loginBannerData.success === 0)) {
-return res.send(loginBannerData);
-}
-if(loginBannerData){
-  loginBannerObj = loginBannerData;
-}else{
-  loginBannerObj = null;
-}
 
-coinCount = userData.coinCount;
-userImage = userData.image;
-var responseObj = {
-  success: 1,
-  userImage: userImage,
-  imageBase: usersConfig.imageBase,
-  unReadNotifications: unReadNotificationCount,
-  coinCount: coinCount,
-  loginBannerDetails : loginBannerObj,
-  coinVideoDetails : coinVideoObj,
-}
 
-return res.send(responseObj)
+  var loginBannerData = await LoginBanner.findOne({
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting login banner details',
+        error: err
+      }
+    })
+  if (loginBannerData && loginBannerData.success && (loginBannerData.success === 0)) {
+    return res.send(loginBannerData);
+  }
+  if (loginBannerData) {
+    loginBannerObj = loginBannerData;
+  } else {
+    loginBannerObj = null;
+  }
+
+  coinCount = userData.coinCount;
+  userImage = userData.image;
+  var responseObj = {
+    success: 1,
+    userImage: userImage,
+    imageBase: usersConfig.imageBase,
+    unReadNotifications: unReadNotificationCount,
+    coinCount: coinCount,
+    loginBannerDetails: loginBannerObj,
+    coinVideoDetails: coinVideoObj,
+  }
+
+  return res.send(responseObj)
 };
 
 exports.getMyDonations = (req, res) => {
@@ -2467,7 +2496,7 @@ async function avaregeRates(type, id) {
     })
 
     if (array && array.succes && array.sucess === 0) {
-      return {success: 0, message:array.message}
+      return { success: 0, message: array.message }
     }
     // return res.send(array);
 
@@ -2482,7 +2511,7 @@ async function avaregeRates(type, id) {
       return { succes: 0, message: err.message }
     })
     if (update && update.succes && update.succes === 1) {
-      return {success:0,message:update.message}
+      return { success: 0, message: update.message }
     }
     return 1;
   }
@@ -2493,7 +2522,7 @@ async function avaregeRates(type, id) {
     })
 
     if (array && array.succes && array.sucess === 0) {
-      return {success:0,message:array.message}
+      return { success: 0, message: array.message }
     }
     // return res.send(array);
 
@@ -2506,11 +2535,11 @@ async function avaregeRates(type, id) {
     var update = await User.updateOne({ _id: id }, { avaregeRating: avg }).catch(err => {
       return { succes: 0, message: err.message }
     })
-    console.log('test1', update, id, avg,array)
+    console.log('test1', update, id, avg, array)
     if (update && update.succes && update.succes === 1) {
-      return {success:0,message:update.message}
+      return { success: 0, message: update.message }
     }
-    return {success:1,message:" added average rating"};
+    return { success: 1, message: " added average rating" };
   }
 }
 
@@ -2550,7 +2579,7 @@ exports.loginWithEmail = async (req, res) => {
       image: 1,
       password: 1,
       isTutor: 1,
-      dob : 1
+      dob: 1
     });
     if (!checkUser) {
       return res.status(200).send({
@@ -2575,7 +2604,7 @@ exports.loginWithEmail = async (req, res) => {
           statusCode: 200,
           userDetails: checkUser,
           token,
-          flag:"ok",
+          flag: "ok",
           message: 'Successfully logged in'
         })
 
@@ -2607,7 +2636,7 @@ exports.sendOtp_1 = async (req, res) => {
   let params = req.body;
   var mobile = params.phone;
   let countryCode = params.countryCode;
- 
+
   if (!mobile) {
     return res.status(400).send({
       success: 0,
@@ -2729,7 +2758,7 @@ exports.sendOtp_1 = async (req, res) => {
     res.status(500).send({
       success: 0,
       message: 'something went wrong while sending email',
-      err:err.message
+      err: err.message
     })
   }
 }
@@ -2762,13 +2791,13 @@ exports.verifyOtp = async (req, res) => {
         message: 'apiToken cannot be empty'
       })
     }
-  
+
     return res.status(400).send({
       success: 0,
       errors: errors
     })
   }
-  var phoneNo =  phone;
+  var phoneNo = phone;
   try {
     var filter = {
       userToken: otp,
@@ -2777,12 +2806,12 @@ exports.verifyOtp = async (req, res) => {
       isUsed: false
     };
 
-    console.log(filter,"flag");
+    console.log(filter, "flag");
     var otpData = await Otp.findOne(filter);
 
     if (otpData) {
       var currentTime = Date.now();
-       console.log(currentTime)
+      console.log(currentTime)
       var otpData1 = await Otp.findOne({
         phone: phoneNo,
         userToken: otp,
@@ -3192,8 +3221,8 @@ exports.socialSignup = async (req, res) => {
 
 exports.updateForSocialAccount = async (req, res) => {
   var params = req.body;
-  if (!params.dob || !params.language 
-    || !params.token || !params.school 
+  if (!params.dob || !params.language
+    || !params.token || !params.school
     || !params.countryId || !params.stateId
     || !params.city) {
     if (!params.dob) {
@@ -3247,7 +3276,7 @@ exports.updateForSocialAccount = async (req, res) => {
   }
 
   const userDetails = await checkAuthToken(params.token, JWT_KEY);
-  
+
   if (userDetails && userDetails.success !== undefined && userDetails.success === 0) {
     return res.send(userDetails)
   }
@@ -3285,7 +3314,7 @@ exports.updateForSocialAccount = async (req, res) => {
   // }
 
   var emailCheck = await checkYourEmail(params);
- 
+
   if (emailCheck && emailCheck.success !== undefined && emailCheck.success === 0) {
     return res.send(emailCheck)
   }
@@ -3373,16 +3402,16 @@ exports.deleteAccount = async (req, res) => {
     if (updateUser && (updateUser.success !== undefined) && (updateUser.success === 0)) {
       return res.send(updateUser);
     }
-  //check if tutor change subject status
-  var userResponseObj = {};
-  userResponseObj.userId = userId;
-  userResponseObj.status = 0;
-  userResponseObj.isTutor = userData.isTutor?userData.isTutor:false;
+    //check if tutor change subject status
+    var userResponseObj = {};
+    userResponseObj.userId = userId;
+    userResponseObj.status = 0;
+    userResponseObj.isTutor = userData.isTutor ? userData.isTutor : false;
 
-  var checkTutorAndUpdateResp = await checkTutorAndUpdate(userResponseObj);
-  if (checkTutorAndUpdateResp && (checkTutorAndUpdateResp.success !== undefined) && (checkTutorAndUpdateResp.success === 0)) {
-    return res.send(checkTutorAndUpdateResp);
-  }
+    var checkTutorAndUpdateResp = await checkTutorAndUpdate(userResponseObj);
+    if (checkTutorAndUpdateResp && (checkTutorAndUpdateResp.success !== undefined) && (checkTutorAndUpdateResp.success === 0)) {
+      return res.send(checkTutorAndUpdateResp);
+    }
 
 
     return res.send({
@@ -3452,7 +3481,7 @@ exports.updateAccountStatus = async (req, res) => {
     if (checkAccountStatusResp && (checkAccountStatusResp.success !== undefined) && (checkAccountStatusResp.success === 0)) {
       return res.send(checkAccountStatusResp);
     }
-    
+
     var update = {};
     update.isDeactivated = checkAccountStatusResp.isDeactivated;
     update.tsModifiedAt = Date.now();
@@ -3478,7 +3507,7 @@ exports.updateAccountStatus = async (req, res) => {
 
     return res.send({
       status: 1,
-      message: 'Your account '+ checkAccountStatusResp.message +' successfully'
+      message: 'Your account ' + checkAccountStatusResp.message + ' successfully'
     });
 
 
@@ -3499,10 +3528,10 @@ exports.requestAsTutor = async (req, res) => {
   var file = req.file;
 
   if (params.tutorCourseIds === null || params.tutorCourseIds === undefined || (params.tutorCourseIds !== undefined && params.tutorCourseIds.length < 1)
-    
-    
+
+
     || params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
-    || !params.courceDescription 
+    || !params.courceDescription
     // || !file 
     || !params.location
     // ||  (params.yearOfExperience === null || params.yearOfExperience === undefined)
@@ -3656,7 +3685,7 @@ exports.requestAsTutor = async (req, res) => {
   }
 
   newTutorRequestObj.location = params.location;
-  newTutorRequestObj.sampleVideo = ( file && file.filename )  ? file.filename : null;
+  newTutorRequestObj.sampleVideo = (file && file.filename) ? file.filename : null;
   newTutorRequestObj.isApproved = false;
   newTutorRequestObj.isRejected = false;
   newTutorRequestObj.status = 1;
@@ -4369,7 +4398,7 @@ async function checkAccountStatus(userData, changeStatus) {
   var isDeactivated = false;
   var status = 1;
   var message = ''
-  console.log("status : " +  status)
+  console.log("status : " + status)
   console.log("userData")
   console.log(userData)
   console.log("userData")
@@ -4426,22 +4455,22 @@ async function checkTutorAndUpdate(userObj) {
   if (!userObj.isTutor) {
     var updateAppointmentRequestFromResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
     if (updateAppointmentRequestFromResp && (updateAppointmentRequestFromResp.success !== undefined) && (updateAppointmentRequestFromResp.success === 0)) {
-       return updateAppointmentRequestFromResp;
-     }
+      return updateAppointmentRequestFromResp;
+    }
     return userObj;
   } else {
- 
+
     var updateOnlineClassResp = await updateTutorOnlineClassStatus(findCriteria, update)
     if (updateOnlineClassResp && (updateOnlineClassResp.success !== undefined) && (updateOnlineClassResp.success === 0)) {
       return updateOnlineClassResp;
     }
-   
+
     var updateAppointmentRequestFromResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
-   if (updateAppointmentRequestFromResp && (updateAppointmentRequestFromResp.success !== undefined) && (updateAppointmentRequestFromResp.success === 0)) {
+    if (updateAppointmentRequestFromResp && (updateAppointmentRequestFromResp.success !== undefined) && (updateAppointmentRequestFromResp.success === 0)) {
       return updateAppointmentRequestFromResp;
     }
     findCriteria = {
-      tutorId : userObj.userId
+      tutorId: userObj.userId
     }
     var updateAppointmentRequestToResp = await updateAppointmentRequestFromAndTo(findCriteria, update)
 
@@ -4471,177 +4500,177 @@ async function updateTutorOnlineClassStatus(findCriteria, update) {
   }
 }
 
-async function updateAppointmentRequestFromAndTo(findCriteria, update){
-  var updateAppointment = await AppointmentClassRequest.update(findCriteria,update, { "multi": true })
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while update online class',
-      error: err
-    }
-  })
-if (updateAppointment && (updateAppointment.success !== undefined) && (updateAppointment.success === 0)) {
-  return updateAppointment;
-}
-return {
-  success: 1,
-  message: 'Updated appointment requests'
-}
-
-}
-
-  // async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
-  //   if(appointmentData.isApproved && isApproved){
-  //     return {
-  //       success: 0,
-  //       message: 'Appoinment request already approved',
-  //     };
-  //   }else if(appointmentData.isRejected && isRejected){
-  //     return {
-  //       success: 0,
-  //       message: 'Appoinment request already rejected',
-  //     };
-  //   }
-  //   var updateObj = {};
-  //   if(isApproved){
-  //     var findCriteria = {};
-  //     findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
-  //     findCriteria.tutorClassId = appointmentData.tutorClassId;
-  //     findCriteria.isPublic = false;
-  //     findCriteria.isApproved = true;
-  //     findCriteria.isRejected = false;
-  //     findCriteria.status = 1;
-
-  //     var checkOnlineClass = await OnlineClass.findOne(findCriteria)
-  //     .catch(err => {
-  //       return {
-  //         success: 0,
-  //         message: 'Something went wrong while checking user is a tutor',
-  //         error: err
-  //       }
-  //     })
-  //     if (checkOnlineClass && (checkOnlineClass.success !== undefined) && (userData.success === 0)) {
-  //     return checkOnlineClass;
-  //     }
-  //     if(!checkOnlineClass || checkOnlineClass === null){
-  //       return {
-  //         success: 0,
-  //         message: 'Requested online class not added, So add class',
-  //       };
-  //     }else{
-  //       updateObj.isApproved = true;
-  //     updateObj.tsModifiedAt = Date.now();
-
-  //     return {
-  //       success : 1,
-  //       message : 'Approve status',
-  //       update : updateObj
-  //     }
-  //     }
-  //   }else{
-  //     updateObj.isRejected = true;
-  //     updateObj.tsModifiedAt = Date.now();
-  //     return {
-  //       success : 1,
-  //       message : 'Reject status',
-  //       update : updateObj
-  //     }
-  //   }
-  // }
-
-
-  async function getLoginResponse(email){
-    let checkUser = await User.findOne({
-      email: email,
-      status: 1
-    }, {
-      coinCount: 1,
-      email: 1,
-      firstName: 1,
-      lastName: 1,
-      middlename: 1,
-      image: 1,
-      password: 1,
-      isTutor: 1,
-      dob : 1
-    });
-    if (!checkUser) {
+async function updateAppointmentRequestFromAndTo(findCriteria, update) {
+  var updateAppointment = await AppointmentClassRequest.update(findCriteria, update, { "multi": true })
+    .catch(err => {
       return {
         success: 0,
-        message: 'User not found'
+        message: 'Something went wrong while update online class',
+        error: err
       }
-    }else{
-      var payload = {
-        userId: checkUser.id
-      };
-      var token = jwt.sign({
-        data: payload,
-      }, JWT_KEY, {
-        expiresIn: '30 days'
-      });
+    })
+  if (updateAppointment && (updateAppointment.success !== undefined) && (updateAppointment.success === 0)) {
+    return updateAppointment;
+  }
+  return {
+    success: 1,
+    message: 'Updated appointment requests'
+  }
 
-      return {
-        success: 1,
-        statusCode: 200,
-        userDetails: checkUser,
-        token,
-        flag:"ok",
-        // message: 'Successfully logged in',
-        message : "User Created Successfully."
-      }
+}
+
+// async function checkAppointmentStatusCheck(appointmentData,isApproved,isRejected){
+//   if(appointmentData.isApproved && isApproved){
+//     return {
+//       success: 0,
+//       message: 'Appoinment request already approved',
+//     };
+//   }else if(appointmentData.isRejected && isRejected){
+//     return {
+//       success: 0,
+//       message: 'Appoinment request already rejected',
+//     };
+//   }
+//   var updateObj = {};
+//   if(isApproved){
+//     var findCriteria = {};
+//     findCriteria.tutorSubjectId = appointmentData.tutorSubjectId;
+//     findCriteria.tutorClassId = appointmentData.tutorClassId;
+//     findCriteria.isPublic = false;
+//     findCriteria.isApproved = true;
+//     findCriteria.isRejected = false;
+//     findCriteria.status = 1;
+
+//     var checkOnlineClass = await OnlineClass.findOne(findCriteria)
+//     .catch(err => {
+//       return {
+//         success: 0,
+//         message: 'Something went wrong while checking user is a tutor',
+//         error: err
+//       }
+//     })
+//     if (checkOnlineClass && (checkOnlineClass.success !== undefined) && (userData.success === 0)) {
+//     return checkOnlineClass;
+//     }
+//     if(!checkOnlineClass || checkOnlineClass === null){
+//       return {
+//         success: 0,
+//         message: 'Requested online class not added, So add class',
+//       };
+//     }else{
+//       updateObj.isApproved = true;
+//     updateObj.tsModifiedAt = Date.now();
+
+//     return {
+//       success : 1,
+//       message : 'Approve status',
+//       update : updateObj
+//     }
+//     }
+//   }else{
+//     updateObj.isRejected = true;
+//     updateObj.tsModifiedAt = Date.now();
+//     return {
+//       success : 1,
+//       message : 'Reject status',
+//       update : updateObj
+//     }
+//   }
+// }
+
+
+async function getLoginResponse(email) {
+  let checkUser = await User.findOne({
+    email: email,
+    status: 1
+  }, {
+    coinCount: 1,
+    email: 1,
+    firstName: 1,
+    lastName: 1,
+    middlename: 1,
+    image: 1,
+    password: 1,
+    isTutor: 1,
+    dob: 1
+  });
+  if (!checkUser) {
+    return {
+      success: 0,
+      message: 'User not found'
+    }
+  } else {
+    var payload = {
+      userId: checkUser.id
+    };
+    var token = jwt.sign({
+      data: payload,
+    }, JWT_KEY, {
+      expiresIn: '30 days'
+    });
+
+    return {
+      success: 1,
+      statusCode: 200,
+      userDetails: checkUser,
+      token,
+      flag: "ok",
+      // message: 'Successfully logged in',
+      message: "User Created Successfully."
     }
   }
+}
 
-  async function getDayMonthAndYear(dob){
-    console.log("dob : " + dob)
-    var dobDate = new Date(dob);
-    console.log("dobDate : " + dobDate)
-    var yearInDob = dobDate.getFullYear()
-    console.log("yearInDob : " + yearInDob)
-    var monthInDob = dobDate.getMonth()
-    console.log("monthInDob : " + monthInDob)
-    var dayInDob = dobDate.getDate()
-    console.log("dayInDob : " + dayInDob)
+async function getDayMonthAndYear(dob) {
+  console.log("dob : " + dob)
+  var dobDate = new Date(dob);
+  console.log("dobDate : " + dobDate)
+  var yearInDob = dobDate.getFullYear()
+  console.log("yearInDob : " + yearInDob)
+  var monthInDob = dobDate.getMonth()
+  console.log("monthInDob : " + monthInDob)
+  var dayInDob = dobDate.getDate()
+  console.log("dayInDob : " + dayInDob)
 
-    var dobObj = {};
-    dobObj.dayInDob = dayInDob;
-    dobObj.monthInDob = monthInDob + 1;
-    dobObj.yearInDob = yearInDob;
-    console.log("dobObj" ) ;
-    console.log(dayInDob)
-    console.log("dobObj" ) ;
-    return dobObj;
+  var dobObj = {};
+  dobObj.dayInDob = dayInDob;
+  dobObj.monthInDob = monthInDob + 1;
+  dobObj.yearInDob = yearInDob;
+  console.log("dobObj");
+  console.log(dayInDob)
+  console.log("dobObj");
+  return dobObj;
 
 
+}
+
+
+
+async function send_otp(phone) {
+  var otp = Math.floor(1000 + Math.random() * 9000);
+  const apiToken = uuidv4();
+  var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
+  try {
+    const smsurl = await superagent.get(`http://thesmsbuddy.com/api/v1/sms/send?key=zOxsbDOn4iK8MBfNTyqxTlrcqM8WD3Ms&type=1&to=${phone}&sender=INFSMS&message=${otp} is the OTP for login to The PG  App&flash=0`);
+    const newOtp = new Otp({
+      phone: phone,
+      isUsed: false,
+      userToken: otp,
+      apiToken: apiToken,
+      expiry: expiry,
+      status: 1,
+      tsCreatedAt: new Date(),
+      tsModifiedAt: null
+    });
+    var saveOtp = await newOtp.save();
+    var otpResponse = {
+      phone: saveOtp.phone,
+      otp: otp,
+      apiToken: saveOtp.apiToken,
+    };
+    return otpResponse
+  } catch (error) {
+    console.log(error.response.body);
   }
 
-
-
-  async function send_otp(phone) {
-    var otp = Math.floor(1000 + Math.random() * 9000);
-    const apiToken = uuidv4();
-    var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
-    try {
-      const smsurl = await superagent.get(`http://thesmsbuddy.com/api/v1/sms/send?key=zOxsbDOn4iK8MBfNTyqxTlrcqM8WD3Ms&type=1&to=${phone}&sender=INFSMS&message=${otp} is the OTP for login to The PG  App&flash=0`);
-      const newOtp = new Otp({
-        phone: phone,
-        isUsed: false,
-        userToken: otp,
-        apiToken: apiToken,
-        expiry: expiry,
-        status: 1,
-        tsCreatedAt: new Date(),
-        tsModifiedAt: null
-      });
-      var saveOtp = await newOtp.save();
-      var otpResponse = {
-        phone: saveOtp.phone,
-        otp: otp,
-        apiToken: saveOtp.apiToken,
-      };
-      return otpResponse
-    } catch (error) {
-      console.log(error.response.body);
-    }
-  
-  }
+}
