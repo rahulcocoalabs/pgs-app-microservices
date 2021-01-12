@@ -51,7 +51,7 @@ module.exports = (app) => {
     app.post('/accounts/recover', accounts.recover);
     app.post('/accounts/reset/:token',accounts.resetPassword);
     app.get('/accounts/self',auth, accounts.getUserDetails);
-    app.patch('/accounts',fileUpload.single('image'),  accounts.update);
+    app.patch('/accounts',auth,fileUpload.single('image'),  accounts.update);
     // app.patch('/accounts',auth, fileUpload.single('image'), accounts.update);
     app.get('/accounts/get-karma',auth, accounts.getKarmaIndex);
     app.patch('/accounts/update-coin',auth, accounts.updateCoin);
@@ -67,7 +67,7 @@ module.exports = (app) => {
 
     //After social signup screen
     app.patch('/accounts/update1',accounts.updateForSocialAccount);
-    app.patch('/accounts/update',fileUpload.single('image'),accounts.updateProfile);
+    app.patch('/accounts/update',auth,accounts.updateProfile);
 
     //Request as become tutor
     app.post('/accounts/request-as-tutor',auth,fileUpload.single('video'), accounts.requestAsTutor); 
