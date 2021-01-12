@@ -5,7 +5,10 @@ const PaymentSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-   
+    charityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Charity'
+    },
     transactionId: String,
     amount: Number,
     paidStatus: Boolean,
