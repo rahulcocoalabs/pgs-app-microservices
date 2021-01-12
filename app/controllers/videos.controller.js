@@ -9,6 +9,7 @@ const constants = require('../helpers/constants');
 
 const VideoCategory = require('../models/videoCategory.model.js');
 var videosConfig = config.videos;
+var userConfig = config.users;
 var videoCategoriesConfig = config.videoCategories;
 
 /* ********* Functions ********** */
@@ -230,6 +231,7 @@ function getApisWithAuth(reqObj, callback) {
                 sharingUrl: video.sharingUrl || null,
                 isFav: isFav,
                 imageBase: videosConfig.imageBase || null,
+                userImageBase: userConfig.imageBase || null,
                 reviews: reviews || [],
                 topVideos: topVideos.items || [],
                 trendingVideos: trendingVideos.items || []
