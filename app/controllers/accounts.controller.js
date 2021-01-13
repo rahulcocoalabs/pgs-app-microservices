@@ -4749,6 +4749,8 @@ async function send_otp_bymail(email){
       subject: 'OTP',
       text:otp
     };
+
+    console.log(email,otp);
     
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
