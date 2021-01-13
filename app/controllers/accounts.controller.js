@@ -4735,31 +4735,28 @@ async function send_otp_bymail(email){
 
 
   try {
-    let testAccount = await nodemailer.createTestAccount();
-
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
-    },
-  });
-
- 
-  let info = await transporter.sendMail({
-    from: '"Fred Foo " <admin@pgsapp.com>', // sender address
-    to: email, // list of receivers
-    subject: "OTP from PGS App", // Subject line
-    text: otp, // plain text body
-  
-  });
-
-  console.log("Message sent: %s", info.messageId);
- 
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'youremail@gmail.com',
+        pass: 'yourpassword'
+      }
+    });
+    
+    var mailOptions = {
+      from: 'mailrkponline@gmail.com',
+      to: 'docsofrakesh@gmail.com',
+      subject: 'Sending Email using Node.js',
+      text: 'That was easy!'
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
     const newOtp = new Otp({
       phone: phone,
       isUsed: false,
