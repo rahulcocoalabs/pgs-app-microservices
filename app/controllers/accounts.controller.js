@@ -2794,8 +2794,8 @@ exports.sendOtp_1 = async (req, res) => {
       });
     }
     else {
-
-      var otpResponse = await send_otp_bymail(email);
+      var mobileNum = countryCode + mobile;
+      var otpResponse = await send_otp_bymail(email,mobileNum);
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
@@ -2847,6 +2847,7 @@ exports.verifyOtp = async (req, res) => {
   var params = req.body;
   var otp = params.otp;
   var phone = params.phone;
+  var email = params.emailId;
   var countryCode = params.countryCode;
   var apiToken = params.apiToken;
   if (!phone || !otp || !apiToken) {
@@ -2879,7 +2880,7 @@ exports.verifyOtp = async (req, res) => {
   try {
     var filter = {
       userToken: otp,
-      phone: phoneNo,
+      $or: [{ phone: phoneNo }, { email: email }],
       apiToken: apiToken,
       isUsed: false
     };
@@ -4752,7 +4753,7 @@ async function send_otp(phone) {
   }
 
 }
-async function send_otp_bymail(email) {
+async function send_otp_bymail(email,phone) {
 
 
   var otp = Math.floor(1000 + Math.random() * 9000);
@@ -4788,7 +4789,7 @@ async function send_otp_bymail(email) {
       }
     });
     const newOtp = new Otp({
-
+      phone:phone,
       isUsed: false,
       userToken: otp,
       apiToken: apiToken,
