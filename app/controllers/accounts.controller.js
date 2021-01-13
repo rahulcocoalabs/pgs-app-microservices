@@ -1431,7 +1431,7 @@ exports.updateProfile = async (req, res) => {
     });
   }
 
-  if (update.dob) {
+  if (params.dob) {
 
     console.log("dob : " + update.dob)
     var formattedDate = moment(update.dob, 'DD MMMM YYYY');
