@@ -1621,6 +1621,12 @@ exports.update = async (req, res) => {
   if (update.city) {
     update.city = update.city;
   }
+
+  if (params.fatherName){
+    update.fatherName = params.fatherName;
+  }
+
+  console.log("the parameter send is", params);
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
       hobbyIds = [];
