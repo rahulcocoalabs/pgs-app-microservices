@@ -2750,7 +2750,7 @@ exports.sendOtp_1 = async (req, res) => {
       })
     }
 
-    if (countryId == "5fdb1a56ec27e7569c53b052"){
+    if (country == "5fdb1a56ec27e7569c53b052"){
       var mobileNum = countryCode + mobile;
       var otpResponse = await send_otp(mobileNum);
       if (otpResponse == undefined) {
