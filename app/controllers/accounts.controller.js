@@ -1485,15 +1485,39 @@ exports.updateProfile = async (req, res) => {
     update.countryCode = params.countryCode;
   }
 
+ 
+
 
   let value = await User.updateOne({ status: 1, _id: userId }, update).catch(err => { return { succes: 0, message: err.message } });
   if (value && value.success != undefined && value.success === 0) {
     return res.send(value);
   }
 
+  var userInfo = await User.findOne({status:1,_id:userId}).catch(err=>{return {success:0,message:err.message}});
+
+  var isEmailUpdated = false;
+  var isDobLanguageUpdated = false;
+  if (userInfo && userInfo.success != undefined && userInfo.success === 0) {
+    return res.send(userInfo);
+  }
+  if (userInfo.email != undefined) {
+    isEmailUpdated = true;
+  }
+  if (userInfo.dob != undefined && userInfo.language != undefined) {
+    isDobLanguageUpdated = true;
+  }
+
+  var loginResponse = await getLoginResponse(userInfo.email);
+
+  var token = loginResponse.token;
+
   return res.send(
     {
       success: 1,
+      userDetail:userInfo,
+      isEmailUpdated,
+      isDobLanguageUpdated,
+      token,
       message: "updated successfully"
     }
   )
