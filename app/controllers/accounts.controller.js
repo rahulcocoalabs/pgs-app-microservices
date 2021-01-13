@@ -1561,7 +1561,7 @@ exports.update = async (req, res) => {
 
   var update = {};
 
-  if (!update) {
+  if (!params) {
     return res.send({
       success: 0,
       message: "no parameter found"
