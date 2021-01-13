@@ -1514,7 +1514,7 @@ exports.updateProfile = async (req, res) => {
   return res.send(
     {
       success: 1,
-      userDetail:userInfo,
+      userDetails:userInfo,
       isEmailUpdated,
       isDobLanguageUpdated,
       token,
