@@ -1559,7 +1559,7 @@ exports.update = async (req, res) => {
 
   //update parameter 
 
-  var update = params;
+  var update = {};
 
   if (!update) {
     return res.send({
@@ -1577,53 +1577,56 @@ exports.update = async (req, res) => {
   // }
 
 
-  if (update.syllabusId) {
-    update.syllabusId = ObjectId(update.syllabusId);
+  if (params.syllabusId) {
+    update.syllabusId = ObjectId(params.syllabusId);
   }
-  if (update.nationalityId) {
-    update.nationalityId = ObjectId(update.nationalityId);
+  if (params.nationalityId && params.nationalityId != "") {
+    update.nationalityId = ObjectId(update.params);
   }
-  if (update.language) {
+  if (params.stateId && params.stateId != "") {
+    update.nationalityId = ObjectId(update.params);
+  }
+  if (params.language) {
     update.language = update.language;
   }
-  if (update.genderId) {
-    update.genderId = ObjectId(update.genderId);
+  if (params.genderId) {
+    update.genderId = ObjectId(params.genderId);
   }
-  if (update.fatherNationalityId) {
-    update.fatherNationalityId = ObjectId(update.fatherNationalityId);
+  if (params.fatherNationalityId) {
+    update.fatherNationalityId = ObjectId(params.fatherNationalityId);
   }
-  if (update.fatherProfessionId) {
-    update.fatherProfessionId = ObjectId(update.fatherProfessionId);
+  if (params.fatherProfessionId) {
+    update.fatherProfessionId = ObjectId(params.fatherProfessionId);
   }
-  if (update.motherNationalityId) {
-    update.motherNationalityId = ObjectId(update.motherNationalityId);
+  if (params.motherNationalityId) {
+    update.motherNationalityId = ObjectId(params.motherNationalityId);
   }
-  if (update.motherProfessionId) {
-    update.motherProfessionId = ObjectId(update.motherProfessionId);
+  if (params.motherProfessionId) {
+    update.motherProfessionId = ObjectId(params.motherProfessionId);
   }
-  if (update.phone) {
-    update.phone = update.phone;
+  if (params.phone) {
+    update.phone = params.phone;
   }
-  if (update.countryCode) {
-    update.countryCode = update.countryCode;
+  if (params.countryCode) {
+    update.countryCode = params.countryCode;
   }
-  if (update.school) {
-    update.school = update.school;
+  if (update.params) {
+    update.school = params.school;
   }
 
   //need to validate country/state & city
-  if (update.countryId) {
-    update.nationalityId = update.countryId;
+  if (params.countryId && params.countryId != "") {
+    update.nationalityId = params.countryId;
   }
-  if (update.stateId) {
-    update.stateId = update.stateId;
+  if (params.stateId && params.stateId != "") {
+    update.stateId = params.stateId;
   }
-  if (update.city) {
-    update.city = update.city;
+  if (params.city) {
+    update.city = params.city;
   }
 
-  if (update.fatherName){
-    update.fatherName = update.fatherName;
+  if (params.fatherName){
+    update.fatherName = params.fatherName;
   }
 
   console.log("the parameter send is", params);
