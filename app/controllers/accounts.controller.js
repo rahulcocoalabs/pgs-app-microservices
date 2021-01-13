@@ -1497,6 +1497,8 @@ exports.updateProfile = async (req, res) => {
     update.fatherName = params.fatherName;
   }
 
+  console.log("the parameter send is", params);
+
 
 
 
