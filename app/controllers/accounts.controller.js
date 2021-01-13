@@ -1587,7 +1587,7 @@ exports.update = async (req, res) => {
     update.nationalityId = ObjectId(update.params);
   }
   if (params.language) {
-    update.language = update.language;
+    update.language = params.language;
   }
   if (params.genderId) {
     update.genderId = ObjectId(params.genderId);
