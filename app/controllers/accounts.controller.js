@@ -1493,6 +1493,10 @@ exports.updateProfile = async (req, res) => {
     update.countryCode = params.countryCode;
   }
 
+  if (params.fatherName){
+    update.fatherName = params.fatherName;
+  }
+
 
 
 
