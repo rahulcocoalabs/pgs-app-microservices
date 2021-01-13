@@ -2742,19 +2742,45 @@ exports.sendOtp_1 = async (req, res) => {
     //   return res.send(info);
     // }
 
-    var mobileNum = countryCode + mobile;
-    var otpResponse = await send_otp(mobileNum);
-    if (otpResponse == undefined) {
-      return res.send({
-        success: 0,
-        message: 'Something went wrong while sending OTP'
+    var country = params.countryId;
+    if (!country){
+      res.send({
+        success:0,
+        message:"provide country id"
       })
     }
-    res.status(200).send({
-      success: 1,
-      message: 'OTP is sent to your registered phone number for verification',
-      item: otpResponse
-    });
+
+    if (countryId == "5fdb1a56ec27e7569c53b052"){
+      var mobileNum = countryCode + mobile;
+      var otpResponse = await send_otp(mobileNum);
+      if (otpResponse == undefined) {
+        return res.send({
+          success: 0,
+          message: 'Something went wrong while sending OTP'
+        })
+      }
+      res.status(200).send({
+        success: 1,
+        message: 'OTP is sent to your registered phone number for verification',
+        item: otpResponse
+      });
+    }
+    else {
+      var email = req.body.email;
+      var otpResponse = await send_otp_bymail(email);
+      if (otpResponse == undefined) {
+        return res.send({
+          success: 0,
+          message: 'Something went wrong while sending OTP'
+        })
+      }
+      res.status(200).send({
+        success: 1,
+        message: 'OTP is sent to your registered phone number for verification',
+        item: otpResponse
+      });
+    }
+   
 
     // console.log("flag5")
     // const newOtp = new Otp({
@@ -4697,4 +4723,66 @@ async function send_otp(phone) {
     console.log(error.response.body);
   }
 
+}
+async function send_otp_bymail(email){
+
+
+  var otp = Math.floor(1000 + Math.random() * 9000);
+  const apiToken = uuidv4();
+  var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
+
+
+  try {
+    let testAccount = await nodemailer.createTestAccount();
+
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: testAccount.user, // generated ethereal user
+      pass: testAccount.pass, // generated ethereal password
+    },
+  });
+
+ 
+  let info = await transporter.sendMail({
+    from: '"Fred Foo 👻" <admin@pgsapp.com>', // sender address
+    to: email, // list of receivers
+    subject: "OTP from PGS App", // Subject line
+    text: otp, // plain text body
+  
+  });
+
+  console.log("Message sent: %s", info.messageId);
+ 
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    const newOtp = new Otp({
+      phone: phone,
+      isUsed: false,
+      userToken: otp,
+      apiToken: apiToken,
+      expiry: expiry,
+      status: 1,
+      tsCreatedAt: new Date(),
+      tsModifiedAt: null
+    });
+    var saveOtp = await newOtp.save();
+    var otpResponse = {
+      phone: saveOtp.phone,
+      otp: otp,
+      apiToken: saveOtp.apiToken,
+    };
+    return otpResponse
+  } catch (error) {
+    console.log(error.response.body);
+  }
+
+
+
+
+
+  
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
