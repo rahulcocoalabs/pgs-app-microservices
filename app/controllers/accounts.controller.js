@@ -4742,12 +4742,14 @@ async function send_otp_bymail(email){
         pass: 'alifbetgimel'
       }
     });
+
+    var message = "Your otp for verification is {$otp}. greetings from PGS APP team"
     
     var mailOptions = {
       from: 'mailrkponline@gmail.com',
       to: email,
       subject: 'OTP',
-      text:otp.toString()
+      text:message
     };
 
     console.log(email,otp);
