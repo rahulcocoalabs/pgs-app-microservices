@@ -4739,7 +4739,7 @@ async function send_otp_bymail(email){
       service: 'yahoo',
       auth: {
         user: 'rakeshkrishnanp@yahoo.com',
-        pass: 'alifbetgimel'
+        pass: 'Alpha@beta123'
       }
     });
     
