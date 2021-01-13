@@ -4778,7 +4778,7 @@ async function send_otp_bymail(email){
     };
     return otpResponse
   } catch (error) {
-    console.log(error.response.body);
+    console.log(error.message);
   }
 
 
