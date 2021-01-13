@@ -4736,7 +4736,7 @@ async function send_otp_bymail(email){
 
   try {
     var transporter = nodemailer.createTransport({
-      service: 'yahoo',
+      service: 'gmail',
       auth: {
         user: 'mailrkponline@gmail.com',
         pass: 'alifbetgimel'
