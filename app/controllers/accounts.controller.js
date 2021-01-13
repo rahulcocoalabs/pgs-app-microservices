@@ -1678,6 +1678,7 @@ exports.update = async (req, res) => {
   var update1 = update;
   console.log("filter and update are",update,"and",filter)
   var update = await User.updateOne(filter, update).catch(err => {
+    console.log("error message ->",err.message)
     return {
       success: 0,
       message: "updation failed",
