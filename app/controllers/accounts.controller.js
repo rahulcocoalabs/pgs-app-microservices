@@ -4743,7 +4743,7 @@ async function send_otp_bymail(email){
       }
     });
 
-    var message = "Your otp for verification is {$otp}. greetings from PGS APP team"
+    var message = "Your otp for verification is " + otp.toString() +  " greetings from PGS APP team"
     
     var mailOptions = {
       from: 'mailrkponline@gmail.com',
