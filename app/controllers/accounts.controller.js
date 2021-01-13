@@ -2659,6 +2659,7 @@ exports.sendOtp_1 = async (req, res) => {
   console.log("flag1")
   let params = req.body;
   var mobile = params.phone;
+  var email = params.email;
   let countryCode = params.countryCode;
 
   if (!mobile) {
@@ -2753,6 +2754,7 @@ exports.sendOtp_1 = async (req, res) => {
     if (country == "5fdb1a56ec27e7569c53b052"){
       var mobileNum = countryCode + mobile;
       var otpResponse = await send_otp(mobileNum);
+     
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
@@ -2766,7 +2768,7 @@ exports.sendOtp_1 = async (req, res) => {
       });
     }
     else {
-      var email = req.body.email;
+      var email = email;
       var otpResponse = await send_otp_bymail(email);
       if (otpResponse == undefined) {
         return res.send({
