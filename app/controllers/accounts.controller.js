@@ -4745,9 +4745,9 @@ async function send_otp_bymail(email){
     
     var mailOptions = {
       from: 'mailrkponline@gmail.com',
-      to: 'docsofrakesh@gmail.com',
-      subject: 'Sending Email using Node.js',
-      text: 'That was easy!'
+      to: email,
+      subject: 'OTP',
+      text:otp
     };
     
     transporter.sendMail(mailOptions, function(error, info){
