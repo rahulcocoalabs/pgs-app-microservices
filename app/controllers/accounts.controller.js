@@ -1622,8 +1622,8 @@ exports.update = async (req, res) => {
     update.city = update.city;
   }
 
-  if (params.fatherName){
-    update.fatherName = params.fatherName;
+  if (update.fatherName){
+    update.fatherName = update.fatherName;
   }
 
   console.log("the parameter send is", params);
@@ -1676,6 +1676,7 @@ exports.update = async (req, res) => {
   }
 
   var update1 = update;
+  console.log("filter and update are",update,"and",filter)
   var update = await User.updateOne(filter, update).catch(err => {
     return {
       success: 0,
