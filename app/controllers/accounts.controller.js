@@ -2778,7 +2778,7 @@ exports.sendOtp_1 = async (req, res) => {
       }
       res.status(200).send({
         success: 1,
-        message: 'OTP is sent to your registered phone number for verification',
+        message: 'OTP is sent to your registered email for verification',
         item: otpResponse
       });
     }
