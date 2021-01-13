@@ -4750,7 +4750,7 @@ async function send_otp_bymail(email){
 
  
   let info = await transporter.sendMail({
-    from: '"Fred Foo 👻" <admin@pgsapp.com>', // sender address
+    from: '"Fred Foo " <admin@pgsapp.com>', // sender address
     to: email, // list of receivers
     subject: "OTP from PGS App", // Subject line
     text: otp, // plain text body
