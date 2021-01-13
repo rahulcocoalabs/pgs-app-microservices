@@ -2701,6 +2701,7 @@ exports.sendOtp_1 = async (req, res) => {
       message: 'countryCode cannot be empty'
     })
   }
+  console.log("params are",params);
   // var otp = Math.floor(1000 + Math.random() * 9000);
   // const apiToken = uuidv4();
   // var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
