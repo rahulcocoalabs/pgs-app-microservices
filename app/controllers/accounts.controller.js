@@ -4758,7 +4758,7 @@ async function send_otp_bymail(email){
       }
     });
     const newOtp = new Otp({
-      phone: phone,
+     
       isUsed: false,
       userToken: otp,
       apiToken: apiToken,
