@@ -1391,7 +1391,7 @@ exports.getKarmaIndex = (req, res) => {
 
 exports.updateProfile = async (req, res) => {
 
- 
+
 
   // verification 
 
@@ -1409,7 +1409,7 @@ exports.updateProfile = async (req, res) => {
     }
     req.identity = userDetails;
     req.token = token;
-    
+
 
   } catch (error) {
     res.status(401).send({
@@ -1429,6 +1429,14 @@ exports.updateProfile = async (req, res) => {
       success: 0,
       message: "no parameter found"
     });
+  }
+
+  if (update.dob) {
+
+    console.log("dob : " + update.dob)
+    var formattedDate = moment(update.dob, 'DD MMMM YYYY');
+    update.dob = formattedDate;
+    console.log("formattedDate : " + formattedDate)
   }
 
   if (params.syllabusId) {
@@ -1485,7 +1493,7 @@ exports.updateProfile = async (req, res) => {
     update.countryCode = params.countryCode;
   }
 
- 
+
 
 
   let value = await User.updateOne({ status: 1, _id: userId }, update).catch(err => { return { succes: 0, message: err.message } });
@@ -1493,7 +1501,7 @@ exports.updateProfile = async (req, res) => {
     return res.send(value);
   }
 
-  var userInfo = await User.findOne({status:1,_id:userId}).catch(err=>{return {success:0,message:err.message}});
+  var userInfo = await User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err.message } });
 
   var isEmailUpdated = false;
   var isDobLanguageUpdated = false;
@@ -1514,7 +1522,7 @@ exports.updateProfile = async (req, res) => {
   return res.send(
     {
       success: 1,
-      userDetails:userInfo,
+      userDetails: userInfo,
       isEmailUpdated,
       isDobLanguageUpdated,
       token,
@@ -2744,17 +2752,17 @@ exports.sendOtp_1 = async (req, res) => {
     // }
 
     var country = params.countryId;
-    if (!country){
+    if (!country) {
       res.send({
-        success:0,
-        message:"provide country id"
+        success: 0,
+        message: "provide country id"
       })
     }
 
-    if (country == "5fdb1a56ec27e7569c53b052"){
+    if (country == "5fdb1a56ec27e7569c53b052") {
       var mobileNum = countryCode + mobile;
       var otpResponse = await send_otp(mobileNum);
-     
+
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
@@ -2768,7 +2776,7 @@ exports.sendOtp_1 = async (req, res) => {
       });
     }
     else {
-      
+
       var otpResponse = await send_otp_bymail(email);
       if (otpResponse == undefined) {
         return res.send({
@@ -2782,7 +2790,7 @@ exports.sendOtp_1 = async (req, res) => {
         item: otpResponse
       });
     }
-   
+
 
     // console.log("flag5")
     // const newOtp = new Otp({
@@ -4726,7 +4734,7 @@ async function send_otp(phone) {
   }
 
 }
-async function send_otp_bymail(email){
+async function send_otp_bymail(email) {
 
 
   var otp = Math.floor(1000 + Math.random() * 9000);
@@ -4743,18 +4751,18 @@ async function send_otp_bymail(email){
       }
     });
 
-    var message = "Your otp for verification is " + otp.toString() +  " greetings from PGS APP team"
-    
+    var message = "Your otp for verification is " + otp.toString() + " greetings from PGS APP team"
+
     var mailOptions = {
       from: 'mailrkponline@gmail.com',
       to: email,
       subject: 'OTP',
-      text:message
+      text: message
     };
 
-    console.log(email,otp);
-    
-    transporter.sendMail(mailOptions, function(error, info){
+    console.log(email, otp);
+
+    transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
         console.log(error);
       } else {
@@ -4762,7 +4770,7 @@ async function send_otp_bymail(email){
       }
     });
     const newOtp = new Otp({
-     
+
       isUsed: false,
       userToken: otp,
       apiToken: apiToken,
@@ -4786,6 +4794,6 @@ async function send_otp_bymail(email){
 
 
 
-  
+
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
