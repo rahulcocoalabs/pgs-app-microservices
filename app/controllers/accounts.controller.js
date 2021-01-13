@@ -4738,8 +4738,8 @@ async function send_otp_bymail(email){
     var transporter = nodemailer.createTransport({
       service: 'yahoo',
       auth: {
-        user: 'rakeshkrishnanp@yahoo.com',
-        pass: 'Alpha@beta123'
+        user: 'mailrkponline@gmail.com',
+        pass: 'alifbetgimel'
       }
     });
     
