@@ -2768,7 +2768,7 @@ exports.sendOtp_1 = async (req, res) => {
       });
     }
     else {
-      var email = email;
+      
       var otpResponse = await send_otp_bymail(email);
       if (otpResponse == undefined) {
         return res.send({
