@@ -1610,7 +1610,7 @@ exports.update = async (req, res) => {
   if (params.countryCode) {
     update.countryCode = params.countryCode;
   }
-  if (update.params) {
+  if (params.school) {
     update.school = params.school;
   }
 
