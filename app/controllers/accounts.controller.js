@@ -4745,9 +4745,9 @@ async function send_otp_bymail(email){
     
     var mailOptions = {
       from: 'mailrkponline@gmail.com',
-      to: "docsofrakesh@gmail.com",
+      to: email,
       subject: 'OTP',
-      text:otp
+      text:otp.toString();
     };
 
     console.log(email,otp);
