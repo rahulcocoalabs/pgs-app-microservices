@@ -1393,6 +1393,7 @@ exports.getKarmaIndex = (req, res) => {
 exports.updateProfile = async (req, res) => {
 
 
+  console.log("body -> ",req.body);
 
   // verification 
 
