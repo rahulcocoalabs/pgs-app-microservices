@@ -87,6 +87,7 @@ exports.getCredentials = async (req, res) => {
     };
     instance.orders.create(options, async function (err, order) {
       if (err) {
+        console.log(err,err.message)
         return res.status(500).json({
           message: "Something Went Wrong",
           error: err.message
