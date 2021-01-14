@@ -1550,7 +1550,7 @@ exports.update = async (req, res) => {
   var userId = userData.userId;
 
   if (params.password != undefined){
-    var x = await addPassword(req,res);
+    // var x = await addPassword(req,res);
     return 
   }
 
