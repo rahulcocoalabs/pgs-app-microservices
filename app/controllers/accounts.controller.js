@@ -1641,6 +1641,12 @@ exports.update = async (req, res) => {
   if (params.address) {
     update.address = params.address;
   }
+
+  if (params.password){
+
+    var hash = bcrypt.hashSync(params.password, salt);
+    update.password = hash;
+  }
   
  
   if (update.hobbyIds) {
