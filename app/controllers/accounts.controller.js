@@ -1549,6 +1549,11 @@ exports.update = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
+  if (params.password != undefined){
+    var x = await addPassword(req,res);
+    return 
+  }
+
   // var validation = await utilities.validateMandatoryFields(params,reqFields,res).catch(err=>{
   //   return {
   //     success:0,
@@ -3138,7 +3143,7 @@ exports.resetPassword = async (req, res) => {
   }
 }
 
-exports.addPassword = async (req, res) => {
+async function addPassword(req, res)  {
 
   let password = req.bdy.password;
   const hash = bcrypt.hashSync(password, salt);
