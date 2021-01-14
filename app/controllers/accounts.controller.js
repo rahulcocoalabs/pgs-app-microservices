@@ -1630,11 +1630,13 @@ exports.update = async (req, res) => {
   if (params.city) {
     update.city = params.city;
   }
-
-  if (params.fatherName){
-    update.fatherName = params.fatherName;
+  if (params.achievements) {
+    update.achievements = params.achievements;
   }
-
+  if (params.ambition) {
+    update.ambition = params.ambition;
+  }
+  
   console.log("the parameter send is", params);
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
