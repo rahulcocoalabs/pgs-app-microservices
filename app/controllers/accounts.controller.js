@@ -413,7 +413,7 @@ exports.create = async (req, res) => {
   var warnings = [];
   var profileCompletion;
   var hobbyIds = [];
-  
+
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
   if (!req.body.firstName || !req.body.phone
@@ -646,7 +646,7 @@ exports.create = async (req, res) => {
           });
         i++;
       }
-     
+
     }
 
     if (req.body.hobbyIds) {
@@ -690,7 +690,7 @@ exports.create = async (req, res) => {
 
     var referralCode = makeid(6);
 
-    
+
     var dobObj = await getDayMonthAndYear(req.body.dob);
     const user = new User({
       firstName: req.body.firstName,
@@ -1063,7 +1063,7 @@ exports.create1 = async (req, res) => {
           });
         i++;
       }
-     
+
     }
 
     if (req.body.hobbyIds) {
@@ -1107,7 +1107,7 @@ exports.create1 = async (req, res) => {
 
     var referralCode = makeid(6);
 
-   
+
     var dobObj = await getDayMonthAndYear(req.body.dob);
     const user = new User({
       firstName: req.body.firstName,
@@ -1393,7 +1393,7 @@ exports.getKarmaIndex = (req, res) => {
 exports.updateProfile = async (req, res) => {
 
 
- 
+
 
   // verification 
 
@@ -1435,10 +1435,10 @@ exports.updateProfile = async (req, res) => {
 
   if (params.dob) {
 
-   
+
     var formattedDate = moment(params.dob, 'DD MMMM YYYY');
     update.dob = formattedDate;
-   
+
   }
 
   if (params.syllabusId) {
@@ -1495,11 +1495,11 @@ exports.updateProfile = async (req, res) => {
     update.countryCode = params.countryCode;
   }
 
-  if (params.fatherName){
+  if (params.fatherName) {
     update.fatherName = params.fatherName;
   }
 
- 
+
 
 
 
@@ -1542,7 +1542,7 @@ exports.updateProfile = async (req, res) => {
 exports.update = async (req, res) => {
 
 
-  console.log("body -> ",req.body);
+  console.log("body -> ", req.body);
   var params = req.body;
   var reqFields = [];
   var hobbyIds = [];
@@ -1643,15 +1643,15 @@ exports.update = async (req, res) => {
     update.address = params.address;
   }
 
-  if (params.password){
+  if (params.password) {
 
-    console.log("password ->",params,params.password)
-    const  passwordValue = params.password.toString();
-    var hash =  bcrypt.hashSync(passwordValue, salt);
+    console.log("password ->", params, params.password)
+    const passwordValue = params.password.toString();
+    var hash = bcrypt.hashSync(passwordValue, salt);
     update.password = hash;
   }
-  
- 
+
+
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
       hobbyIds = [];
@@ -1701,9 +1701,9 @@ exports.update = async (req, res) => {
   }
 
   var update1 = update;
- 
+
   var update = await User.updateOne(filter, update).catch(err => {
-   
+
     return {
       success: 0,
       message: "updation failed",
@@ -1844,17 +1844,17 @@ exports.update1 = async (req, res) => {
   var userId = userData.userId;
   var coinType = constants.COIN_PROFILE_COMPLETION;
   utilities.validateMandatoryFields(params, reqFields, res).catch(function () {
-   
+
   }).then(async function (missingFields) {
     if (missingFields.length)
       return;
 
     var update = params;
     if (update.dob) {
-     
+
       var formattedDate = moment(update.dob, 'DD MMMM YYYY');
       update.dob = formattedDate;
-    
+
 
     }
     if (update.syllabusId) {
@@ -2723,7 +2723,7 @@ exports.sendOtp_1 = async (req, res) => {
       message: 'countryCode cannot be empty'
     })
   }
-  console.log("params are",params);
+  console.log("params are", params);
   // var otp = Math.floor(1000 + Math.random() * 9000);
   // const apiToken = uuidv4();
   // var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
@@ -2817,7 +2817,7 @@ exports.sendOtp_1 = async (req, res) => {
     }
     else {
       var mobileNum = countryCode + mobile;
-      var otpResponse = await send_otp_bymail(email,mobileNum);
+      var otpResponse = await send_otp_bymail(email, mobileNum);
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
@@ -3136,6 +3136,33 @@ exports.resetPassword = async (req, res) => {
       message: 'something went wrong while resetting password'
     })
   }
+}
+
+exports.addPassword = async (req, res) => {
+
+  let password = req.bdy.password;
+  const hash = bcrypt.hashSync(password, salt);
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var update = {
+    password: hash,
+   
+  };
+  var filter = {
+    _id: userId,
+    status: 1
+  };
+  let updateUser = await User.findOneAndUpdate(filter, update, {
+    new: true,
+    useFindAndModify: false
+  });
+  res.status(200).send({
+    success: 1,
+    message: 'Your password has been updated.'
+  });
+
 }
 
 exports.socialSignup = async (req, res) => {
@@ -4775,7 +4802,7 @@ async function send_otp(phone) {
   }
 
 }
-async function send_otp_bymail(email,phone) {
+async function send_otp_bymail(email, phone) {
 
 
   var otp = Math.floor(1000 + Math.random() * 9000);
@@ -4811,7 +4838,7 @@ async function send_otp_bymail(email,phone) {
       }
     });
     const newOtp = new Otp({
-      phone:phone,
+      phone: phone,
       isUsed: false,
       userToken: otp,
       apiToken: apiToken,

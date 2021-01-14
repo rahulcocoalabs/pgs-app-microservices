@@ -52,6 +52,7 @@ module.exports = (app) => {
     app.post('/accounts/reset/:token',accounts.resetPassword);
     app.get('/accounts/self',auth, accounts.getUserDetails);
     app.patch('/accounts',auth,fileUpload.single('image'),  accounts.update);
+    app.patch('/accounts/addpassword',auth,  accounts.addPassword);
     // app.patch('/accounts',auth, fileUpload.single('image'), accounts.update);
     app.get('/accounts/get-karma',auth, accounts.getKarmaIndex);
     app.patch('/accounts/update-coin',auth, accounts.updateCoin);
