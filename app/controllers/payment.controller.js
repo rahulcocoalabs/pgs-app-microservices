@@ -116,7 +116,7 @@ exports.updatePayment= async (req, res) => {
     return request(
      {
      method: "POST",
-     url: `https://${object.key}:${config.object.secret}@api.razorpay.com/v1/payments/${paymentId}/capture`,
+     url: `https://rzp_test_0eNdXM0OQ3OMf0:8P2s0RUm6DWeErPG3H7vXoWa@api.razorpay.com/v1/payments/${paymentId}/capture`,
      form: {
         amount: amount * 100, // amount == Rs 10 // Same As Order amount
         currency: "INR",
@@ -139,3 +139,4 @@ exports.updatePayment= async (req, res) => {
    });
   }
 }
+
