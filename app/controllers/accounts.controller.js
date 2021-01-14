@@ -1636,6 +1636,9 @@ exports.update = async (req, res) => {
   if (params.ambition) {
     update.ambition = params.ambition;
   }
+  if (params.address) {
+    update.address = params.address;
+  }
   
   console.log("the parameter send is", params);
   if (update.hobbyIds) {
