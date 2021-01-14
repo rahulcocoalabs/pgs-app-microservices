@@ -1393,7 +1393,7 @@ exports.getKarmaIndex = (req, res) => {
 exports.updateProfile = async (req, res) => {
 
 
-  console.log("body -> ",req.body);
+ 
 
   // verification 
 
@@ -1542,6 +1542,7 @@ exports.updateProfile = async (req, res) => {
 exports.update = async (req, res) => {
 
 
+  console.log("body -> ",req.body);
   var params = req.body;
   var reqFields = [];
   var hobbyIds = [];
