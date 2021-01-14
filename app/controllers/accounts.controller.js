@@ -1645,7 +1645,8 @@ exports.update = async (req, res) => {
 
   if (params.password){
 
-    var hash = await bcrypt.hashSync(params.password, salt);
+    console.log("password ->",params,params.password)
+    var hash =  bcrypt.hashSync(params.password, salt);
     update.password = hash;
   }
   
