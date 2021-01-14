@@ -1613,6 +1613,12 @@ exports.update = async (req, res) => {
   if (params.school) {
     update.school = params.school;
   }
+  if (params.fatherName) {
+    update.fatherName = params.fatherName;
+  }
+  if (params.motherName) {
+    update.motherName = params.motherName;
+  }
 
   //need to validate country/state & city
   if (params.countryId && params.countryId != "") {
