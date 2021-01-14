@@ -1551,7 +1551,7 @@ exports.update = async (req, res) => {
 
   
   if (params.password != undefined){
-    var x = await addPassword(params.password);
+    var x = await addPassword(params.password,userId);
     return 
   }
 
@@ -3144,7 +3144,7 @@ exports.resetPassword = async (req, res) => {
   }
 }
 
-async function addPassword(password)  {
+async function addPassword(password,userId)  {
 
   
   const hash = bcrypt.hashSync(password, salt);
