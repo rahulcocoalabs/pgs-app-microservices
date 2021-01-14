@@ -3163,10 +3163,7 @@ async function addPassword(password,userId)  {
     new: true,
     useFindAndModify: false
   });
-  res.status(200).send({
-    success: 1,
-    message: 'Your password has been updated.'
-  });
+  return {success:1};
 
 }
 
