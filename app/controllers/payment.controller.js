@@ -100,6 +100,7 @@ exports.getCredentials = async (req, res) => {
   } catch (err) {
     return res.status(500).json({
       message: "Something Went Wrong",
+      error: err.message
     });
   }
 };
