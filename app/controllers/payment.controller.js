@@ -65,7 +65,7 @@ exports.getKey = async (req, res) => {
   return res.status(200).json({
     success: 1,
     message:"obtained key successfully",
-    key:key
+    key:"rzp_test_wmNtNfuPJcBOat"//key
   })
 }
 
@@ -74,7 +74,7 @@ exports.getCredentials = async (req, res) => {
   let object = await getSettingData();
   let amount = req.query.amount;
   const instance = new Razorpay({
-    key_id: object.key,
+    key_id: "rzp_test_wmNtNfuPJcBOat",
     key_secret: object.secret,
   });
   try {
