@@ -1552,7 +1552,10 @@ exports.update = async (req, res) => {
   
   if (params.password != undefined){
     var x = await addPassword(params.password,userId);
-    return 
+    return res.send({
+      success:1,
+      message:"updated"
+    })
   }
 
   // var validation = await utilities.validateMandatoryFields(params,reqFields,res).catch(err=>{
