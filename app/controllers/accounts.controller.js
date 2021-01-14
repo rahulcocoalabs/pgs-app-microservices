@@ -3149,8 +3149,7 @@ async function addPassword(password)  {
   
   const hash = bcrypt.hashSync(password, salt);
 
-  var userData = req.identity.data;
-  var userId = userData.userId;
+  
 
   var update = {
     password: hash,
