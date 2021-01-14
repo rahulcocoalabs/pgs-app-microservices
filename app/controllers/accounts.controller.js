@@ -1476,7 +1476,7 @@ exports.updateProfile = async (req, res) => {
 
   //need to validate country/state & city
   if (params.countryId) {
-    update.nationalityId = params.countryId;
+    update.countryId = params.countryId;
   }
   if (params.stateId) {
     update.stateId = params.stateId;
