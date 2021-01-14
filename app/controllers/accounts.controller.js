@@ -413,6 +413,7 @@ exports.create = async (req, res) => {
   var warnings = [];
   var profileCompletion;
   var hobbyIds = [];
+  console.log("body is ->",req.body);
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
   if (!req.body.firstName || !req.body.phone
@@ -645,7 +646,7 @@ exports.create = async (req, res) => {
           });
         i++;
       }
-      console.log(warnings);
+     
     }
 
     if (req.body.hobbyIds) {
@@ -689,7 +690,7 @@ exports.create = async (req, res) => {
 
     var referralCode = makeid(6);
 
-    console.log("dob : " + req.body.dob)
+    
     var dobObj = await getDayMonthAndYear(req.body.dob);
     const user = new User({
       firstName: req.body.firstName,
@@ -1062,7 +1063,7 @@ exports.create1 = async (req, res) => {
           });
         i++;
       }
-      console.log(warnings);
+     
     }
 
     if (req.body.hobbyIds) {
@@ -1106,7 +1107,7 @@ exports.create1 = async (req, res) => {
 
     var referralCode = makeid(6);
 
-    console.log("dob : " + req.body.dob)
+   
     var dobObj = await getDayMonthAndYear(req.body.dob);
     const user = new User({
       firstName: req.body.firstName,
@@ -1433,10 +1434,10 @@ exports.updateProfile = async (req, res) => {
 
   if (params.dob) {
 
-    console.log("dob : " + params.dob)
+   
     var formattedDate = moment(params.dob, 'DD MMMM YYYY');
     update.dob = formattedDate;
-    console.log("formattedDate : " + formattedDate)
+   
   }
 
   if (params.syllabusId) {
@@ -1497,7 +1498,7 @@ exports.updateProfile = async (req, res) => {
     update.fatherName = params.fatherName;
   }
 
-  console.log("the parameter send is", params);
+ 
 
 
 
@@ -1640,7 +1641,7 @@ exports.update = async (req, res) => {
     update.address = params.address;
   }
   
-  console.log("the parameter send is", params);
+ 
   if (update.hobbyIds) {
     if (update.hobbyIds.length > 0) {
       hobbyIds = [];
@@ -1690,9 +1691,9 @@ exports.update = async (req, res) => {
   }
 
   var update1 = update;
-  console.log("filter and update are",update,"and",filter)
+ 
   var update = await User.updateOne(filter, update).catch(err => {
-    console.log("error message ->",err.message)
+   
     return {
       success: 0,
       message: "updation failed",
@@ -1833,17 +1834,17 @@ exports.update1 = async (req, res) => {
   var userId = userData.userId;
   var coinType = constants.COIN_PROFILE_COMPLETION;
   utilities.validateMandatoryFields(params, reqFields, res).catch(function () {
-    console.log("Error");
+   
   }).then(async function (missingFields) {
     if (missingFields.length)
       return;
 
     var update = params;
     if (update.dob) {
-      console.log("dob : " + update.dob)
+     
       var formattedDate = moment(update.dob, 'DD MMMM YYYY');
       update.dob = formattedDate;
-      console.log("formattedDate : " + formattedDate)
+    
 
     }
     if (update.syllabusId) {
