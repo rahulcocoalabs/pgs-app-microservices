@@ -413,7 +413,7 @@ exports.create = async (req, res) => {
   var warnings = [];
   var profileCompletion;
   var hobbyIds = [];
-  console.log("body is ->",req.body);
+  
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
   if (!req.body.firstName || !req.body.phone
@@ -1623,7 +1623,7 @@ exports.update = async (req, res) => {
 
   //need to validate country/state & city
   if (params.countryId && params.countryId != "") {
-    update.nationalityId = params.countryId;
+    update.countryId = params.countryId;
   }
   if (params.stateId && params.stateId != "") {
     update.stateId = params.stateId;
