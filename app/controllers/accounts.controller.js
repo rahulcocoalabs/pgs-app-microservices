@@ -3194,7 +3194,7 @@ async function changePassword(password, oldPassword, userId) {
 
   var passHash = userData.password;
 
-  let matched = await bcrypt.compare(password, passHash);
+  let matched = await bcrypt.compare(oldPassword, passHash);
 
   if (matched) {
 
