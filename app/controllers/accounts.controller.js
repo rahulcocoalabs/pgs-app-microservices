@@ -1550,7 +1550,7 @@ exports.update = async (req, res) => {
   var userId = userData.userId;
 
   if (params.password != undefined && params.oldPassword != undefined){
-    console.log("parameters are ->",params.password,"and",params.oldPassword,"and",userId)
+    
     var y = await changePassword(params.password,params.oldPassword, userId);
     return res.send({
       success: 1,
@@ -3187,6 +3187,7 @@ async function addPassword(password, userId) {
 
 async function changePassword(password, oldPassword, userId) {
 
+  console.log("flag 0")
   var userData = User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err, message } })
 
   if (userData && userData.success != undefined && userData.success == 0) {
@@ -3194,12 +3195,13 @@ async function changePassword(password, oldPassword, userId) {
   }
 
   var passHash = userData.password;
+  console.log("flag 1")
 
   let matched = await bcrypt.compare(oldPassword, passHash);
 
   if (matched) {
 
-
+    console.log("flag 2")
     const hash = bcrypt.hashSync(password, salt);
 
 
