@@ -4819,8 +4819,8 @@ async function send_otp_bymail(email, phone) {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'mailrkponline@gmail.com',
-        pass: 'alifbetgimel'
+        user: 'pgsapp123@gmail.com',
+        pass: 'Pgs@123!'
       }
     });
 
