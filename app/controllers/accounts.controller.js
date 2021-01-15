@@ -4827,7 +4827,7 @@ async function send_otp_bymail(email, phone) {
     var message = "Your otp for verification is " + otp.toString() + " greetings from PGS APP team"
 
     var mailOptions = {
-      from: 'mailrkponline@gmail.com',
+      from: 'pgsapp123@gmail.com',
       to: email,
       subject: 'OTP',
       text: message
