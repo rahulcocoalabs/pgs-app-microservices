@@ -77,9 +77,9 @@ exports.listAll = async (req, res) => {
     //     $gte: age
     //   },
     // }],
-    languageId: {
-      $in: language
-    },
+    // languageId: {
+    //   $in: language
+    // },
     status: 1,
     isApproved: 1
   };
