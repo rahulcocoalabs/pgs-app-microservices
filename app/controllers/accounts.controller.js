@@ -1549,12 +1549,19 @@ exports.update = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
-  
-  if (params.password != undefined){
-    var x = await addPassword(params.password,userId);
+  if (params.password != undefined && params.oldPassword != undefined){
+    var y = await changePassword(params.password,params.oldPassword, userId);
     return res.send({
-      success:1,
-      message:"updated"
+      success: 1,
+      message: "updated"
+    })
+  }
+
+  if (params.password != undefined) {
+    var x = await addPassword(params.password, userId);
+    return res.send({
+      success: 1,
+      message: "updated"
     })
   }
 
@@ -3147,26 +3154,80 @@ exports.resetPassword = async (req, res) => {
   }
 }
 
-async function addPassword(password,userId)  {
+async function addPassword(password, userId) {
 
+  var userData = User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err, message } })
+
+  if (userData && userData.success != undefined && userData.success == 0) {
+    return userData
+  }
+
+  if (userData.password != undefined) {
+
+    return { success: 0 };
+  }
+  else {
+    const hash = bcrypt.hashSync(password, salt);
+
+
+
+    var update = {
+      password: hash,
   
-  const hash = bcrypt.hashSync(password, salt);
+    };
+    var filter = {
+      _id: userId,
+      status: 1
+    };
+    let updateUser = await User.findOneAndUpdate(filter, update, {
+      new: true,
+      useFindAndModify: false
+    });
+    
+  }
 
-  
 
-  var update = {
-    password: hash,
-   
-  };
-  var filter = {
-    _id: userId,
-    status: 1
-  };
-  let updateUser = await User.findOneAndUpdate(filter, update, {
-    new: true,
-    useFindAndModify: false
-  });
-  return {success:1};
+ 
+
+}
+
+async function changePassword(password, oldPassword, userId) {
+
+  var userData = User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err, message } })
+
+  if (userData && userData.success != undefined && userData.success == 0) {
+    return userData
+  }
+
+  var passHash = userData.password;
+
+  let matched = await bcrypt.compare(password, passHash);
+
+  if (matched) {
+
+
+    const hash = bcrypt.hashSync(password, salt);
+
+
+
+    var update = {
+      password: hash,
+
+    };
+    var filter = {
+      _id: userId,
+      status: 1
+    };
+    let updateUser = await User.findOneAndUpdate(filter, update, {
+      new: true,
+      useFindAndModify: false
+    });
+    return { success: 1 };
+  }
+  else {
+
+    return {success:0}
+  }
 
 }
 
