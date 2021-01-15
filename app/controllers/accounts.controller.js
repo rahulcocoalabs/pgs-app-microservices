@@ -3168,9 +3168,6 @@ async function addPassword(password, userId) {
   }
   else {
     const hash = bcrypt.hashSync(password, salt);
-
-
-
     var update = {
       password: hash,
   
@@ -3185,10 +3182,6 @@ async function addPassword(password, userId) {
     });
     
   }
-
-
- 
-
 }
 
 async function changePassword(password, oldPassword, userId) {
