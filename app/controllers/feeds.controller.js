@@ -68,15 +68,15 @@ exports.listAll = async (req, res) => {
   var age = currentYear - dobYear;
   var language = findUser.language;
   var filters = {
-    // $and: [{
-    //   startAge: {
-    //     $lte: age
-    //   },
-    // }, {
-    //   endAge: {
-    //     $gte: age
-    //   },
-    // }],
+    $and: [{
+      startAge: {
+        $lte: age
+      },
+    }, {
+      endAge: {
+        $gte: age
+      },
+    }],
     // languageId: {
     //   $in: language
     // },
