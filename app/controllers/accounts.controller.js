@@ -3187,21 +3187,21 @@ async function addPassword(password, userId) {
 
 async function changePassword(password, oldPassword, userId) {
 
-  console.log("flag 0")
-  var userData = User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err, message } })
+  
+  var userData = await User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err, message } })
 
   if (userData && userData.success != undefined && userData.success == 0) {
     return userData
   }
 
   var passHash = userData.password;
-  console.log("flag 1", userData);
+ 
 
   let matched = await bcrypt.compare(oldPassword, passHash);
 
   if (matched) {
 
-    console.log("flag 2")
+    
     const hash = bcrypt.hashSync(password, salt);
 
 
