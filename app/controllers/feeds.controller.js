@@ -60,6 +60,7 @@ exports.listAll = async (req, res) => {
     _id: userId,
     status: 1
   });
+  console.log("user ->", findUser);
   var dob = findUser.dob;
   var dobYear = dob.getFullYear();
   var currentDate = new Date();
