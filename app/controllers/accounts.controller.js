@@ -1550,6 +1550,7 @@ exports.update = async (req, res) => {
   var userId = userData.userId;
 
   if (params.password != undefined && params.oldPassword != undefined){
+    console.log("parameters are ->",params.password,"and",params.oldPassword,"and",userId)
     var y = await changePassword(params.password,params.oldPassword, userId);
     return res.send({
       success: 1,
