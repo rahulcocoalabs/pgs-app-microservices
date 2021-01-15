@@ -5,6 +5,7 @@ app.use(cors());
 const Razorpay = require('razorpay')
 const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
+const Payment = require('../models/payment.model');
 
 
 async function getSettingData()  {
@@ -140,3 +141,40 @@ exports.updatePayment= async (req, res) => {
   }
 }
 
+exports.savePayment = async (req, res) => {
+
+  var identity = req.identity.data;
+  var userId = identity.id;
+  var params = req.body;
+
+  var transactionId = params.transactionId;
+  var amount = params.amount;
+  var paidStatus = params.paidStatus;
+  var paidOn = params.paidOn;
+  var charityId = params.charityId;
+
+  const newPayment = new Payment({
+    userId: userId,
+    charityId:charityId,
+    transactionId: transactionId,
+    amount: amount,
+    paidStatus: paidStatus,
+    paidOn: paidOn,
+    status: 1,
+    tsCreatedAt: Date.now(),
+    tsModifiedAt: null
+  });
+  var savePayment = await newPayment.save().catch(err => {
+    return { success: 0, message: err.message }
+  });
+
+  if (savePayment && savePayment.success != undefined && savePayment.success === 0) {
+    return res.status(200).send(savePayment);
+  }
+
+  res.status(200).send({
+    success: 1,
+    message: 'Payment successfully added'
+  })
+
+}
