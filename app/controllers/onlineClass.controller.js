@@ -414,7 +414,7 @@ exports.createTutorRequest = async (req, res) => {
 
 }
 
-exports.getZoomLink = async (req, res) => {
+exports. getZoomLink = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
