@@ -2834,7 +2834,7 @@ exports.sendOtp_1 = async (req, res) => {
     }
     else {
       var mobileNum = countryCode + mobile;
-      var otpResponse = await send_otp_bymail_1(email, mobileNum);
+      var otpResponse = await send_otp_bymail(email, mobileNum);
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
