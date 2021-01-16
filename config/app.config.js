@@ -196,7 +196,7 @@ module.exports = {
     resetpassword: {
         timeForExpiry: 24 * 60 * 60 * 1000,
         root: "https://www.pgsedu.com/web/#/reset-password/",
-        fromMail: "noreply@pgsedu.com"
+        fromMail: "cocoalabstest@gmail.com"
     },
     tutors: {
         resultsPerPage: 10,
