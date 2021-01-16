@@ -1549,9 +1549,9 @@ exports.update = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
-  if (params.password != undefined && params.oldPassword != undefined){
-    
-    var y = await changePassword(params.password,params.oldPassword, userId);
+  if (params.password != undefined && params.oldPassword != undefined) {
+
+    var y = await changePassword(params.password, params.oldPassword, userId);
     return res.send({
       success: 1,
       message: "updated"
@@ -2834,7 +2834,7 @@ exports.sendOtp_1 = async (req, res) => {
     }
     else {
       var mobileNum = countryCode + mobile;
-      var otpResponse = await send_otp_bymail(email, mobileNum);
+      var otpResponse = await send_otp_bymail_1(email, mobileNum);
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
@@ -3171,7 +3171,7 @@ async function addPassword(password, userId) {
     const hash = bcrypt.hashSync(password, salt);
     var update = {
       password: hash,
-  
+
     };
     var filter = {
       _id: userId,
@@ -3181,13 +3181,13 @@ async function addPassword(password, userId) {
       new: true,
       useFindAndModify: false
     });
-    
+
   }
 }
 
 async function changePassword(password, oldPassword, userId) {
 
-  
+
   var userData = await User.findOne({ status: 1, _id: userId }).catch(err => { return { success: 0, message: err, message } })
 
   if (userData && userData.success != undefined && userData.success == 0) {
@@ -3195,13 +3195,13 @@ async function changePassword(password, oldPassword, userId) {
   }
 
   var passHash = userData.password;
- 
+
 
   let matched = await bcrypt.compare(oldPassword, passHash);
 
   if (matched) {
 
-    
+
     const hash = bcrypt.hashSync(password, salt);
 
 
@@ -3222,7 +3222,7 @@ async function changePassword(password, oldPassword, userId) {
   }
   else {
 
-    return {success:0}
+    return { success: 0 }
   }
 
 }
@@ -4864,6 +4864,63 @@ async function send_otp(phone) {
   }
 
 }
+
+async function send_otp_bymail_1(email, phone) {
+
+  var otp = Math.floor(1000 + Math.random() * 9000);
+  const apiToken = uuidv4();
+  var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
+
+  var settingData = await Setting.findOne({
+    key: constants.SEND_GRID_AUTH_KEY,
+    status: 1
+  }).catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting sendgrid data',
+        error: err
+      }
+    })
+  if (settingData && (settingData.success !== undefined) && (settingData.success === 0)) {
+    return { success: 0 };
+  }
+  if (settingData) {
+    let link = config.resetpassword.root + user.resetPasswordToken;
+    const mailmsg = "Your otp for verifying account is " + "   " + link + "greets from PGS APP";
+    sgMail.setApiKey(settingData.value);
+
+
+    const x = await sendMail(mailmsg, email);
+
+    if (x && (x == 1)) {
+      return {
+        success: 0,
+        message: "Mail could not be sent"
+      }
+    }
+
+    const newOtp = new Otp({
+      phone: phone,
+      isUsed: false,
+      userToken: otp,
+      apiToken: apiToken,
+      expiry: expiry,
+      status: 1,
+      tsCreatedAt: new Date(),
+      tsModifiedAt: null
+    });
+    var saveOtp = await newOtp.save();
+    var otpResponse = {
+      phone: saveOtp.phone,
+      otp: otp,
+      apiToken: saveOtp.apiToken,
+    };
+    return otpResponse
+
+  }
+
+}
+
 async function send_otp_bymail(email, phone) {
 
 
