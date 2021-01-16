@@ -4889,8 +4889,8 @@ async function send_otp_bymail_1(email, phone) {
   }
   if (settingData) {
     console.log("email api key fetched")
-    let link = config.resetpassword.root + user.resetPasswordToken;
-    const mailmsg = "Your otp for verifying account is " + "   " + link + "greets from PGS APP";
+    
+    const mailmsg = "Your otp for verifying account is " + "   " + otp + "greets from PGS APP";
     sgMail.setApiKey(settingData.value);
 
     console.log("email ->",mailmsg);
