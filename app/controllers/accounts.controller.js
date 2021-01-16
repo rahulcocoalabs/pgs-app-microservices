@@ -2874,7 +2874,7 @@ exports.sendOtp_1 = async (req, res) => {
   } catch (err) {
     res.status(500).send({
       success: 0,
-      message: 'something went wrong while sending email',
+      message: err.message,
       err: err.message
     })
   }
@@ -4871,6 +4871,8 @@ async function send_otp_bymail_1(email, phone) {
   const apiToken = uuidv4();
   var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
 
+  console.log("email token generated")
+
   var settingData = await Setting.findOne({
     key: constants.SEND_GRID_AUTH_KEY,
     status: 1
@@ -4885,11 +4887,12 @@ async function send_otp_bymail_1(email, phone) {
     return { success: 0 };
   }
   if (settingData) {
+    console.log("email api key fetched")
     let link = config.resetpassword.root + user.resetPasswordToken;
     const mailmsg = "Your otp for verifying account is " + "   " + link + "greets from PGS APP";
     sgMail.setApiKey(settingData.value);
 
-
+    console.log("email ->",mailmsg);
     const x = await sendMail(mailmsg, email);
 
     if (x && (x == 1)) {
