@@ -618,6 +618,8 @@ exports.createFeed = async (req, res) => {
     }
   }
 
+  console.log("parametes are ->" ,req.body);
+
   var type = req.body.type || null;
   var images = [];
   var documents = [];
