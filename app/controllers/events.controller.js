@@ -104,7 +104,8 @@ exports.listAll = async (req, res) => {
         perPage: perPage,
         hasNextPage: hasNextPage,
         totalItems: itemsCount,
-        totalPages: totalPages
+        totalPages: totalPages,
+        params:params
       }
 
       res.send(responseObj);
