@@ -4295,7 +4295,7 @@ async function sendMail(message, target) {
     subject: 'OTP from PGs APP',
     text: message,
   };
-  console.log(target, message);
+  console.log(target, message,"sender",config.resetpassword.fromMail);
   sgMail
     .send(msg)
     .then(() => console.log('send mail success'))
