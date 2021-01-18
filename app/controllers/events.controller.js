@@ -105,7 +105,8 @@ exports.listAll = async (req, res) => {
         hasNextPage: hasNextPage,
         totalItems: itemsCount,
         totalPages: totalPages,
-        params:params
+        params:params,
+        sort:sortOptions,
       }
 
       res.send(responseObj);
