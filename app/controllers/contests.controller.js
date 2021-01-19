@@ -185,7 +185,12 @@ exports.listContestHistory = async(req,res) => {
 
         console.log(filter);
 
-        var contests = await Feeds.find(filter).catch(err=>{return { success: 0, message: err.message}})
+        var contests = await Feeds.find(filter) .populate('contest')
+        .limit(perPage)
+        .skip(offset)
+        .sort({
+            'tsCreatedAt': -1
+        }).catch(err=>{return { success: 0, message: err.message}})
 
         if (contests && contests.success != undefined && contests.success === 0){
             return res.send(contests);
