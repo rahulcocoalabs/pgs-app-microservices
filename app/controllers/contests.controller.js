@@ -172,6 +172,7 @@ exports.listContestHistory = async(req,res) => {
             var item = data[x];
             var id = item.contestId;
             console.log(id,ObjectId(id));
+            console.log(ids);
             ids.push(ObjectId(id));
             
         }
