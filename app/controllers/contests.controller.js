@@ -177,15 +177,15 @@ exports.listContestHistory = async(req,res) => {
             console.log(ids);
         }
         console.log(ids);
-        var pm = {array:ids};
+        
         var filter = {
             status:1,
-            _id:{$in:ids}
+            contest:{$in:ids}
         }
 
         console.log(filter);
 
-        var contests = await Contests.find(filter).catch(err=>{return { success: 0, message: err.message}})
+        var contests = await Feeds.find(filter).catch(err=>{return { success: 0, message: err.message}})
 
         if (contests && contests.success != undefined && contests.success === 0){
             return res.send(contests);
