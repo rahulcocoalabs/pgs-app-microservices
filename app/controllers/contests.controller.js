@@ -180,6 +180,7 @@ exports.listContestHistory = async(req,res) => {
         
         var filter = {
             status:1,
+            authorUserId:userId,
             contest:{$in:ids}
         }
 
