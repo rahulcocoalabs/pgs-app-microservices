@@ -112,7 +112,109 @@ exports.detail = async (req, res) => {
 }
 
 // *** Contest history ***
-exports.listContestHistory = async (req, res) => {
+
+
+exports.listContestHistory = async(req,res) => {
+
+    var userData = req.identity.data;
+    var userId = userData.userId;
+
+    var params = req.query;
+    var page = Number(params.page) || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || contestsConfig.resultsPerPage;
+    perPage = perPage > 0 ? perPage : contestsConfig.resultsPerPage;
+    var offset = (page - 1) * perPage;
+
+    var findCriteria = {
+        userId: userId,
+       
+        status: 1
+    }
+
+    var projection = {contestId:1};
+
+    var data = await InnovationChallenge.find(findCriteria,projection).catch(err=>{return {success:0,message:err.message}});
+
+    if (data && data.success != undefined && data.success === 0){
+        return res.send(data);
+    }
+
+    if (data.count === 0){
+
+        var pagination = {
+            page,
+            perPage,
+            hasNextPage:false,
+            totalItems: 0,
+            totalPages:0,
+        };
+
+        return res.send({
+            success: 1,
+            pagination,
+            contestImageBase: contestsConfig.imageBase,
+            imageBase: feedsConfig.imageBase,
+            documentImage: feedsConfig.documentImage,
+            videoBase: feedsConfig.videoBase,
+            documentBase: feedsConfig.documentBase,
+            items: data,
+            message: 'contest history list'
+        })
+    }
+    else {
+
+        var ids = [];
+
+        for (x in data){
+            var item = data[x];
+            var id = item.contestId;
+            ids.push(id);
+            
+        }
+
+        var filter = {
+            status:1,
+            _id:{$in:{ids}}
+        }
+
+        var contests = await Contests.find(filter).catch(err=>{return { success: 0, message: err.message}})
+
+        if (contests && contests.success != undefined && dcontestsata.success === 0){
+            return res.send(contests);
+        }
+
+        var totalPages = contests.length / perPage;
+        totalPages = Math.ceil(totalPages);
+        var hasNextPage = page < totalPages;
+        var pagination = {
+            page,
+            perPage,
+            hasNextPage,
+            totalItems: totalContestHistoryCount,
+            totalPages,
+        };
+
+        return res.send({
+            success: 1,
+            pagination,
+            contestImageBase: contestsConfig.imageBase,
+            imageBase: feedsConfig.imageBase,
+            documentImage: feedsConfig.documentImage,
+            videoBase: feedsConfig.videoBase,
+            documentBase: feedsConfig.documentBase,
+            items: contests,
+            message: 'contest history list'
+        })
+
+
+    }
+
+
+
+}
+
+exports.listContestHistory1 = async (req, res) => {
     var userData = req.identity.data;
     var userId = userData.userId;
 
