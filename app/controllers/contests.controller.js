@@ -212,11 +212,9 @@ exports.listContestHistory = async(req,res) => {
         return res.send({
             success: 1,
             pagination,
-            contestImageBase: contestsConfig.imageBase,
-            imageBase: feedsConfig.imageBase,
-            documentImage: feedsConfig.documentImage,
-            videoBase: feedsConfig.videoBase,
-            documentBase: feedsConfig.documentBase,
+            
+            imageBase: contestsConfig.imageBase,
+           
             items: contests,
             message: 'contest history list'
         })
