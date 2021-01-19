@@ -180,13 +180,13 @@ exports.listContestHistory = async(req,res) => {
         
         var filter = {
             status:1,
-            authorUserId:userId,
-            contest:{$in:ids}
+           
+            _id:{$in:ids}
         }
 
        
 
-        var contests = await Feeds.find(filter) .populate('contest')
+        var contests = await Contests.find(filter)
         .limit(perPage)
         .skip(offset)
         .sort({
