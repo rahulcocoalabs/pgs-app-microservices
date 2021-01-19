@@ -180,7 +180,7 @@ exports.listContestHistory = async(req,res) => {
 
         var contests = await Contests.find(filter).catch(err=>{return { success: 0, message: err.message}})
 
-        if (contests && contests.success != undefined && dcontestsata.success === 0){
+        if (contests && contests.success != undefined && contestsata.success === 0){
             return res.send(contests);
         }
 
