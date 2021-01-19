@@ -171,6 +171,7 @@ exports.listContestHistory = async(req,res) => {
         for (x in data){
             var item = data[x];
             var id = item.contestId;
+            console.log(id,ObjectId(id));
             ids.push(ObjectId(id));
             
         }
