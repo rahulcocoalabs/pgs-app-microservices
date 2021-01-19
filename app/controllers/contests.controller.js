@@ -198,7 +198,7 @@ exports.listContestHistory = async(req,res) => {
             page,
             perPage,
             hasNextPage,
-            totalItems: totalContestHistoryCount,
+            totalItems: contests.length,
             totalPages,
         };
 
