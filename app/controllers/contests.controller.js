@@ -136,14 +136,14 @@ exports.listContestHistory = async(req,res) => {
 
     var data = await InnovationChallenge.find(findCriteria,projection).catch(err=>{return {success:0,message:err.message}});
 
-    console.log("flag1");
+ 
     if (data && data.success != undefined && data.success === 0){
-        console.log("flag2");
+       
         return res.send(data);
     }
 
     if (data.count === 0){
-        console.log("flag3");
+      
         var pagination = {
             page,
             perPage,
@@ -165,25 +165,25 @@ exports.listContestHistory = async(req,res) => {
         })
     }
     else {
-        console.log("flag4");
+       
         var ids = [];
 
         for (x in data){
             var item = data[x];
             var id = item.contestId;
-            console.log(id,ObjectId(id));
-            console.log(ids);
+           
+           
             ids.push(ObjectId(id));
-            console.log(ids);
+           
         }
-        console.log(ids);
+        
         
         var filter = {
             status:1,
             contest:{$in:ids}
         }
 
-        console.log(filter);
+       
 
         var contests = await Feeds.find(filter) .populate('contest')
         .limit(perPage)
