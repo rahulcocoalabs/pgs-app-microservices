@@ -177,9 +177,10 @@ exports.listContestHistory = async(req,res) => {
             console.log(ids);
         }
         console.log(ids);
+        var pm = {array:ids};
         var filter = {
             status:1,
-            _id:{$in:{ids}}
+            _id:{$in:ids}
         }
 
         console.log(filter);
