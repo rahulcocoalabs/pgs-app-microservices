@@ -174,9 +174,9 @@ exports.listContestHistory = async(req,res) => {
             console.log(id,ObjectId(id));
             console.log(ids);
             ids.push(ObjectId(id));
-            
+            console.log(ids);
         }
-
+        console.log(ids);
         var filter = {
             status:1,
             _id:{$in:{ids}}
