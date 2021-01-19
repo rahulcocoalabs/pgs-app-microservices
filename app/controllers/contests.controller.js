@@ -185,8 +185,9 @@ exports.listContestHistory = async(req,res) => {
         }
 
        
+        var projection1 = {image:1,status:1,toDate:1,title:1,description:1};
 
-        var contests = await Contests.find(filter)
+        var contests = await Contests.find(filter,projection1)
         .limit(perPage)
         .skip(offset)
         .sort({
