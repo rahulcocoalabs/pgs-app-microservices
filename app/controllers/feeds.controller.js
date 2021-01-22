@@ -1309,6 +1309,7 @@ exports.addEmotionToFeed = async (req, res) => {
   }
 
   var emotions = feedsResult.emotions;
+  var updateObj = {};
   var ObjectId = require('mongoose').Types.ObjectId;
   if (emotions.length) {
     console.log("Emotions length is 0");
@@ -1330,6 +1331,7 @@ exports.addEmotionToFeed = async (req, res) => {
         emotion: params.emotion,
         userId: userId
       });
+      updateObj = { $push: { emotions:{emotion:params.emotion,userId:userId} } }
     }
   } else {
     console.log("No emotions are present");
@@ -1337,6 +1339,7 @@ exports.addEmotionToFeed = async (req, res) => {
       emotion: params.emotion,
       userId: userId
     });
+    updateObj = { $push: { emotions:{emotion:params.emotion,userId:userId} } }
   }
   console.log("Emotions array : ");
   console.log(emotions);
@@ -1347,7 +1350,7 @@ exports.addEmotionToFeed = async (req, res) => {
   var update = {
     emotions: emotions
   };
-  var updateFeed = await Feed.updateOne(filter, update).catch(err => {
+  var updateFeed = await Feed.updateOne(filter, updateObj).catch(err => {
     return { success: 0, message: "could not update favourites", error: err.message }
   });
 
