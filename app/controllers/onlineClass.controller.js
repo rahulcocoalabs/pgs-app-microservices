@@ -160,6 +160,7 @@ exports.createOnlineClass = async (req, res) => {
       })
     }
 
+    console.log("errors =>", errors);
     return res.status(200).send({
       success: 0,
       errors: errors,
