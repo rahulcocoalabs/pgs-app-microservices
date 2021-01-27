@@ -93,6 +93,18 @@ exports.createOnlineClass = async (req, res) => {
         message: "title cannot be empty"
       })
     }
+    if (!req.body.availableFromTime) {
+      errors.push({
+        field: "availableFromTime",
+        message: "starting time cannot be empty"
+      })
+    }
+    if (!req.body.availableToTime) {
+      errors.push({
+        field: "availableToTime",
+        message: "end time cannot be empty"
+      })
+    }
 
 
     if (!req.body.classDescription) {
@@ -216,6 +228,8 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.tutorSyllabus = params.tutorSyllabus;
   onlineClassObj.qualification = params.qualification;
   onlineClassObj.category = params.category;
+  onlineClassObj.availableFromTime = params.availableFromTime;
+  onlineClassObj.availableToTime = params.availableToTime;
 
   var newOnlineClassObj = new OnlineCLass(onlineClassObj);
   var onlineClassResponse = await newOnlineClassObj.save()
@@ -1425,7 +1439,7 @@ async function checkUserIsTutor(userId) {
   }
 }
 
-async function listClasses(findCriteria, perPage, page, favouriteData, sortOptions) {
+async function  listClasses(findCriteria, perPage, page, favouriteData, sortOptions) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || classConfig.resultsPerPage;
