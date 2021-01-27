@@ -62,7 +62,7 @@ exports.createOnlineClass = async (req, res) => {
 
 
   if (!file || !(params.tutorSubjectId || params.tutorSubject) || !params.title || params.title === undefined || !(params.tutorClassId || params.tutorClass) || !params.classDescription || params.isPaid === undefined
-    || (params.isPaid === 'true' && !params.fee) || !params.availableDays || !params.availableTime
+    || (params.isPaid === 'true' && !params.fee) || !params.availableDays 
     || params.isPublic === undefined || (params.isPaid === 'true' && !params.classTimeCategory)
     || (params.isPaid === 'true' && !params.currencyId) || !(params.tutorSyllabusId || params.tutorSyllabus) || params.availableFromTime || 
     params.availableToTime ) {
@@ -150,12 +150,7 @@ exports.createOnlineClass = async (req, res) => {
         message: "availableDays cannot be empty"
       })
     }
-    if (!req.body.availableTime) {
-      errors.push({
-        field: "availableTime",
-        message: "availableTime cannot be empty"
-      })
-    }
+  
     if (!params.tutorSyllabusId) {
       errors.push({
         field: "tutorSyllabusId",
