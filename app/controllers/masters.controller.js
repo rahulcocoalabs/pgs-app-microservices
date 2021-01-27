@@ -881,10 +881,12 @@ exports.getSubjects = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+  console.log("flag 0 ->",params );
   var checkResult = await checkSubjectsForOnlineClass(params, userId)
   if (checkResult && (checkResult.success !== undefined) && (checkResult.success === 0)) {
     return checkResult;
   }
+  console.log("flag 1 ->",checkResult );
   if (checkResult.isAllSubjects || (!checkResult.isAllSubjects && checkResult.subjectIds.length > 0)) {
     var findCriteria = {};
     if (!checkResult.isAllSubjects) {
