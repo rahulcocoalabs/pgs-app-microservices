@@ -68,6 +68,8 @@ exports.createOnlineClass = async (req, res) => {
     params.availableToTime ) {
     var errors = [];
 
+    console.log("parameters => ", params)
+
     if (!req.body.tutorSubjectId) {
       errors.push({
         field: "tutorSubjectId",
