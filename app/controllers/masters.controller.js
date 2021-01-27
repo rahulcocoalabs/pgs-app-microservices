@@ -885,7 +885,7 @@ exports.getSubjects = async (req, res) => {
   var checkResult = await checkSubjectsForOnlineClass(params, userId);
   console.log("flag 0 ->",checkResult );
   if (checkResult && (checkResult.success !== undefined) && (checkResult.success === 0)) {
-    return checkResult;
+    return res.send(checkResult);
   }
   
   if (checkResult.isAllSubjects || (!checkResult.isAllSubjects && checkResult.subjectIds.length > 0)) {
