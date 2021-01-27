@@ -3056,7 +3056,7 @@ exports.recover = async (req, res) => {
     sgMail.setApiKey(settingData.value);
 
 
-    const x = await sendMail(mailmsg, email);
+    const x = await sendMail(mailmsg, email,"Password reset link from PGS App");
 
     if (x && (x == 1)) {
       return res.json({
@@ -4285,14 +4285,14 @@ async function checkAuthToken(token, JWT_KEY) {
 
 
 
-async function sendMail(message, target) {
+async function sendMail(message, target,title) {
 
   var ret = 0;
 
   const msg = {
     to: target,
     from: config.resetpassword.fromMail,
-    subject: 'OTP from PGs APP',
+    subject: title,
     text: message,
   };
   console.log(target, message,"sender",config.resetpassword.fromMail);
@@ -4894,7 +4894,7 @@ async function send_otp_bymail_1(email, phone) {
     sgMail.setApiKey(settingData.value);
 
     console.log("email ->",mailmsg);
-    const x = await sendMail(mailmsg, email);
+    const x = await sendMail(mailmsg, email,"OTP from PGS App");
 
     if (x && (x == 1)) {
       return {
