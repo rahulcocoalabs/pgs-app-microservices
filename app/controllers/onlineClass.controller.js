@@ -61,14 +61,14 @@ exports.createOnlineClass = async (req, res) => {
 
 
 
-  if (!file || !(params.tutorSubjectId || params.tutorSubject) || !params.title || params.title === undefined || !(params.tutorClassId || params.tutorClass) || !params.classDescription || params.isPaid === undefined
-    || (params.isPaid === 'true' && !params.fee) || !params.availableDays 
-    || params.isPublic === undefined || (params.isPaid === 'true' && !params.classTimeCategory)
-    || (params.isPaid === 'true' && !params.currencyId) || !(params.tutorSyllabusId || params.tutorSyllabus) || params.availableFromTime || 
-    params.availableToTime ) {
+  // if (!file || !(params.tutorSubjectId || params.tutorSubject) || !params.title || params.title === undefined || !(params.tutorClassId || params.tutorClass) || !params.classDescription || params.isPaid === undefined
+  //   || (params.isPaid === 'true' && !params.fee) || !params.availableDays 
+  //   || params.isPublic === undefined || (params.isPaid === 'true' && !params.classTimeCategory)
+  //   || (params.isPaid === 'true' && !params.currencyId) || !(params.tutorSyllabusId || params.tutorSyllabus) || params.availableFromTime || 
+  //   params.availableToTime ) {
     var errors = [];
 
-    console.log("parameters => ", params)
+    //console.log("parameters => ", params)
 
     if (!req.body.tutorSubjectId) {
       errors.push({
@@ -160,7 +160,11 @@ exports.createOnlineClass = async (req, res) => {
       })
     }
 
-    console.log("errors =>", errors);
+    //console.log("errors =>", errors);
+
+
+    if (errors.length > 0){
+
     return res.status(200).send({
       success: 0,
       errors: errors,
@@ -168,7 +172,8 @@ exports.createOnlineClass = async (req, res) => {
       code: 200
     });
   }
-  console.log("08/12/202", file.filename)
+ // }
+  //console.log("08/12/202", file.filename)
   var onlineClassObj = {};
   onlineClassObj.userId = userId;
   onlineClassObj.tutorClassId = params.tutorClassId;
