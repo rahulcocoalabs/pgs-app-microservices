@@ -6,6 +6,7 @@ const Razorpay = require('razorpay')
 const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
 const Payment = require('../models/payment.model');
+const onlineClass = require('../models/onlineClass.model');
 
 
 async function getSettingData() {
@@ -142,5 +143,15 @@ exports.savePayment = async (req, res) => {
     success: 1,
     message: 'Payment successfully added'
   })
+
+}
+
+exports.softDelete = async (req,res) => {
+
+  var update = await onlineClass.updateMany({status:1},{status:0}).catch(err=> {
+    return res.send("failed")
+  })
+
+  return res.send("done")
 
 }
