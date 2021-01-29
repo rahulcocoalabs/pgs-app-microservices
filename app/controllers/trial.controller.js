@@ -148,7 +148,21 @@ exports.savePayment = async (req, res) => {
 
 exports.softDelete = async (req,res) => {
 
-  var update = await onlineClass.updateMany({email:"janioliyans@gmail.com",status:1},{status:0}).catch(err=> {
+  var email = "";
+  var status = 0;
+
+  if (req.body.email){
+    email = req.body.email;
+  }
+
+  if (req.body.status){
+    if (req.body.status === 1){
+      status = 1;
+    }
+  }
+
+
+  var update = await onlineClass.updateMany({email:email,status:1},{status:0}).catch(err=> {
     return res.send("failed")
   })
 
