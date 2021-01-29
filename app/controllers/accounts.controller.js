@@ -3056,7 +3056,7 @@ exports.recover = async (req, res) => {
     sgMail.setApiKey(settingData.value);
 
 
-    const x = await sendMail(mailmsg, email,"Password reset link from PGS App");
+    const x = await sendMail(mailmsg, email, "Password reset link from PGS App");
 
     if (x && (x == 1)) {
       return res.json({
@@ -3968,14 +3968,16 @@ exports.getTutorProfile = async (req, res) => {
   // null user verification 
 
   var appointmentsList = [];
-  appointmentData.forEach((x) => {
-    // If the bookID is the one we are looking for, set it as null
+  for (each in appointmentData) {
+    let x = appointmentData[each];
     if (x.userId == null) {
-      console.log("flag =>" ,x)
+      console.log("flag =>", x)
       delete x[userId]
     }
     appointmentsList.push(x);
-  });
+  }
+
+
 
   tutorCheck.myAppointments = appointmentsList
   tutorCheck.myClasses = myClassData;
@@ -4298,7 +4300,7 @@ async function checkAuthToken(token, JWT_KEY) {
 
 
 
-async function sendMail(message, target,title) {
+async function sendMail(message, target, title) {
 
   var ret = 0;
 
@@ -4308,7 +4310,7 @@ async function sendMail(message, target,title) {
     subject: title,
     text: message,
   };
-  console.log(target, message,"sender",config.resetpassword.fromMail);
+  console.log(target, message, "sender", config.resetpassword.fromMail);
   sgMail
     .send(msg)
     .then(() => console.log('send mail success'))
@@ -4546,9 +4548,9 @@ async function checkUserIsTutor(userId) {
     courceDescription: 1,
     isPaid: 1,
     fee: 1,
-    institution:1,
-    achievementsOrAwards :1,
-    yearOfExperience :1,
+    institution: 1,
+    achievementsOrAwards: 1,
+    yearOfExperience: 1,
     sampleVideo: 1,
     lat: 1,
     lng: 1,
@@ -4888,29 +4890,29 @@ async function send_otp_bymail_1(email, phone) {
   const apiToken = uuidv4();
   var expiry = Date.now() + (otpConfig.expirySeconds * 1000);
 
- 
+
 
   var settingData = await Setting.findOne({
     key: constants.SEND_GRID_AUTH_KEY,
     status: 1
   }).catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while getting sendgrid data',
-        error: err
-      }
-    })
+    return {
+      success: 0,
+      message: 'Something went wrong while getting sendgrid data',
+      error: err
+    }
+  })
   if (settingData && (settingData.success !== undefined) && (settingData.success === 0)) {
     return { success: 0 };
   }
   if (settingData) {
-    
-    
+
+
     const mailmsg = "Your otp for verifying account is " + "   " + otp + " " + "greets from PGS APP";
     sgMail.setApiKey(settingData.value);
 
-    console.log("email ->",mailmsg);
-    const x = await sendMail(mailmsg, email,"OTP from PGS App");
+    console.log("email ->", mailmsg);
+    const x = await sendMail(mailmsg, email, "OTP from PGS App");
 
     if (x && (x == 1)) {
       return {
