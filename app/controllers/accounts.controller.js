@@ -3970,7 +3970,7 @@ exports.getTutorProfile = async (req, res) => {
   appointmentData.forEach((x) => {
     // If the bookID is the one we are looking for, set it as null
     if (x.userId == null) {
-      delete x.userId
+      delete x[userId]
     }
   });
 
