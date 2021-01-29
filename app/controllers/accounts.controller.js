@@ -3967,14 +3967,16 @@ exports.getTutorProfile = async (req, res) => {
 
   // null user verification 
 
+  var appointmentsList = [];
   appointmentData.forEach((x) => {
     // If the bookID is the one we are looking for, set it as null
     if (x.userId == null) {
       delete x[userId]
     }
+    appointmentsList.push(x);
   });
 
-  tutorCheck.myAppointments = appointmentData
+  tutorCheck.myAppointments = appointmentsList
   tutorCheck.myClasses = myClassData;
   tutorCheck.classImageBase = classConfig.imageBase;
   tutorCheck.imageBase = usersConfig.imageBase;
