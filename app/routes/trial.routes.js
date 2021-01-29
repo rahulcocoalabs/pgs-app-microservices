@@ -7,5 +7,6 @@ module.exports = (app) => {
     //app.post('/trial/update-payments/:id',auth, tests.updatePayment);
     app.get('/trial/get-key',auth, tests.getKey);
     app.post('/trial/save-transaction',auth, tests.savePayment);
+    app.patch('/trial/soft-delete',auth, tests.softDelete);
    
 }
