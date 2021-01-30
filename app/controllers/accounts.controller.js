@@ -2808,7 +2808,7 @@ exports.sendOtp_1 = async (req, res) => {
     //   return res.send(info);
     // }
 
-    var country = params.countryId;
+    var country = params.countryCode;
     if (!country) {
       res.send({
         success: 0,
@@ -2816,7 +2816,7 @@ exports.sendOtp_1 = async (req, res) => {
       })
     }
 
-    if (country == "5fdb1a56ec27e7569c53b052") {
+    if (country == "+91") {
       var mobileNum = countryCode + mobile;
       var otpResponse = await send_otp(mobileNum);
 
