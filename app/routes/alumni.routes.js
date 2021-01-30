@@ -7,10 +7,8 @@ var feedsConfig = config.alumni;
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         if (file.fieldname === "image"){
-            cb(null, usersConfig.imageUploadPath.trim());
-        } else if (file.fieldname === "video"){
-            cb(null, tutorsConfig.videoUploadPath.trim());
-        }else{
+            cb(null, feedsConfig.imageUploadPath.trim());
+        } else{
             return cb({success: 0, message: "Invalid types" });
         }
     },
