@@ -87,7 +87,7 @@ exports.addAlumni = async (req, res) => {
 
     }
 
-    const obj = new alumni(newObject);
+    const obj = new Alumni(newObject);
     const newGroup = await  obj.save().catch(err => {
         console.log(err.message,"<=error")
         return {
