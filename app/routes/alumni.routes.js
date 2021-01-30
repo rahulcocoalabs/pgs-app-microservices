@@ -7,7 +7,7 @@ var feedsConfig = config.alumni;
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         if (file.fieldname === "image"){
-            cb(null, feedsConfig.imageBase.trim());
+            cb(null, feedsConfig.imageUploadPath.trim());
         } else{
             return cb({success: 0, message: "Invalid types" });
         }
