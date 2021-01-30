@@ -102,7 +102,7 @@ module.exports = {
         imageBase: commonPath + "images/events/",
         organizerImageBase: commonPath + "images/events/organizers/"
     },
-    events: {
+    alumni: {
         resultsPerPage: 30,
         imageBase: commonPath + "images/alumni/"
         
