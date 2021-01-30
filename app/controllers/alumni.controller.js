@@ -31,7 +31,7 @@ var jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var crypto = require("crypto");
 
-//const Alumni = require('../models/alumni.model.js');
+ const Alumni = require('../models/alumni.model.js');
 
 var gateway = require('../components/gateway.component.js');
 
@@ -52,5 +52,52 @@ karmaConfig = config.karma;
 
 exports.addAlumni = async (req, res) => {
 
-    res.send("ok")
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.body;
+
+    var errors = [];
+
+    if (!params.groupName){
+        errors.push({
+            filed:groupName,
+            message:"please add a name for your group"
+        })
+    }
+
+    var imagePath = req.file ? req.file.filename : null;
+
+    const newObject = {
+        fullName: params.fullName,
+        address: params.address,
+        companyName : params.companyName,
+        description: params.description,
+        image:imagePath,
+        designation: params.designation,
+        passingYear: params.passingYear,
+        email: params.email,
+        contact: params.contact,
+        facebook: params.facebook,
+        linkedin: params.linkedin,
+        groupName: params.groupName,
+        groupTargets: params.groupTargets,
+        createdBy:userId,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    }
+
+    const newGroup = await new alumni(newObject).save().catch(err => {
+        return {
+            success: 0,
+            message:"could not create new group",
+            error:err.message,
+        }
+    })
+
+    res.send({
+        success: 1,
+        message:"success",
+        item:newGroup
+    })
 }
