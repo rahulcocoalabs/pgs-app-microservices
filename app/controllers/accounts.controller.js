@@ -3971,10 +3971,21 @@ exports.getTutorProfile = async (req, res) => {
   for (each in appointmentData) {
     let x = appointmentData[each];
     if (x.userId == null) {
-      console.log("flag =>", x)
-      delete x[userId]
+      appointmentsList.push({
+        tutorId:x.tutorId,
+        tutorSubjectId:x.tutorSubjectId,
+        tutorClassId:x.tutorClassId,
+        isApproved:x.isApproved,
+        isRejected:x.isRejected,
+        isStudentDeleted:x.isStudentDeleted,
+        isTutorDeleted:x.isTutorDeleted,
+        id:x.id
+      })
     }
-    appointmentsList.push(x);
+    else {
+      appointmentsList.push(x); 
+    }
+    
   }
 
 
