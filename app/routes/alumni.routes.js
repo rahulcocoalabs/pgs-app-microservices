@@ -28,6 +28,6 @@ const auth = require('../middleware/auth.js');
 module.exports = (app) => {
     const alumni = require('../controllers/alumni.controller');
 
-   app.post('/alumni/add',upload.single('image'),  alumni.addAlumni);
+   app.post('/alumni/add', auth,upload.single('image'),  alumni.addAlumni);
   
 }
