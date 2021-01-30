@@ -87,7 +87,9 @@ exports.addAlumni = async (req, res) => {
 
     }
 
-    const newGroup = await new alumni(newObject).save().catch(err => {
+    const obj = new alumni(newObject);
+    const newGroup = await  obj.save().catch(err => {
+        console.log(err.message,"<=error")
         return {
             success: 0,
             message:"could not create new group",
