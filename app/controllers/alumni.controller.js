@@ -128,7 +128,7 @@ exports.listAlumni = async (req, res) => {
         limit: perPage
     };
 
-    var data = await Alumni.find({ status: 1 }, {}, pageParams).catch(err=>{
+    var dataAlumni = await Alumni.find({ status: 1 }, {}, pageParams).catch(err=>{
         return{
             success:0,
             message:"did not fetch details from database",
@@ -136,13 +136,13 @@ exports.listAlumni = async (req, res) => {
         }
     })
 
-    if (data && data.success != undefined && data.success === 0){
-        return res.send(data)
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0){
+        return res.send(dataAlumni)
     }
 
     return res.send({
         success:1,
         message:"listed successfully",
-        items:data
+        items:dataAlumni
     })
 }
