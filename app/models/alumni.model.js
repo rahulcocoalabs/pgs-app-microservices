@@ -14,6 +14,7 @@ const AlumniSchema = mongoose.Schema({
     contact: String,
     facebook: String,
     linkedin: String,
+    status:1,
     groupName: String,
     groupTargets: String,
     createdBy:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
