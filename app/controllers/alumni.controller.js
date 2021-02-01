@@ -60,7 +60,7 @@ exports.addAlumni = async (req, res) => {
 
     if (!params.groupName){
         errors.push({
-            filed:groupName,
+            filed:"groupName",
             message:"please add a name for your group"
         })
     }
