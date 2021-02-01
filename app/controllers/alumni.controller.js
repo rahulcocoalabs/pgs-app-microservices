@@ -91,6 +91,7 @@ exports.addAlumni = async (req, res) => {
         groupName: params.groupName,
         groupTargets: params.groupTargets,
         createdBy: userId,
+        status:1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
 
