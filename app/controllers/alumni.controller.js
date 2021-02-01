@@ -65,6 +65,15 @@ exports.addAlumni = async (req, res) => {
         })
     }
 
+
+    if (errors.length > 0){
+        return res.send({
+            success:0,
+            message:"failed",
+            error:errors
+        })
+    }
+
     var imagePath = req.file ? req.file.filename : null;
 
     const newObject = {
