@@ -29,5 +29,6 @@ module.exports = (app) => {
     const alumni = require('../controllers/alumni.controller');
 
    app.post('/alumni/add', auth,upload.single('image'),  alumni.addAlumni);
+   app.get('/alumni/list',auth,  alumni.listAlumni);
   
 }

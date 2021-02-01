@@ -31,7 +31,7 @@ var jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var crypto = require("crypto");
 
- const Alumni = require('../models/alumni.model.js');
+const Alumni = require('../models/alumni.model.js');
 
 var gateway = require('../components/gateway.component.js');
 
@@ -58,19 +58,19 @@ exports.addAlumni = async (req, res) => {
 
     var errors = [];
 
-    if (!params.groupName){
+    if (!params.groupName) {
         errors.push({
-            filed:"groupName",
-            message:"please add a name for your group"
+            filed: "groupName",
+            message: "please add a name for your group"
         })
     }
 
 
-    if (errors.length > 0){
+    if (errors.length > 0) {
         return res.send({
-            success:0,
-            message:"failed",
-            error:errors
+            success: 0,
+            message: "failed",
+            error: errors
         })
     }
 
@@ -79,9 +79,9 @@ exports.addAlumni = async (req, res) => {
     const newObject = {
         fullName: params.fullName,
         address: params.address,
-        companyName : params.companyName,
+        companyName: params.companyName,
         description: params.description,
-        image:imagePath,
+        image: imagePath,
         designation: params.designation,
         passingYear: params.passingYear,
         email: params.email,
@@ -90,25 +90,59 @@ exports.addAlumni = async (req, res) => {
         linkedin: params.linkedin,
         groupName: params.groupName,
         groupTargets: params.groupTargets,
-        createdBy:userId,
+        createdBy: userId,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
 
     }
 
     const obj = new Alumni(newObject);
-    const newGroup = await  obj.save().catch(err => {
-        console.log(err.message,"<=error")
+    const newGroup = await obj.save().catch(err => {
+        console.log(err.message, "<=error")
         return {
             success: 0,
-            message:"could not create new group",
-            error:err.message,
+            message: "could not create new group",
+            error: err.message,
         }
     })
 
     res.send({
         success: 1,
-        message:"success",
-        item:newGroup
+        message: "success",
+        item: newGroup
+    })
+}
+
+exports.listAlumni = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.query;
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    var data = await Alumni.find({ status: 1 }, {}, pageParams).catch(err=>{
+        return{
+            success:0,
+            message:"did not fetch details from database",
+            error:err.message
+        }
+    })
+
+    if (data && data.success != undefined && data.success === 0){
+        return res.send(data)
+    }
+
+    return res.send({
+        success:1,
+        message:"listed successfully",
+        items:data
     })
 }
