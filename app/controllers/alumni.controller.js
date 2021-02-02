@@ -124,7 +124,7 @@ exports.joinRequest = async(req, res)=>{
 
     const newObject = {
         user:userId,
-        group:groupId,
+        group:params.groupId,
         status:1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
