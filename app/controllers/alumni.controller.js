@@ -200,3 +200,44 @@ exports.details = async(req,res) => {
     return res.send(returnObj);
 
 }
+
+exports.listJoinRequests = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.query;
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    if (!params.groupId){
+        return res.send({
+            success:0,
+            message:"please provide a group ID"
+        })
+    }
+
+    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1 ,group:params.groupId}, {}, pageParams).populate('user').catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumniRequest && dataAlumniRequest.success != undefined && dataAlumniRequest.success === 0) {
+        return res.send(dataAlumniRequest)
+    }
+
+    return res.send({
+        success: 1,
+        message: "listed successfully",
+        items: dataAlumniRequest
+    })
+}

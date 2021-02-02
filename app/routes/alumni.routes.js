@@ -32,5 +32,6 @@ module.exports = (app) => {
    app.get('/alumni/list',auth,  alumni.listAlumni);
    app.get('/alumni/details/:id',auth,  alumni.details);
    app.post('/alumni/join-request', auth,  alumni.joinRequest);
+   app.get('/alumni/list-join-request', auth,  alumni.listJoinRequests);
   
 }
