@@ -1,54 +1,6 @@
-const Otp = require('../models/otp.model.js');
-const User = require('../models/user.model');
-const Setting = require('../models/setting.model');
-const TutorCategory = require('../models/tutorCategory.model');
-const TutorCourse = require('../models/tutorCourse.model');
-const TutorClass = require('../models/tutorClass.model');
-const TutorSubject = require('../models/tutorSubject.model');
-const TutorRequest = require('../models/tutorRequest.model');
-const TutorProfileUpdateRequest = require('../models/tutorProfileUpdateRequest.model');
-const OnlineClass = require('../models/onlineClass.model');
-const Rating = require('../models/rating.model');
-const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
-const EarnCoin = require('../models/earnCoin.model');
-const LoginBanner = require('../models/loginBanner.model');
-
-const InnovationChallenge = require('../models/innovationChallenge.model');
-const otplib = require('otplib');
-const uuidv4 = require('uuid/v4');
 var config = require('../../config/app.config.js');
-var smsConfig = config.sms;
-var otpConfig = config.otp;
-var eventsConfig = config.events;
-var tutorsConfig = config.tutors;
-var classConfig = config.class;
-const superagent = require('superagent');
-
-const JWT_KEY = config.jwt.key;
-const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
-
-var jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-var crypto = require("crypto");
-
 const Alumni = require('../models/alumni.model.js');
-
-var gateway = require('../components/gateway.component.js');
-
-var moment = require('moment');
-var ObjectId = require('mongodb').ObjectID;
-var charitiesConfig = config.charities;
-var utilities = require('../components/utilities.component.js');
-const constants = require('../helpers/constants');
-const Feed = require('../models/feed.model.js');
-const sgMail = require('@sendgrid/mail');
-
-var bcrypt = require('bcryptjs');
-const requestForTutorModel = require('../models/requestForTutor.model.js');
-const salt = bcrypt.genSaltSync(10);
-
-var usersConfig = config.users;
-karmaConfig = config.karma;
+const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
 
 exports.addAlumni = async (req, res) => {
 
@@ -146,4 +98,56 @@ exports.listAlumni = async (req, res) => {
         message:"listed successfully",
         items:dataAlumni
     })
+}
+
+exports.joinRequest = async(req, res)=>{
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    
+    if (!params.groupId) {
+        errors.push({
+            filed: "groupId",
+            message: "please add a name for your group Id"
+        })
+    }
+
+
+    if (errors.length > 0) {
+        return res.send({
+            success: 0,
+            message: "failed",
+            error: errors
+        })
+    }
+
+    const newObject = {
+        user:userId,
+        group:groupId,
+        status:1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    }
+
+    const obj = new AlumniJoinRequest(newObject);
+    const newGroupReq = await obj.save().catch(err => {
+        console.log(err.message, "<=error")
+        return {
+            success: 0,
+            message: "could not create request for join alumni",
+            error: err.message,
+        }
+    })
+
+    if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0){
+        return res.send(newGroupReq);
+    }
+
+    res.send({
+        success: 1,
+        message: "success",
+        item: newGroupReq
+    })
+
 }

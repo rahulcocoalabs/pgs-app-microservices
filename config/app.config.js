@@ -104,7 +104,8 @@ module.exports = {
     },
     alumni: {
         resultsPerPage: 30,
-        imageUploadPath: relativeCommonPath + "user-images"
+        imageUploadPath: relativeCommonPath + "alumni-images",
+        imageBase: commonPath + "alumni-images/",
         
     },
     ads: {
