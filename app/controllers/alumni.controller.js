@@ -104,6 +104,7 @@ exports.joinRequest = async(req, res)=>{
 
     const data = req.identity.data;
     const userId = data.userId;
+    const params = req.body;
     
     if (!params.groupId) {
         errors.push({
