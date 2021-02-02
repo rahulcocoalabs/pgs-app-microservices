@@ -223,7 +223,10 @@ exports.listJoinRequests = async (req, res) => {
         })
     }
 
-    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1 ,group:params.groupId}, {}, pageParams).populate('user').catch(err => {
+    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1 ,group:params.groupId}, {}, pageParams).populate({
+        path: 'user',
+        select: { image: 1}
+    }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
