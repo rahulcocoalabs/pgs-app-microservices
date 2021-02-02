@@ -30,7 +30,7 @@ module.exports = (app) => {
 
    app.post('/alumni/add', auth,upload.single('image'),  alumni.addAlumni);
    app.get('/alumni/list',auth,  alumni.listAlumni);
-   app.get('/alumni/details',auth,  alumni.details);
+   app.get('/alumni/details/:id',auth,  alumni.details);
    app.post('/alumni/join-request', auth,  alumni.joinRequest);
   
 }
