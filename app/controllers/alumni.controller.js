@@ -105,7 +105,7 @@ exports.joinRequest = async(req, res)=>{
     const data = req.identity.data;
     const userId = data.userId;
     const params = req.body;
-    
+    var errors = [];
     if (!params.groupId) {
         errors.push({
             filed: "groupId",
@@ -113,7 +113,7 @@ exports.joinRequest = async(req, res)=>{
         })
     }
 
-
+    
     if (errors.length > 0) {
         return res.send({
             success: 0,
