@@ -162,3 +162,41 @@ exports.joinRequest = async (req, res) => {
     })
 
 }
+
+exports.details = async(req,res) => {
+    const data = req.identity.data;
+    const userId = data.userId;
+    const id = req.params.id;
+
+    var group = await Alumni.findOne({status:1,_id:id}).catch(err =>{ 
+        return { success: 0,message:"did not get detail for group", error:err.message}
+    })
+
+    if (group && group.success != undefined && group.success === 0){
+        return res.send(group);
+    }
+
+    var returnObj = {};
+
+    if (group.created == userId) {
+        returnObj.isAdmin = 1;
+    }
+    else {
+        returnObj.isAdmin = 0;
+    }
+
+    var people = await AlumniJoinRequest.find({status:2}).populate("user").catch(err=>{
+        return { success: 0,message:"did not get detail for requesta", error:err.message}
+    })
+
+    if (people && people.success != undefined && people.success === 0){
+        return res.send(people);
+    }
+
+    returnObj.success = 1;
+    returnObj.message = "description of group retrieved successfully";
+    returnObj.groupInfo = group;
+    returnObj.members = people;
+    return res.send(returnObj);
+
+}
