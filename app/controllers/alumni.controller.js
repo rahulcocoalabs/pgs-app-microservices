@@ -43,7 +43,7 @@ exports.addAlumni = async (req, res) => {
         groupName: params.groupName,
         groupTargets: params.groupTargets,
         createdBy: userId,
-        status:1,
+        status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
 
@@ -81,26 +81,26 @@ exports.listAlumni = async (req, res) => {
         limit: perPage
     };
 
-    var dataAlumni = await Alumni.find({ status: 1 }, {}, pageParams).catch(err=>{
-        return{
-            success:0,
-            message:"did not fetch details from database",
-            error:err.message
+    var dataAlumni = await Alumni.find({ status: 1 }, {}, pageParams).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
         }
     })
 
-    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0){
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
         return res.send(dataAlumni)
     }
 
     return res.send({
-        success:1,
-        message:"listed successfully",
-        items:dataAlumni
+        success: 1,
+        message: "listed successfully",
+        items: dataAlumni
     })
 }
 
-exports.joinRequest = async(req, res)=>{
+exports.joinRequest = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
@@ -113,7 +113,7 @@ exports.joinRequest = async(req, res)=>{
         })
     }
 
-    
+
     if (errors.length > 0) {
         return res.send({
             success: 0,
@@ -123,9 +123,19 @@ exports.joinRequest = async(req, res)=>{
     }
 
     const newObject = {
-        user:userId,
-        group:params.groupId,
-        status:1,
+        name: params.name,
+        address: params.address,
+        companyName: params.address,
+        designation: params.designation,
+        college: params.college,
+        batch: params.batch,
+        passingYear: params.passingYear,
+        contact: params.contact,
+        fbLink: params.fbLink,
+        linkedLink: params.linkedLink,
+        user: userId,
+        group: params.groupId,
+        status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
 
@@ -141,7 +151,7 @@ exports.joinRequest = async(req, res)=>{
         }
     })
 
-    if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0){
+    if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0) {
         return res.send(newGroupReq);
     }
 

@@ -409,7 +409,7 @@ exports.validate = async (req, res) => {
 // **** User sign-up ****
 
 exports.create = async (req, res) => {
-  console.log('flag ..1');
+  console.log("sign up after  otp started")
   var warnings = [];
   var profileCompletion;
   var hobbyIds = [];
@@ -2720,7 +2720,7 @@ exports.loginWithEmail = async (req, res) => {
 // *** Send OTP to registered email to reset password ***
 
 exports.sendOtp_1 = async (req, res) => {
-  console.log("flag1")
+  console.log("request for otp started")
   let params = req.body;
   var mobile = params.phone;
   var email = params.emailId;
@@ -2884,6 +2884,8 @@ exports.sendOtp_1 = async (req, res) => {
 //   **** Verify OTP ****  
 
 exports.verifyOtp = async (req, res) => {
+
+  console.log("verification of otp started")
   var params = req.body;
   var otp = params.otp;
   var phone = params.phone;

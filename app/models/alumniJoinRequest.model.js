@@ -3,6 +3,18 @@ const mongoose = require('mongoose');
 
 
 const AlumniJoinRequestSchema = mongoose.Schema({
+
+    name:String,
+    address:String,
+    companyName:String,
+    designation:String,
+    college:String,
+    batch:String,
+    passingYear:String,
+    contact:String,
+    fbLink:String,
+    linkedLink:String,
+
    
     status : Number,
     user:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
