@@ -371,6 +371,9 @@ async function updateClassAndSubject(classId,subjectId,userId){
       update.tutorClassIds = array2;
     }
 
+    console.log("update => " , update);
+    console.log("array =>" , array1);
+    console.log("array 2 => " , array2);
     var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
 
     if (updateinfo == 0){
