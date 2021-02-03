@@ -354,21 +354,21 @@ async function updateClassAndSubject(classId,subjectId,userId){
   var update = {};
 
 
-  var info = await User.findOne({status:1, _id: userId},{tutorSubjectId:1,tutorClassId:1}).catch(err => {
+  var info = await User.findOne({status:1, _id: userId},{tutorSubjectIds:1,tutorClassIds:1}).catch(err => {
     return 0;
   });
   if (info == 0){
     return info;
   }
 
-  if (!info.tutorSubjectId.includes(subjectId) || !info.tutorClassId.includes(classId)) {
-    if (!info.tutorSubjectId.includes(subjectId)){
-      var array1 = info.tutorSubjectId.push(subjectId);
-      update.tutorSubjectId = array1;
+  if (!info.tutorSubjectIds.includes(subjectId) || !info.tutorClassIds.includes(classId)) {
+    if (!info.tutorSubjectIds.includes(subjectId)){
+      var array1 = info.tutorSubjectIds.push(subjectId);
+      update.tutorSubjectIds = array1;
     }
-    if (!info.tutorClassId.includes(classId)){
-      var array2 = info.tutorClassId.push(classId);
-      update.tutorClassId = array2;
+    if (!info.tutorClassIds.includes(classId)){
+      var array2 = info.tutorClassIds.push(classId);
+      update.tutorClassIds = array2;
     }
 
     var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
