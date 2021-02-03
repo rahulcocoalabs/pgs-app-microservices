@@ -293,6 +293,9 @@ exports.acceptJoinRequests = async (req,res) => {
         })
 
     }
+    else {
+        return res.send("ok")
+    }
 
     
 }
