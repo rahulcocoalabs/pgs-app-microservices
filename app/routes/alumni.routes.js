@@ -33,6 +33,6 @@ module.exports = (app) => {
    app.get('/alumni/details/:id',auth,  alumni.details);
    app.post('/alumni/join-request', auth,  alumni.joinRequest);
    app.get('/alumni/list-join-request', auth,  alumni.listJoinRequests);
-   app.patch('/alumni/accept-join-request',auth,alumni.AcceptRequests)
+   app.patch('/alumni/:id/accept-join-request',auth,alumni.acceptJoinRequests)
   
 }
