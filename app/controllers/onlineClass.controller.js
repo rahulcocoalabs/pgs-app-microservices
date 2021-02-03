@@ -376,6 +376,20 @@ async function updateClassAndSubject(classId,subjectId,userId){
     }
       
     }
+    if (!info.tutorClassIds.includes(classId)){
+      var update = { $push: { tutorClassIds: classId } } 
+      console.log("update => " , update);
+   
+    var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
+
+    if (updateinfo == 0){
+      return updateinfo;
+    }
+    else {
+      return 1;
+    }
+      
+    }
     
 
     
