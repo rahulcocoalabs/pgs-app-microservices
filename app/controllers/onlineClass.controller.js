@@ -363,12 +363,12 @@ async function updateClassAndSubject(classId,subjectId,userId){
 
   if (!info.tutorSubjectIds.includes(subjectId) || !info.tutorClassIds.includes(classId)) {
     if (!info.tutorSubjectIds.includes(subjectId)){
-      var array1 = info.tutorSubjectIds.push(subjectId);
-      update.tutorSubjectIds = array1;
+      update.tutorSubjectIds = info.tutorSubjectIds.push(subjectId);
+      
     }
     if (!info.tutorClassIds.includes(classId)){
-      var array2 = info.tutorClassIds.push(classId);
-      update.tutorClassIds = array2;
+      update.tutorClassIds = info.tutorClassIds.push(classId);
+       
     }
 
     console.log("update => " , update);
