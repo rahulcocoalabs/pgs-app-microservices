@@ -372,7 +372,7 @@ async function updateClassAndSubject(classId,subjectId,userId){
     }
 
     console.log("update => " , update);
-    console.log("array =>" , array1);
+    console.log("array =>" ,  info.tutorSubjectIds);
     console.log("array 2 => " , array2);
     console.log("class",classId);
     console.log("subject", subjectId);
