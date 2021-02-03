@@ -364,7 +364,7 @@ async function updateClassAndSubject(classId,subjectId,userId){
   if (!info.tutorSubjectIds.includes(subjectId) || !info.tutorClassIds.includes(classId)) {
     if (!info.tutorSubjectIds.includes(subjectId)){
       var update = { $push: { tutorSubjectIds: subjectId } } 
-      console.log("update => " , update);
+     
    
     var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
 
@@ -378,7 +378,7 @@ async function updateClassAndSubject(classId,subjectId,userId){
     }
     if (!info.tutorClassIds.includes(classId)){
       var update = { $push: { tutorClassIds: classId } } 
-      console.log("update => " , update);
+      
    
     var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
 
