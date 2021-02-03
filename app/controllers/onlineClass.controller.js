@@ -351,7 +351,7 @@ exports.createOnlineClass = async (req, res) => {
 async function updateClassAndSubject(classId,subjectId,userId){
 
   var  returnValue = 0;
-  var update = {};
+  
 
 
   var info = await User.findOne({status:1, _id: userId},{tutorSubjectIds:1,tutorClassIds:1}).catch(err => {
@@ -363,15 +363,8 @@ async function updateClassAndSubject(classId,subjectId,userId){
 
   if (!info.tutorSubjectIds.includes(subjectId) || !info.tutorClassIds.includes(classId)) {
     if (!info.tutorSubjectIds.includes(subjectId)){
-      update.tutorSubjectIds = info.tutorSubjectIds.push(subjectId);
-      
-    }
-    if (!info.tutorClassIds.includes(classId)){
-      update.tutorClassIds = info.tutorClassIds.push(classId);
-       
-    }
-
-    console.log("update => " , update);
+      var update = { $push: { tutorSubjectIds: subjectId } } 
+      console.log("update => " , update);
    
     var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
 
@@ -381,6 +374,11 @@ async function updateClassAndSubject(classId,subjectId,userId){
     else {
       return 1;
     }
+      
+    }
+    
+
+    
   }
   else {
     return 1
