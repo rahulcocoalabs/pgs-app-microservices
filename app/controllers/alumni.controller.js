@@ -244,3 +244,53 @@ exports.listJoinRequests = async (req, res) => {
         items: dataAlumniRequest
     })
 }
+
+exports.acceptJoinRequests = async (req,res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var id = req.params.id;
+
+    var info = await (await AlumniJoinRequest.findOne({ status:1,group:id})).populate('group').catch(err =>  {
+        return {
+            success : 0,
+            message:"some thing went wrong",
+            error:err.message
+        }
+    })
+
+    if (info && info.success != undefined && info.success == 0){
+        return res.send(info);
+    }
+
+    var admin = 0;
+    if (info){
+        if (info.group){
+            if (info.group.createdBy){
+                if (userId == info.group.createdBy){
+                    admin = 1;
+                }
+            }
+        }
+    }
+
+    if (admin == 1){
+        var update = await AlumniJoinRequest.updateOne({status:1,_id:id},{status:2}).catch(err=>{
+            return {
+                success : 0,
+                message:"some thing went wrong",
+                error:err.message
+            }
+        })
+        if (update && update.success != undefined && update.success == 0){
+            return res.send(update);
+        }
+        return res.send({
+            success:0,
+            message:"accepted"
+        })
+
+    }
+
+    
+}
