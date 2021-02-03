@@ -178,6 +178,17 @@ exports.createOnlineClass = async (req, res) => {
   onlineClassObj.userId = userId;
   onlineClassObj.tutorClassId = params.tutorClassId;
   onlineClassObj.tutorSubjectId = params.tutorSubjectId;
+
+  var updateTutorProfile = await updateClassAndSubject(params.tutorClassId,params.tutorSubjectId,userId);
+
+  if (updateTutorProfile == 0) {
+    return res.send({
+      success:0,
+      message:"could not update tutor profile"
+    })
+  }
+
+
   onlineClassObj.classDescription = params.classDescription;
   if (file.image && file.image.length > 0) {
     onlineClassObj.image = file.image[0].filename;
@@ -336,6 +347,45 @@ exports.createOnlineClass = async (req, res) => {
 //   }
 // }
 
+
+async function updateClassAndSubject(classId,subjectId,userId){
+
+  var  returnValue = 0;
+  var update = {};
+
+
+  var info = await User.findOne({status:1, _id: userId},{tutorSubjectId:1,tutorClassId:1}).catch(err => {
+    return 0;
+  });
+  if (info == 0){
+    return info;
+  }
+
+  if (!info.tutorSubjectId.includes(subjectId) || !info.tutorClassId.includes(classId)) {
+    if (!info.tutorSubjectId.includes(subjectId)){
+      var array1 = info.tutorSubjectId.push(subjectId);
+      update.tutorSubjectId = array1;
+    }
+    if (!info.tutorClassId.includes(classId)){
+      var array2 = info.tutorClassId.push(classId);
+      update.tutorClassId = array2;
+    }
+
+    var updateinfo = await User.updateOne({status:1, _id: userId},update).catch(err => {return 0})
+
+    if (updateinfo == 0){
+      return updateinfo;
+    }
+    else {
+      return 1;
+    }
+  }
+  else {
+    return 1
+  }
+
+  return returnValue;
+}
 
 exports.createTutorRequest = async (req, res) => {
   var userData = req.identity.data;
