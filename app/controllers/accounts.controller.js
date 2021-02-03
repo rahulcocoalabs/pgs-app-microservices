@@ -3877,6 +3877,8 @@ exports.requestAsTutor = async (req, res) => {
 
   }
 
+  console.log("params => ", params)
+
   newTutorRequestObj.location = params.location;
   newTutorRequestObj.sampleVideo = (file && file.filename) ? file.filename : null;
   newTutorRequestObj.isApproved = false;
