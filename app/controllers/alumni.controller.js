@@ -294,7 +294,10 @@ exports.acceptJoinRequests = async (req,res) => {
 
     }
     else {
-        return res.send("ok")
+        return res.send({
+            success:0,
+            message:"you are not authorized to accept this request"
+        })
     }
 
     
