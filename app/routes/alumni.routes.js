@@ -22,25 +22,10 @@ var storage = multer.diskStorage({
     }
 });
 
-var storage1 = multer.diskStorage({
-    destination: function (req, file, cb) {
-        if (file.fieldname === "image"){
-            cb(null, feedsConfigEvents.imageUploadPath.trim());
-        } else{
-            return cb({success: 0, message: "Invalid types" });
-        }
-    },
-    filename: function (req, file, cb) {
-        crypto.pseudoRandomBytes(16, function (err, raw) {
-            if (err)
-                return cb(err)
-            cb(null, raw.toString('hex') + "." + mime.extension(file.mimetype))
-        })
-    }
-});
+
 
 var upload = multer({ storage: storage });
-var upload1 = multer({ storage: storage1 });
+
 
 const auth = require('../middleware/auth.js');
 
@@ -54,7 +39,7 @@ module.exports = (app) => {
    app.get('/alumni/list-join-request', auth,  alumni.listJoinRequests);
    app.patch('/alumni/:id/accept-join-request',auth,alumni.acceptJoinRequests)
 
-   app.post('/alumni/add-event', auth,upload1.single('image'),  alumni.addAlumniEvents);
+   app.post('/alumni/add-event', auth,upload.single('image'),  alumni.addAlumniEvents);
    app.post('/alumni/add-job', auth,upload.single('image'),  alumni.addAlumniJobs);
   
 }
