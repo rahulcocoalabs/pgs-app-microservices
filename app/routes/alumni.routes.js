@@ -34,5 +34,8 @@ module.exports = (app) => {
    app.post('/alumni/join-request', auth,  alumni.joinRequest);
    app.get('/alumni/list-join-request', auth,  alumni.listJoinRequests);
    app.patch('/alumni/:id/accept-join-request',auth,alumni.acceptJoinRequests)
+
+   app.post('/alumni/add-event', auth,upload.single('image'),  alumni.addAlumniEvents);
+   app.post('/alumni/add-job', auth,upload.single('image'),  alumni.addAlumniJobs);
   
 }

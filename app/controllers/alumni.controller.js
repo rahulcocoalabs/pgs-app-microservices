@@ -1,7 +1,8 @@
 var config = require('../../config/app.config.js');
 const Alumni = require('../models/alumni.model.js');
 const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
-
+const AlumniEvent = require('../models/alumniEvents.model.js');
+const AlumniJob = require('../models/alumniJobs.model.js');
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
@@ -163,16 +164,16 @@ exports.joinRequest = async (req, res) => {
 
 }
 
-exports.details = async(req,res) => {
+exports.details = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
     const id = req.params.id;
 
-    var group = await Alumni.findOne({status:1,_id:id}).catch(err =>{ 
-        return { success: 0,message:"did not get detail for group", error:err.message}
+    var group = await Alumni.findOne({ status: 1, _id: id }).catch(err => {
+        return { success: 0, message: "did not get detail for group", error: err.message }
     })
 
-    if (group && group.success != undefined && group.success === 0){
+    if (group && group.success != undefined && group.success === 0) {
         return res.send(group);
     }
 
@@ -185,11 +186,11 @@ exports.details = async(req,res) => {
         returnObj.isAdmin = 0;
     }
 
-    var people = await AlumniJoinRequest.find({status:2}).populate("user").catch(err=>{
-        return { success: 0,message:"did not get detail for requesta", error:err.message}
+    var people = await AlumniJoinRequest.find({ status: 2 }).populate("user").catch(err => {
+        return { success: 0, message: "did not get detail for requesta", error: err.message }
     })
 
-    if (people && people.success != undefined && people.success === 0){
+    if (people && people.success != undefined && people.success === 0) {
         return res.send(people);
     }
 
@@ -216,16 +217,16 @@ exports.listJoinRequests = async (req, res) => {
         limit: perPage
     };
 
-    if (!params.groupId){
+    if (!params.groupId) {
         return res.send({
-            success:0,
-            message:"please provide a group ID"
+            success: 0,
+            message: "please provide a group ID"
         })
     }
 
-    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1 ,group:params.groupId}, {}, pageParams).populate({
+    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1, group: params.groupId }, {}, pageParams).populate({
         path: 'user',
-        select: { image: 1}
+        select: { image: 1 }
     }).catch(err => {
         return {
             success: 0,
@@ -245,7 +246,7 @@ exports.listJoinRequests = async (req, res) => {
     })
 }
 
-exports.acceptJoinRequests = async (req,res) => {
+exports.acceptJoinRequests = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
@@ -253,52 +254,166 @@ exports.acceptJoinRequests = async (req,res) => {
     var group = req.query.group;
 
 
-    var info = await await AlumniJoinRequest.findOne({ status:1,group:group}).populate('group').catch(err =>  {
+    var info = await await AlumniJoinRequest.findOne({ status: 1, group: group }).populate('group').catch(err => {
         return {
-            success : 0,
-            message:"some thing went wrong",
-            error:err.message
+            success: 0,
+            message: "some thing went wrong",
+            error: err.message
         }
     })
 
-    if (info && info.success != undefined && info.success == 0){
+    if (info && info.success != undefined && info.success == 0) {
         return res.send(info);
     }
 
     var admin = 0;
-    if (info){
-        if (info.group){
-            if (info.group.createdBy){
-                if (userId == info.group.createdBy){
+    if (info) {
+        if (info.group) {
+            if (info.group.createdBy) {
+                if (userId == info.group.createdBy) {
                     admin = 1;
                 }
             }
         }
     }
 
-    if (admin == 1){
-        var update = await AlumniJoinRequest.updateOne({status:1,_id:id},{status:2}).catch(err=>{
+    if (admin == 1) {
+        var update = await AlumniJoinRequest.updateOne({ status: 1, _id: id }, { status: 2 }).catch(err => {
             return {
-                success : 0,
-                message:"some thing went wrong",
-                error:err.message
+                success: 0,
+                message: "some thing went wrong",
+                error: err.message
             }
         })
-        if (update && update.success != undefined && update.success == 0){
+        if (update && update.success != undefined && update.success == 0) {
             return res.send(update);
         }
         return res.send({
-            success:0,
-            message:"accepted"
+            success: 0,
+            message: "accepted"
         })
 
     }
     else {
         return res.send({
-            success:0,
-            message:"you are not authorized to accept this request"
+            success: 0,
+            message: "you are not authorized to accept this request"
         })
     }
 
-    
+
+}
+
+exports.addAlumniEvent = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.body;
+
+    var errors = [];
+
+    if (!params.groupId) {
+        errors.push({
+            filed: "groupName",
+            message: "please add a name for your group"
+        })
+    }
+
+
+    if (errors.length > 0) {
+        return res.send({
+            success: 0,
+            message: "failed",
+            error: errors
+        })
+    }
+
+    var imagePath = req.file ? req.file.filename : null;
+
+    const newObject = {
+        title: params.title,
+        description: params.description,
+        venue: params.venue,
+        date: params.date,
+        groupId:params.groupId,
+        image:imagePath,
+      
+
+        status: 1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    }
+
+    const obj = new AlumniEvent(newObject);
+    const event = await obj.save().catch(err => {
+
+        return {
+            success: 0,
+            message: "could not create new group",
+            error: err.message,
+        }
+    })
+
+    res.send({
+        success: 1,
+        message: "success",
+        item: event
+    })
+}
+
+exports.addAlumniJobs = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.body;
+
+    var errors = [];
+
+    if (!params.groupId) {
+        errors.push({
+            filed: "groupName",
+            message: "please add a name for your group"
+        })
+    }
+
+
+    if (errors.length > 0) {
+        return res.send({
+            success: 0,
+            message: "failed",
+            error: errors
+        })
+    }
+
+    var imagePath = req.file ? req.file.filename : null;
+
+    const newObject = {
+        position: params.title,
+        description: params.description,
+        company: params.venue,
+        location: params.date,
+        groupId:params.groupId,
+        image:imagePath,
+        status: 1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    }
+
+    const obj = new AlumniJob(newObject);
+    const event = await obj.save().catch(err => {
+
+        return {
+            success: 0,
+            message: "could not create new group",
+            error: err.message,
+        }
+    })
+
+    res.send({
+        success: 1,
+        message: "success",
+        item: event
+    })
 }

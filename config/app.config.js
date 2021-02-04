@@ -108,6 +108,18 @@ module.exports = {
         imageBase: commonPath + "alumni-images/",
         
     },
+    alumniEvents: {
+        resultsPerPage: 30,
+        imageUploadPath: relativeCommonPath + "alumni-event-images",
+        imageBase: commonPath + "alumni-event-images/",
+        
+    },
+    alumniJobs: {
+        resultsPerPage: 30,
+        imageUploadPath: relativeCommonPath + "alumni-job-images",
+        imageBase: commonPath + "alumni-job-images/",
+        
+    },
     ads: {
         resultsPerPage: 30,
         imageBase: commonPath + "ads/",
