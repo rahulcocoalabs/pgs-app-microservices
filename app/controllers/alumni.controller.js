@@ -304,7 +304,7 @@ exports.acceptJoinRequests = async (req, res) => {
 
 }
 
-exports.addAlumniEvent = async (req, res) => {
+exports.addAlumniEvents = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
