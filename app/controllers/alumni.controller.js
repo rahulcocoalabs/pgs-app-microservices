@@ -422,7 +422,7 @@ exports.listEvents = async (req,res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
-    var params = req.params;
+    var params = req.query;
 
     var page = params.page || 1;
     page = page > 0 ? page : 1;
@@ -467,7 +467,7 @@ exports.listEvents = async (req,res) => {
 exports.listJobs = async (req,res) => {
     const data = req.identity.data;
     const userId = data.userId;
-    var params = req.params;
+    var params = req.query;
 
     var page = params.page || 1;
     page = page > 0 ? page : 1;
