@@ -1598,7 +1598,7 @@ exports.update = async (req, res) => {
 
 
   if (params.firstName) {
-    update.firstName = ObjectId(params.firstName);
+    update.firstName = params.firstName;
   }
   if (params.syllabusId) {
     update.syllabusId = ObjectId(params.syllabusId);
