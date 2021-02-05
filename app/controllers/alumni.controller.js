@@ -506,3 +506,78 @@ exports.listJobs = async (req,res) => {
     })
 
 }
+
+exports.detailsEvents = async (req,res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.params;
+
+   
+
+    if (!params.id){
+        return res.send({
+            success:0,
+            message:"please provide a event ID"
+        })
+    }
+
+    
+    var dataAlumni = await AlumniEvent.findOne({ status: 1,groupId:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
+        return res.send(dataAlumni)
+    }
+
+    return res.send({
+        success: 1,
+        message: "listed successfully",
+        items: dataAlumni
+    })
+
+
+
+}
+exports.detailsJobs = async (req,res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.params;
+
+   
+
+    if (!params.id){
+        return res.send({
+            success:0,
+            message:"please provide a job ID"
+        })
+    }
+
+    
+    var dataAlumni = await AlumniJob.findOne({ status: 1,groupId:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
+        return res.send(dataAlumni)
+    }
+
+    return res.send({
+        success: 1,
+        message: "listed successfully",
+        items: dataAlumni
+    })
+
+
+
+}
