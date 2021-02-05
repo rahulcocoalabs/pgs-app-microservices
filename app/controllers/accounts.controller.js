@@ -1690,7 +1690,7 @@ exports.update = async (req, res) => {
 
 
   if (req.file) {
-    console.log("image ->", req.file.filename);
+    console.log("image ->");
     update.image = req.file.filename
   }
   var unwantedFields = ["_id", "userType", "coinCount", "password_hash", "auth_key", "status", "tsCreatedAt", "tsModifiedAt", "karmaIndex", "rev"];
