@@ -523,7 +523,7 @@ exports.detailsEvents = async (req,res) => {
     }
 
     
-    var dataAlumni = await AlumniEvent.findOne({ status: 1,groupId:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
+    var dataAlumni = await AlumniEvent.findOne({ status: 1,_id:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -560,7 +560,7 @@ exports.detailsJobs = async (req,res) => {
     }
 
     
-    var dataAlumni = await AlumniJob.findOne({ status: 1,groupId:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
+    var dataAlumni = await AlumniJob.findOne({ status: 1,_id:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
