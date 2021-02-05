@@ -41,5 +41,8 @@ module.exports = (app) => {
 
    app.post('/alumni/add-event', auth,upload.single('image'),  alumni.addAlumniEvents);
    app.post('/alumni/add-job', auth,upload.single('image'),  alumni.addAlumniJobs);
+
+   app.get('/alumni/list-events',auth,alumni.listEvents);
+   app.get('/alumni/list-jobs',auth,alumni.listJobs);
   
 }

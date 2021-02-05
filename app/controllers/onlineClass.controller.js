@@ -1588,6 +1588,8 @@ async function listTutors(findCriteria, perPage, page, favouriteData) {
   perPage = perPage > 0 ? perPage : tutorConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
+  console.log("now filter ->", findCriteria )
+
   var tutorsData = await User.find(findCriteria)
     .populate([{
       path: 'tutorCourseIds'

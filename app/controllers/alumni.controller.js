@@ -417,3 +417,92 @@ exports.addAlumniJobs = async (req, res) => {
         item: event
     })
 }
+
+exports.listEvents = async (req,res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.params;
+
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    if (!params.groupId){
+        return res.send({
+            success:0,
+            message:"please provide a group ID"
+        })
+    }
+
+    
+    var dataAlumni = await AlumniEvent.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
+        return res.send(dataAlumni)
+    }
+
+    return res.send({
+        success: 1,
+        message: "listed successfully",
+        items: dataAlumni
+    })
+
+
+
+}
+
+exports.listJobs = async (req,res) => {
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.params;
+
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    if (!params.groupId){
+        return res.send({
+            success:0,
+            message:"please provide a group ID"
+        })
+    }
+
+    
+    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
+        return res.send(dataAlumni)
+    }
+
+    return res.send({
+        success: 1,
+        message: "listed successfully",
+        items: dataAlumni
+    })
+
+}
