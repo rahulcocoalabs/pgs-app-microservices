@@ -45,7 +45,7 @@ module.exports = (app) => {
    app.get('/alumni/list-events',auth,alumni.listEvents);
    app.get('/alumni/list-jobs',auth,alumni.listJobs);
 
-   app.get('/alumni/detail-events',auth,alumni.detailsEvents);
-   app.get('/alumni/detail-jobs',auth,alumni.detailsJobs);
+   app.get('/alumni/detail-events/:id',auth,alumni.detailsEvents);
+   app.get('/alumni/detail-jobs/:id',auth,alumni.detailsJobs);
   
 }
