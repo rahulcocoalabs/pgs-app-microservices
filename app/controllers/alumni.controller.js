@@ -1,6 +1,7 @@
 var config = require('../../config/app.config.js');
 const Alumni = require('../models/alumni.model.js');
 const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
+const AlumniEventParticipation = require('../models/alumniEventParticipation.model.js');
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 exports.addAlumni = async (req, res) => {
@@ -580,4 +581,66 @@ exports.detailsJobs = async (req,res) => {
 
 
 
+}
+
+exports.eventParticipate = async (req,res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.body;
+
+    var errors = [];
+
+    if (!params.count){
+        errors.push({
+            fileds:"count",
+            message:"please mention number of attendees"
+        })
+    }
+    if (!params.email){
+        errors.push({
+            fileds:"email",
+            message:"please mention email"
+        })
+    }
+    if (!params.name){
+        errors.push({
+            fileds:"name",
+            message:"please mention   name"
+        })
+    }
+    const newObject = {
+        name: params.name,
+        eventId:params.eventId,
+        email:params.email,
+        attendeeCount: params.count,
+        user: userId,
+        group: params.groupId,
+        status: 1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    }
+
+    const obj = new AlumniEventParticipation(newObject);
+    const newGroupReq = await obj.save().catch(err => {
+        console.log(err.message, "<=error")
+        return {
+            success: 0,
+            message: "could not create request for join alumni",
+            error: err.message,
+        }
+    })
+
+    if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0) {
+        return res.send(newGroupReq);
+    }
+
+    res.send({
+        success: 1,
+        message: "success",
+        item: newGroupReq
+    })
+    
+    
 }

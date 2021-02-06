@@ -47,5 +47,7 @@ module.exports = (app) => {
 
    app.get('/alumni/detail-events/:id',auth,alumni.detailsEvents);
    app.get('/alumni/detail-jobs/:id',auth,alumni.detailsJobs);
+
+   app.post('/alumni/event-participate',auth,alumni.eventParticipate);
   
 }
