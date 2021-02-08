@@ -77,7 +77,7 @@ function getApisWithAuth(reqObj, callback) {
     }
 
     if (params.categoryId){
-      filter.videoCategoryIds = [params.categoryId];
+      filters.videoCategoryIds = [params.categoryId];
     }
 
    
