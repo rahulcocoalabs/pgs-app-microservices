@@ -67,6 +67,10 @@ exports.listAllGames = (req, res) => {
     filters.isTrending = true;
   }
 
+  if(params.categoryId) {
+    filters.gameCategoryIds = [params.categoryId];
+  }
+
   Game.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).then(gamesList => {
     Game.countDocuments(filters, function (err, itemsCount) {
       var i = 0;
