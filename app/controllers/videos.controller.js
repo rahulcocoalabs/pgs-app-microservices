@@ -76,6 +76,10 @@ function getApisWithAuth(reqObj, callback) {
       filters.isTrending = isTrending;
     }
 
+    if (params.categoryId) {
+      filters.categoryIds = [params.categoryId];
+    }
+
     Video.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).then(videosList => {
       Video.countDocuments(filters, function (err, itemsCount) {
 
