@@ -210,7 +210,7 @@ exports.details = async (req, res) => {
         returnObj.isAdmin = 0;
     }
 
-    var people = await AlumniJoinRequest.find($or[{ status: 2 },{isApproved:true}]).populate("createdBy").catch(err => {
+    var people = await AlumniJoinRequest.find({$or:[{ status: 2 },{isApproved:true}]}).populate("createdBy").catch(err => {
         return { success: 0, message: "did not get detail for requesta", error: err.message }
     })
 
