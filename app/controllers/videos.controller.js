@@ -77,7 +77,7 @@ function getApisWithAuth(reqObj, callback) {
     }
 
     if (params.categoryId) {
-      filters.categoryIds = [params.categoryId];
+      filters.categoryIds = params.categoryId;
     }
 
     Video.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).then(videosList => {
