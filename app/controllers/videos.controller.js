@@ -76,29 +76,33 @@ function getApisWithAuth(reqObj, callback) {
       filters.isTrending = isTrending;
     }
 
+    if (params.categoryId){
+      filter.videoCategoryIds = [params.categoryId];
+    }
+
    
     Video.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).then(videosList => {
       Video.countDocuments(filters, function (err, itemsCount) {
 
-        var returnList = [];
+        // var returnList = [];
         
-        for(x in videosList) {
-          var item = videosList[x];
+        // for(x in videosList) {
+        //   var item = videosList[x];
 
-          var arr = item.categoryIds;
+        //   var arr = item.categoryIds;
 
-          if (arr.includes(params.categoryId)) {
-            returnList.push(item);
-          }
+        //   if (arr.includes(params.categoryId)) {
+        //     returnList.push(item);
+        //   }
 
 
-        }
+        // }
         totalPages = itemsCount / perPage;
         totalPages = Math.ceil(totalPages);
         var hasNextPage = page < totalPages;
         var responseObj = {
           imageBase: videosConfig.imageBase,
-          items: returnList,
+          items: videosList,
           page: page,
           perPage: perPage,
           hasNextPage: hasNextPage,
