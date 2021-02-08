@@ -193,7 +193,7 @@ exports.details = async (req, res) => {
     const userId = data.userId;
     const id = req.params.id;
 
-    var group = await Alumni.findOne({ status: 1, _id: id }).populate('createdBy').catch(err => {
+    var group = await Alumni.findOne({ status: 1, _id: id }).populate({path:'createdBy',select:{"name":1,"image":1}}).catch(err => {
         return { success: 0, message: "did not get detail for group", error: err.message }
     })
 
@@ -210,7 +210,7 @@ exports.details = async (req, res) => {
         returnObj.isAdmin = 0;
     }
 
-    var people = await AlumniJoinRequest.find({$or:[{ status: 2 },{isApproved:true}]}).populate("user").catch(err => {
+    var people = await AlumniJoinRequest.find({$or:[{ status: 2 },{isApproved:true}]}).populate({path:'user',select:{"name":1,"image":1}}).catch(err => {
         return { success: 0, message: "did not get detail for requesta", error: err.message }
     })
 
