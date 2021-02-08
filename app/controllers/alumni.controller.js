@@ -155,6 +155,7 @@ exports.joinRequest = async (req, res) => {
         batch: params.batch,
         passingYear: params.passingYear,
         contact: params.contact,
+        email:params.email,
         fbLink: params.fbLink,
         linkedLink: params.linkedLink,
         user: userId,
@@ -209,7 +210,7 @@ exports.details = async (req, res) => {
         returnObj.isAdmin = 0;
     }
 
-    var people = await AlumniJoinRequest.find({ status: 2 }).populate("user").catch(err => {
+    var people = await AlumniJoinRequest.find({ status: 2 }).populate("createdBy").catch(err => {
         return { success: 0, message: "did not get detail for requesta", error: err.message }
     })
 

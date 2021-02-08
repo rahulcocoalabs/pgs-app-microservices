@@ -20,7 +20,8 @@ const AlumniSchema = mongoose.Schema({
     groupTargets: String,
     createdBy:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     tsCreatedAt: Number,
-    tsModifiedAt: Number
+    tsModifiedAt: Number,
+    isApproved: Boolean,
     
 });
 module.exports = mongoose.model('Alumni', AlumniSchema, 'Alumnis');
