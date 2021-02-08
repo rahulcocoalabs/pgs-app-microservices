@@ -8,6 +8,7 @@ const AlumniSchema = mongoose.Schema({
     companyName : String,
     description: String,
     image: String,
+    batch:String,
     designation: String,
     passingYear: String,
     email: String,

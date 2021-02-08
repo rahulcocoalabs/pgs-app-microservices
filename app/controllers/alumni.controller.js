@@ -4,6 +4,7 @@ const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
 const AlumniEventParticipation = require('../models/alumniEventParticipation.model.js');
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
+const imageBase = config.alumni.imageBase;
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
@@ -36,6 +37,7 @@ exports.addAlumni = async (req, res) => {
         companyName: params.companyName,
         description: params.description,
         image: imagePath,
+        batch:params.batch,
         designation: params.designation,
         passingYear: params.passingYear,
         email: params.email,
@@ -64,6 +66,7 @@ exports.addAlumni = async (req, res) => {
     res.send({
         success: 1,
         message: "success",
+        imageBase:imageBase,
         item: newGroup
     })
 }
@@ -95,9 +98,30 @@ exports.listAlumni = async (req, res) => {
         return res.send(dataAlumni)
     }
 
+    var itemsCount = dataAlumni.length;
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
+    if (page > totalPages) {
+        return res.send({
+            success: 0,
+            message: "No products to show"
+        })
+    }
+
     return res.send({
         success: 1,
+        pagination,
         message: "listed successfully",
+        imageBase,
         items: dataAlumni
     })
 }
@@ -199,6 +223,7 @@ exports.details = async (req, res) => {
     returnObj.message = "description of group retrieved successfully";
     returnObj.groupInfo = group;
     returnObj.members = people;
+    returnObj.imageBase = imageBase;
     return res.send(returnObj);
 
 }
@@ -455,8 +480,22 @@ exports.listEvents = async (req,res) => {
         return res.send(dataAlumni)
     }
 
+    var itemsCount = dataAlumni.length;
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
     return res.send({
         success: 1,
+        pagination,
+        imageBase,
         message: "listed successfully",
         items: dataAlumni
     })
@@ -502,6 +541,8 @@ exports.listJobs = async (req,res) => {
 
     return res.send({
         success: 1,
+        pagination,
+        imageBase,
         message: "listed successfully",
         items: dataAlumni
     })
@@ -539,6 +580,7 @@ exports.detailsEvents = async (req,res) => {
     return res.send({
         success: 1,
         message: "listed successfully",
+        imageBase,
         items: dataAlumni
     })
 
@@ -576,6 +618,7 @@ exports.detailsJobs = async (req,res) => {
     return res.send({
         success: 1,
         message: "listed successfully",
+        imageBase,
         items: dataAlumni
     })
 
