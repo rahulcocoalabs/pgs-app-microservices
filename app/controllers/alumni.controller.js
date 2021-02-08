@@ -65,9 +65,7 @@ exports.addAlumni = async (req, res) => {
 
     res.send({
         success: 1,
-        message: "success",
-        imageBase:imageBase,
-        item: newGroup
+        message: "successfully created new alumni group"
     })
 }
 
