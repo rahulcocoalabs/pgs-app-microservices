@@ -1134,6 +1134,9 @@ exports.deleteFeed = (req, res) => {
 }
 
 exports.removeEmotionFromFeed = (req, res) => {
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
   console.log("Inside delete exports function");
   var params = req.query;
   var errors = [];
