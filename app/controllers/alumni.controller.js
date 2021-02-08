@@ -5,7 +5,7 @@ const AlumniEventParticipation = require('../models/alumniEventParticipation.mod
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const imageBase = config.alumni.imageBase;
-const userImageBase = config.user.imageBase;
+const userImageBase = config.users.imageBase;
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
