@@ -76,19 +76,29 @@ function getApisWithAuth(reqObj, callback) {
       filters.isTrending = isTrending;
     }
 
-    if (params.categoryId) {
-      filters.categoryIds = params.categoryId;
-    }
-
+   
     Video.find(filters, queryProjection, pageParams).sort(sortOptions).limit(perPage).then(videosList => {
       Video.countDocuments(filters, function (err, itemsCount) {
 
+        var returnList = [];
+        
+        for(x in videosList) {
+          var item = videosList[x];
+
+          var arr = item.categoryIds;
+
+          if (arr.includes(params.categoryId)) {
+            returnList.push(item);
+          }
+
+
+        }
         totalPages = itemsCount / perPage;
         totalPages = Math.ceil(totalPages);
         var hasNextPage = page < totalPages;
         var responseObj = {
           imageBase: videosConfig.imageBase,
-          items: videosList,
+          items: returnList,
           page: page,
           perPage: perPage,
           hasNextPage: hasNextPage,
