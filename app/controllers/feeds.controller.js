@@ -1246,6 +1246,63 @@ exports.removeEmotionFromFeed = (req, res) => {
   });
 }
 
+exports.removeEmotionFromFeed1 = async(req,res) =>{
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+
+  if (!params.emotion) {
+    errors.push({
+      field: "emotion",
+      message: "Emotion cannot be empty"
+    });
+  }
+  if (!params.feedId) {
+    errors.push({
+      field: "feedId",
+      message: "feedId cannot be empty"
+    });
+  }
+
+ 
+  if (params.feedId) {
+    var ObjectId = require('mongoose').Types.ObjectId;
+    var isValidId = ObjectId.isValid(params.feedId);
+    if (!isValidId) {
+      errors.push({
+        field: "feedId",
+        message: "feedId is invalid"
+      })
+    }
+  }
+
+  if (errors.length) {
+    res.send({
+      success: 0,
+      status: 400,
+      params,
+      errors: errors
+    });
+    return;
+  }
+
+  var filters = {
+    _id: params.feedId,
+    status: 1
+  };
+
+  var feedsResult = await Feed.findOne(filters, { $pull: { emotions: { userId: userId} } }).catch(err => {
+    return { success: 0, message: "did not find feed" }
+  })
+
+  if (feedsResult && feedsResult.success && feedsResult.success === 0) {
+    return res.send(feedsResult);
+  }
+
+
+}
+
 exports.addEmotionToFeed = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -1300,7 +1357,7 @@ exports.addEmotionToFeed = async (req, res) => {
     emotions: 1
   }
 
-  var feedsResult = await Feed.findOne(filter, queryProjection).catch(err => {
+  var feedsResult = await Feed.findOne(filters, queryProjection).catch(err => {
     return { success: 0, message: "did not find feed" }
   })
 
