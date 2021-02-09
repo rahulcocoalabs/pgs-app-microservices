@@ -540,6 +540,18 @@ exports.listJobs = async (req,res) => {
         return res.send(dataAlumni)
     }
 
+    var itemsCount = dataAlumni.length;
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
     return res.send({
         success: 1,
         pagination,
