@@ -332,18 +332,25 @@ exports.acceptJoinRequests = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
     var id = req.params.id;
+    if (!req.query){
+        return res.send({
+            success: 0,
+            message: "no query found"
+           
+        })
+    }
     var group = req.query.group;
     var status = req.query.status;
 
     var errors = [];
 
-    if (!params.groupName) {
+    if (!group) {
         errors.push({
             filed: "groupName",
             message: "please add a name for your group"
         })
     }
-    if (!params.status) {
+    if (!status) {
         errors.push({
             filed: "status",
             message: "please add status"
