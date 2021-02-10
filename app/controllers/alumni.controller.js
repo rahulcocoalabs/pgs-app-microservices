@@ -295,8 +295,33 @@ exports.listJoinRequests = async (req, res) => {
         return res.send(dataAlumniRequest)
     }
 
+    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1 }).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumniCount && dataAlumniCount.success != undefined && dataAlumniCount.success === 0) {
+        return res.send(dataAlumniCount)
+    }
+
+    var itemsCount = dataAlumniCount;
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
     return res.send({
         success: 1,
+        pagination,
         message: "listed successfully",
         items: dataAlumniRequest
     })
