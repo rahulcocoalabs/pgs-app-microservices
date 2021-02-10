@@ -366,7 +366,7 @@ exports.acceptJoinRequests = async (req, res) => {
         })
     }
 
-    if ((String(status) === constants.ALUMNI_STATUS_ACCEPTED) || (String(status) === constants.ALUMNI_STATUS_REJECTED)) {
+    if (!(status == constants.ALUMNI_STATUS_ACCEPTED) && !(status == constants.ALUMNI_STATUS_REJECTED)) {
         return res.send({
             success: 0,
             message: " value for staus is not allowed"
