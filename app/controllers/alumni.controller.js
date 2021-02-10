@@ -98,6 +98,18 @@ exports.listAlumni = async (req, res) => {
         return res.send(dataAlumni)
     }
 
+    var dataAlumniCount = await Alumni.countDocuments({ status: 1 }).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumniCount && dataAlumniCount.success != undefined && dataAlumniCount.success === 0) {
+        return res.send(dataAlumniCount)
+    }
+
     var itemsCount = dataAlumni.length;
     var totalPages = itemsCount / perPage;
     totalPages = Math.ceil(totalPages);
@@ -122,6 +134,7 @@ exports.listAlumni = async (req, res) => {
         pagination,
         message: "listed successfully",
         imageBase,
+        itemCount:dataAlumniCount,
         items: dataAlumni
     })
 }
