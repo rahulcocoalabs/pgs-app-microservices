@@ -411,14 +411,14 @@ exports.acceptJoinRequests = async (req, res) => {
         }
         return res.send({
             success: 0,
-            message: "accepted"
+            message: "processed successfully"
         })
 
     }
     else {
         return res.send({
             success: 0,
-            message: "you are not authorized to accept this request"
+            message: "you are not authorized to process this request"
         })
     }
 
