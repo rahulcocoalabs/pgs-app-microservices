@@ -198,8 +198,7 @@ exports.joinRequest = async (req, res) => {
 
     res.send({
         success: 1,
-        message: "success",
-        item: newGroupReq
+        message: "successfully submitted your request"
     })
 
 }
