@@ -14,8 +14,8 @@ const AlumniJoinRequestSchema = mongoose.Schema({
     contact:String,
     fbLink:String,
     linkedLink:String,
-
-   
+    email:String,
+    isApproved:String,
     status : Number,
     user:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     group:{ type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },

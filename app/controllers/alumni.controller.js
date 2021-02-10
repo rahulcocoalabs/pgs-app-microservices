@@ -6,6 +6,7 @@ const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
+const constants = require('../helpers/constants.js');
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
@@ -160,6 +161,7 @@ exports.joinRequest = async (req, res) => {
         fbLink: params.fbLink,
         linkedLink: params.linkedLink,
         user: userId,
+        isApproved: constants.ALUMNI_STATUS_PENDING,
         group: params.groupId,
         status: 1,
         tsCreatedAt: Date.now(),
@@ -211,17 +213,32 @@ exports.details = async (req, res) => {
         returnObj.isAdmin = 0;
     }
 
-    var people = await AlumniJoinRequest.find({$or:[{ status: 2 },{isApproved:true}]}).populate({path:'user',select:{"firstName":1,"image":1}}).catch(err => {
-        return { success: 0, message: "did not get detail for requesta", error: err.message }
+    var pageParams = {
+        skip: 0,
+        limit: 10
+    };
+
+
+    var people = await AlumniJoinRequest.find({isApproved:constants.ALUMNI_STATUS_ACCEPTED, status: 1},{},pageParams).populate({path:'user',select:{"firstName":1,"image":1}}).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
     if (people && people.success != undefined && people.success === 0) {
         return res.send(people);
     }
 
+    var peopleCount = await AlumniJoinRequest.countDocuments({isApproved:constants.ALUMNI_STATUS_ACCEPTED, status: 1}).populate({path:'user',select:{"firstName":1,"image":1}}).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    })
+
+    if (peopleCount && peopleCount.success != undefined && peopleCount.success === 0) {
+        return res.send(peopleCount);
+    }
+
     returnObj.success = 1;
     returnObj.message = "description of group retrieved successfully";
     returnObj.groupInfo = group;
+    returnObj.membersCount = peopleCount;
     returnObj.members = people;
     returnObj.imageBase = imageBase;
     returnObj.userImageBase = userImageBase;
@@ -251,7 +268,7 @@ exports.listJoinRequests = async (req, res) => {
         })
     }
 
-    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1, group: params.groupId }, {}, pageParams).populate({
+    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1, group: params.groupId ,isApproved:constants.ALUMNI_STATUS_PENDING}, {}, pageParams).populate({
         path: 'user',
         select: { image: 1 }
     }).catch(err => {
@@ -279,6 +296,39 @@ exports.acceptJoinRequests = async (req, res) => {
     const userId = data.userId;
     var id = req.params.id;
     var group = req.query.group;
+    var status = req.query.status;
+
+    var errors = [];
+
+    if (!params.groupName) {
+        errors.push({
+            filed: "groupName",
+            message: "please add a name for your group"
+        })
+    }
+    if (!params.status) {
+        errors.push({
+            filed: "status",
+            message: "please add status"
+        })
+    }
+
+
+    if (errors.length > 0) {
+        return res.send({
+            success: 0,
+            message: "failed",
+            error: errors
+        })
+    }
+
+    if ((status == constants.ALUMNI_STATUS_ACCEPTED) || (status == constants.ALUMNI_STATUS_REJECTED)) {
+        return res.send({
+            success: 0,
+            message: " value for staus is not allowed"
+            
+        })
+    }
 
 
     var info = await await AlumniJoinRequest.findOne({ status: 1, group: group }).populate('group').catch(err => {
@@ -305,7 +355,7 @@ exports.acceptJoinRequests = async (req, res) => {
     }
 
     if (admin == 1) {
-        var update = await AlumniJoinRequest.updateOne({ status: 1, _id: id }, { status: 2 }).catch(err => {
+        var update = await AlumniJoinRequest.updateOne({ status: 1, _id: id }, { isApproved: status }).catch(err => {
             return {
                 success: 0,
                 message: "some thing went wrong",
