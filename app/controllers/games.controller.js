@@ -189,7 +189,7 @@ exports.getGameDetail = (req, res) => {
     isFav: 1
   }
   // get data
-  Game.findOne(filters, queryProjection).populate('categories').then(game => {
+  Game.findOne(filters).populate('categories').then(game => {
     if (!game) {
       var responseObj = {
         success: 0,
