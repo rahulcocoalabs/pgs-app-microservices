@@ -322,6 +322,7 @@ exports.listJoinRequests = async (req, res) => {
     return res.send({
         success: 1,
         pagination,
+        userImageBase,
         message: "listed successfully",
         items: dataAlumniRequest
     })
