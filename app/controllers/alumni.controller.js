@@ -534,8 +534,7 @@ exports.addAlumniJobs = async (req, res) => {
 
     res.send({
         success: 1,
-        message: "success",
-        item: event
+        message: "successfully added jobs"
     })
 }
 

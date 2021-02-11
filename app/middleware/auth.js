@@ -5,7 +5,7 @@ const config = require('../../config/app.config.js');
 const JWT_KEY = config.jwt.key;
 
 const auth = async (req, res, next) => {
-    console.log("test65");
+   
     try {
         const token = req.header('Authorization').replace('Bearer ', '');
         const userDetails = jwt.verify(token, JWT_KEY);
