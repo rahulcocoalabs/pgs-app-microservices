@@ -202,7 +202,7 @@ exports.getGameDetail = (req, res) => {
       res.send(responseObj);
       return;
     }
-    console.log("game=>",game)
+   
     gameId = id;
     let relatedGameReqObj = {
       page: 1,
