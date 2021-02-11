@@ -254,7 +254,7 @@ exports.getGameDetail = (req, res) => {
             title: game.title || null,
             image: game.image || null,
             description: game.description || null,
-            playStoreUrl: game.playstoreUrl || null,
+            playStoreUrl: game.playstoreURL || null,
             videoYoutubeId: game.videoYoutubeId || null,
             appStoreUrl: game.appStoreUrl || null,
             viewCount: game.viewCount || null,

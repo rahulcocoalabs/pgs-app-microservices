@@ -31,7 +31,7 @@ const GameSchema = mongoose.Schema({
     gameCategoryIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'GameCategory' }],
     image : String, 
     banners : [String],
-    playstroreUrl : String,
+    playstoreURL : String,
     videoYoutubeId : String, 
     appStoreUrl : String,    
     description : String, 
