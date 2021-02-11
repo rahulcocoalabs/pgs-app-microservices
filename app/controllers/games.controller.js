@@ -178,7 +178,7 @@ exports.getGameDetail = (req, res) => {
     categories: 1,
     image: 1,
     banners: 1,
-    playstroreURL: 1,
+    playstoreURL: 1,
     videoYoutubeId: 1,
     appStoreUrl: 1,
     description: 1,
