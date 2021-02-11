@@ -515,6 +515,7 @@ exports.addAlumniJobs = async (req, res) => {
         location: params.location,
         groupId:params.groupId,
         image:imagePath,
+        createdBy: userId,
         status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
@@ -620,7 +621,7 @@ exports.listJobs = async (req,res) => {
     }
 
     
-    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).catch(err => {
+    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).populate({path:"createdBy",select:{name:1,image:1}}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -648,6 +649,7 @@ exports.listJobs = async (req,res) => {
         success: 1,
         pagination,
         imageBase,
+        userImageBase,
         message: "listed successfully",
         items: dataAlumni
     })

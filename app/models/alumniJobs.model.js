@@ -10,7 +10,7 @@ const AlumniJobsSchema = mongoose.Schema({
     groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },
     image:String,
     status:Number,
-    
+    createdBy:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     tsCreatedAt: Number,
     tsModifiedAt: Number
     
