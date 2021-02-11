@@ -759,9 +759,22 @@ exports.eventParticipate = async (req,res) => {
             message:"please mention   name"
         })
     }
+    if (!req.params){
+        return res.send({
+            success:0,
+            message:"no event id recieved"
+        })
+    }
+    if (!req.params.id){
+        return res.send({
+            success:0,
+            message:"no event id recieved"
+        })
+    }
+    const eventId = req.params.id;
     const newObject = {
         name: params.name,
-        eventId:params.eventId,
+        eventId:eventId,
         email:params.email,
         attendeeCount: params.count,
         user: userId,
