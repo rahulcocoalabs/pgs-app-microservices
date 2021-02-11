@@ -178,7 +178,7 @@ exports.getGameDetail = (req, res) => {
     categories: 1,
     image: 1,
     banners: 1,
-    playstroreUrl: 1,
+    playstroreURL: 1,
     videoYoutubeId: 1,
     appStoreUrl: 1,
     description: 1,
@@ -189,7 +189,7 @@ exports.getGameDetail = (req, res) => {
     isFav: 1
   }
   // get data
-  Game.findOne(filters).populate('categories').then(game => {
+  Game.findOne(filters,queryProjection).populate('categories').then(game => {
     if (!game) {
       var responseObj = {
         success: 0,
