@@ -509,10 +509,10 @@ exports.addAlumniJobs = async (req, res) => {
     var imagePath = req.file ? req.file.filename : null;
 
     const newObject = {
-        position: params.title,
+        position: params.position,
         description: params.description,
-        company: params.venue,
-        location: params.date,
+        company: params.company,
+        location: params.location,
         groupId:params.groupId,
         image:imagePath,
         status: 1,
@@ -620,7 +620,7 @@ exports.listJobs = async (req,res) => {
     }
 
     
-    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).populate({path:"jobId",select:{postion:1,company:1,location:1,description:1}}).catch(err => {
+    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
