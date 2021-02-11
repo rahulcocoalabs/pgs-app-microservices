@@ -621,7 +621,7 @@ exports.listJobs = async (req,res) => {
     }
 
     
-    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).populate({path:"createdBy",select:{name:1,image:1}}).catch(err => {
+    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).populate({path:"createdBy",select:{firstName:1,middleName:1,lastName:1,image:1}}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
