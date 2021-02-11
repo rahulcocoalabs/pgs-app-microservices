@@ -86,7 +86,7 @@ exports.listAlumni = async (req, res) => {
         limit: perPage
     };
 
-    var dataAlumni = await Alumni.find({ status: 1 }, {}, pageParams).catch(err => {
+    var dataAlumni = await Alumni.find({ status: 1 }, {createdBy:0}, pageParams).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
