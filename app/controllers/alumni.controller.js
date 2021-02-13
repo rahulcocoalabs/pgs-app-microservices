@@ -39,7 +39,7 @@ exports.addAlumni = async (req, res) => {
         companyName: params.companyName,
         description: params.description,
         image: imagePath,
-        batch:params.batch,
+        batch: params.batch,
         designation: params.designation,
         passingYear: params.passingYear,
         email: params.email,
@@ -86,7 +86,7 @@ exports.listAlumni = async (req, res) => {
         limit: perPage
     };
 
-    var dataAlumni = await Alumni.find({ status: 1 }, {createdBy:0}, pageParams).catch(err => {
+    var dataAlumni = await Alumni.find({ status: 1 }, { createdBy: 0 }, pageParams).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -134,7 +134,7 @@ exports.listAlumni = async (req, res) => {
         pagination,
         message: "listed successfully",
         imageBase,
-        itemCount:dataAlumniCount,
+        itemCount: dataAlumniCount,
         items: dataAlumni
     })
 }
@@ -170,7 +170,7 @@ exports.joinRequest = async (req, res) => {
         batch: params.batch,
         passingYear: params.passingYear,
         contact: params.contact,
-        email:params.email,
+        email: params.email,
         fbLink: params.fbLink,
         linkedLink: params.linkedLink,
         user: userId,
@@ -208,7 +208,7 @@ exports.details = async (req, res) => {
     const userId = data.userId;
     const id = req.params.id;
 
-    var group = await Alumni.findOne({ status: 1, _id: id }).populate({path:'createdBy',select:{"firstName":1,"image":1}}).catch(err => {
+    var group = await Alumni.findOne({ status: 1, _id: id }).populate({ path: 'createdBy', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for group", error: err.message }
     })
 
@@ -231,7 +231,7 @@ exports.details = async (req, res) => {
     };
 
 
-    var people = await AlumniJoinRequest.find({isApproved:constants.ALUMNI_STATUS_ACCEPTED, status: 1},{},pageParams).populate({path:'user',select:{"firstName":1,"image":1}}).catch(err => {
+    var people = await AlumniJoinRequest.find({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 }, {}, pageParams).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
@@ -239,7 +239,7 @@ exports.details = async (req, res) => {
         return res.send(people);
     }
 
-    var peopleCount = await AlumniJoinRequest.countDocuments({isApproved:constants.ALUMNI_STATUS_ACCEPTED, status: 1}).populate({path:'user',select:{"firstName":1,"image":1}}).catch(err => {
+    var peopleCount = await AlumniJoinRequest.countDocuments({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 }).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
@@ -280,7 +280,7 @@ exports.listJoinRequests = async (req, res) => {
         })
     }
 
-    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1, group: params.groupId ,isApproved:constants.ALUMNI_STATUS_PENDING}, {}, pageParams).populate({
+    var dataAlumniRequest = await AlumniJoinRequest.find({ status: 1, group: params.groupId, isApproved: constants.ALUMNI_STATUS_PENDING }, {}, pageParams).populate({
         path: 'user',
         select: { image: 1 }
     }).catch(err => {
@@ -333,11 +333,11 @@ exports.acceptJoinRequests = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
     var id = req.params.id;
-    if (!req.query){
+    if (!req.query) {
         return res.send({
             success: 0,
             message: "no query found"
-           
+
         })
     }
     var group = req.query.group;
@@ -371,7 +371,7 @@ exports.acceptJoinRequests = async (req, res) => {
         return res.send({
             success: 0,
             message: " value for staus is not allowed"
-            
+
         })
     }
 
@@ -457,9 +457,9 @@ exports.addAlumniEvents = async (req, res) => {
         description: params.description,
         venue: params.venue,
         date: params.date,
-        groupId:params.groupId,
-        image:imagePath,
-      
+        groupId: params.groupId,
+        image: imagePath,
+
 
         status: 1,
         tsCreatedAt: Date.now(),
@@ -514,8 +514,8 @@ exports.addAlumniJobs = async (req, res) => {
         description: params.description,
         company: params.company,
         location: params.location,
-        groupId:params.groupId,
-        image:imagePath,
+        groupId: params.groupId,
+        image: imagePath,
         createdBy: userId,
         status: 1,
         tsCreatedAt: Date.now(),
@@ -539,7 +539,7 @@ exports.addAlumniJobs = async (req, res) => {
     })
 }
 
-exports.listEvents = async (req,res) => {
+exports.listEvents = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
@@ -555,15 +555,15 @@ exports.listEvents = async (req,res) => {
         limit: perPage
     };
 
-    if (!params.groupId){
+    if (!params.groupId) {
         return res.send({
-            success:0,
-            message:"please provide a group ID"
+            success: 0,
+            message: "please provide a group ID"
         })
     }
 
-    
-    var dataAlumni = await AlumniEvent.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).catch(err => {
+
+    var dataAlumni = await AlumniEvent.find({ status: 1, groupId: params.groupId }, { status: 0, tsModifiedAt: 0, tsCreatedAt: 0 }, pageParams).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -599,7 +599,7 @@ exports.listEvents = async (req,res) => {
 
 }
 
-exports.listJobs = async (req,res) => {
+exports.listJobs = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
@@ -614,15 +614,15 @@ exports.listJobs = async (req,res) => {
         limit: perPage
     };
 
-    if (!params.groupId){
+    if (!params.groupId) {
         return res.send({
-            success:0,
-            message:"please provide a group ID"
+            success: 0,
+            message: "please provide a group ID"
         })
     }
 
-    
-    var dataAlumni = await AlumniJob.find({ status: 1,groupId:params.groupId }, {status:0,tsModifiedAt:0,tsCreatedAt:0}, pageParams).populate({path:"createdBy",select:{firstName:1,middleName:1,lastName:1,image:1}}).catch(err => {
+
+    var dataAlumni = await AlumniJob.find({ status: 1, groupId: params.groupId }, { status: 0, tsModifiedAt: 0, tsCreatedAt: 0 }, pageParams).populate({ path: "createdBy", select: { firstName: 1, middleName: 1, lastName: 1, image: 1 } }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -657,23 +657,23 @@ exports.listJobs = async (req,res) => {
 
 }
 
-exports.detailsEvents = async (req,res) => {
+exports.detailsEvents = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.params;
 
-   
 
-    if (!params.id){
+
+    if (!params.id) {
         return res.send({
-            success:0,
-            message:"please provide a event ID"
+            success: 0,
+            message: "please provide a event ID"
         })
     }
 
-    
-    var dataAlumni = await AlumniEvent.findOne({ status: 1,_id:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
+
+    var dataAlumni = await AlumniEvent.findOne({ status: 1, _id: params.id }, { status: 0, tsModifiedAt: 0, tsCreatedAt: 0 }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -695,23 +695,23 @@ exports.detailsEvents = async (req,res) => {
 
 
 }
-exports.detailsJobs = async (req,res) => {
+exports.detailsJobs = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.params;
 
-   
 
-    if (!params.id){
+
+    if (!params.id) {
         return res.send({
-            success:0,
-            message:"please provide a job ID"
+            success: 0,
+            message: "please provide a job ID"
         })
     }
 
-    
-    var dataAlumni = await AlumniJob.findOne({ status: 1,_id:params.id }, {status:0,tsModifiedAt:0,tsCreatedAt:0}).catch(err => {
+
+    var dataAlumni = await AlumniJob.findOne({ status: 1, _id: params.id }, { status: 0, tsModifiedAt: 0, tsCreatedAt: 0 }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -734,7 +734,7 @@ exports.detailsJobs = async (req,res) => {
 
 }
 
-exports.eventParticipate = async (req,res) => {
+exports.eventParticipate = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
@@ -742,41 +742,41 @@ exports.eventParticipate = async (req,res) => {
 
     var errors = [];
 
-    if (!params.count){
+    if (!params.count) {
         errors.push({
-            fileds:"count",
-            message:"please mention number of attendees"
+            fileds: "count",
+            message: "please mention number of attendees"
         })
     }
-    if (!params.email){
+    if (!params.email) {
         errors.push({
-            fileds:"email",
-            message:"please mention email"
+            fileds: "email",
+            message: "please mention email"
         })
     }
-    if (!params.name){
+    if (!params.name) {
         errors.push({
-            fileds:"name",
-            message:"please mention   name"
+            fileds: "name",
+            message: "please mention   name"
         })
     }
-    if (!req.params){
+    if (!req.params) {
         return res.send({
-            success:0,
-            message:"no event id recieved"
+            success: 0,
+            message: "no event id recieved"
         })
     }
-    if (!req.params.id){
+    if (!req.params.id) {
         return res.send({
-            success:0,
-            message:"no event id recieved"
+            success: 0,
+            message: "no event id recieved"
         })
     }
     const eventId = req.params.id;
     const newObject = {
         name: params.name,
-        eventId:eventId,
-        email:params.email,
+        eventId: eventId,
+        email: params.email,
         attendeeCount: params.count,
         user: userId,
         group: params.groupId,
@@ -805,6 +805,83 @@ exports.eventParticipate = async (req,res) => {
         message: "success",
         item: newGroupReq
     })
-    
-    
+
+
+}
+
+exports.listMembers = async (req, res) => {
+
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.query;
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    if (!params.groupId) {
+        return res.send({
+            success:0,
+            message:"mention group id"
+        })
+    }
+
+    var dataAlumni = await AlumniJoinRequest.find({ status: 1 ,isApproved:constants.ALUMNI_STATUS_ACCEPTED,group:params.groupId}, { designation: 1,user:1 }, pageParams).populate({path: 'user', select: { "firstName": 1, "image": 1 }}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
+        return res.send(dataAlumni)
+    }
+
+    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1 ,isApproved:constants.ALUMNI_STATUS_ACCEPTED,group:params.groupId}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumniCount && dataAlumniCount.success != undefined && dataAlumniCount.success === 0) {
+        return res.send(dataAlumniCount)
+    }
+
+    var itemsCount = dataAlumni.length;
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
+    if (page > totalPages) {
+        return res.send({
+            success: 0,
+            message: "No products to show"
+        })
+    }
+
+    return res.send({
+        success: 1,
+        pagination,
+        message: "listed successfully",
+        imageBase,
+        itemCount: dataAlumniCount,
+        items: dataAlumni
+    })
+
 }
