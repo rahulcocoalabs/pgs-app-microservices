@@ -908,7 +908,7 @@ exports.setAdmin = async(req,res)=>{
             message:"mention user id"
         })
     }
-    var countData = await AlumniJoinRequest.countData({status:1,_id:groupId,createdBy:userId}).catch(err => {
+    var countData = await AlumniJoinRequest.countDocuments({status:1,_id:groupId,createdBy:userId}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
