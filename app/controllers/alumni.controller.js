@@ -951,3 +951,70 @@ exports.setAdmin = async(req,res)=>{
        
     })
 }
+
+
+exports.deleteAdmin = async(req,res)=>{
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.query;
+    
+
+   
+
+    if (!req.params.id) {
+        return res.send({
+            success:0,
+            message:"mention group id"
+        })
+    }
+    var groupId = req.params.id;
+    if (!params.user) {
+        return res.send({
+            success:0,
+            message:"mention user id"
+        })
+    }
+    console.log(groupId,userId)
+    var countData = await Alumni.countDocuments({status:1,_id:groupId,createdBy:userId}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (countData && countData.success != undefined && countData.success === 0) {
+        return res.send(countData)
+    }
+
+    console.log(groupId,userId,countData)
+
+    if (countData == 0){
+
+        return res.send({ 
+            success: 0, 
+            message:"you are not authorized for this action"
+        })
+    }
+
+
+
+    var updateData = await AlumniJoinRequest.updateOne({status:1,group:groupId,user:params.user},{isAdmin:false}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (updateData && updateData.success != undefined && updateData.success === 0) {
+        return res.send(updateData)
+    }
+    return res.send({
+        success: 1,
+       
+        message: "set as admin  successfully",
+       
+    })
+}
