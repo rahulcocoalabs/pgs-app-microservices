@@ -51,5 +51,7 @@ module.exports = (app) => {
    app.post('/alumni/event-participate/:id',auth,alumni.eventParticipate);
 
    app.get('/alumni/list-memebers',auth,alumni.listMembers);
+
+   app.patch('/alumni/set-admin',auth,alumni.setAdmin);
   
 }
