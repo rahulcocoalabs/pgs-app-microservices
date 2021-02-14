@@ -921,7 +921,9 @@ exports.setAdmin = async(req,res)=>{
         return res.send(countData)
     }
 
-    if (countData === 0){
+    console.log(groupId,userId,countData)
+
+    if (countData == 0){
 
         return res.send({ 
             success: 0, 
