@@ -19,6 +19,7 @@ const AlumniJoinRequestSchema = mongoose.Schema({
     status : Number,
     user:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     group:{ type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },
+    isAdmin:Boolean,
     tsCreatedAt: Number,
     tsModifiedAt: Number
     

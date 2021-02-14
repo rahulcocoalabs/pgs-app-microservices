@@ -885,3 +885,65 @@ exports.listMembers = async (req, res) => {
     })
 
 }
+
+exports.setAdmin = async(req,res)=>{
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.query;
+
+
+   
+
+    if (!params.groupId) {
+        return res.send({
+            success:0,
+            message:"mention group id"
+        })
+    }
+    if (!params.user) {
+        return res.send({
+            success:0,
+            message:"mention user id"
+        })
+    }
+    var countData = await AlumniJoinRequest.countData({status:1,_id:params.groupId,createdBy:userid}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (countData && countData.success != undefined && countData.success === 0) {
+        return res.send(countData)
+    }
+
+    if (countData === 0){
+
+        return res.send({ 
+            success: 0, 
+            message:"you are not authorized for this action"
+        })
+    }
+
+
+
+    var updateData = await AlumniJoinRequest.updateOne({status:1,group:params.groupId,user:params.user},{isAdmin:true}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (updateData && updateData.success != undefined && updateData.success === 0) {
+        return res.send(updateData)
+    }
+    return res.send({
+        success: 1,
+       
+        message: "set as admin  successfully",
+       
+    })
+}

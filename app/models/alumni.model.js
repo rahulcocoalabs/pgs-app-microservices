@@ -19,6 +19,7 @@ const AlumniSchema = mongoose.Schema({
     groupName: String,
     groupTargets: String,
     createdBy:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    admins:[{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     tsCreatedAt: Number,
     tsModifiedAt: Number,
     isApproved: Boolean,
