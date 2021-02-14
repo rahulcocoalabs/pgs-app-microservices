@@ -52,6 +52,6 @@ module.exports = (app) => {
 
    app.get('/alumni/list-memebers',auth,alumni.listMembers);
 
-   app.patch('/alumni/set-admin',auth,alumni.setAdmin);
+   app.patch('/alumni/set-admin/:id',auth,alumni.setAdmin);
   
 }

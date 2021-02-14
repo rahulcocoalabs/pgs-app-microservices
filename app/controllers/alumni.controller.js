@@ -891,23 +891,24 @@ exports.setAdmin = async(req,res)=>{
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
-
+    
 
    
 
-    if (!params.groupId) {
+    if (!req.params.id) {
         return res.send({
             success:0,
             message:"mention group id"
         })
     }
+    var groupId = req.params.id;
     if (!params.user) {
         return res.send({
             success:0,
             message:"mention user id"
         })
     }
-    var countData = await AlumniJoinRequest.countData({status:1,_id:params.groupId,createdBy:userid}).catch(err => {
+    var countData = await AlumniJoinRequest.countData({status:1,_id:groupId,createdBy:userid}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -929,7 +930,7 @@ exports.setAdmin = async(req,res)=>{
 
 
 
-    var updateData = await AlumniJoinRequest.updateOne({status:1,group:params.groupId,user:params.user},{isAdmin:true}).catch(err => {
+    var updateData = await AlumniJoinRequest.updateOne({status:1,group:groupId,user:params.user},{isAdmin:true}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
