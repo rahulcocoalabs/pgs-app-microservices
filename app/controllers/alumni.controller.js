@@ -908,6 +908,7 @@ exports.setAdmin = async(req,res)=>{
             message:"mention user id"
         })
     }
+    console.log(groupId,userId)
     var countData = await AlumniJoinRequest.countDocuments({status:1,_id:groupId,createdBy:userId}).catch(err => {
         return {
             success: 0,
