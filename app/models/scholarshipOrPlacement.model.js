@@ -88,4 +88,5 @@ ScholarshipOrPlacementSchema.virtual('sharingUrl').get(function () {
 });
 
 
+
 module.exports = mongoose.model('ScholarshipOrPlacement', ScholarshipOrPlacementSchema, 'ScholarshipOrPlacements');

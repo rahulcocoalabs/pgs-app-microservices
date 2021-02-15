@@ -777,6 +777,7 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
 }
 
 exports.getEventScholarshipPlacementDetail = async(req,res) =>{
+
   var userData = req.identity.data;
   var userId = userData.userId;
   var eventScholarshipPlacementId = req.params.id;
@@ -826,10 +827,15 @@ if(checkEventScholarshipPlacement){
   if(checkApplied){
     isApplied  = true;
   }
+
+  const fromDate = moment(checkEventScholarshipPlacement.tsFrom).format('MMM DD, YYYY');
+  const toDate = moment(checkEventScholarshipPlacement.tsTo).format('MMM DD, YYYY');
+  const duration = fromDate + "- " + toDate;
     return res.send({
       success: 1,
       item: checkEventScholarshipPlacement,
       isApplied,
+      duration:duration,
       imageBase: eventsConfig.imageBase,
       message: 'Scholaship or placement details'
     })
@@ -842,6 +848,7 @@ if(checkEventScholarshipPlacement){
 }
 
 exports.applyEventScholarshipPlacement = async(req,res) =>{
+
   var userData = req.identity.data;
   var userId = userData.userId;
   var eventScholarshipPlacementId = req.params.id;
