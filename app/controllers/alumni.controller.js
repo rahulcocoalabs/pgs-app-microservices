@@ -416,7 +416,7 @@ exports.acceptJoinRequests = async (req, res) => {
     }
 
 
-    var info = await await AlumniJoinRequest.findOne({ status: 1, group: group }).populate('group').catch(err => {
+    var info = await await Alumni.findOne({ status: 1, group: group }).populate('group').catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
@@ -438,6 +438,24 @@ exports.acceptJoinRequests = async (req, res) => {
             }
         }
     }
+
+    var info =  await AlumniJoinRequest.findOne({ status: 1, userId }).catch(err => {
+        return {
+            success: 0,
+            message: "some thing went wrong",
+            error: err.message
+        }
+    })
+
+    if (info && info.success != undefined && info.success == 0) {
+        return res.send(info);
+    }
+
+    if (info.isAdmin == true) {
+        admin = 1;
+    }
+
+
 
     if (admin == 1) {
         var update = await AlumniJoinRequest.updateOne({ status: 1, _id: id }, { isApproved: status }).catch(err => {
