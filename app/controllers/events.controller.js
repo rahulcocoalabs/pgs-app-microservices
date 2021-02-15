@@ -831,7 +831,7 @@ if(checkEventScholarshipPlacement){
   const fromDate = moment(checkEventScholarshipPlacement.tsFrom).format('MMM DD, YYYY');
   const toDate = moment(checkEventScholarshipPlacement.tsTo).format('MMM DD, YYYY');
   const duration = fromDate + "- " + toDate;
-  console.log(fromDate, toDate, duration,tsFrom, tsTo);
+  console.log(fromDate, toDate, duration,checkEventScholarshipPlacement.tsFrom, checkEventScholarshipPlacement.tsTo);
     return res.send({
       success: 1,
       item: checkEventScholarshipPlacement,
