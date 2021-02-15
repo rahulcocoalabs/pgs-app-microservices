@@ -831,11 +831,12 @@ if(checkEventScholarshipPlacement){
   const fromDate = moment(checkEventScholarshipPlacement.tsFrom).format('MMM DD, YYYY');
   const toDate = moment(checkEventScholarshipPlacement.tsTo).format('MMM DD, YYYY');
   const duration = fromDate + "- " + toDate;
+  console.log(fromDate, toDate, duration);
     return res.send({
       success: 1,
       item: checkEventScholarshipPlacement,
       isApplied,
-      duration:duration,
+      duration:duration || "duration not available",
       imageBase: eventsConfig.imageBase,
       message: 'Scholaship or placement details'
     })
