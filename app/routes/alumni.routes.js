@@ -37,7 +37,8 @@ module.exports = (app) => {
    app.get('/alumni/details/:id',auth,  alumni.details);
    app.post('/alumni/join-request', auth,  alumni.joinRequest);
    app.get('/alumni/list-join-request', auth,  alumni.listJoinRequests);
-   app.patch('/alumni/:id/accept-join-request',auth,alumni.acceptJoinRequests)
+   app.get('/alumni/joinee-detail', auth,  alumni.joineeDetail);
+   app.patch('/alumni/accept-join-request',auth,alumni.acceptJoinRequests)
 
    app.post('/alumni/add-event', auth,upload.single('image'),  alumni.addAlumniEvents);
    app.post('/alumni/add-job', auth,upload.single('image'),  alumni.addAlumniJobs);

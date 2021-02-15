@@ -328,6 +328,46 @@ exports.listJoinRequests = async (req, res) => {
     })
 }
 
+exports.joineeDetail = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.query;
+   
+
+    if (!params.joineeId) {
+        return res.send({
+            success: 0,
+            message: "please provide a joinees's ID"
+        })
+    }
+
+    var dataAlumniRequest = await AlumniJoinRequest.findOne({ status: 1, _id: params.joineeId }).populate({
+        path: 'user',
+        select: { image: 1,firstName:1 }
+    }).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (dataAlumniRequest && dataAlumniRequest.success != undefined && dataAlumniRequest.success === 0) {
+        return res.send(dataAlumniRequest)
+    }
+
+    
+
+    return res.send({
+        success: 1,
+      
+        userImageBase,
+        message: "details fetched successfully",
+        items: dataAlumniRequest
+    })
+}
+
 exports.acceptJoinRequests = async (req, res) => {
 
     const data = req.identity.data;
@@ -348,7 +388,7 @@ exports.acceptJoinRequests = async (req, res) => {
     if (!group) {
         errors.push({
             filed: "groupName",
-            message: "please add a name for your group"
+            message: "please mention id of your group"
         })
     }
     if (!status) {
@@ -437,7 +477,7 @@ exports.addAlumniEvents = async (req, res) => {
     if (!params.groupId) {
         errors.push({
             filed: "groupName",
-            message: "please add a name for your group"
+            message: "please add id for your group"
         })
     }
 
@@ -494,7 +534,7 @@ exports.addAlumniJobs = async (req, res) => {
     if (!params.groupId) {
         errors.push({
             filed: "groupName",
-            message: "please add a name for your group"
+            message: "please add id for your group"
         })
     }
 
