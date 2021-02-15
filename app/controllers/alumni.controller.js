@@ -1054,7 +1054,7 @@ exports.deleteAdmin = async(req,res)=>{
     return res.send({
         success: 1,
        
-        message: "set as admin  successfully",
+        message: "removed as admin  successfully",
        
     })
 }
