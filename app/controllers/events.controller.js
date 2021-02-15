@@ -828,10 +828,10 @@ if(checkEventScholarshipPlacement){
     isApplied  = true;
   }
 
-  const fromDate = moment.unix(1617251400).format("YYYY-MM-DD HH:mm:ss");
-  const toDate = moment.unix(1619721000).format("YYYY-MM-DD HH:mm:ss");
+  const fromDate = moment.unix(1617251400).format("YYYY-MM-DD ");
+  const toDate = moment.unix(1619721000).format("YYYY-MM-DD ");
   const duration = fromDate + "- " + toDate;
-  console.log(fromDate, toDate, duration,checkEventScholarshipPlacement.tsFrom, checkEventScholarshipPlacement.tsTo);
+ 
     return res.send({
       success: 1,
       item: checkEventScholarshipPlacement,
