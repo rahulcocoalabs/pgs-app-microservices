@@ -619,7 +619,7 @@ exports.createFeed = async (req, res) => {
     }
   }
 
- console.log(params.title);
+ console.log("-------------------------------------> title <-------------------------------",params.title,userId);
  
 
   var type = req.body.type || null;
@@ -628,7 +628,7 @@ exports.createFeed = async (req, res) => {
   var video = null;
   if (!youTubeLink) {
     if (req.files.images && !req.files.video && !req.files.documents) {
-      console.log("Image field detected");
+     
       type = "image";
       var len = files.images.length;
       var i = 0;
