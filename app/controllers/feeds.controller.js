@@ -582,6 +582,7 @@ exports.getSummaryForWeb = (req, res) => {
 
 }
 exports.createFeed = async (req, res) => {
+
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.body;
@@ -618,7 +619,8 @@ exports.createFeed = async (req, res) => {
     }
   }
 
-  console.log("parametes are ->" ,req.body);
+ console.log(params.title);
+ 
 
   var type = req.body.type || null;
   var images = [];
