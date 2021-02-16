@@ -265,7 +265,7 @@ exports.details = async (req, res) => {
         return res.send(people);
     }
 
-    var peopleCount = await AlumniJoinRequest.countDocuments({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 }).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
+    var peopleCount = await AlumniJoinRequest.countDocuments({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 ,group:id}).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
