@@ -65,7 +65,7 @@ exports.addAlumni = async (req, res) => {
         }
     })
 
-    const newObject = {
+    const newObject1 = {
       
         user: userId,
         isApproved: constants.ALUMNI_STATUS_ACCEPTED,
@@ -76,8 +76,8 @@ exports.addAlumni = async (req, res) => {
 
     }
 
-    const obj = new AlumniJoinRequest(newObject);
-    const newGroupReq = await obj.save().catch(err => {
+    const obj1 = new AlumniJoinRequest(newObject1);
+    const newGroupReq = await obj1.save().catch(err => {
         console.log(err.message, "<=error")
         return {
             success: 0,
