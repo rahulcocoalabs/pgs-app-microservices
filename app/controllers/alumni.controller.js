@@ -69,7 +69,7 @@ exports.addAlumni = async (req, res) => {
       
         user: userId,
         isApproved: constants.ALUMNI_STATUS_ACCEPTED,
-        group: params.groupId,
+        group:newGroup._id,
         status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
@@ -257,7 +257,7 @@ exports.details = async (req, res) => {
     };
 
 
-    var people = await AlumniJoinRequest.find({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 }, {}, pageParams).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
+    var people = await AlumniJoinRequest.find({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 ,group:id}, {}, pageParams).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
