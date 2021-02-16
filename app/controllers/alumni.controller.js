@@ -65,6 +65,32 @@ exports.addAlumni = async (req, res) => {
         }
     })
 
+    const newObject = {
+      
+        user: userId,
+        isApproved: constants.ALUMNI_STATUS_ACCEPTED,
+        group: params.groupId,
+        status: 1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+
+    }
+
+    const obj = new AlumniJoinRequest(newObject);
+    const newGroupReq = await obj.save().catch(err => {
+        console.log(err.message, "<=error")
+        return {
+            success: 0,
+            message: "could not create request for join alumni",
+            error: err.message,
+        }
+    })
+
+    if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0) {
+        return res.send(newGroupReq);
+    }
+
+
     res.send({
         success: 1,
         message: "successfully created new alumni group"
@@ -370,6 +396,7 @@ exports.joineeDetail = async (req, res) => {
 
 exports.acceptJoinRequests = async (req, res) => {
 
+
     const data = req.identity.data;
     const userId = data.userId;
     var id = req.params.id;
@@ -416,7 +443,7 @@ exports.acceptJoinRequests = async (req, res) => {
     }
 
 
-    var info = await await Alumni.findOne({ status: 1, group: group }).populate('group').catch(err => {
+    var info =  await Alumni.findOne({ status: 1, group: group }).populate('group').catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
