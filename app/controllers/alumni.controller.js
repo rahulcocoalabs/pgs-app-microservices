@@ -247,7 +247,7 @@ exports.details = async (req, res) => {
     console.log(group.createdBy);
     console.log(userId)
 
-    if (group.createdBy == userId) {
+    if (group.createdBy.id == userId) {
         returnObj.isAdmin = 1;
     }
     else {
