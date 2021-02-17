@@ -72,6 +72,7 @@ exports.addAlumni = async (req, res) => {
         isApproved: constants.ALUMNI_STATUS_ACCEPTED,
         group:newGroup._id,
         status: 1,
+        isAdmin: true,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
 
