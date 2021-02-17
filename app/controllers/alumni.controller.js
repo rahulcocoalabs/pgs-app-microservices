@@ -477,11 +477,11 @@ exports.acceptJoinRequests = async (req, res) => {
     var admin = 0;
     if (info) {
         if (info.createdBy) {
-            if (info.createdBy.id) {
+          
                 if (userId == info.createdBy) {
                     admin = 1;
                 }
-            }
+            
         }
     }
 
