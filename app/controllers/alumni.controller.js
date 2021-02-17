@@ -484,7 +484,7 @@ exports.acceptJoinRequests = async (req, res) => {
         }
     }
 
-    var info =  await AlumniJoinRequest.findOne({ status: 1, user:userId,isAdmin:true }).catch(err => {
+    var info =  await AlumniJoinRequest.findOne({ status: 1, user:userId }).catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
