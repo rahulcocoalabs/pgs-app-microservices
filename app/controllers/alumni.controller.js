@@ -386,6 +386,13 @@ exports.joineeDetail = async (req, res) => {
         return res.send(dataAlumniRequest)
     }
 
+    if (dataAlumniRequest === null){
+        return res.send({ 
+            success:0,
+            message:"this joinee is removed or rejected"
+        })
+    }
+
     
 
     return res.send({
@@ -412,6 +419,7 @@ exports.acceptJoinRequests = async (req, res) => {
     }
     var group = req.query.group;
     var status = req.query.status;
+    var id = req.params.id;
 
     var errors = [];
 
@@ -425,6 +433,12 @@ exports.acceptJoinRequests = async (req, res) => {
         errors.push({
             filed: "status",
             message: "please add status"
+        })
+    }
+    if (!id) {
+        errors.push({
+            filed: "status",
+            message: "please add id of request"
         })
     }
 
@@ -469,7 +483,7 @@ exports.acceptJoinRequests = async (req, res) => {
         }
     }
 
-    var info =  await AlumniJoinRequest.findOne({ status: 1, userId }).catch(err => {
+    var info =  await AlumniJoinRequest.findOne({ status: 1, _id:id }).catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
