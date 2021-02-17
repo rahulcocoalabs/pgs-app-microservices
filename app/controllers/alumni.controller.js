@@ -473,6 +473,7 @@ exports.acceptJoinRequests = async (req, res) => {
         return res.send(info);
     }
 
+    console.log(info,userId);
     var admin = 0;
     if (info) {
         if (info.createdBy) {
@@ -484,7 +485,7 @@ exports.acceptJoinRequests = async (req, res) => {
         }
     }
 
-    var info =  await AlumniJoinRequest.findOne({ status: 1, user:userId }).catch(err => {
+    var info1 =  await AlumniJoinRequest.findOne({ status: 1, user:userId }).catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
@@ -492,11 +493,11 @@ exports.acceptJoinRequests = async (req, res) => {
         }
     })
 
-    if (info && info.success != undefined && info.success == 0) {
-        return res.send(info);
+    if (info1 && info1.success != undefined && info1.success == 0) {
+        return res.send(info1);
     }
 
-    if (info.isAdmin == true) {
+    if (info1.isAdmin == true) {
         admin = 1;
     }
 
