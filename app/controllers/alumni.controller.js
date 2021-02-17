@@ -938,7 +938,7 @@ exports.listMembers = async (req, res) => {
         })
     }
 
-    var dataAlumni = await AlumniJoinRequest.find({ status: 1 ,isApproved:constants.ALUMNI_STATUS_ACCEPTED,group:params.groupId}, { designation: 1,user:1 }, pageParams).populate({path: 'user', select: { "firstName": 1, "image": 1 }}).catch(err => {
+    var dataAlumni = await AlumniJoinRequest.find({ status: 1 ,isApproved:constants.ALUMNI_STATUS_ACCEPTED,group:params.groupId}, { designation: 1,user:1,isAdmin:1 }, pageParams).populate({path: 'user', select: { "firstName": 1, "image": 1 }}).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
