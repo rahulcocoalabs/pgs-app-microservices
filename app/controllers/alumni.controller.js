@@ -474,9 +474,9 @@ exports.acceptJoinRequests = async (req, res) => {
 
     var admin = 0;
     if (info) {
-        if (info.group) {
-            if (info.group.createdBy) {
-                if (userId == info.group.createdBy) {
+        if (info.createdBy) {
+            if (info.createdBy.id) {
+                if (userId == info.createdBy.id) {
                     admin = 1;
                 }
             }
