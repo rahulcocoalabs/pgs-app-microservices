@@ -205,6 +205,7 @@ exports.joinRequest = async (req, res) => {
         isApproved: constants.ALUMNI_STATUS_PENDING,
         group: params.groupId,
         status: 1,
+        isAdmin: false,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
 
