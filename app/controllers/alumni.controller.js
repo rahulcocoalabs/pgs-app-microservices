@@ -461,7 +461,7 @@ exports.acceptJoinRequests = async (req, res) => {
     }
 
 
-    var info =  await Alumni.findOne({ status: 1, group: group }).populate('group').catch(err => {
+    var info =  await Alumni.findOne({ status: 1, _id: group }).populate('group').catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
