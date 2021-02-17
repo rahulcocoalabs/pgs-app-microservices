@@ -7,6 +7,7 @@ const AlumniJob = require('../models/alumniJobs.model.js');
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
+const { TUTOR_TYPE } = require('../helpers/constants.js');
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
@@ -483,7 +484,7 @@ exports.acceptJoinRequests = async (req, res) => {
         }
     }
 
-    var info =  await AlumniJoinRequest.findOne({ status: 1, _id:id }).catch(err => {
+    var info =  await AlumniJoinRequest.findOne({ status: 1, user:userId,isAdmin:true }).catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
