@@ -297,14 +297,23 @@ exports.details = async (req, res) => {
         }
     }
 
+    var membersArray = [];
+
     for (x in people){
 
+        var member = {};
+
         if (people[x].isAdmin == true) {
-            people[x].isAdmin = 1;
+            member.isAdmin = 1;
         }
         else {
-            people[x].isAdmin = 0;
+            member.isAdmin = 0;
         }
+
+        member.designation = people[x].designation || "";
+        member.user = people[x].user;
+        member._id = people[x]._id;
+        membersArray.push(member);
     }
 
     console.log(userId)
@@ -314,7 +323,7 @@ exports.details = async (req, res) => {
     returnObj.message = "description of group retrieved successfully";
     returnObj.groupInfo = group;
     returnObj.membersCount = peopleCount;
-    returnObj.members = people;
+    returnObj.members = membersArray;
     returnObj.imageBase = imageBase;
     returnObj.userImageBase = userImageBase;
     returnObj.isMember = isMember;
