@@ -681,6 +681,7 @@ exports.addAlumniJobs = async (req, res) => {
         description: params.description,
         company: params.company,
         location: params.location,
+        email:params.email,
         groupId: params.groupId,
         image: imagePath,
         createdBy: userId,

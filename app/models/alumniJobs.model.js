@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const AlumniJobsSchema = mongoose.Schema({
     position: String,
     company: String,
+    email:String,
     description : String,
     location: String,
     groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },
