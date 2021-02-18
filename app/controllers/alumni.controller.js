@@ -8,6 +8,7 @@ const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
 const { TUTOR_TYPE } = require('../helpers/constants.js');
+const alumniEventParticipationModel = require('../models/alumniEventParticipation.model.js');
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
@@ -850,10 +851,24 @@ exports.detailsEvents = async (req, res) => {
     if (dataAlumni && dataAlumni.success != undefined && dataAlumni.success === 0) {
         return res.send(dataAlumni)
     }
+    var isParticipated = 0;
+
+    var AlumniEventParticipationCount = await alumniEventParticipation.countDocuments({status: 1,eventId:params.id,userId:userId}).catch(err=>{
+        return {success:0,message:err.message}
+    })
+
+    if (AlumniEventParticipationCount && AlumniEventParticipationCount.success != undefined && AlumniEventParticipationCount.success === 0) {
+        return res.send(AlumniEventParticipationCount)
+    }
+
+    if (AlumniEventParticipationCount > 0) {
+        isParticipated = 1;
+    }
 
     return res.send({
         success: 1,
         message: "listed successfully",
+        isParticipated: isParticipated,
         imageBase,
         items: dataAlumni
     })
