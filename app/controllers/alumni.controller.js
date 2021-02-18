@@ -1022,7 +1022,26 @@ exports.listMembers = async (req, res) => {
         return res.send(dataAlumniCount)
     }
 
-    var itemsCount = dataAlumni.length;
+    var membersArray = [];
+    
+    for (x in dataAlumni){
+
+        var member = {};
+
+        if (dataAlumni[x].isAdmin == true) {
+            member.isAdmin = 1;
+        }
+        else {
+            member.isAdmin = 0;
+        }
+
+        member.designation = dataAlumni[x].designation || "";
+        member.user = dataAlumni[x].user;
+        member._id = dataAlumni[x]._id;
+        membersArray.push(member);
+    }
+
+    var itemsCount = dataAlumniCount;
     var totalPages = itemsCount / perPage;
     totalPages = Math.ceil(totalPages);
     var hasNextPage = page < totalPages;
@@ -1047,7 +1066,7 @@ exports.listMembers = async (req, res) => {
         message: "listed successfully",
         userImageBase,
         itemCount: dataAlumniCount,
-        items: dataAlumni
+        items: membersArray
     })
 
 }
