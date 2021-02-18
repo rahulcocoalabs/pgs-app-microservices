@@ -577,6 +577,24 @@ exports.addAlumniEvents = async (req, res) => {
         })
     }
 
+    var userInfo = await AlumniJoinRequest.findOne({status: 1,user:userId}).catch(err=>{
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    });
+
+    if (userInfo && userInfo.success != undefined && userInfo.success === 0) {
+        return res.send(userInfo);
+    }
+
+   
+
+    
+    if (userInfo.isAdmin == false){
+        return res.send({
+            success:0,
+            message:"you are not authorized for this action"
+        })
+    }
+
     var imagePath = req.file ? req.file.filename : null;
 
     const newObject = {
