@@ -895,7 +895,7 @@ exports.detailsJobs = async (req, res) => {
     }
 
 
-    var dataAlumni = await AlumniJob.findOne({ status: 1, _id: params.id }, { status: 0, tsModifiedAt: 0, tsCreatedAt: 0 }).catch(err => {
+    var dataAlumni = await AlumniJob.findOne({ status: 1, _id: params.id }, { status: 0, tsModifiedAt: 0, tsCreatedAt: 0 }).populate({ path: "createdBy", select: { firstName: 1, middleName: 1, lastName: 1, image: 1 } }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -911,6 +911,7 @@ exports.detailsJobs = async (req, res) => {
         success: 1,
         message: "listed successfully",
         imageBase,
+        userImageBase,
         items: dataAlumni
     })
 
