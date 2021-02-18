@@ -246,9 +246,7 @@ exports.details = async (req, res) => {
     }
 
     var returnObj = {};
-    console.log(group);
-    console.log(group.createdBy);
-    console.log(userId)
+    
 
     if (group.createdBy.id == userId) {
         returnObj.isAdmin = 1;
@@ -279,6 +277,25 @@ exports.details = async (req, res) => {
         return res.send(peopleCount);
     }
 
+    var userInfo = await AlumniJoinRequest.findOne({status: 1,user:userId}).catch(err=>{
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    });
+
+    if (userInfo && userInfo.success != undefined && userInfo.success === 0) {
+        return res.send(userInfo);
+    }
+
+    var isMember = 0;
+    var isAdmin = 0;
+
+    if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED){
+        isMember = 1;
+    }
+    if (userInfo.isAdmin == true){
+        isAdmin = 1;
+    }
+
+
     returnObj.success = 1;
     returnObj.message = "description of group retrieved successfully";
     returnObj.groupInfo = group;
@@ -286,6 +303,8 @@ exports.details = async (req, res) => {
     returnObj.members = people;
     returnObj.imageBase = imageBase;
     returnObj.userImageBase = userImageBase;
+    returnObj.isMember = isMember;
+    returnObj.isAdmin = isAdmin;
     return res.send(returnObj);
 
 }
@@ -1014,7 +1033,7 @@ exports.setAdmin = async(req,res)=>{
             message:"mention user id"
         })
     }
-    console.log(groupId,userId)
+    
     var countData = await Alumni.countDocuments({status:1,_id:groupId,createdBy:userId}).catch(err => {
         return {
             success: 0,
@@ -1027,7 +1046,7 @@ exports.setAdmin = async(req,res)=>{
         return res.send(countData)
     }
 
-    console.log(groupId,userId,countData)
+   
 
     if (countData == 0){
 
