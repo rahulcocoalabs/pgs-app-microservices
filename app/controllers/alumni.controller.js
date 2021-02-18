@@ -754,9 +754,7 @@ exports.listEvents = async (req, res) => {
         totalPages: totalPages
     }
 
-    for (x in dataAlumni){
-        var originalObj  = 
-    }
+    
 
     return res.send({
         success: 1,
