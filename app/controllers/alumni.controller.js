@@ -297,6 +297,16 @@ exports.details = async (req, res) => {
         }
     }
 
+    for (x in people){
+
+        if (people[x].isAdmin == true) {
+            people[x].isAdmin = 1;
+        }
+        else {
+            people[x].isAdmin = 0;
+        }
+    }
+
     console.log(userId)
     console.log(userInfo)
 
