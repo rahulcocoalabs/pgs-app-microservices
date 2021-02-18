@@ -153,7 +153,7 @@ exports.listAlumni = async (req, res) => {
     if (page > totalPages) {
         return res.send({
             success: 0,
-            message: "No products to show"
+            message: "No groups to show"
         })
     }
 
@@ -1016,7 +1016,7 @@ exports.listMembers = async (req, res) => {
     if (page > totalPages) {
         return res.send({
             success: 0,
-            message: "No products to show"
+            message: "No members to show"
         })
     }
 
