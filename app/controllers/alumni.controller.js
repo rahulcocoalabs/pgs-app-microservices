@@ -1024,7 +1024,7 @@ exports.listMembers = async (req, res) => {
         success: 1,
         pagination,
         message: "listed successfully",
-        imageBase,
+        userImageBase,
         itemCount: dataAlumniCount,
         items: dataAlumni
     })
