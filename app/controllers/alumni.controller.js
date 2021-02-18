@@ -67,10 +67,10 @@ exports.addAlumni = async (req, res) => {
     })
 
     const newObject1 = {
-      
+
         user: userId,
         isApproved: constants.ALUMNI_STATUS_ACCEPTED,
-        group:newGroup._id,
+        group: newGroup._id,
         status: 1,
         isAdmin: true,
         tsCreatedAt: Date.now(),
@@ -246,7 +246,7 @@ exports.details = async (req, res) => {
     }
 
     var returnObj = {};
-    
+
 
     if (group.createdBy.id == userId) {
         returnObj.isAdmin = 1;
@@ -261,7 +261,7 @@ exports.details = async (req, res) => {
     };
 
 
-    var people = await AlumniJoinRequest.find({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 ,group:id}, {}, pageParams).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
+    var people = await AlumniJoinRequest.find({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1, group: id }, {}, pageParams).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
@@ -269,7 +269,7 @@ exports.details = async (req, res) => {
         return res.send(people);
     }
 
-    var peopleCount = await AlumniJoinRequest.countDocuments({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1 ,group:id}).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
+    var peopleCount = await AlumniJoinRequest.countDocuments({ isApproved: constants.ALUMNI_STATUS_ACCEPTED, status: 1, group: id }).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
@@ -277,7 +277,7 @@ exports.details = async (req, res) => {
         return res.send(peopleCount);
     }
 
-    var userInfo = await AlumniJoinRequest.findOne({status: 1,user:userId}).catch(err=>{
+    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     });
 
@@ -288,11 +288,13 @@ exports.details = async (req, res) => {
     var isMember = 0;
     var isAdmin = 0;
 
-    if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED){
-        isMember = 1;
-    }
-    if (userInfo.isAdmin == true){
-        isAdmin = 1;
+    if (userInfo){
+        if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED) {
+            isMember = 1;
+        }
+        if (userInfo.isAdmin == true) {
+            isAdmin = 1;
+        }
     }
 
     console.log(userId)
@@ -386,7 +388,7 @@ exports.joineeDetail = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
-   
+
 
     if (!params.joineeId) {
         return res.send({
@@ -397,7 +399,7 @@ exports.joineeDetail = async (req, res) => {
 
     var dataAlumniRequest = await AlumniJoinRequest.findOne({ status: 1, _id: params.joineeId }).populate({
         path: 'user',
-        select: { image: 1,firstName:1 }
+        select: { image: 1, firstName: 1 }
     }).catch(err => {
         return {
             success: 0,
@@ -410,18 +412,18 @@ exports.joineeDetail = async (req, res) => {
         return res.send(dataAlumniRequest)
     }
 
-    if (dataAlumniRequest === null){
-        return res.send({ 
-            success:0,
-            message:"this joinee is removed or rejected"
+    if (dataAlumniRequest === null) {
+        return res.send({
+            success: 0,
+            message: "this joinee is removed or rejected"
         })
     }
 
-    
+
 
     return res.send({
         success: 1,
-      
+
         userImageBase,
         message: "details fetched successfully",
         items: dataAlumniRequest
@@ -484,7 +486,7 @@ exports.acceptJoinRequests = async (req, res) => {
     }
 
 
-    var info =  await Alumni.findOne({ status: 1, _id: group }).populate('group').catch(err => {
+    var info = await Alumni.findOne({ status: 1, _id: group }).populate('group').catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
@@ -496,19 +498,19 @@ exports.acceptJoinRequests = async (req, res) => {
         return res.send(info);
     }
 
-    console.log(info,userId);
+    console.log(info, userId);
     var admin = 0;
     if (info) {
         if (info.createdBy) {
-          
-                if (userId == info.createdBy) {
-                    admin = 1;
-                }
-            
+
+            if (userId == info.createdBy) {
+                admin = 1;
+            }
+
         }
     }
 
-    var info1 =  await AlumniJoinRequest.findOne({ status: 1, user:userId }).catch(err => {
+    var info1 = await AlumniJoinRequest.findOne({ status: 1, user: userId }).catch(err => {
         return {
             success: 0,
             message: "some thing went wrong",
@@ -577,7 +579,7 @@ exports.addAlumniEvents = async (req, res) => {
         })
     }
 
-    var userInfo = await AlumniJoinRequest.findOne({status: 1,user:userId}).catch(err=>{
+    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     });
 
@@ -585,13 +587,13 @@ exports.addAlumniEvents = async (req, res) => {
         return res.send(userInfo);
     }
 
-   
 
-    
-    if (userInfo.isAdmin == false){
+
+
+    if (userInfo.isAdmin == false) {
         return res.send({
-            success:0,
-            message:"you are not authorized for this action"
+            success: 0,
+            message: "you are not authorized for this action"
         })
     }
 
@@ -972,12 +974,12 @@ exports.listMembers = async (req, res) => {
 
     if (!params.groupId) {
         return res.send({
-            success:0,
-            message:"mention group id"
+            success: 0,
+            message: "mention group id"
         })
     }
 
-    var dataAlumni = await AlumniJoinRequest.find({ status: 1 ,isApproved:constants.ALUMNI_STATUS_ACCEPTED,group:params.groupId}, { designation: 1,user:1,isAdmin:1 }, pageParams).populate({path: 'user', select: { "firstName": 1, "image": 1 }}).catch(err => {
+    var dataAlumni = await AlumniJoinRequest.find({ status: 1, isApproved: constants.ALUMNI_STATUS_ACCEPTED, group: params.groupId }, { designation: 1, user: 1, isAdmin: 1 }, pageParams).populate({ path: 'user', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -989,7 +991,7 @@ exports.listMembers = async (req, res) => {
         return res.send(dataAlumni)
     }
 
-    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1 ,isApproved:constants.ALUMNI_STATUS_ACCEPTED,group:params.groupId}).catch(err => {
+    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1, isApproved: constants.ALUMNI_STATUS_ACCEPTED, group: params.groupId }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1031,29 +1033,29 @@ exports.listMembers = async (req, res) => {
 
 }
 
-exports.setAdmin = async(req,res)=>{
+exports.setAdmin = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
 
-   
+
 
     if (!req.params.id) {
         return res.send({
-            success:0,
-            message:"mention group id"
+            success: 0,
+            message: "mention group id"
         })
     }
     var groupId = req.params.id;
     if (!params.user) {
         return res.send({
-            success:0,
-            message:"mention user id"
+            success: 0,
+            message: "mention user id"
         })
     }
-    
-    var countData = await Alumni.countDocuments({status:1,_id:groupId,createdBy:userId}).catch(err => {
+
+    var countData = await Alumni.countDocuments({ status: 1, _id: groupId, createdBy: userId }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1065,18 +1067,18 @@ exports.setAdmin = async(req,res)=>{
         return res.send(countData)
     }
 
-   
 
-    if (countData == 0){
 
-        return res.send({ 
-            success: 0, 
-            message:"you are not authorized for this action"
+    if (countData == 0) {
+
+        return res.send({
+            success: 0,
+            message: "you are not authorized for this action"
         })
     }
 
 
-    var countData1 = await Alumni.countDocuments({status:1,_id:groupId,isAdmin:true}).catch(err => {
+    var countData1 = await Alumni.countDocuments({ status: 1, _id: groupId, isAdmin: true }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1090,27 +1092,27 @@ exports.setAdmin = async(req,res)=>{
 
 
 
-   
 
-    if (countData == 0){
 
-        return res.send({ 
-            success: 0, 
-            message:"you are not authorized for this action"
+    if (countData == 0) {
+
+        return res.send({
+            success: 0,
+            message: "you are not authorized for this action"
         })
     }
 
-    if (countData1 > 4){
-        return res.send({ 
-            success: 0, 
-            message:"you can not add new admin since five admins are in the group"
+    if (countData1 > 4) {
+        return res.send({
+            success: 0,
+            message: "you can not add new admin since five admins are in the group"
         })
     }
 
 
 
 
-    var updateData = await AlumniJoinRequest.updateOne({status:1,group:groupId,user:params.user},{isAdmin:true}).catch(err => {
+    var updateData = await AlumniJoinRequest.updateOne({ status: 1, group: groupId, user: params.user }, { isAdmin: true }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1123,37 +1125,37 @@ exports.setAdmin = async(req,res)=>{
     }
     return res.send({
         success: 1,
-       
+
         message: "set as admin  successfully",
-       
+
     })
 }
 
 
-exports.deleteAdmin = async(req,res)=>{
+exports.deleteAdmin = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
-    
 
-   
+
+
 
     if (!req.params.id) {
         return res.send({
-            success:0,
-            message:"mention group id"
+            success: 0,
+            message: "mention group id"
         })
     }
     var groupId = req.params.id;
     if (!params.user) {
         return res.send({
-            success:0,
-            message:"mention user id"
+            success: 0,
+            message: "mention user id"
         })
     }
-    console.log(groupId,userId)
-    var countData = await Alumni.countDocuments({status:1,_id:groupId,createdBy:userId}).catch(err => {
+    console.log(groupId, userId)
+    var countData = await Alumni.countDocuments({ status: 1, _id: groupId, createdBy: userId }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1165,19 +1167,19 @@ exports.deleteAdmin = async(req,res)=>{
         return res.send(countData)
     }
 
-    console.log(groupId,userId,countData)
+    console.log(groupId, userId, countData)
 
-    if (countData == 0){
+    if (countData == 0) {
 
-        return res.send({ 
-            success: 0, 
-            message:"you are not authorized for this action"
+        return res.send({
+            success: 0,
+            message: "you are not authorized for this action"
         })
     }
 
 
 
-    var updateData = await AlumniJoinRequest.updateOne({status:1,group:groupId,user:params.user},{isAdmin:false}).catch(err => {
+    var updateData = await AlumniJoinRequest.updateOne({ status: 1, group: groupId, user: params.user }, { isAdmin: false }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1190,8 +1192,8 @@ exports.deleteAdmin = async(req,res)=>{
     }
     return res.send({
         success: 1,
-       
+
         message: "removed as admin  successfully",
-       
+
     })
 }
