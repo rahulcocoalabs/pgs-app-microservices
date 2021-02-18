@@ -560,7 +560,7 @@ exports.acceptJoinRequests = async (req, res) => {
             return res.send(update);
         }
         return res.send({
-            success: 0,
+            success: 1,
             message: "processed successfully"
         })
 
