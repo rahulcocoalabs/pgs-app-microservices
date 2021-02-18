@@ -417,7 +417,7 @@ exports.joineeDetail = async (req, res) => {
         })
     }
 
-    var dataAlumniRequest = await AlumniJoinRequest.findOne({ status: 1, _id: params.joineeId }).populate({
+    var dataAlumniRequest = await AlumniJoinRequest.findOne({ status: 1, _id: params.joineeId },{isAdmin:0}).populate({
         path: 'user',
         select: { image: 1, firstName: 1 }
     }).catch(err => {
