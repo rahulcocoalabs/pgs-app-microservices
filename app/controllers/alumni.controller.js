@@ -1018,7 +1018,6 @@ exports.setAdmin = async(req,res)=>{
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
-    
 
    
 
@@ -1057,6 +1056,39 @@ exports.setAdmin = async(req,res)=>{
             message:"you are not authorized for this action"
         })
     }
+
+
+    var countData1 = await Alumni.countDocuments({status:1,_id:groupId,isAdmin:true}).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
+
+    if (countData1 && countData1.success != undefined && countData1.success === 0) {
+        return res.send(countData1)
+    }
+
+
+
+   
+
+    if (countData == 0){
+
+        return res.send({ 
+            success: 0, 
+            message:"you are not authorized for this action"
+        })
+    }
+
+    if (countData1 > 4){
+        return res.send({ 
+            success: 0, 
+            message:"you can not add new admin since five admins are in the group"
+        })
+    }
+
 
 
 
