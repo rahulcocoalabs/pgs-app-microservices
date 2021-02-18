@@ -150,12 +150,12 @@ exports.listAlumni = async (req, res) => {
         totalPages: totalPages
     }
 
-    if (page > totalPages) {
-        return res.send({
-            success: 0,
-            message: "No groups to show"
-        })
-    }
+    // if (page > totalPages) {
+    //     return res.send({
+    //         success: 0,
+    //         message: "No groups to show"
+    //     })
+    // }
 
     return res.send({
         success: 1,
@@ -1013,12 +1013,12 @@ exports.listMembers = async (req, res) => {
         totalPages: totalPages
     }
 
-    if (page > totalPages) {
-        return res.send({
-            success: 0,
-            message: "No members to show"
-        })
-    }
+    // if (page > totalPages) {
+    //     return res.send({
+    //         success: 0,
+    //         message: "No members to show"
+    //     })
+    // }
 
     return res.send({
         success: 1,
