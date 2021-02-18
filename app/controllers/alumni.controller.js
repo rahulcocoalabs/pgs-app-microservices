@@ -295,6 +295,8 @@ exports.details = async (req, res) => {
         isAdmin = 1;
     }
 
+    console.log(userId)
+    console.log(userInfo)
 
     returnObj.success = 1;
     returnObj.message = "description of group retrieved successfully";
