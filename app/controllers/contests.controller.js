@@ -83,6 +83,8 @@ exports.detail = async (req, res) => {
             description: 1,
             place: 1,
             image: 1,
+            type:1,
+            uplodFileType:1,
             fromDate: 1,
             toDate: 1,
             aboutContest : 1
