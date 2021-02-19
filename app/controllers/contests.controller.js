@@ -91,7 +91,7 @@ exports.detail = async (req, res) => {
         };
         let contestDetail = await Contests.findOne(filter, projection);
 
-        let contestId = contestDetail.id;
+       // let contestId = contestDetail.id;
         var count = 0
         var isApplied = false ;
         count = await InnovationChallenge.countDocuments({status:1,userId:userId,contestId:id});
