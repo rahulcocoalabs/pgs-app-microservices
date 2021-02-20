@@ -505,6 +505,8 @@ exports.getLeaderBoard = async (req, res) => {
 
 exports.addContestItem = async (req, res) => {
 
+    console.log("ok1")
+
     var userData = req.identity.data;
     var userId = userData.userId;
     var params = req.body;
@@ -520,8 +522,8 @@ exports.addContestItem = async (req, res) => {
         }
         if (!params.type) {
             errors.push({
-                field: "feedType",
-                message: "Feed type cannot be empty"
+                field: "Type",
+                message: " type cannot be empty"
             });
         }
         return res.status(200).send({
