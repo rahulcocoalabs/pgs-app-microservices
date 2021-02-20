@@ -600,7 +600,7 @@ exports.addContestItem = async (req, res) => {
        
         res.status(200).send({
             success: 1,
-            message: "Feed Posted Successfully"
+            message: "Item Posted Successfully"
         });
     } catch (err) {
         res.status(500).send({
