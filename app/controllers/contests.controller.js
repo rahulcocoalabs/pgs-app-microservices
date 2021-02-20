@@ -583,11 +583,11 @@ exports.addContestItem = async (req, res) => {
         const contestItems = new contestItem({
             title: params.title,
             feedType: params.feedType,
-           
+            contestId:params.contestId,
             description: params.description || null,
-            image: image || [],
-            video: video || null,
-            document: document || [],
+            image: params.image || null,
+            video: params.video || null,
+            document: params.document || [],
             type: type,
             contest: params.contestId || null,
             
