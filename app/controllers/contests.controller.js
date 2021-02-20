@@ -19,7 +19,7 @@ exports.listAll = async (req, res) => {
     var offset = (page - 1) * perPage;
     try {
         let filter = {
-            isResultAnnounced : false,
+            isResultAnnounced: false,
             status: 1
         };
         // let projection = {
@@ -83,19 +83,19 @@ exports.detail = async (req, res) => {
             description: 1,
             place: 1,
             image: 1,
-            type:1,
-            uploadFileType:1,
+            type: 1,
+            uploadFileType: 1,
             fromDate: 1,
             toDate: 1,
-            aboutContest : 1
+            aboutContest: 1
         };
         let contestDetail = await Contests.findOne(filter, projection);
 
-       // let contestId = contestDetail.id;
+        // let contestId = contestDetail.id;
         var count = 0
-        var isApplied = false ;
-        count = await InnovationChallenge.countDocuments({status:1,userId:userId,contestId:id});
-        if (count >= 1){
+        var isApplied = false;
+        count = await InnovationChallenge.countDocuments({ status: 1, userId: userId, contestId: id });
+        if (count >= 1) {
             isApplied = true;
         }
         res.status(200).send({
@@ -108,7 +108,7 @@ exports.detail = async (req, res) => {
         res.status(500).send({
             success: 0,
             message: 'something went wrong while fetching details',
-            error:err.message
+            error: err.message
         })
     }
 }
@@ -116,7 +116,7 @@ exports.detail = async (req, res) => {
 // *** Contest history ***
 
 
-exports.listContestHistory = async(req,res) => {
+exports.listContestHistory = async (req, res) => {
 
     var userData = req.identity.data;
     var userId = userData.userId;
@@ -130,28 +130,28 @@ exports.listContestHistory = async(req,res) => {
 
     var findCriteria = {
         userId: userId,
-       
+
         status: 1
     }
 
-    var projection = {contestId:1};
+    var projection = { contestId: 1 };
 
-    var data = await InnovationChallenge.find(findCriteria,projection).catch(err=>{return {success:0,message:err.message}});
+    var data = await InnovationChallenge.find(findCriteria, projection).catch(err => { return { success: 0, message: err.message } });
 
- 
-    if (data && data.success != undefined && data.success === 0){
-       
+
+    if (data && data.success != undefined && data.success === 0) {
+
         return res.send(data);
     }
 
-    if (data.count === 0){
-      
+    if (data.count === 0) {
+
         var pagination = {
             page,
             perPage,
-            hasNextPage:false,
+            hasNextPage: false,
             totalItems: 0,
-            totalPages:0,
+            totalPages: 0,
         };
 
         return res.send({
@@ -167,36 +167,36 @@ exports.listContestHistory = async(req,res) => {
         })
     }
     else {
-       
+
         var ids = [];
 
-        for (x in data){
+        for (x in data) {
             var item = data[x];
             var id = item.contestId;
-           
-           
+
+
             ids.push(ObjectId(id));
-           
+
         }
-        
-        
+
+
         var filter = {
-            status:1,
-           
-            _id:{$in:ids}
+            status: 1,
+
+            _id: { $in: ids }
         }
 
-       
-        var projection1 = {image:1,status:1,toDate:1,fromDate:1,title:1,description:1};
 
-        var contests = await Contests.find(filter,projection1)
-        .limit(perPage)
-        .skip(offset)
-        .sort({
-            'tsCreatedAt': -1
-        }).catch(err=>{return { success: 0, message: err.message}})
+        var projection1 = { image: 1, status: 1, toDate: 1, fromDate: 1, title: 1, description: 1 };
 
-        if (contests && contests.success != undefined && contests.success === 0){
+        var contests = await Contests.find(filter, projection1)
+            .limit(perPage)
+            .skip(offset)
+            .sort({
+                'tsCreatedAt': -1
+            }).catch(err => { return { success: 0, message: err.message } })
+
+        if (contests && contests.success != undefined && contests.success === 0) {
             return res.send(contests);
         }
 
@@ -214,9 +214,9 @@ exports.listContestHistory = async(req,res) => {
         return res.send({
             success: 1,
             pagination,
-            
+
             imageBase: contestsConfig.imageBase,
-           
+
             items: contests,
             message: 'contest history list'
         })
@@ -500,4 +500,112 @@ exports.getLeaderBoard = async (req, res) => {
             message: 'Invalid contest'
         })
     }
+}
+
+exports.addContestItem = async (req, res) => {
+
+    var userData = req.identity.data;
+    var userId = userData.userId;
+    var params = req.body;
+    var files = req.files;
+    
+    if (!params.title || !params.type) {
+        errors = [];
+        if (!params.title) {
+            errors.push({
+                field: "title",
+                message: "Title cannot be empty"
+            });
+        }
+        if (!params.type) {
+            errors.push({
+                field: "feedType",
+                message: "Feed type cannot be empty"
+            });
+        }
+        return res.status(200).send({
+            success: 0,
+            errors: errors,
+            code: 200
+        });
+    }
+
+
+    var type = req.body.type || null;
+    var images = [];
+    var documents = [];
+    var video = null;
+   
+        if (req.files.images && !req.files.video && !req.files.documents) {
+
+            type = "image";
+            var len = files.images.length;
+            var i = 0;
+            while (i < len) {
+                images.push(files.images[i].filename);
+                i++;
+            }
+            console.log("images is " + images);
+        }
+        if (!req.files.images && req.files.video && !req.files.documents) {
+            if (req.files.video[0].size > 10485760) {
+                return res.send({
+                    success: 0,
+                    field: 'video',
+                    message: "video File size exceeded 10mb limit"
+                })
+            }
+            type = "video";
+            video = req.files.video[0].filename;
+        }
+        if (!req.files.images && !req.files.video && req.files.documents) {
+            type = "document";
+            var len = files.documents.length;
+            var i = 0;
+            while (i < len) {
+                documents.push(files.documents[i].filename);
+                i++;
+            }
+
+        }
+        if (!req.files.images && !req.files.video && !req.files.documents) {
+            type = "text";
+        }
+    
+
+   
+
+    try {
+       
+        const newFeed = new Feed({
+            title: params.title,
+            feedType: params.feedType,
+           
+            description: params.description || null,
+            image: image || [],
+            video: video || null,
+            document: document || [],
+            type: type,
+            contest: params.contestId || null,
+            
+            tsCreatedAt: Number(moment().unix()),
+            tsModifiedAt: null
+        });
+       
+        let saveFeed = await newFeed.save();
+       
+        res.status(200).send({
+            success: 1,
+            message: "Feed Posted Successfully"
+        });
+    } catch (err) {
+        res.status(500).send({
+          success: 0,
+          message: 'Something went wrong while uploading',
+          error:err.message
+        })
+       
+    }
+
+
 }

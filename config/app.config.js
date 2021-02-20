@@ -43,7 +43,17 @@ module.exports = {
     },
     contests: {
         resultsPerPage: 30,
-        imageBase: commonPath + "contest/"
+        imageUploadPath: relativeCommonPath + "contest/images",
+        videoUploadPath: relativeCommonPath + "contest/videos",
+        documentUploadPath: relativeCommonPath + "contest/documents",
+        imageBase: commonPath + "contest/images/",
+        authorImageBase: commonPath + "user-images/",
+        videoBase: commonPath + "contest/videos/",
+        documentBase: commonPath + "contest/documents/",
+        documentImage: "http://trackflyvehicle.com/edunet-web/ftp/edunet-admin-portal/backend/img/pdf.png",
+        maxImageCount: 10,
+        maxVideoCount: 1,
+        maxDocumentsCount: 10
     },
     books: {
         resultsPerPage: 30,
