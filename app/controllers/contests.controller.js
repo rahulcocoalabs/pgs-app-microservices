@@ -9,6 +9,7 @@ const feedsConfig = config.feeds;
 const usersConfig = config.users;
 const InnovationChallenge = require('../models/innovationChallenge.model');
 const ObjectId = require('mongoose').Types.ObjectId;
+var moment = require("moment");
 
 // *** List all contests ***
 exports.listAll = async (req, res) => {
