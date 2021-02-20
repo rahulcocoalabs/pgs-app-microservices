@@ -1,5 +1,6 @@
 const Contests = require('../models/contest.model');
 const Feeds = require('../models/feed.model');
+const contestItem = require('../models/contestItem.model');
 const Users = require('../models/user.model.js');
 const config = require('../../config/app.config.js');
 const constants = require('../helpers/constants');
@@ -577,7 +578,7 @@ exports.addContestItem = async (req, res) => {
 
     try {
        
-        const newFeed = new Feed({
+        const contestItems = new contestItem({
             title: params.title,
             feedType: params.feedType,
            
@@ -592,7 +593,7 @@ exports.addContestItem = async (req, res) => {
             tsModifiedAt: null
         });
        
-        let saveFeed = await newFeed.save();
+        let saveFeed = await contestItems.save();
        
         res.status(200).send({
             success: 1,
