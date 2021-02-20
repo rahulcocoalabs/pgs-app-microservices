@@ -4,11 +4,9 @@ const mongoose = require('mongoose');
 
 const ContestInnovationSchema = mongoose.Schema({
     title: String,
-    description: String,
-    file:String,
-    video:String,
-    file:String,
-    uploadFileType:String,
+    estimate: String,
+    projectBrief:String,
+    
     contest: { type: mongoose.Schema.Types.ObjectId, ref: 'Contest' },
     status: Number,
     tsCreatedAt: Number,

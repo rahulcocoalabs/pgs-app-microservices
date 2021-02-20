@@ -513,7 +513,7 @@ exports.addContestItem = async (req, res) => {
     var params = req.body;
     var files = req.files;
     
-    if (!params.title || !params.type) {
+    if (!params.title || !params.type || !params.contestId) {
         errors = [];
         if (!params.title) {
             errors.push({
@@ -525,6 +525,12 @@ exports.addContestItem = async (req, res) => {
             errors.push({
                 field: "Type",
                 message: " type cannot be empty"
+            });
+        }
+        if (!params.contestId) {
+            errors.push({
+                field: "contest ID",
+                message: " contest ID cannot be empty"
             });
         }
         return res.status(200).send({
@@ -590,6 +596,89 @@ exports.addContestItem = async (req, res) => {
             video: video || null,
             document: documents || [],
             type: type,
+            contest: params.contestId || null,
+            
+            tsCreatedAt: Number(moment().unix()),
+            tsModifiedAt: null
+        });
+       
+        let saveFeed = await contestItems.save();
+       
+        res.status(200).send({
+            success: 1,
+            message: "Item Posted Successfully"
+        });
+    } catch (err) {
+        res.status(500).send({
+          success: 0,
+          message: 'Something went wrong while uploading',
+          error:err.message
+        })
+       
+    }
+
+
+}
+
+
+
+exports.addContestInnovation = async (req, res) => {
+
+    
+
+    var userData = req.identity.data;
+    var userId = userData.userId;
+    var params = req.body;
+    
+    
+    if (!params.title || !params.estimate || !params.contestId || !params.description) {
+        errors = [];
+        if (!params.title) {
+            errors.push({
+                field: "title",
+                message: "Title cannot be empty"
+            });
+        }
+        if (!params.estimate) {
+            errors.push({
+                field: "estimate",
+                message: " estimate cannot be empty"
+            });
+        }
+        if (!params.contestId) {
+            errors.push({
+                field: "contest ID",
+                message: " contest ID cannot be empty"
+            });
+        }
+        if (!params.description) {
+            errors.push({
+                field: "description ID",
+                message: " description ID cannot be empty"
+            });
+        }
+        return res.status(200).send({
+            success: 0,
+            errors: errors,
+            code: 200
+        });
+    }
+
+
+   
+       
+    
+
+   
+
+    try {
+       
+        const contestItems = new contestItem({
+            title: params.title,
+            estimate: params.estimate,
+            contestId:params.contestId,
+            projectBrief: params.description ,
+           
             contest: params.contestId || null,
             
             tsCreatedAt: Number(moment().unix()),
