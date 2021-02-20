@@ -28,7 +28,7 @@ const ContestSchema = mongoose.Schema({
     place: String,
     type:String,
     uploadFileType:String,
-    image: String,
+    images: [String],
     fromDate: Number,
     toDate: Number,
     isResultAnnounced : Boolean,
