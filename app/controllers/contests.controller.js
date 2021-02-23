@@ -46,7 +46,7 @@ exports.listAll = async (req, res) => {
         };
         res.status(200).send({
             success: 1,
-            imageBase: contestsConfig.imageBase,
+            imageBase: contestsConfig.contestImageBase,
             pagination: pagination,
             items: contestList
         })

@@ -47,6 +47,7 @@ module.exports = {
         videoUploadPath: relativeCommonPath + "contest/videos",
         documentUploadPath: relativeCommonPath + "contest/documents",
         imageBase: commonPath + "contest/images/",
+        contestImageBase: commonPath + "contest/",
         authorImageBase: commonPath + "user-images/",
         videoBase: commonPath + "contest/videos/",
         documentBase: commonPath + "contest/documents/",
