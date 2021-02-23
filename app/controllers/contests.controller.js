@@ -594,7 +594,7 @@ exports.addContestItem = async (req, res) => {
             description: params.description || null,
             images: images || [],
             video: video || null,
-            document: documents || [],
+            files: documents || [],
             type: type,
             contest: params.contestId || null,
             
