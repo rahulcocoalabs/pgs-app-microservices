@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
             if (err){
                 return cb(err)
             }
-            console.log(file.mimetype)
+            console.log(mime.extension(file.mimetype))
             cb(null, raw.toString('hex') + "." + mime.extension(file.mimetype))
         })
     }
