@@ -102,7 +102,7 @@ exports.detail = async (req, res) => {
         }
         res.status(200).send({
             success: 1,
-            imageBase: contestsConfig.imageBase,
+            imageBase: contestsConfig.contestImageBase,
             item: contestDetail,
             isApplied: isApplied
         })
@@ -159,7 +159,7 @@ exports.listContestHistory = async (req, res) => {
         return res.send({
             success: 1,
             pagination,
-            contestImageBase: contestsConfig.imageBase,
+            contestImageBase: contestsConfig.contestImageBase,
             imageBase: feedsConfig.imageBase,
             documentImage: feedsConfig.documentImage,
             videoBase: feedsConfig.videoBase,
@@ -217,7 +217,7 @@ exports.listContestHistory = async (req, res) => {
             success: 1,
             pagination,
 
-            imageBase: contestsConfig.imageBase,
+            imageBase: contestsConfig.contestImageBase,
 
             items: contests,
             message: 'contest history list'
@@ -288,7 +288,7 @@ exports.listContestHistory1 = async (req, res) => {
     return res.send({
         success: 1,
         pagination,
-        contestImageBase: contestsConfig.imageBase,
+        contestImageBase: contestsConfig.contestImageBase,
         imageBase: feedsConfig.imageBase,
         documentImage: feedsConfig.documentImage,
         videoBase: feedsConfig.videoBase,
@@ -355,7 +355,7 @@ exports.listResultAnnouncedContest = async (req, res) => {
     return res.send({
         success: 1,
         pagination,
-        contestImageBase: contestsConfig.imageBase,
+        contestImageBase: contestsConfig.contestImageBase,
         items: resultAnnouncedContestData,
         message: 'Result announced contest list'
     })
@@ -490,7 +490,7 @@ exports.getLeaderBoard = async (req, res) => {
         return res.send({
             success: 1,
             pagination,
-            contestImageBase: contestsConfig.imageBase,
+            contestImageBase: contestsConfig.contestImageBase,
             usersImageBase: usersConfig.imageBase,
             items: leaderBoardList,
             authorWinnerData: authorWinnerData,
