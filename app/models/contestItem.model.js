@@ -8,7 +8,7 @@ const ContestItemSchema = mongoose.Schema({
     images:[String],
     
     video:String,
-    file:[String],
+    files:[String],
     uploadFileType:String,
     contest: { type: mongoose.Schema.Types.ObjectId, ref: 'Contest' },
     status: Number,
