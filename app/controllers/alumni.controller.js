@@ -986,6 +986,24 @@ exports.eventParticipate = async (req, res) => {
             message: "no event id recieved"
         })
     }
+
+    const eventCheck = await AlumniEventParticipation.countDocuments({status: 1,eventId:eventID,userId,userId}).catch(err=>{
+        return {
+            success:0,
+            message:"coyuld not connect to  db ",
+            error:err.message
+        }
+    })
+
+    if (eventCheck && eventCheck.success != undefined && eventCheck.success === 0){
+        return res.send(eventCheck);
+
+    }
+
+    if (eventCheck > 0){
+        return res.send({success:0, message:"already participated in this event"})
+    }
+
     const eventId = req.params.id;
     const newObject = {
         name: params.name,
