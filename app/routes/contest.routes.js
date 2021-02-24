@@ -20,11 +20,9 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         crypto.pseudoRandomBytes(16, function (err, raw) {
-            if (err){
+            if (err)
                 return cb(err)
-            }
-            console.log(mime.extension(file.mimetype))
-            cb(null, raw.toString('hex') + "." + mime.extension(file.mimetype))
+            cb(null, raw.toString('hex') + "." + mime.getExtension(file.mimetype))
         })
     }
 });
