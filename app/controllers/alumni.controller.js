@@ -190,6 +190,22 @@ exports.joinRequest = async (req, res) => {
         })
     }
 
+    const countOfReq = await AlumniJoinRequest.countDocuments({status: 1,user:userId,group:params.groupId}).catch(err=> {
+        return {success: 0,message: "did not get detail for requests", error: err.message}
+    })
+
+    if (countOfReq && countOfReq.success != undefined && countOfReq.success === 0){
+        return res.send(countOfReq)
+    }
+
+    
+    if(countOfReq > 0){
+        return res.send({
+            success:0,
+            message:"already added a request for joining this group"
+            })
+    }
+
     const newObject = {
         name: params.name,
         address: params.address,
@@ -288,6 +304,7 @@ exports.details = async (req, res) => {
 
     var isMember = 0;
     var isAdmin = 0;
+    var didRequested = 0;
 
     if (userInfo){
         if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED) {
@@ -317,8 +334,19 @@ exports.details = async (req, res) => {
         membersArray.push(member);
     }
 
-    console.log(userId)
-    console.log(userInfo)
+    const countOfReq = await AlumniJoinRequest.countDocuments({status: 1,user:userId,group:id}).catch(err=> {
+        return {success: 0,message: "did not get detail for requests", error: err.message}
+    })
+
+    if (countOfReq && countOfReq.success != undefined && countOfReq.success === 0){
+        return res.send(countOfReq)
+    }
+
+    
+    if(countOfReq > 0){
+       didRequested = 1;
+    }
+
 
     returnObj.success = 1;
     returnObj.message = "description of group retrieved successfully";
@@ -329,6 +357,7 @@ exports.details = async (req, res) => {
     returnObj.userImageBase = userImageBase;
     returnObj.isMember = isMember;
     returnObj.isAdmin = isAdmin;
+    returnObj.didRequested = didRequested;
     return res.send(returnObj);
 
 }
