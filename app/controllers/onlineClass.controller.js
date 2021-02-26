@@ -218,6 +218,13 @@ exports.createOnlineClass = async (req, res) => {
     onlineClassObj.isPublic = false;
   }
 
+  if (params.availableDays.length == 0){
+    return res.send({
+      success:0,
+      message:"select at least one day"
+    })
+  }
+
   onlineClassObj.availableDays = params.availableDays;
   onlineClassObj.availableTime = params.availableTime;
   onlineClassObj.isApproved = false;
