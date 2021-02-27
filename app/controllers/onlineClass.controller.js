@@ -2218,8 +2218,8 @@ exports.createInstitution = async (req, res) => {
       code: 200
     });
   }
-  // }
-  //console.log("08/12/202", file.filename)
+  var params = req.body;
+  
   var institutionObj = {};
   institutionObj.userId = userId;
   institutionObj.phone = params.phone;
