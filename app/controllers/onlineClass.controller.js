@@ -2207,6 +2207,12 @@ exports.createInstitution = async (req, res) => {
       message: "phone cannot be empty"
     })
   }
+  if (!req.body.name) {
+    errors.push({
+      field: "name",
+      message: "name cannot be empty"
+    })
+  }
 
 
   if (errors.length > 0) {
@@ -2224,6 +2230,7 @@ exports.createInstitution = async (req, res) => {
   institutionObj.userId = userId;
   institutionObj.phone = params.phone;
   institutionObj.location = params.location;
+  institutionObj.name = params.name;
 
   if (file.image && file.image.length > 0) {
     institutionObj.image = file.image[0].filename;
@@ -2251,7 +2258,7 @@ exports.createInstitution = async (req, res) => {
     success: 1,
     statusCode: 200,
     filename: file.filename,
-    message: 'Created a class..waiting for admin approval',
+    message: 'Created a institution..waiting for admin approval',
   })
 
 }
