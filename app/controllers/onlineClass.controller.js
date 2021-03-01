@@ -2336,7 +2336,7 @@ exports.detailInstitution = async (req, res) => {
   }
 
   var isOwner = 0;
-  if (detail.userId == userid){
+  if (detail.userId == userId){
     isOwner = 1;
   }
 
