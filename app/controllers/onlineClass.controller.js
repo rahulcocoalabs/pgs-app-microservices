@@ -16,6 +16,7 @@ var crypto = require("crypto");
 
 const User = require('../models/user.model');
 const OnlineCLass = require('../models/onlineClass.model');
+const InstitutionClass = require('../models/instituteClass.model');
 const tutorRequestModel = require('../models/requestForTutor.model');
 const Instituion = require('../models/institute.model');
 const TutorCategory = require('../models/tutorCategory.model');
@@ -2347,4 +2348,229 @@ exports.detailInstitution = async (req, res) => {
   ret_Obj.isOwner = isOwner;
   return res.send(ret_Obj);
 
+}
+
+exports.addClass = async(req,res)=>{
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+  var params = req.body;
+
+  var file = req.files;
+
+
+
+  
+  var errors = [];
+
+  if (!req.body.institution) {
+    errors.push({
+      field: "institution",
+      message: "institution cannot be empty"
+    })
+  }
+
+ 
+  if (!req.body.tutorSubjectId) {
+    errors.push({
+      field: "tutorSubjectId",
+      message: "tutorSubjectId cannot be empty"
+    })
+  }
+  if (!file) {
+    errors.push({
+      field: "image",
+      message: "Please select a class image"
+    })
+  }
+  if (!req.body.tutorClassId) {
+    errors.push({
+      field: "tutorClassId",
+      message: "tutorClassId cannot be empty"
+    })
+  }
+
+  if (!params.title || params.title === undefined) {
+    errors.push({
+      field: "title",
+      message: "title cannot be empty"
+    })
+  }
+  if (!req.body.availableFromTime) {
+    errors.push({
+      field: "availableFromTime",
+      message: "starting time cannot be empty"
+    })
+  }
+  if (!req.body.availableToTime) {
+    errors.push({
+      field: "availableToTime",
+      message: "end time cannot be empty"
+    })
+  }
+
+
+  if (!req.body.classDescription) {
+    errors.push({
+      field: "classDescription",
+      message: "classDescription cannot be empty"
+    })
+  }
+  if (params.isPaid === undefined) {
+    errors.push({
+      field: "isPaid",
+      message: "isPaid cannot be empty"
+    })
+  }
+  if (params.isPaid === 'true' && !params.fee) {
+    errors.push({
+      field: "fee",
+      message: "fee cannot be empty"
+    })
+  }
+  if (params.isPaid === 'true' && !params.classTimeCategory) {
+    errors.push({
+      field: "classTimeCategory",
+      message: "classTimeCategory cannot be empty"
+    })
+  }
+  if ((params.isPaid === 'true' && !params.currencyId)) {
+    errors.push({
+      field: "currencyId",
+      message: "currencyId cannot be empty"
+    })
+  }
+
+  if (params.isPublic === undefined) {
+    errors.push({
+      field: "isPublic",
+      message: "isPublic cannot be empty"
+    })
+  }
+  if (!req.body.availableDays) {
+    errors.push({
+      field: "availableDays",
+      message: "availableDays cannot be empty"
+    })
+  }
+
+  if (!params.tutorSyllabusId) {
+    errors.push({
+      field: "tutorSyllabusId",
+      message: "tutorSyllabusId cannot be empty"
+    })
+  }
+
+ 
+  if (errors.length > 0) {
+
+    return res.status(200).send({
+      success: 0,
+      errors: errors,
+
+      code: 200
+    });
+  }
+
+  var onlineClassObj = {};
+  onlineClassObj.userId = userId;
+  onlineClassObj.tutorClassId = params.tutorClassId;
+  onlineClassObj.tutorSubjectId = params.tutorSubjectId;
+
+  var updateTutorProfile = await updateClassAndSubject(params.tutorClassId, params.tutorSubjectId, userId);
+
+  if (updateTutorProfile == 0) {
+    return res.send({
+      success: 0,
+      message: "could not update tutor profile"
+    })
+  }
+
+
+  onlineClassObj.classDescription = params.classDescription;
+  if (file.image && file.image.length > 0) {
+    onlineClassObj.image = file.image[0].filename;
+  }
+  if (file.video && file.video.length > 0) {
+    onlineClassObj.video = file.video[0].filename;
+  }
+  onlineClassObj.isPaid = params.isPaid;
+  onlineClassObj.title = params.title;
+  onlineClassObj.tutorSyllabusId = params.tutorSyllabusId;
+  onlineClassObj.isPopular = false;
+  if (params.isPaid === 'true') {
+    onlineClassObj.isPaid = true;
+    onlineClassObj.fee = params.fee;
+    onlineClassObj.classTimeCategory = params.classTimeCategory;
+    onlineClassObj.currencyId = params.currencyId;
+  } else {
+    onlineClassObj.isPaid = false;
+    onlineClassObj.fee = null;
+    onlineClassObj.classTimeCategory = null;
+    onlineClassObj.currencyId = null;
+
+  }
+  if (params.isPublic === 'true') {
+    onlineClassObj.isPublic = true;
+  } else {
+    onlineClassObj.isPublic = false;
+  }
+
+  if (params.availableDays.length == 0) {
+    return res.send({
+      success: 0,
+      message: "select at least one day"
+    })
+  }
+
+  onlineClassObj.availableDays = params.availableDays;
+  onlineClassObj.availableTime = params.availableTime;
+  onlineClassObj.isApproved = false;
+  onlineClassObj.isRejected = false;
+  onlineClassObj.status = 1;
+  onlineClassObj.tsCreatedAt = Date.now();
+  onlineClassObj.tsModifiedAt = null;
+  
+
+  var tutorName = await User.findOne({ _id: params.userId, status: 1 }, { firstName: 1 }).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (tutorName && (tutorName.success !== undefined) && (tutorName.success === 0)) {
+    return res.send(tutorName);
+  }
+
+  onlineClassObj.tutorName = tutorName;
+
+  onlineClassObj.tutorSubject = params.tutorSubject;
+  onlineClassObj.tutorClass = params.tutorClass;
+  onlineClassObj.tutorSyllabus = params.tutorSyllabus;
+  onlineClassObj.qualification = params.qualification;
+  onlineClassObj.category = params.category;
+  onlineClassObj.availableFromTime = params.availableFromTime;
+  onlineClassObj.availableToTime = params.availableToTime;
+
+  var newOnlineClassObj = new InstitutionClass(onlineClassObj);
+  var onlineClassResponse = await newOnlineClassObj.save()
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while saving online class',
+        error: err
+      }
+    })
+  if (onlineClassResponse && (onlineClassResponse.success !== undefined) && (onlineClassResponse.success === 0)) {
+    return res.send(onlineClassResponse);
+  }
+  return res.send({
+    success: 1,
+    statusCode: 200,
+    filename: file.filename,
+    message: 'Created a class..waiting for admin approval',
+  })
 }
