@@ -2343,7 +2343,7 @@ exports.detailInstitution = async (req, res) => {
   var ret_Obj = {};
   ret_Obj.success = 1;
   ret_Obj.message = "fetched data successfully"
-  ret_obj.detail = detail;
+  ret_Obj.detail = detail;
   ret_Obj.isOwner = isOwner;
   return res.send(ret_Obj);
 
