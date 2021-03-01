@@ -2319,7 +2319,7 @@ exports.listInstitutes = async(req,res) => {
 
 }
 
-exports.DetailInstitution = async (req, res) => {
+exports.detailInstitution = async (req, res) => {
 
 
   var userData = req.identity.data;
