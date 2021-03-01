@@ -2318,3 +2318,33 @@ exports.listInstitutes = async(req,res) => {
   return res.send(ret_Obj);
 
 }
+
+exports.DetailInstitution = async (req, res) => {
+
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var id = req.params.id;
+
+
+  var detail = await Instituion.findOne({status:1},{tsCreatedAt:0,tsModifiedAt:0,status:0}).catch(err => {
+    return {success:0,err:err.message,message:"could not fetch data"};
+  })
+  if (detail && (detail.success !== undefined) && (detail.success === 0)) {
+    return res.send(detail);
+  }
+
+  var isOwner = 0;
+  if (detail.userId == userid){
+    isOwner = 1;
+  }
+
+  var ret_Obj = {};
+  ret_Obj.success = 1;
+  ret_Obj.message = "fetched data successfully"
+  ret_obj.detail = detail;
+  ret_Obj.isOwner = isOwner;
+  return res.send(ret_Obj);
+
+}

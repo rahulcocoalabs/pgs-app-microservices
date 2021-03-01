@@ -67,4 +67,10 @@ module.exports = (app) => {
 
     app.get('/online-class/list-institutes', auth, onlineClass.listInstitutes);
 
+    app.post('/online-class/add-institution-class', fileUpload.fields([{
+        name: 'video', maxCount: 1
+    }, {
+        name: 'image', maxCount: 1
+    }]), auth, onlineClass.createInstitutionClass);
+
 }
