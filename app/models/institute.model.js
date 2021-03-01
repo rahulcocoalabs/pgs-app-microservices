@@ -7,6 +7,7 @@ const InstituteSchema = mongoose.Schema({
     userId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     image:String,
     name:String,
+    isPopular:Boolean,
     location:String,
     phone:String,
     status : Number,

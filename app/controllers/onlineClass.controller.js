@@ -2262,3 +2262,59 @@ exports.createInstitution = async (req, res) => {
   })
 
 }
+exports.listInstitutes = async(req,res) => {
+
+  var page1 = Number(page1) || 1;
+  page1 = page1 > 0 ? page1 : 1;
+  var perPage1 = Number(perPage1) || classConfig.resultsPerPage;
+  perPage1 = perPage1 > 0 ? perPage1 : classConfig.resultsPerPage;
+  var offset1 = (page1 - 1) * perPage1;
+
+  var page2 = Number(page2) || 1;
+  page2 = page2 > 0 ? page2 : 1;
+  var perPage2 = Number(perPage2) || classConfig.resultsPerPage;
+  perPage2 = perPage2 > 0 ? perPage2 : classConfig.resultsPerPage;
+  var offset2 = (page2 - 1) * perPage2;
+
+  var inst_list = await Instituion.find({status:1},{name:11,image:1,location:1}).limit(page1).skip(offset1).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err
+    }
+  })
+
+  var inst_list_popular = await Instituion.find({status:1,isPopular:true},{name:11,image:1,location:1}).limit(page2).skip(offset2).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err
+    }
+  })
+
+  if (inst_list && (inst_list.success !== undefined) && (inst_list.success === 0)) {
+    return res.send(inst_list);
+  }
+  if (inst_list_popular && (inst_list_popular.success !== undefined) && (inst_list_popular.success === 0)) {
+    return res.send(inst_list_popular);
+  }
+
+  var pageParams1 = {
+    skip: offset1,
+    limit: perPage1
+  };
+  var pageParams2 = {
+    skip: offset2,
+    limit: perPage2
+  };
+
+  var ret_Obj = {};
+  ret_Obj.success = 1;
+  ret_Obj.message = "listed Successfully"
+  ret_Obj.insitutes = inst_list;
+  ret_Obj.popularInstitutes = inst_list_popular;
+  ret_Obj.pageParms1 = pageParams1
+  ret_Obj.pageParms2 = pageParams2
+  return res.send(ret_Obj);
+
+}
