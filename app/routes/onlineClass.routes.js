@@ -67,7 +67,7 @@ module.exports = (app) => {
 
     app.get('/online-class/list-institutes', auth, onlineClass.listInstitutes);
 
-    app.get('/online-class/list-institutes/:id', auth, onlineClass.detailInstitution);
+    app.get('/online-class/detail-institute/:id', auth, onlineClass.detailInstitution);
 
     app.post('/online-class/add-institution-class', fileUpload.fields([{
         name: 'video', maxCount: 1
