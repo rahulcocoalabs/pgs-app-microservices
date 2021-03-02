@@ -2329,7 +2329,7 @@ exports.detailInstitution = async (req, res) => {
   var id = req.params.id;
 
 
-  var detail = await Instituion.findOne({status:1},{tsCreatedAt:0,tsModifiedAt:0,status:0}).catch(err => {
+  var detail = await Instituion.findOne({status:1,_id:id},{tsCreatedAt:0,tsModifiedAt:0,status:0}).catch(err => {
     return {success:0,err:err.message,message:"could not fetch data"};
   })
   if (detail && (detail.success !== undefined) && (detail.success === 0)) {
@@ -2341,11 +2341,19 @@ exports.detailInstitution = async (req, res) => {
     isOwner = 1;
   }
 
+  var detailListClasses = await InstitutionClass.find({status:1,institution:id},{tsCreatedAt:0,tsModifiedAt:0,status:0}).catch(err => {
+    return {success:0,err:err.message,message:"could not fetch data"};
+  })
+  if (detailListClasses && (detailListClasses.success !== undefined) && (detailListClasses.success === 0)) {
+    return res.send(detailListClasses);
+  }
+
   var ret_Obj = {};
   ret_Obj.success = 1;
   ret_Obj.message = "fetched data successfully"
   ret_Obj.detail = detail;
   ret_Obj.isOwner = isOwner;
+  ret_Obj.listClasses = detailListClasses;
   return res.send(ret_Obj);
 
 }
@@ -2489,6 +2497,18 @@ exports.addClass = async(req,res)=>{
       success: 0,
       message: "could not update tutor profile"
     })
+  }
+
+  var owner = await Institution.countDocuments({_id:req.body.institution,userId:userId}).catch(err=>{
+    return {success:0,message:"could not fetch data about institution",err:err.message}
+  })
+
+  if (owner.success && owner.success != undefined && owner.success == 0){
+    return res.send(owner)
+  }
+
+  if (owner == 0){
+    return res.send({success:0,message:"you are not authorized for this action"})
   }
 
 
