@@ -2350,7 +2350,8 @@ exports.detailInstitution = async (req, res) => {
 
   var ret_Obj = {};
   ret_Obj.success = 1;
-  ret_Obj.message = "fetched data successfully"
+  ret_Obj.message = "fetched data successfully";
+  ret_Obj.imageBase =  classConfig.imageBase;
   ret_Obj.detail = detail;
   ret_Obj.isOwner = isOwner;
   ret_Obj.listClasses = detailListClasses;
