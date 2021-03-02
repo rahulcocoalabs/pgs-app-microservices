@@ -7,7 +7,7 @@ const InstituteClassSchema = mongoose.Schema({
     userId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     rateduser: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     tutorSubjectId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' },
-    tutorClassId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' }],
+    tutorClassId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' },
     currencyId : { type: mongoose.Schema.Types.ObjectId, ref: 'Currency' },
     tutorSyllabusId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorSyllabus' },
     institution:{ type: mongoose.Schema.Types.ObjectId, ref: 'Institute' },
