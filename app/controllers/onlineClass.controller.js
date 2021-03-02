@@ -2501,7 +2501,7 @@ exports.addClass = async(req,res)=>{
     })
   }
 
-  var owner = await Institution.countDocuments({_id:req.body.institution,userId:userId}).catch(err=>{
+  var owner = await Instituion.countDocuments({_id:req.body.institution,userId:userId}).catch(err=>{
     return {success:0,message:"could not fetch data about institution",err:err.message}
   })
 
