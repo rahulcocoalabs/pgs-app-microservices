@@ -2522,6 +2522,7 @@ exports.addClass = async(req,res)=>{
     onlineClassObj.video = file.video[0].filename;
   }
   onlineClassObj.isPaid = params.isPaid;
+  onlineClassObj.insitute = params.insitute;
   onlineClassObj.title = params.title;
   onlineClassObj.tutorSyllabusId = params.tutorSyllabusId;
   onlineClassObj.isPopular = false;
