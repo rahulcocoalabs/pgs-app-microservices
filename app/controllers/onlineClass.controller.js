@@ -2597,3 +2597,8 @@ exports.addClass = async(req,res)=>{
     message: 'Created a class..waiting for admin approval',
   })
 }
+
+exports.removeAll = async(req,res)=>{
+
+  var update = await  OnlineCLass.update({},{status:0}).catch(err=>{})
+}

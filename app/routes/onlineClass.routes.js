@@ -54,6 +54,8 @@ module.exports = (app) => {
 
     app.post('/online-class/student/requesttutor', auth, onlineClass.createTutorRequest);
 
+    app.post('/online-class/remove-all', auth, onlineClass.removeAll);
+
     // get join zoom link 
     app.get('/online-class/student/getzoomlink/:id', auth, onlineClass.getZoomLink);
 
