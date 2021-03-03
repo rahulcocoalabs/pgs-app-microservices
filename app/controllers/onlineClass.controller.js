@@ -2602,7 +2602,7 @@ exports.removeAll = async(req,res)=>{
 
  // var update = await  OnlineCLass.updateMany({},{status:0}).catch(err=>{})
 
-  var cnt = await OnlineCLass.find({status:0}).catch(err => {return {err:err.message}});
+  var cnt = await OnlineCLass.countDocuments({status:0}).catch(err => {return {err:err.message}});
 
-  return res.send(cnt);
+  return res.send({number:cnt});
 }
