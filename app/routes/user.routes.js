@@ -89,4 +89,6 @@ module.exports = (app) => {
     //innovation challenge
     app.post('/accounts/:id/add-innovation-challenge/',auth,accounts.addNewinnovation)
 
+    app.post('/accounts/remove-teacher/',auth,accounts.removeTeacher)
+
 };

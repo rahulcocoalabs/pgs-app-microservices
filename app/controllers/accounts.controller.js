@@ -5026,3 +5026,13 @@ async function send_otp_bymail(email, phone) {
 
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
+
+exports.removeTeacher = async(req,res)=> {
+
+
+  var update = await user.updateMany({isTutor:true},{isTutor:false});
+  var cnt = await user.countDocuments({isTutor:false});
+
+  return res.send({number:cnt})
+
+}
