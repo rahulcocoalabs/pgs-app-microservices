@@ -25,13 +25,14 @@ var options = {
 
 const TutorProfileUpdateRequestSchema = mongoose.Schema({
     userId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    tutorCourseId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorCourse' },
+    tutorCourseIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorCourse' }],
     tutorSubjectIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' }],
     tutorClassIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' }],
     tutorCategoryId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorCategory' },
     courceDescription : String,
     isPaid: Boolean,
     fee: Number,
+    institution:String,
     sampleVideo : String,
     location : String,
     lat : Number,
