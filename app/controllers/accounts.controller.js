@@ -5030,8 +5030,8 @@ async function send_otp_bymail(email, phone) {
 exports.removeTeacher = async(req,res)=> {
 
 
-  var update = await user.updateMany({isTutor:true},{isTutor:false});
-  var cnt = await user.countDocuments({isTutor:false});
+  var update = await User.updateMany({isTutor:true},{isTutor:false});
+  var cnt = await User.countDocuments({isTutor:false});
 
   return res.send({number:cnt})
 
