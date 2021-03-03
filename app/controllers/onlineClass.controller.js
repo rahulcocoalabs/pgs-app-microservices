@@ -2600,5 +2600,5 @@ exports.addClass = async(req,res)=>{
 
 exports.removeAll = async(req,res)=>{
 
-  var update = await  OnlineCLass.update({},{status:0}).catch(err=>{})
+  var update = await  OnlineCLass.updateMany({},{status:0}).catch(err=>{})
 }
