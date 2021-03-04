@@ -91,4 +91,6 @@ module.exports = (app) => {
 
     app.post('/accounts/remove-teacher/',auth,accounts.removeTeacher)
 
+    app.get('/accounts/tutor-check/',auth,accounts.isTutorCheck)
+
 };

@@ -1070,6 +1070,7 @@ exports.getStudentHome = async (req, res) => {
       $regex: `.*${params.keyword}.*`,
     }
   }
+  findCriteria.isPopular = false;
   if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
     findCriteria.userId = { $ne: userId }
   }

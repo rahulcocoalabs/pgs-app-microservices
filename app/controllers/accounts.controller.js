@@ -5036,3 +5036,32 @@ exports.removeTeacher = async(req,res)=> {
   return res.send({number:cnt})
 
 }
+
+exports.isTutorCheck = async(req,res) => {
+
+    var userData = req.identity.data;
+    var userId = userData.userId;
+
+    var data = await User.findOne({_id:userId},{isTutor:1}).catch(err=>{
+      return { succes: 0, message: err.message };
+    })
+
+    if (data && data.success != undefined && data.success === 0){
+      return res.send(data);
+    }
+
+    if (data.isTutor == true){
+      return res.send({
+        success:1,
+        message:"success",
+        isTutor : true
+      })
+    }
+    else {
+      return res.send({
+        success:1,
+        message:"success",
+        isTutor : false
+      })
+    }
+}
