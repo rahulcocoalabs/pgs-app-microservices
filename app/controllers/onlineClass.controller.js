@@ -1075,6 +1075,14 @@ exports.getStudentHome = async (req, res) => {
     findCriteria.userId = { $ne: userId }
   }
 
+  var d1 = Date.now();
+
+  var d2 = 1000 * 60 * 60 * 24 * 7;
+
+  findCriteria.tsCreatedAt = {$gt: (d1 - d2)};
+
+  console.log("time-<",d1,d2);
+
 
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
