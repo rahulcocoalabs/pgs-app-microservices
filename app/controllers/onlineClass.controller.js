@@ -1081,7 +1081,7 @@ exports.getStudentHome = async (req, res) => {
 
   findCriteria.tsCreatedAt = {$gt: (d1 - d2)};
 
-  console.log("time-<",d1,d2);
+  console.log("time-<",(d1-d2));
 
 
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
