@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+require('mongoose-double')(mongoose);
+
+var SchemaTypes = mongoose.Schema.Types;
+
 function transform(ret) {
     ret.id = ret._id;
     delete ret._id;
@@ -41,7 +45,7 @@ const OnlineClassSchema = mongoose.Schema({
     tutorName:String,
     video:String,
     title : String,
-    avaregeRating:{type:Number,default:0.0},
+    avaregeRating:{type:SchemaTypes.Double,default:0.0},
     classDescription : String,
     isPaid: Boolean,
     isPopular: Boolean,
