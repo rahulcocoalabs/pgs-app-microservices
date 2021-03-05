@@ -41,7 +41,7 @@ const OnlineClassSchema = mongoose.Schema({
     tutorName:String,
     video:String,
     title : String,
-    avaregeRating:Number,
+    avaregeRating:{type:Number,default:0.0},
     classDescription : String,
     isPaid: Boolean,
     isPopular: Boolean,

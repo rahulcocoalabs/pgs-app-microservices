@@ -1081,9 +1081,8 @@ exports.getStudentHome = async (req, res) => {
 
   findCriteria.tsCreatedAt = {$gt: (d1 - d2)};
 
-  console.log("time-<",(d1-d2));
-
-  console.log(findCriteria);
+  
+  
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
