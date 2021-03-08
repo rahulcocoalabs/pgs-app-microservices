@@ -2768,7 +2768,7 @@ exports.addInstitutionClassAppointment = async(req,res) => {
   const newObj = {
     userId : userId,
     instituteId: req.body.instituteId,
-    instituteClassid: req.body.instituteClassId,
+    instituteClassId: req.body.instituteClassId,
     status: 1,
     tsCreatedAt: Date.now(),
   }
