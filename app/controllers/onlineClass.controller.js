@@ -1103,6 +1103,7 @@ exports.getStudentHome = async (req, res) => {
     popularTutors: listPopularTutorData.items,
     latestClasses: listLatestClassData.items,
     institutes:instituteList,
+    
     classImageBase: classConfig.imageBase,
     tutorImageBase: usersConfig.imageBase,
     message: 'Student home'
