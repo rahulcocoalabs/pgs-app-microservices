@@ -10,6 +10,7 @@ const InstituteSchema = mongoose.Schema({
     isPopular:Boolean,
     location:String,
     phone:String,
+    email:String,
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number

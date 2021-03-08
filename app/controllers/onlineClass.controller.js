@@ -26,6 +26,8 @@ const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
+
+const InstituteClassAppointmentRequest = require('../models/instituteClassAppointment.model');
 const Currency = require('../models/currency.model');
 const TutorSyllabus = require('../models/tutorSyllabus.model');
 const PushNotification = require('../models/pushNotification.model');
@@ -2269,7 +2271,7 @@ exports.createInstitution = async (req, res) => {
   institutionObj.phone = params.phone;
   institutionObj.location = params.location;
   institutionObj.name = params.name;
-
+  institutionObj.email = params.email;
   if (file.image && file.image.length > 0) {
     institutionObj.image = file.image[0].filename;
   }
@@ -2723,6 +2725,69 @@ exports.removeFavouriteInstitution = async(req,res) => {
   }
 
   return res.send({success:1, message:"removed from favourites"})
+
+
+}
+
+
+exports.addFavouriteInstitution = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const cnt = await InstituteClassAppointmentRequest.countDocuments({status:0,userId:userId,instituteId:req.params.id}).catch(err => {
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message,
+    }
+  });
+
+  if (cnt && cnt.success !== undefined && cnt.success === 0) {
+    return res.send(cnt);
+  }
+
+  if (cnt > 0){
+    const saveData= await InstituteClassAppointmentRequest.updateOne({status:0,instituteId:req.body.instituteId,instituteClassId:req.body.instituteClassId,userId:userId},{status:1}).catch(err => {
+      return {
+        success:0,
+        message:"success",
+        error:err.message,
+      }
+    })
+  
+    if (saveData && saveData.success !== undefined && saveData.success === 0) {
+      return res.send(saveData);
+    }
+  
+    return res.send({success:1, message:"added to appointments"})
+  }
+
+  
+
+  const newObj = {
+    userId : userId,
+    instituteId: req.body.instituteId,
+    instituteClassid: req.body.instituteClassId,
+    status: 1,
+    tsCreatedAt: Date.now(),
+  }
+
+  const data = new InstituteClassAppointmentRequest(newObj);
+
+  const saveData= await data.save().catch(err => {
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:1, message:"added to appointments"})
 
 
 }
