@@ -12,4 +12,4 @@ var ClassAppointmentSchema = mongoose.Schema({
     tsModifiedAt: Number
 })
 
-module.exports = mongoose.model('ClassAppointment', ClassAppointmentSchema, 'ClassAppointments');
+module.exports = mongoose.model('InstitutesClassAppointment', ClassAppointmentSchema, 'InstitutesClassAppointments');
