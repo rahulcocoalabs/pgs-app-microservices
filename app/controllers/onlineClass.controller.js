@@ -1090,15 +1090,39 @@ exports.getStudentHome = async (req, res) => {
     return res.send(listLatestClassData);
   }
 
+  var instituteList = [];
+  if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
+
+    instituteList = await listInstitutes( perPage, page,);
+
+  }
+
   return res.send({
     success: 1,
     popularClasses: listPopularClassData.items,
     popularTutors: listPopularTutorData.items,
     latestClasses: listLatestClassData.items,
+    institutes:instituteList,
     classImageBase: classConfig.imageBase,
     tutorImageBase: usersConfig.imageBase,
     message: 'Student home'
   })
+}
+
+async function listInstitutes( userId,perPage, page){
+
+
+  var data = await FavouriteInstitute.find({status:1,userId:userId},{instituteId:1},{perPage:perPage,page:page}).populate({path:"instituteId",select:{"name":1,"image":1}).catch(err=>{
+    return {success:0,message:"some thing went wrong",error: err.message}
+  });
+
+  if (data && data.succes != undefined && data.success === 0){
+    return [];
+  }
+
+
+
+
 }
 
 exports.getTutorDetails = async (req, res) => {
