@@ -2626,7 +2626,7 @@ exports.addFavouriteInstitution = async(req,res) => {
 
   
 
-  const newobj = {
+  const newObj = {
     userId : userId,
     instituteId: req.params.id,
     status: 1,
