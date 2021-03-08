@@ -17,7 +17,7 @@ var crypto = require("crypto");
 const User = require('../models/user.model');
 const OnlineCLass = require('../models/onlineClass.model');
 
-const FavouriteInstitutes = require('../models/favouriteInstitutes.model');
+const FavouriteInstitute = require('../models/favouriteInstitutes.model');
 const InstitutionClass = require('../models/instituteClass.model');
 const tutorRequestModel = require('../models/requestForTutor.model');
 const Instituion = require('../models/institute.model');
