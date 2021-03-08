@@ -2735,7 +2735,7 @@ exports.addInstitutionClassAppointment = async(req,res) => {
   const userData = req.identity.data;
   const userId = userData.userId;
 
-  const cnt = await InstituteClassAppointmentRequest.countDocuments({status:0,userId:userId,instituteId:req.params.id}).catch(err => {
+  const cnt = await InstituteClassAppointmentRequest.countDocuments({status:0,userId:userId,instituteId:req.body.instituteId,instituteClassId:req.body.instituteClassId}).catch(err => {
     return {
       success:0,
       message:"something went wrong",
