@@ -77,4 +77,7 @@ module.exports = (app) => {
         name: 'image', maxCount: 1
     }]), auth, onlineClass.addClass);
 
+    app.post('/online-class/add-institution-favourite/:id', auth, onlineClass.addFavouriteInstitution);
+    app.delete('/online-class/add-institution-favourite/:id', auth, onlineClass.removeFavouriteInstitution);
+
 }

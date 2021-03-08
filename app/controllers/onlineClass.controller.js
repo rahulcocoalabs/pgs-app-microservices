@@ -16,6 +16,8 @@ var crypto = require("crypto");
 
 const User = require('../models/user.model');
 const OnlineCLass = require('../models/onlineClass.model');
+
+const FavouriteInstitutes = require('../models/favouriteInstitutes.model');
 const InstitutionClass = require('../models/instituteClass.model');
 const tutorRequestModel = require('../models/requestForTutor.model');
 const Instituion = require('../models/institute.model');
@@ -2615,4 +2617,59 @@ exports.removeAll = async(req,res)=>{
   var cnt = await OnlineCLass.countDocuments({status:0}).catch(err => {return {err:err.message}});
 
   return res.send({number:cnt});
+}
+
+exports.addFavouriteInstitution = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  
+
+  const newobj = {
+    userId : userId,
+    instituteId: req.params.id,
+    status: 1,
+    tsCreatedAt: Date.now(),
+  }
+
+  const data = new FavouriteInstitute(newObj);
+
+  const saveData= await data.save().catch(err => {
+    return {
+      success:0,
+      message:"success",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:0, message:"added to favourites"})
+
+
+}
+
+exports.removeFavouriteInstitution = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const saveData= await FavouriteInstitute.updateOne({status:1,instituteId:req.params.id,userId:userId},{status:0}).catch(err => {
+    return {
+      success:0,
+      message:"success",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:0, message:"removed from favourites"})
+
+
 }
