@@ -1093,7 +1093,7 @@ exports.getStudentHome = async (req, res) => {
   var instituteList = [];
   if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
 
-    instituteList = await listInstitutes( perPage, page,);
+    instituteList = await listInstitutes( userId,perPage, page,);
 
   }
 
