@@ -2624,6 +2624,34 @@ exports.addFavouriteInstitution = async(req,res) => {
   const userData = req.identity.data;
   const userId = userData.userId;
 
+  const cnt = await FavouriteInstitute.countDocuments({status:0,userId:userId,instituteId:req.params.id}).catch(err => {
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message,
+    }
+  });
+
+  if (cnt && cnt.success !== undefined && cnt.success === 0) {
+    return res.send(cnt);
+  }
+
+  if (cnt > 0){
+    const saveData= await FavouriteInstitute.updateOne({status:0,instituteId:req.params.id,userId:userId},{status:1}).catch(err => {
+      return {
+        success:0,
+        message:"success",
+        error:err.message,
+      }
+    })
+  
+    if (saveData && saveData.success !== undefined && saveData.success === 0) {
+      return res.send(saveData);
+    }
+  
+    return res.send({success:0, message:"added to favourites"})
+  }
+
   
 
   const newObj = {
@@ -2638,7 +2666,7 @@ exports.addFavouriteInstitution = async(req,res) => {
   const saveData= await data.save().catch(err => {
     return {
       success:0,
-      message:"success",
+      message:"something went wrong",
       error:err.message,
     }
   })
