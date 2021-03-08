@@ -2735,6 +2735,24 @@ exports.addInstitutionClassAppointment = async(req,res) => {
   const userData = req.identity.data;
   const userId = userData.userId;
 
+  var errors = []
+  if (!req.body.instituteId){
+    errors.push({
+      field: "instituteId",
+      message: "instituteId cannot be empty"
+    })
+  }
+  if (!req.body.instituteClassId){
+    errors.push({
+      field: "instituteClassId",
+      message: "instituteClassId cannot be empty"
+    })
+  }
+
+  if (errors.length > 0){
+    return res.send(errors);
+  }
+
   const cnt = await InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId,instituteId:req.body.instituteId,instituteClassId:req.body.instituteClassId}).catch(err => {
     return {
       success:0,
