@@ -2750,7 +2750,12 @@ exports.addInstitutionClassAppointment = async(req,res) => {
   }
 
   if (errors.length > 0){
-    return res.send(errors);
+    return res.status(200).send({
+      success: 0,
+      errors: errors,
+
+      code: 200
+    });
   }
 
   const cnt = await InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId,instituteId:req.body.instituteId,instituteClassId:req.body.instituteClassId}).catch(err => {
