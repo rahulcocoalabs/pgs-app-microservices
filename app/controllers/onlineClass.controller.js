@@ -2649,7 +2649,7 @@ exports.addFavouriteInstitution = async(req,res) => {
       return res.send(saveData);
     }
   
-    return res.send({success:0, message:"added to favourites"})
+    return res.send({success:1, message:"added to favourites"})
   }
 
   
@@ -2675,7 +2675,7 @@ exports.addFavouriteInstitution = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:0, message:"added to favourites"})
+  return res.send({success:1, message:"added to favourites"})
 
 
 }
@@ -2697,7 +2697,7 @@ exports.removeFavouriteInstitution = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:0, message:"removed from favourites"})
+  return res.send({success:1, message:"removed from favourites"})
 
 
 }
