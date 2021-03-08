@@ -2748,19 +2748,9 @@ exports.addInstitutionClassAppointment = async(req,res) => {
   }
 
   if (cnt > 0){
-    const saveData= await InstituteClassAppointmentRequest.updateOne({status:0,instituteId:req.body.instituteId,instituteClassId:req.body.instituteClassId,userId:userId},{status:1}).catch(err => {
-      return {
-        success:0,
-        message:"success",
-        error:err.message,
-      }
-    })
+    
   
-    if (saveData && saveData.success !== undefined && saveData.success === 0) {
-      return res.send(saveData);
-    }
-  
-    return res.send({success:1, message:"added to appointments"})
+    return res.send({success:1, message:"already added to appointments"})
   }
 
   
