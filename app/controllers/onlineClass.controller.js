@@ -2730,7 +2730,7 @@ exports.removeFavouriteInstitution = async(req,res) => {
 }
 
 
-exports.addFavouriteInstitution = async(req,res) => {
+exports.addInstitutionClassAppointment = async(req,res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
