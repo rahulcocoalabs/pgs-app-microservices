@@ -1113,7 +1113,7 @@ exports.getStudentHome = async (req, res) => {
 async function listInstitutes( userId,perPage, page){
 
 
-  var data = await FavouriteInstitute.find({status:1,userId:userId},{instituteId:1},{perPage:perPage,page:page}).populate({path:"instituteId",select:{"name":1,"image":1}}).catch(err=>{
+  var data = await FavouriteInstitute.find({status:1,userId:userId},{instituteId:1},{perPage:perPage,page:page}).populate({path:"instituteId"}).catch(err=>{
     return {success:0,message:"some thing went wrong",error: err.message}
   });
 
