@@ -78,6 +78,6 @@ module.exports = (app) => {
     }]), auth, onlineClass.addClass);
 
     app.post('/online-class/add-institution-favourite/:id', auth, onlineClass.addFavouriteInstitution);
-    app.delete('/online-class/add-institution-favourite/:id', auth, onlineClass.removeFavouriteInstitution);
+    app.delete('/online-class/remove-institution-favourite/:id', auth, onlineClass.removeFavouriteInstitution);
 
 }
