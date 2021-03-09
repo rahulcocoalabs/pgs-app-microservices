@@ -2744,14 +2744,14 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data1 = InstituteClassAppointmentRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
+  var data1 = await InstituteClassAppointmentRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (data1 && data1.success !== undefined && data1.success === 0){
     return res.send(data1);
   }
 
-  var dataCount = InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId}).catch(err=>{
+  var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (dataCount && dataCount.success !== undefined && dataCount.success === 0){
