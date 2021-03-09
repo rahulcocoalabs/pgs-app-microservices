@@ -2729,6 +2729,57 @@ exports.removeFavouriteInstitution = async(req,res) => {
 
 }
 
+exports.listInstitutionClassAppointment = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  var page = Number(page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
+
+  var data = InstituteClassAppointmentRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
+    return {success:0,message:"something went wrong",error:err.message};
+  })
+  if (data && data.success !== undefined && data.success === 0){
+    return res.send(data);
+  }
+
+  var dataCount = InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId}).catch(err=>{
+    return {success:0,message:"something went wrong",error:err.message};
+  })
+  if (dataCount && dataCount.success !== undefined && dataCount.success === 0){
+    return res.send(dataCount);
+  }
+
+  var totalPages = dataCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+      page: page,
+      perPage: perPage,
+      hasNextPage: hasNextPage,
+      totalItems: itemsCount,
+      totalPages: totalPages
+  }
+
+  return res.send({
+    success:1,
+    message:"success",
+    pagination,
+    items:data
+  })
+
+
+
+}
+
 
 exports.addInstitutionClassAppointment = async(req,res) => {
 
