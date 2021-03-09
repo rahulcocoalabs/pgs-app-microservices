@@ -2744,7 +2744,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data = InstituteClassAppointmentRequest.find({status:1,userId:userId}).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
+  var data = InstituteClassAppointmentRequest.find({status:1,userId:userId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (data && data.success !== undefined && data.success === 0){
