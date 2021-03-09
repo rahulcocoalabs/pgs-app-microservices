@@ -2339,7 +2339,7 @@ exports.listInstitutesAtHome = async(req,res) => {
   //   return res.send(inst_list_popular);
   // }
 
-  var dataCount = await Instituion.countDocuments({status:1},{name:1,image:1,location:1}).catch(err=>{
+  var dataCount = await Instituion.countDocuments({status:1}).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
