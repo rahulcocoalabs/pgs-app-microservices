@@ -2430,6 +2430,7 @@ exports.detailInstitution = async (req, res) => {
   ret_Obj.detail = detail;
   ret_Obj.isOwner = isOwner;
   ret_Obj.listClasses = detailListClasses;
+  ret_Obj.isFavourite = isFavourite;
   return res.send(ret_Obj);
 
 }
