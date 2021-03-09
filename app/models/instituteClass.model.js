@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
+require('mongoose-double')(mongoose);
 
+var SchemaTypes = mongoose.Schema.Types;
 
 
 const InstituteClassSchema = mongoose.Schema({
@@ -22,7 +24,7 @@ const InstituteClassSchema = mongoose.Schema({
     tutorName:String,
     video:String,
     title : String,
-    avaregeRating:Number,
+    avaregeRating:{type:SchemaTypes.Double,default:0.0},
     classDescription : String,
     isPaid: Boolean,
     isPopular: Boolean,
