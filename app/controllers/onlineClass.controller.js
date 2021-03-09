@@ -2744,11 +2744,11 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data = InstituteClassAppointmentRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
+  var data1 = InstituteClassAppointmentRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
-  if (data && data.success !== undefined && data.success === 0){
-    return res.send(data);
+  if (data1 && data1.success !== undefined && data1.success === 0){
+    return res.send(data1);
   }
 
   var dataCount = InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId}).catch(err=>{
@@ -2773,7 +2773,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     success:1,
     message:"success",
     pagination,
-    items:data
+    items:data1
   })
 
 
