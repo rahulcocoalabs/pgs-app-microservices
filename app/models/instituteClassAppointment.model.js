@@ -8,6 +8,8 @@ var ClassAppointmentSchema = mongoose.Schema({
     instituteId: { type: mongoose.Schema.Types.ObjectId, ref: 'Institute' },
     instituteClassId: { type: mongoose.Schema.Types.ObjectId, ref: 'InstituteClass' },
     status: Number,
+    isApproved:Boolean,
+    isRejected:Boolean,
     tsCreatedAt: Number,
     tsModifiedAt: Number
 })
