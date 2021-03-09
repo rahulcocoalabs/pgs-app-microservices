@@ -2314,9 +2314,12 @@ exports.listInstitutesAtHome = async(req,res) => {
   perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
-  
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
 
-  var inst_list = await Instituion.find({status:1},{name:1,image:1,location:1}).limit(page).skip(offset).catch(err=>{
+  var inst_list = await Instituion.find({status:1},{name:1,image:1,location:1},pageParams).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
