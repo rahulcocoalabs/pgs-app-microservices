@@ -2319,7 +2319,7 @@ exports.listInstitutesAtHome = async(req,res) => {
     limit: perPage
   };
 
-  var inst_list = await Instituion.find({status:1},{name:1,image:1,location:1},pageParams).catch(err=>{
+  var inst_list = await Instituion.find({status:1},{name:1,image:1,location:1,email:1,phone:1},pageParams).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
