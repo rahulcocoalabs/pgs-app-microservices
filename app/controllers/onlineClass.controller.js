@@ -2403,6 +2403,26 @@ exports.detailInstitution = async (req, res) => {
     return res.send(detailListClasses);
   }
 
+  var isFavourite = false;
+
+  const cnt = await FavouriteInstitute.countDocuments({status:1,userId:userId,instituteId:req.params.id}).catch(err => {
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message,
+    }
+  });
+
+  if (cnt && cnt.success !== undefined && cnt.success === 0) {
+    return res.send(cnt);
+  }
+
+  if (cnt > 0){
+    isFavourite = true;
+  }
+
+
+
   var ret_Obj = {};
   ret_Obj.success = 1;
   ret_Obj.message = "fetched data successfully";
