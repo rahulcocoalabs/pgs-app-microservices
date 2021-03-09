@@ -2304,7 +2304,7 @@ exports.createInstitution = async (req, res) => {
 }
 
 
-exports.listInstitutes = async(req,res) => {
+exports.listInstitutesAtHome = async(req,res) => {
 
   var params = req.query;
 
@@ -2343,7 +2343,7 @@ exports.listInstitutes = async(req,res) => {
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
-      error: err
+      error: err.message
     }
   })
   if (dataCount && (dataCount.success !== undefined) && (dataCount.success === 0)) {

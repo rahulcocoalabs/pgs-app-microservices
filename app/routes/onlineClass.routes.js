@@ -67,7 +67,7 @@ module.exports = (app) => {
         name: 'image', maxCount: 1
     }]), auth, onlineClass.createInstitution);
 
-    app.get('/online-class/list-institutes', auth, onlineClass.listInstitutes);
+    app.get('/online-class/list-institutes', auth, onlineClass.listInstitutesAtHome);
 
     app.get('/online-class/detail-institute/:id', auth, onlineClass.detailInstitution);
 
