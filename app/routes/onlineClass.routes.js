@@ -83,5 +83,5 @@ module.exports = (app) => {
     app.post('/online-class/add-institution-class-appointment', auth, onlineClass.addInstitutionClassAppointment);
     app.delete('/online-class/reject-institution-class-appointment/:id', auth, onlineClass.rejectInstitutionClassAppointment);
     app.patch('/online-class/accept-institution-class-appointment/:id', auth, onlineClass.acceptInstitutionClassAppointment);
-    app.get('/online-class/list-institution-class-appointment', auth, onlineClass.listInstitutionClassAppointment);
+    app.get('/online-class/list-institution-class-appointment/:id', auth, onlineClass.listInstitutionClassAppointment);
 }
