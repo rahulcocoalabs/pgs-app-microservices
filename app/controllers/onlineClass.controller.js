@@ -2396,7 +2396,7 @@ exports.detailInstitution = async (req, res) => {
     isOwner = 1;
   }
 
-  var detailListClasses = await InstitutionClass.find({status:1,institution:id},{tsCreatedAt:0,tsModifiedAt:0,status:0}).catch(err => {
+  var detailListClasses = await InstitutionClass.find({status:1,institution:id},{tsCreatedAt:0,tsModifiedAt:0,status:0}).populate({path:"shopOwnerId",select:"name"}).catch(err => {
     return {success:0,err:err.message,message:"could not fetch data"};
   })
   if (detailListClasses && (detailListClasses.success !== undefined) && (detailListClasses.success === 0)) {
