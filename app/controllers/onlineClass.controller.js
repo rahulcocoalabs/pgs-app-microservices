@@ -2770,6 +2770,8 @@ exports.listInstitutionClassAppointment = async(req,res) => {
   const userData = req.identity.data;
   const userId = userData.userId;
 
+  var classId = req.params.id;
+
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || classConfig.resultsPerPage;
@@ -2780,14 +2782,14 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data1 = await InstituteClassAppointmentRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
+  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (data1 && data1.success !== undefined && data1.success === 0){
     return res.send(data1);
   }
 
-  var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId}).catch(err=>{
+  var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,instituteClassId:classId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (dataCount && dataCount.success !== undefined && dataCount.success === 0){
@@ -2816,12 +2818,37 @@ exports.listInstitutionClassAppointment = async(req,res) => {
 
 }
 
-exports.removeInstitutionClassAppointment = async(req,res) => {
+exports.rejectInstitutionClassAppointment = async(req,res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
-  const saveData= await InstituteClassAppointmentRequest.updateOne({status:1,_id:req.params.id},{status:0}).catch(err => {
+
+
+  const saveData= await InstituteClassAppointmentRequest.updateOne({status:1,_id:req.params.id},{isRejected:true}).catch(err => {
+    return {
+      success:0,
+      message:"success",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:1, message:"removed your request"})
+
+
+}
+exports.acceptInstitutionClassAppointment = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+
+
+  const saveData= await InstituteClassAppointmentRequest.updateOne({status:1,_id:req.params.id},{isApproved:true}).catch(err => {
     return {
       success:0,
       message:"success",
