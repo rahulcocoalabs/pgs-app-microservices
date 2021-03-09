@@ -2765,7 +2765,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
       page: page,
       perPage: perPage,
       hasNextPage: hasNextPage,
-      totalItems: itemsCount,
+      totalItems: dataCount,
       totalPages: totalPages
   }
 
