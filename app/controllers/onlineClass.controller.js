@@ -2780,6 +2780,28 @@ exports.listInstitutionClassAppointment = async(req,res) => {
 
 }
 
+exports.removeInstitutionClassAppointment = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const saveData= await InstituteClassAppointmentRequest.updateOne({status:1,_id:req.params.id},{status:0}).catch(err => {
+    return {
+      success:0,
+      message:"success",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:1, message:"removed your request"})
+
+
+}
+
 
 exports.addInstitutionClassAppointment = async(req,res) => {
 

@@ -81,5 +81,6 @@ module.exports = (app) => {
     app.delete('/online-class/remove-institution-favourite/:id', auth, onlineClass.removeFavouriteInstitution);
 
     app.post('/online-class/add-institution-class-appointment', auth, onlineClass.addInstitutionClassAppointment);
+    app.delete('/online-class/remove-institution-class-appointment/:id', auth, onlineClass.removeInstitutionClassAppointment);
     app.get('/online-class/list-institution-class-appointment', auth, onlineClass.listInstitutionClassAppointment);
 }
