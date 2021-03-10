@@ -2782,7 +2782,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteClassId',select:{'availableFromTime':1,'availableToTime':1,'title':1,'image':1}}]).catch(err=>{
+  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteClassId',select:{'availableFromTime':1,'availableToTime':1,'title':1,'image':1}},{path:'userId',select:{'firstName':1,'image':1}}]).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (data1 && data1.success !== undefined && data1.success === 0){
