@@ -2789,7 +2789,9 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     return res.send(data1);
   }
 
-  data1['subject'] = "chemistry";
+  var data2 = {}
+
+  data2['subject'] = "chemistry";
 
   var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,instituteClassId:classId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
@@ -2813,7 +2815,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     success:1,
     message:"success",
     pagination,
-    items:data1
+    items:data2
   })
 
 
