@@ -2782,7 +2782,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteClassId',select:{'availableFromTime':1,'availableToTime':1,'title':1,'image':1}},{path:'userId',select:{'firstName':1,'image':1}}]).catch(err=>{
+  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteClassId',select:{'availableFromTime':1,'availableToTime':1,'title':1,'image':1}},{path:'userId',select:{'firstName':1,'image':1}},{path:'tutorSubjectId'},{path:'tutorClassId'}]).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (data1 && data1.success !== undefined && data1.success === 0){
@@ -2901,6 +2901,19 @@ exports.addInstitutionClassAppointment = async(req,res) => {
     })
   }
 
+  if (!req.body.tutorSubjectId){
+    errors.push({
+      field: "tutorSubjectId",
+      message: "tutorSubjectId cannot be empty"
+    })
+  }
+  if (!req.body.tutorClassId){
+    errors.push({
+      field: "tutorClassId",
+      message: "tutorClassId cannot be empty"
+    })
+  }
+
   if (errors.length > 0){
     return res.status(200).send({
       success: 0,
@@ -2934,6 +2947,8 @@ exports.addInstitutionClassAppointment = async(req,res) => {
     userId : userId,
     instituteId: req.body.instituteId,
     instituteClassId: req.body.instituteClassId,
+    tutorClassId:req.body.tutorClassId, 
+    tutorSubjectId:req.body.tutorSubjectId,
     isApproved:false,
     isRejected:false,
     status: 1,
