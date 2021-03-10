@@ -2827,7 +2827,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     success:1,
     message:"success",
     pagination,
-    items:arr
+    items:data1
   })
 
 
