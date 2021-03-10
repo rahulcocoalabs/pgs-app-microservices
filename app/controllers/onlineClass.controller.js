@@ -2942,3 +2942,79 @@ exports.addInstitutionClassAppointment = async(req,res) => {
 
 
 }
+
+exports.getInstituteClassDetails = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+  var classId = req.params.id;
+
+  var classId = req.params.id;
+  // var favouriteDataResp = await getUserFavouriteData(userId);
+  // if (favouriteDataResp && (favouriteDataResp.success !== undefined) && (favouriteDataResp.success === 0)) {
+  //   return res.send(favouriteDataResp);
+  // }
+  // var favouriteData = favouriteDataResp.favouriteData;
+  var classDetails = await InstitutionClass.findOne({
+    _id: classId,
+    // isApproved: true,
+    // isRejected: false,
+    status: 1
+  })
+    .populate([{
+      path: 'userId',
+    }, {
+      path: 'tutorSubjectId',
+    }, {
+      path: 'tutorClassId',
+    }, {
+      path: 'currencyId',
+    },
+    {
+      path: 'tutorSyllabusId',
+    }])
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get class details',
+        error: err
+      }
+    })
+  if (classDetails && (classDetails.success !== undefined) && (classDetails.success === 0)) {
+    return res.send(classDetails);
+  }
+  if (classDetails) {
+    // classDetails = JSON.parse(JSON.stringify(classDetails))
+    // var checkResp = await checkIfJoinLinkAvailable(classDetails, userId);
+    // if (checkResp && (checkResp.success !== undefined) && (checkResp.success === 0)) {
+    //   return res.send(checkResp);
+    // }
+    // if (favouriteData && favouriteData.favouriteClass !== null && favouriteData.favouriteClass !== undefined) {
+    //   var index = await favouriteData.favouriteClass.findIndex(id => JSON.stringify(id) === JSON.stringify(classId));
+    //   if (index > -1) {
+    //     classDetails.isFavourite = true;
+    //   } else {
+    //     classDetails.isFavourite = false;
+    //   }
+    // } else {
+    //   classDetails.isFavourite = false;
+    // }
+
+    return res.send({
+      success: 1,
+      flag: 1,
+      item: classDetails,
+      //joinLinkAvailable: checkResp.joinLinkAvailable,
+      classImageBase: classConfig.imageBase,
+      tutorImageBase: usersConfig.imageBase,
+      tutorVideoBase: tutorConfig.videoBase,
+      message: 'Class details'
+    })
+
+  } else {
+    return res.send({
+      success: 0,
+      message: "Class not exists"
+    })
+  }
+}
