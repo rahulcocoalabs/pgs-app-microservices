@@ -16,7 +16,7 @@ var crypto = require("crypto");
 
 const User = require('../models/user.model');
 const OnlineCLass = require('../models/onlineClass.model');
-
+const FavouriteClass = require('../models/instituteClassFavourite.model')
 const FavouriteInstitute = require('../models/favouriteInstitutes.model');
 const InstitutionClass = require('../models/instituteClass.model');
 const tutorRequestModel = require('../models/requestForTutor.model');
@@ -2782,7 +2782,7 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteId'},{path:'instituteClassId'}]).catch(err=>{
+  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteClassId'}]).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
   if (data1 && data1.success !== undefined && data1.success === 0){
@@ -3017,4 +3017,86 @@ exports.getInstituteClassDetails = async (req, res) => {
       message: "Class not exists"
     })
   }
+}
+
+exports.addInstitutionClassFavourite = async(req,res) => {
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const cnt = await FavouriteClass.countDocuments({status:0,userId:userId,instituteId:req.params.id}).catch(err => {
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message,
+    }
+  });
+
+  if (cnt && cnt.success !== undefined && cnt.success === 0) {
+    return res.send(cnt);
+  }
+
+  if (cnt > 0){
+    const saveData= await FavouriteClass.updateOne({status:0,institutionClass:req.params.id,userId:userId},{status:1}).catch(err => {
+      return {
+        success:0,
+        message:"success",
+        error:err.message,
+      }
+    })
+  
+    if (saveData && saveData.success !== undefined && saveData.success === 0) {
+      return res.send(saveData);
+    }
+  
+    return res.send({success:1, message:"added to favourites"})
+  }
+
+  
+
+  const newObj = {
+    userId : userId,
+    instituteId: req.params.id,
+    status: 1,
+    tsCreatedAt: Date.now(),
+  }
+
+  const data = new FavouriteInstitute(newObj);
+
+  const saveData= await data.save().catch(err => {
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:1, message:"added to favourites"})
+
+
+}
+
+exports.removeInstitutionClassFavourite = async(req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const saveData= await FavouriteClass.updateOne({status:1,instituteId:req.params.id,userId:userId},{status:0}).catch(err => {
+    return {
+      success:0,
+      message:"success",
+      error:err.message,
+    }
+  })
+
+  if (saveData && saveData.success !== undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({success:1, message:"removed from favourites"})
+
+
 }
