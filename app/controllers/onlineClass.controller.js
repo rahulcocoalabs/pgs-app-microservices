@@ -2789,21 +2789,21 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     return res.send(data1);
   }
 
-  var arr = [];
+  // var arr = [];
 
-  for (x in data1){
-    var data2 = {}
-    var obj = data1[x];
+  // for (x in data1){
+  //   var data2 = {}
+  //   var obj = data1[x];
 
-  data2['subject'] = "chemistry";
-  data2["_id"] = obj._id;
-  data2["userId"] = obj.userId;
-  data2["instituteClassId"] = obj.instituteClassId;
-  data2["isApproved"] = obj.isApproved;
-  data2["isRejected"] = obj.isRejected;
+  // data2['subject'] = "chemistry";
+  // data2["_id"] = obj._id;
+  // data2["userId"] = obj.userId;
+  // data2["instituteClassId"] = obj.instituteClassId;
+  // data2["isApproved"] = obj.isApproved;
+  // data2["isRejected"] = obj.isRejected;
 
-  arr.push(data2);
-  }
+  // arr.push(data2);
+  // }
   
   var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,instituteClassId:classId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
