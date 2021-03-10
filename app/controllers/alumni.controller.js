@@ -8,6 +8,7 @@ const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
 const { TUTOR_TYPE } = require('../helpers/constants.js');
+var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 
 exports.addAlumni = async (req, res) => {
 
@@ -241,6 +242,15 @@ exports.joinRequest = async (req, res) => {
     if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0) {
         return res.send(newGroupReq);
     }
+
+    var notificationObj = {
+        title: " request for joining group",
+        message: "Some has sent request for joining group",
+       
+       
+        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+      }
+      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
     res.send({
         success: 1,
