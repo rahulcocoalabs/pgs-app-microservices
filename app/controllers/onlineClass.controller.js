@@ -2789,6 +2789,8 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     return res.send(data1);
   }
 
+  data1.subject = "chemistry";
+
   var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,instituteClassId:classId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   })
