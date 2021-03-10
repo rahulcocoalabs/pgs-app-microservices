@@ -2792,11 +2792,11 @@ exports.listInstitutionClassAppointment = async(req,res) => {
   var data2 = {}
 
   data2['subject'] = "chemistry";
-  data2._id = data1._id;
-  data2.userId = data1.userId;
-  data2.instituteClassId = data1.instituteClassId;
-  data2.isApproved = data1.isApproved;
-  data2.isRejected = data1.isRejected;
+  data2["_id"] = data1._id;
+  data2["userId"] = data1.userId;
+  data2["instituteClassId"] = data1.instituteClassId;
+  data2["isApproved"] = data1.isApproved;
+  data2["isRejected"] = data1.isRejected;
   
   var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,instituteClassId:classId}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
