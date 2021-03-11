@@ -243,7 +243,19 @@ exports.joinRequest = async (req, res) => {
         return res.send(newGroupReq);
     }
 
-    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value":userId }]
+    var groupInfo = await Alumni.findOne({_id:params.groupId}).catch(err=>{
+        return {success:0, message: "did not get detail for requests", error: err.message}
+    })
+
+    if (groupInfo && groupInfo.success != undefined && groupInfo.success === 0){
+        return res.send(groupInfo)
+    }
+
+    var owner = groupInfo.createdBy;
+
+    
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value":owner }]
 
     var notificationObj = {
         title: " request for joining group",
@@ -252,7 +264,7 @@ exports.joinRequest = async (req, res) => {
         filtersJsonArr,
          // metaInfo,
       
-      userId: userId,
+      userId: owner,
       notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
       }
       let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
