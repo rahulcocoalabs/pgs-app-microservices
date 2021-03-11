@@ -7,6 +7,8 @@ const AlumniEventsSchema = mongoose.Schema({
     description: String,
     venue : String,
     date: String,
+    availableFromTime:Number,
+    availableToTime:Number,
     groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },
     image:String,
     status:Number,

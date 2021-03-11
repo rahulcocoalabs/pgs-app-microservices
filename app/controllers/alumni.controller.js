@@ -189,7 +189,13 @@ exports.listAlumni1 = (rew,res) => {
     // shrink the array by eliminating duplicate values
 
 
-    // take the count of array
+    // take the count of array and compare with pageparams 
+
+    // case 1 only this member alumnis to show
+
+    // case 2 both totalPages
+
+    // case 3 only non member alumnis to show
 
 
 }
@@ -720,7 +726,8 @@ exports.addAlumniEvents = async (req, res) => {
         date: params.date,
         groupId: params.groupId,
         image: imagePath,
-
+        availableFromTime:Number,
+        availableToTime:Number,
 
         status: 1,
         tsCreatedAt: Date.now(),
