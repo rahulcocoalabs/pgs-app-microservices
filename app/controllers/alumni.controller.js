@@ -243,12 +243,17 @@ exports.joinRequest = async (req, res) => {
         return res.send(newGroupReq);
     }
 
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value":userId }]
+
     var notificationObj = {
         title: " request for joining group",
         message: "Some has sent request for joining group",
-       
-       
-        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+        type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+        filtersJsonArr,
+         // metaInfo,
+      
+      userId: userId,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
       }
       let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
