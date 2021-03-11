@@ -169,6 +169,31 @@ exports.listAlumni = async (req, res) => {
     })
 }
 
+exports.listAlumni1 = (rew,res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+    // from alumni join request get elements of approved request from same userId project group only
+
+    // shrink the array by eliminating duplicate values
+
+
+    // take the count of array
+
+
+}
+
 exports.joinRequest = async (req, res) => {
 
     const data = req.identity.data;
@@ -260,7 +285,7 @@ exports.joinRequest = async (req, res) => {
     var notificationObj = {
         title: " request for joining group",
         message: "Some has sent request for joining group",
-        type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+        type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
         filtersJsonArr,
          // metaInfo,
       
