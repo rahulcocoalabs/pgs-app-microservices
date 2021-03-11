@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const AlumniJoinRequestSchema = mongoose.Schema({
 
     name:String,
+    comments : String,
     address:String,
     companyName:String,
     designation:String,

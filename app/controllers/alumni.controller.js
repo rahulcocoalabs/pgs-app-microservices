@@ -206,6 +206,18 @@ exports.joinRequest = async (req, res) => {
             message: "please add a name for your group Id"
         })
     }
+    if (!params.name) {
+        errors.push({
+            filed: "name",
+            message: "please add a name "
+        })
+    }
+    if (!params.comments) {
+        errors.push({
+            filed: "comments",
+            message: "please add  comments "
+        })
+    }
 
 
     if (errors.length > 0) {
@@ -234,6 +246,7 @@ exports.joinRequest = async (req, res) => {
 
     const newObject = {
         name: params.name,
+        comments:params.comments,
         address: params.address,
         companyName: params.address,
         designation: params.designation,
