@@ -169,7 +169,7 @@ exports.listAlumni = async (req, res) => {
     })
 }
 
-exports.listAlumni1 = (rew,res) => {
+exports.listAlumni1 = async(req,res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
