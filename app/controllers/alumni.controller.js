@@ -726,8 +726,8 @@ exports.addAlumniEvents = async (req, res) => {
         date: params.date,
         groupId: params.groupId,
         image: imagePath,
-        availableFromTime:Number,
-        availableToTime:Number,
+        availableFromTime:params.availableFromTime,
+        availableToTime:params.availableToTime,
 
         status: 1,
         tsCreatedAt: Date.now(),
