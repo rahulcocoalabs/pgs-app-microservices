@@ -113,7 +113,7 @@ module.exports = Object.freeze({
     APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE : 'appointmentStatusUpdate',
 
     ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE: 'alumniJoinRequestStatusUpdate',
-
+    ALUMNI_EVENT_PARTICIPATION: 'alumniEventParticipation',
     //push notification message
     APPOINTMENT_STATUS_UPDATE_NOTIFICATION_MESSAGE : 'Your appointment request',
 

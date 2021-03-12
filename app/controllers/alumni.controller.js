@@ -1143,6 +1143,31 @@ exports.eventParticipate = async (req, res) => {
         return res.send(newGroupReq);
     }
 
+    var groupInfo = await Alumni.findOne({_id:params.groupId}).catch(err=>{
+        return {success:0, message: "did not get detail for requests", error: err.message}
+    })
+
+    if (groupInfo && groupInfo.success != undefined && groupInfo.success === 0){
+        return res.send(groupInfo)
+    }
+
+    var owner = groupInfo.createdBy;
+
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value":owner }]
+
+    var notificationObj = {
+        title: " Request for event participation",
+        message: "Some has sent request for participating event",
+        type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
+        filtersJsonArr,
+         // metaInfo,
+      
+      userId: owner,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+      }
+      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
     res.send({
         success: 1,
         message: "success",
