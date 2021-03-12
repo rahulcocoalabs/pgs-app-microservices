@@ -186,16 +186,55 @@ exports.listAlumni1 = (rew,res) => {
 
     // from alumni join request get elements of approved request from same userId project group only
 
+    var count = await AlumniJoinRequest.find({ status: 1,user: userId,isApproved:true}).catch(err => {
+        return {success:0,message:"something went wrong", error: err.message}
+    })
+
+    if (count && count.success != undefined && count.success === 0){
+        return res.send(count)
+    }
+
+    var group = []
+
     // shrink the array by eliminating duplicate values
+
+
+    for (x in count){
+
+        var elem = count[x];
+        var groupId = elem.group;
+        var cond = group.includes(groupId);
+
+        if (cond === false ){
+            group.push.groupId
+        }
+    }
 
 
     // take the count of array and compare with pageparams 
 
+    var sizeOfCount = group.length;
+
+    var markOffset = perPage * (page);
+
+    var mark2Offset = (perPage ) * (page + 1);
+
     // case 1 only this member alumnis to show
+
+    if (sizeOfCount > mark2Offset) {
+        //execute same logic of alumni listing + present in array or not
+
+    }
 
     // case 2 both totalPages
 
+    if ((sizeOfCount < mark2Offset) && (sizeOfCount > markOffset)) {}
     // case 3 only non member alumnis to show
+
+    if (sizeOfCount < markOffset) {
+
+        //execute same logic of alumni listing
+    }
 
 
 }
@@ -728,7 +767,7 @@ exports.addAlumniEvents = async (req, res) => {
         image: imagePath,
         availableFromTime:params.availableFromTime,
         availableToTime:params.availableToTime,
-
+        zoomLink: params.zoomLink,
         status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
