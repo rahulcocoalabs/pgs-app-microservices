@@ -173,7 +173,7 @@ exports.listAlumni1 = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
-
+    var params = req.query;
     var page = params.page || 1;
     page = page > 0 ? page : 1;
     var perPage = Number(params.perPage) || 30;
