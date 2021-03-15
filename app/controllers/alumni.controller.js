@@ -560,7 +560,7 @@ exports.listJoinRequests = async (req, res) => {
         return res.send(dataAlumniRequest)
     }
 
-    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1 }).catch(err => {
+    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1,group: params.groupId, isApproved: constants.ALUMNI_STATUS_PENDING }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
