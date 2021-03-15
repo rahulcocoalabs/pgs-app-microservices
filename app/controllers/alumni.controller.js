@@ -246,7 +246,9 @@ exports.listAlumni1 = async (req, res) => {
         return res.send({
             success: 1,
             message: "listed successfully",
-            flag1,
+            flag1:"flag",
+            offset,
+            perPage,
             pagination: {
                 page:page,
                 perPage:perPage,
