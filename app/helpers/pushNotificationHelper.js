@@ -128,6 +128,10 @@ module.exports = {
         newNotificationObj.tsCreatedAt = Date.now();
         newNotificationObj.tsModifiedAt = null;
 
+
+
+        console.log(notificationObj);
+
         var saveNotificationObj = new Notification(newNotificationObj);
         var newNotificationData = await saveNotificationObj.save()
         .catch(err => {
