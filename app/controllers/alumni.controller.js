@@ -249,6 +249,9 @@ exports.listAlumni1 = async (req, res) => {
             flag1:"flag",
             offset,
             perPage,
+            arr,
+            arr1,
+            arr2,
             pagination: {
                 page:page,
                 perPage:perPage,
