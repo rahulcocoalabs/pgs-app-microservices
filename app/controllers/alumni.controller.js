@@ -428,7 +428,7 @@ exports.details = async (req, res) => {
     var returnObj = {};
 
 
-    if (group.createdBy.id == userId) {
+    if (group.createdBy._id == userId) {
         returnObj.isAdmin = 1;
     }
     else {
