@@ -169,7 +169,7 @@ exports.listAlumni = async (req, res) => {
     })
 }
 
-exports.listAlumni1 = async(req,res) => {
+exports.listAlumni1 = async (req, res) => {
 
     const data = req.identity.data;
     const userId = data.userId;
@@ -186,11 +186,11 @@ exports.listAlumni1 = async(req,res) => {
 
     // from alumni join request get elements of approved request from same userId project group only
 
-    var count = await AlumniJoinRequest.find({ status: 1,user: userId,isApproved:true}).catch(err => {
-        return {success:0,message:"something went wrong", error: err.message}
+    var count = await AlumniJoinRequest.find({ status: 1, user: userId, isApproved: true }).catch(err => {
+        return { success: 0, message: "something went wrong", error: err.message }
     })
 
-    if (count && count.success != undefined && count.success === 0){
+    if (count && count.success != undefined && count.success === 0) {
         return res.send(count)
     }
 
@@ -199,42 +199,89 @@ exports.listAlumni1 = async(req,res) => {
     // shrink the array by eliminating duplicate values
 
 
-    for (x in count){
+    for (x in count) {
 
         var elem = count[x];
         var groupId = elem.group;
         var cond = group.includes(groupId);
 
-        if (cond === false ){
+        if (cond === false) {
             group.push.groupId
         }
     }
 
 
-    // take the count of array and compare with pageparams 
 
-    var sizeOfCount = group.length;
 
-    var markOffset = perPage * (page);
+    var arr1 = await Alumni.find({ status: 1, $in: { _id: group } }, { createdBy: 0 }, pageParams).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
 
-    var mark2Offset = (perPage ) * (page + 1);
-
-    // case 1 only this member alumnis to show
-
-    if (sizeOfCount > mark2Offset) {
-        //execute same logic of alumni listing + present in array or not
-
+    if (arr1 && arr1.success != undefined && arr1.success === 0) {
+        return res.send(arr1)
     }
 
-    // case 2 both totalPages
+    var arr2 = await Alumni.find({ status: 1, $nin: { _id: group } }, { createdBy: 0 }, pageParams).catch(err => {
+        return {
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
+        }
+    })
 
-    if ((sizeOfCount < mark2Offset) && (sizeOfCount > markOffset)) {}
-    // case 3 only non member alumnis to show
-
-    if (sizeOfCount < markOffset) {
-
-        //execute same logic of alumni listing
+    if (arr2 && arr2.success != undefined && arr2.success === 0) {
+        return res.send(arr2)
     }
+
+    var arr = arr1 + arr2;
+
+    if ((offset + perPage) < arr.length) {
+
+        var output = arr.slice(offset, perPage);
+
+        return res.send({
+            success: 1,
+            message: "listed successfully",
+            pagination: {
+                page:page,
+                perPage:perPage,
+                hasNexPage:true
+            },
+            item: arr,
+        })
+    }
+
+    if ((offset + perPage) > arr.length && (offset ) < arr.length) {
+
+
+
+        var output = arr.slice(offset,(offset +(arr.length - offset)));
+
+        return res.send({
+            success: 1,
+            message: "listed successfully",
+            item: arr,
+            pagination: {
+                page:page,
+                perPage:perPage,
+                hasNexPage:false
+            }
+        })
+    }
+
+
+
+
+    return res.send({
+        success: 0,
+        message: "maximum documents exceeded"
+        
+    })
+
 
 
 }
@@ -273,25 +320,25 @@ exports.joinRequest = async (req, res) => {
         })
     }
 
-    const countOfReq = await AlumniJoinRequest.countDocuments({status: 1,user:userId,group:params.groupId}).catch(err=> {
-        return {success: 0,message: "did not get detail for requests", error: err.message}
+    const countOfReq = await AlumniJoinRequest.countDocuments({ status: 1, user: userId, group: params.groupId }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
-    if (countOfReq && countOfReq.success != undefined && countOfReq.success === 0){
+    if (countOfReq && countOfReq.success != undefined && countOfReq.success === 0) {
         return res.send(countOfReq)
     }
 
-    
-    if(countOfReq > 0){
+
+    if (countOfReq > 0) {
         return res.send({
-            success:0,
-            message:"already added a request for joining this group"
-            })
+            success: 0,
+            message: "already added a request for joining this group"
+        })
     }
 
     const newObject = {
         name: params.name,
-        comments:params.comments,
+        comments: params.comments,
         address: params.address,
         companyName: params.address,
         designation: params.designation,
@@ -326,31 +373,31 @@ exports.joinRequest = async (req, res) => {
         return res.send(newGroupReq);
     }
 
-    var groupInfo = await Alumni.findOne({_id:params.groupId}).catch(err=>{
-        return {success:0, message: "did not get detail for requests", error: err.message}
+    var groupInfo = await Alumni.findOne({ _id: params.groupId }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
-    if (groupInfo && groupInfo.success != undefined && groupInfo.success === 0){
+    if (groupInfo && groupInfo.success != undefined && groupInfo.success === 0) {
         return res.send(groupInfo)
     }
 
     var owner = groupInfo.createdBy;
 
-    
 
-    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value":owner }]
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
     var notificationObj = {
         title: " request for joining group",
         message: "Some has sent request for joining group",
         type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
         filtersJsonArr,
-         // metaInfo,
-      
-      userId: owner,
-      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
-      }
-      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+        // metaInfo,
+
+        userId: owner,
+        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
     res.send({
         success: 1,
@@ -416,7 +463,7 @@ exports.details = async (req, res) => {
     var isAdmin = 0;
     var didRequested = 0;
 
-    if (userInfo){
+    if (userInfo) {
         if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED) {
             isMember = 1;
         }
@@ -427,7 +474,7 @@ exports.details = async (req, res) => {
 
     var membersArray = [];
 
-    for (x in people){
+    for (x in people) {
 
         var member = {};
 
@@ -444,17 +491,17 @@ exports.details = async (req, res) => {
         membersArray.push(member);
     }
 
-    const countOfReq = await AlumniJoinRequest.countDocuments({status: 1,user:userId,group:id}).catch(err=> {
-        return {success: 0,message: "did not get detail for requests", error: err.message}
+    const countOfReq = await AlumniJoinRequest.countDocuments({ status: 1, user: userId, group: id }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
-    if (countOfReq && countOfReq.success != undefined && countOfReq.success === 0){
+    if (countOfReq && countOfReq.success != undefined && countOfReq.success === 0) {
         return res.send(countOfReq)
     }
 
-    
-    if(countOfReq > 0){
-       didRequested = 1;
+
+    if (countOfReq > 0) {
+        didRequested = 1;
     }
 
 
@@ -556,7 +603,7 @@ exports.joineeDetail = async (req, res) => {
         })
     }
 
-    var dataAlumniRequest = await AlumniJoinRequest.findOne({ status: 1, _id: params.joineeId },{isAdmin:0}).populate({
+    var dataAlumniRequest = await AlumniJoinRequest.findOne({ status: 1, _id: params.joineeId }, { isAdmin: 0 }).populate({
         path: 'user',
         select: { image: 1, firstName: 1 }
     }).catch(err => {
@@ -765,8 +812,8 @@ exports.addAlumniEvents = async (req, res) => {
         date: params.date,
         groupId: params.groupId,
         image: imagePath,
-        availableFromTime:params.availableFromTime,
-        availableToTime:params.availableToTime,
+        availableFromTime: params.availableFromTime,
+        availableToTime: params.availableToTime,
         zoomLink: params.zoomLink,
         status: 1,
         tsCreatedAt: Date.now(),
@@ -821,7 +868,7 @@ exports.addAlumniJobs = async (req, res) => {
         description: params.description,
         company: params.company,
         location: params.location,
-        email:params.email,
+        email: params.email,
         groupId: params.groupId,
         image: imagePath,
         createdBy: userId,
@@ -895,7 +942,7 @@ exports.listEvents = async (req, res) => {
         totalPages: totalPages
     }
 
-    
+
 
     return res.send({
         success: 1,
@@ -996,8 +1043,8 @@ exports.detailsEvents = async (req, res) => {
     }
     var isParticipated = 0;
 
-    var AlumniEventParticipationCount = await AlumniEventParticipation.countDocuments({status: 1,eventId:params.id,userId:userId}).catch(err=>{
-        return {success:0,message:err.message}
+    var AlumniEventParticipationCount = await AlumniEventParticipation.countDocuments({ status: 1, eventId: params.id, userId: userId }).catch(err => {
+        return { success: 0, message: err.message }
     })
 
     if (AlumniEventParticipationCount && AlumniEventParticipationCount.success != undefined && AlumniEventParticipationCount.success === 0) {
@@ -1098,21 +1145,21 @@ exports.eventParticipate = async (req, res) => {
         })
     }
 
-    const eventCheck = await AlumniEventParticipation.countDocuments({status: 1,eventId:eventID,userId,userId}).catch(err=>{
+    const eventCheck = await AlumniEventParticipation.countDocuments({ status: 1, eventId: eventID, userId, userId }).catch(err => {
         return {
-            success:0,
-            message:"coyuld not connect to  db ",
-            error:err.message
+            success: 0,
+            message: "coyuld not connect to  db ",
+            error: err.message
         }
     })
 
-    if (eventCheck && eventCheck.success != undefined && eventCheck.success === 0){
+    if (eventCheck && eventCheck.success != undefined && eventCheck.success === 0) {
         return res.send(eventCheck);
 
     }
 
-    if (eventCheck > 0){
-        return res.send({success:0, message:"already participated in this event"})
+    if (eventCheck > 0) {
+        return res.send({ success: 0, message: "already participated in this event" })
     }
 
     const eventId = req.params.id;
@@ -1143,30 +1190,30 @@ exports.eventParticipate = async (req, res) => {
         return res.send(newGroupReq);
     }
 
-    var groupInfo = await Alumni.findOne({_id:params.groupId}).catch(err=>{
-        return {success:0, message: "did not get detail for requests", error: err.message}
+    var groupInfo = await Alumni.findOne({ _id: params.groupId }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
-    if (groupInfo && groupInfo.success != undefined && groupInfo.success === 0){
+    if (groupInfo && groupInfo.success != undefined && groupInfo.success === 0) {
         return res.send(groupInfo)
     }
 
     var owner = groupInfo.createdBy;
 
 
-    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value":owner }]
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
     var notificationObj = {
         title: " Request for event participation",
         message: "Some has sent request for participating event",
-        type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
+        type: constants.ALUMNI_EVENT_PARTICIPATION,
         filtersJsonArr,
-         // metaInfo,
-      
-      userId: owner,
-      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
-      }
-      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+        // metaInfo,
+
+        userId: owner,
+        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
     res.send({
         success: 1,
@@ -1225,8 +1272,8 @@ exports.listMembers = async (req, res) => {
     }
 
     var membersArray = [];
-    
-    for (x in dataAlumni){
+
+    for (x in dataAlumni) {
 
         var member = {};
 

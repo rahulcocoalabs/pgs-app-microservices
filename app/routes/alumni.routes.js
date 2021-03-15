@@ -33,7 +33,7 @@ module.exports = (app) => {
     const alumni = require('../controllers/alumni.controller');
 
    app.post('/alumni/add', auth,upload.single('image'),  alumni.addAlumni);
-   app.get('/alumni/list',auth,  alumni.listAlumni);
+   app.get('/alumni/list',auth,  alumni.listAlumni1);
    app.get('/alumni/details/:id',auth,  alumni.details);
    app.post('/alumni/join-request', auth,  alumni.joinRequest);
    app.get('/alumni/list-join-request', auth,  alumni.listJoinRequests);
