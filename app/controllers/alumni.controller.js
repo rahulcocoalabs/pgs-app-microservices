@@ -518,9 +518,9 @@ exports.details = async (req, res) => {
     returnObj.members = membersArray;
     returnObj.imageBase = imageBase;
     returnObj.userImageBase = userImageBase;
-    returnObj.isMember = isMember;
-    returnObj.isAdmin = isAdmin;
-    returnObj.didRequested = didRequested;
+    returnObj.isMember = isMember || 0;
+    returnObj.isAdmin = isAdmin || 0;
+    returnObj.didRequested = didRequested || 0;
     return res.send(returnObj);
 
 }
