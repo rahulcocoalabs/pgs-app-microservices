@@ -22,6 +22,7 @@ const notificationSchema = mongoose.Schema({
     title: String,
     content: String,
     type: String,
+    typeId:String,
     referenceId : String,
     notificationType: String,
     userId :  {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
