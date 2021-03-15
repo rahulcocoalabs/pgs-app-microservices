@@ -206,7 +206,7 @@ exports.listAlumni1 = async (req, res) => {
        // var cond = group.includes(groupId);
 
       //  if (cond === false) {
-            group.push.groupId
+            group.push(groupId)
        // }
     }
 
