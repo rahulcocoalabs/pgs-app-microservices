@@ -203,11 +203,11 @@ exports.listAlumni1 = async (req, res) => {
 
         var elem = count[x];
         var groupId = elem.group;
-        var cond = group.includes(groupId);
+        //var cond = group.includes(groupId);
 
-        if (cond === false) {
+        //if (cond === false) {
             group.push.groupId
-        }
+        //}
     }
 
 
