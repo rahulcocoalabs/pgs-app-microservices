@@ -237,7 +237,7 @@ exports.listAlumni1 = async (req, res) => {
         return res.send(arr2)
     }
 
-    var arr = arr1 + arr2;
+    var arr = arr1.concat(arr2);
 
     if ((offset + perPage) < arr.length) {
 
