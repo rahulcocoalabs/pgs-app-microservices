@@ -213,7 +213,7 @@ exports.listAlumni1 = async (req, res) => {
 
 
 
-    var arr1 = await Alumni.find({ status: 1, $in: { _id: group } }, { createdBy: 0 }, pageParams).catch(err => {
+    var arr1 = await Alumni.find({ status: 1, _id: { $in: group } }, { createdBy: 0 }, pageParams).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -225,7 +225,7 @@ exports.listAlumni1 = async (req, res) => {
         return res.send(arr1)
     }
 
-    var arr2 = await Alumni.find({ status: 1, $nin: { _id: group } }, { createdBy: 0 }, pageParams).catch(err => {
+    var arr2 = await Alumni.find({ status: 1, _id: { $nin: group } }, { createdBy: 0 }, pageParams).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
