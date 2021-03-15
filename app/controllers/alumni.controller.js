@@ -431,7 +431,7 @@ exports.details = async (req, res) => {
     console.log(group.createdBy)
     console.log(userId)
     console.log(" < ---------------------------- >")
-    if (group.createdBy._id == userId) {
+    if (group.createdBy.id == userId) {
         returnObj.isAdmin = 1;
     }
     else {
@@ -469,7 +469,7 @@ exports.details = async (req, res) => {
     }
 
     var isMember = 0;
-    var isAdmin = 0;
+    
     var didRequested = 0;
 
     if (userInfo) {
