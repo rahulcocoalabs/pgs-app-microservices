@@ -186,7 +186,7 @@ exports.listAlumni1 = async (req, res) => {
 
     // from alumni join request get elements of approved request from same userId project group only
 
-    var count = await AlumniJoinRequest.find({ status: 1, user: userId, isApproved: true }).catch(err => {
+    var count = await AlumniJoinRequest.find({ status: 1, user: userId, isApproved: "ACCEPTED" }).catch(err => {
         return { success: 0, message: "something went wrong", error: err.message }
     })
 
@@ -203,11 +203,11 @@ exports.listAlumni1 = async (req, res) => {
 
         var elem = count[x];
         var groupId = elem.group;
-        //var cond = group.includes(groupId);
+        var cond = group.includes(groupId);
 
-        //if (cond === false) {
+        if (cond === false) {
             group.push.groupId
-        //}
+        }
     }
 
 
