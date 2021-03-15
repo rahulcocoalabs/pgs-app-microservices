@@ -262,6 +262,8 @@ exports.listAlumni1 = async (req, res) => {
             pagination,
             arr1,
             arr2,
+            group,
+            count,
             items: output,
         })
     }
@@ -279,6 +281,8 @@ exports.listAlumni1 = async (req, res) => {
             imageBase,
             arr1,
             arr2,
+            group,
+            count,
             pagination
         })
     }
