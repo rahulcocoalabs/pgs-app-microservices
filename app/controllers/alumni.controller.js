@@ -520,7 +520,7 @@ exports.details = async (req, res) => {
     returnObj.imageBase = imageBase;
     returnObj.userImageBase = userImageBase;
     returnObj.isMember = isMember || 0;
-    returnObj.isAdmin = isAdmin || 0;
+    
     returnObj.didRequested = didRequested || 0;
     return res.send(returnObj);
 
