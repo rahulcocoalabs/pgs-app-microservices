@@ -260,6 +260,8 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             imageBase,
             pagination,
+            arr1,
+            arr2,
             items: output,
         })
     }
@@ -275,6 +277,8 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             items: output,
             imageBase,
+            arr1,
+            arr2,
             pagination
         })
     }
