@@ -399,7 +399,7 @@ exports.joinRequest = async (req, res) => {
         type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
         filtersJsonArr,
         // metaInfo,
-        id:params.groupId,
+        typeId:params.groupId,
         userId: owner,
         notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
@@ -1215,7 +1215,7 @@ exports.eventParticipate = async (req, res) => {
         type: constants.ALUMNI_EVENT_PARTICIPATION,
         filtersJsonArr,
         // metaInfo,
-        id:req.params.id,
+        typeId:req.params.id,
         userId: owner,
         notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
