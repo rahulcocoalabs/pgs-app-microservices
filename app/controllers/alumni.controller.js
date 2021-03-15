@@ -251,7 +251,7 @@ exports.listAlumni1 = async (req, res) => {
                 perPage:perPage,
                 hasNexPage:true
             },
-            item: arr,
+            item: output,
         })
     }
 
@@ -264,7 +264,7 @@ exports.listAlumni1 = async (req, res) => {
         return res.send({
             success: 1,
             message: "listed successfully",
-            item: arr,
+            item: output,
             pagination: {
                 page:page,
                 perPage:perPage,
