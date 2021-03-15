@@ -130,7 +130,7 @@ module.exports = {
 
 
 
-        console.log(notificationObj);
+        console.log("->  notify",notificationObj);
 
         var saveNotificationObj = new Notification(newNotificationObj);
         var newNotificationData = await saveNotificationObj.save()
