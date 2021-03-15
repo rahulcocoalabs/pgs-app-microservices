@@ -473,9 +473,7 @@ exports.details = async (req, res) => {
         if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED) {
             isMember = 1;
         }
-        if (userInfo.isAdmin == true) {
-            isAdmin = 1;
-        }
+       
     }
 
     var membersArray = [];
