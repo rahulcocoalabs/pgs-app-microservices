@@ -258,7 +258,7 @@ exports.listAlumni1 = async (req, res) => {
         return res.send({
             success: 1,
             message: "listed successfully",
-            
+            imageBase,
             pagination,
             items: output,
         })
@@ -274,7 +274,7 @@ exports.listAlumni1 = async (req, res) => {
             success: 1,
             message: "listed successfully",
             items: output,
-            
+            imageBase,
             pagination
         })
     }
