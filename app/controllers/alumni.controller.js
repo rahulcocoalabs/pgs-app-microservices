@@ -239,6 +239,18 @@ exports.listAlumni1 = async (req, res) => {
 
     var arr = arr1.concat(arr2);
 
+    var itemsCount = arr.length;
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
     if ((offset + perPage) < arr.length) {
 
         var output = arr.slice(offset, perPage);
@@ -247,11 +259,7 @@ exports.listAlumni1 = async (req, res) => {
             success: 1,
             message: "listed successfully",
             
-            pagination: {
-                page:page,
-                perPage:perPage,
-                hasNexPage:true
-            },
+            pagination,
             item: output,
         })
     }
@@ -267,11 +275,7 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             item: output,
             
-            pagination: {
-                page:page,
-                perPage:perPage,
-                hasNexPage:false
-            }
+            pagination
         })
     }
 
