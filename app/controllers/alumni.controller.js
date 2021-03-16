@@ -1167,12 +1167,7 @@ exports.eventParticipate = async (req, res) => {
             message: "please mention   name"
         })
     }
-    if (!params.customer_group_id) {
-        errors.push({
-            fileds: "group id",
-            message: "please mention   group id"
-        })
-    }
+   
     if (!req.params) {
         return res.send({
             success: 0,
@@ -1189,7 +1184,7 @@ exports.eventParticipate = async (req, res) => {
     const eventCheck = await AlumniEventParticipation.countDocuments({ status: 1, eventId: req.params.id, userId, userId }).catch(err => {
         return {
             success: 0,
-            message: "coyuld not connect to  db ",
+            message: "could not connect to  db ",
             error: err.message
         }
     })
@@ -1203,6 +1198,22 @@ exports.eventParticipate = async (req, res) => {
         return res.send({ success: 0, message: "already participated in this event" })
     }
 
+
+    const event1 = await AlumniEvent.findOne({status:1,_id:req.params.id}).catch(err => {
+        return {
+            success: 0,
+            message: "could not connect to  db ",
+            error: err.message
+        }
+    })
+
+    if (event1 && event1.success != undefined && event1.success === 0) {
+        return res.send(event1);
+
+    }
+
+    var groupId = event1.groupId;
+
     const eventId = req.params.id;
     const newObject = {
         name: params.name,
@@ -1210,7 +1221,7 @@ exports.eventParticipate = async (req, res) => {
         email: params.email,
         attendeeCount: params.count,
         user: userId,
-        group: params.groupId,
+        group: groupId,
         status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
@@ -1231,7 +1242,7 @@ exports.eventParticipate = async (req, res) => {
         return res.send(newGroupReq);
     }
 
-    var groupInfo = await Alumni.findOne({ _id: params.groupId }).catch(err => {
+    var groupInfo = await Alumni.findOne({ _id: groupId }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
