@@ -1530,6 +1530,6 @@ cron.schedule('* * * * *', function() {
         var mm = today.getMonth() ; 
   
         var yyyy = today.getFullYear(); 
-        const today = dd + " " + months[mm] + " " + yyyy; 
-        console.log(today)
+        const today1 = dd + " " + months[mm] + " " + yyyy; 
+        console.log(today1)
   });
