@@ -213,7 +213,7 @@ exports.listAlumni1 = async (req, res) => {
 
 
 
-    var arr1 = await Alumni.find({ status: 1, _id: { $in: group } }, { createdBy: 0 }).catch(err => {
+    var arr1 = await Alumni.find({ status: 1, _id: { $in: group } }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -241,7 +241,12 @@ exports.listAlumni1 = async (req, res) => {
         elem1.passingYear = elem.passingYear;
         // for (var propKey in elem)
         //     elem1[propKey] = elem[propKey];
-        
+        if(elem.createdBy === userId){
+            elem1.isAdmin = 1;
+        }
+        else {
+            elem1.isAdmin = 0;
+        }
        
         arr3.push(elem1);
     }
@@ -298,7 +303,7 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             items: output,
             imageBase,
-            arr3,
+           
             pagination
         })
     }
