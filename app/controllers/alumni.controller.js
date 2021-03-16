@@ -293,7 +293,7 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             items: output,
             imageBase,
-
+            arr3,
             pagination
         })
     }
