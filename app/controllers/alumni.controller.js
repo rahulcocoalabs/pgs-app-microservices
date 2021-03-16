@@ -233,7 +233,7 @@ exports.listAlumni1 = async (req, res) => {
 
         var elem1 = {};
         var elem = arr1[x];
-       
+
         elem1.isMember = 1;
         elem1._id = elem.id;
         elem1.image = elem.image;
@@ -242,14 +242,14 @@ exports.listAlumni1 = async (req, res) => {
         elem1.passingYear = elem.passingYear;
         // for (var propKey in elem)
         //     elem1[propKey] = elem[propKey];
-        
-        if(elem.createdBy == userId){
+
+        if (elem.createdBy == userId) {
             elem1.isAdmin = 1;
         }
         else {
             elem1.isAdmin = 0;
         }
-       
+
         arr3.push(elem1);
     }
 
@@ -305,7 +305,7 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             items: output,
             imageBase,
-           
+
             pagination
         })
     }
@@ -1521,15 +1521,71 @@ exports.deleteAdmin = async (req, res) => {
 }
 
 
-cron.schedule('* * * * *', function() {
+cron.schedule('* * * * *', function () {
     console.log('running a task every minute');
 
-        var today = new Date(); 
-        const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-        var dd = today.getDate(); 
-        var mm = today.getMonth() ; 
-  
-        var yyyy = today.getFullYear(); 
-        const today1 = dd + " " + months[mm] + " " + yyyy; 
-        console.log(today1)
-  });
+    var today = new Date();
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var dd = today.getDate();
+    var mm = today.getMonth();
+
+    var yyyy = today.getFullYear();
+    const today1 = dd + " " + months[mm] + " " + yyyy;
+    console.log(today1)
+
+    var events = await AlumniEvents.find({ status: 1, date: today1 }).populate({ path:'groupId'}).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    })
+
+    if (events && events.success != undefined && events.success === 0) {
+        return;
+    }
+
+    for (x in events) {
+        var event = events[x];
+        let id = event._id;
+        var joinees = AlumniEventParticipation.find({ eventId: id, status: 1 }).catch(err => {
+            return { success: 0, message: "did not get detail for requests", error: err.message }
+        })
+        if (events && events.success != undefined && events.success === 0) {
+            continue;
+        }
+
+        for (y in joinees) {
+
+            var joinee = joinees[y];
+            var owner = joinee.userId;
+
+            var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+            var notificationObj = {
+                title: " Request for event participation",
+                message: "Some has sent request for participating event",
+                type: constants.ALUMNI_EVENT_PARTICIPATION,
+                filtersJsonArr,
+                // metaInfo,
+                typeId: event._id,
+                userId: owner,
+                notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+            }
+            let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+        }
+
+        let groupOwner = event.groupId.createdBy;
+        var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": groupOwner }]
+
+        var notificationObj = {
+            title: " Request for event participation",
+            message: "Some has sent request for participating event",
+            type: constants.ALUMNI_EVENT_PARTICIPATION,
+            filtersJsonArr,
+            // metaInfo,
+            typeId: event._id,
+            userId: groupOwner,
+            notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+        }
+        let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
+        
+    }
+});
