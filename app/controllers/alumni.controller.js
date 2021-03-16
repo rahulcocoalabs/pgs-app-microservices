@@ -225,6 +225,17 @@ exports.listAlumni1 = async (req, res) => {
         return res.send(arr1)
     }
 
+
+    var arr3 = [];
+
+    for (x in arr1){
+
+        var elem = arr1[x];
+        elem["isMember"] = 1;
+        arr3.push(elem);
+    }
+
+
     var arr2 = await Alumni.find({ status: 1, _id: { $nin: group } }, { createdBy: 0 }).catch(err => {
         return {
             success: 0,
