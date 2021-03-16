@@ -248,7 +248,7 @@ exports.listAlumni1 = async (req, res) => {
         return res.send(arr2)
     }
 
-    var arr = arr1.concat(arr2);
+    var arr = arr3.concat(arr2);
 
     var itemsCount = arr.length;
     var totalPages = itemsCount / perPage;
