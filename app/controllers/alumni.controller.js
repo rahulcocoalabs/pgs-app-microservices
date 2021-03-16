@@ -234,8 +234,8 @@ exports.listAlumni1 = async (req, res) => {
         var elem = arr1[x];
        
         elem1.isMember = 1;
-        for (var propKey in elem)
-            elem1[propKey] = elem[propKey];
+        // for (var propKey in elem)
+        //     elem1[propKey] = elem[propKey];
         
        
         arr3.push(elem1);
