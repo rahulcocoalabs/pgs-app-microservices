@@ -1167,6 +1167,12 @@ exports.eventParticipate = async (req, res) => {
             message: "please mention   name"
         })
     }
+    if (!params.customer_group_id) {
+        errors.push({
+            fileds: "group id",
+            message: "please mention   group id"
+        })
+    }
     if (!req.params) {
         return res.send({
             success: 0,
