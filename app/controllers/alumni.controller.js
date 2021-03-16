@@ -1555,10 +1555,12 @@ cron.schedule('* * * * *', async function () {
     })
 
     if (events && events.success != undefined && events.success === 0) {
+        console.log(" < -------- end")
         return;
     }
 
     for (x in events) {
+        console.log(" < -------- inside for loops")
         var event = events[x];
         let id = event._id;
         var joinees = AlumniEventParticipation.find({ eventId: id, status: 1 }).catch(err => {
