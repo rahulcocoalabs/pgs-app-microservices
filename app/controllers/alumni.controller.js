@@ -10,7 +10,7 @@ const constants = require('../helpers/constants.js');
 const { TUTOR_TYPE } = require('../helpers/constants.js');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 const { CronJob } = require('cron');
-
+const cron = require('node-cron');
 exports.addAlumni = async (req, res) => {
 
     const data = req.identity.data;
@@ -1521,6 +1521,6 @@ exports.deleteAdmin = async (req, res) => {
 }
 
 
-CronJob.schedule('* * * * *', function() {
+cron.schedule('* * * * *', function() {
     console.log('running a task every minute');
   });
