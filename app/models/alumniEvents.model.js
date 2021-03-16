@@ -11,7 +11,7 @@ const AlumniEventsSchema = mongoose.Schema({
     availableToTime:String,
     groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },
     image:String,
-    zoomLink:String,
+    liveLink:String,
     status:Number,
     
     tsCreatedAt: Number,

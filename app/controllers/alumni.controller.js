@@ -260,10 +260,7 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             imageBase,
             pagination,
-            arr1,
-            arr2,
-            group,
-            count,
+           
             items: output,
         })
     }
@@ -279,10 +276,7 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             items: output,
             imageBase,
-            arr1,
-            arr2,
-            group,
-            count,
+            
             pagination
         })
     }
@@ -826,7 +820,7 @@ exports.addAlumniEvents = async (req, res) => {
         image: imagePath,
         availableFromTime: params.availableFromTime,
         availableToTime: params.availableToTime,
-        zoomLink: params.zoomLink,
+        liveLink: params.liveLink,
         status: 1,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
