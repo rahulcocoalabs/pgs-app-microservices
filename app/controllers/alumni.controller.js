@@ -1180,7 +1180,7 @@ exports.eventParticipate = async (req, res) => {
         })
     }
 
-    const eventCheck = await AlumniEventParticipation.countDocuments({ status: 1, eventId: eventID, userId, userId }).catch(err => {
+    const eventCheck = await AlumniEventParticipation.countDocuments({ status: 1, eventId: req.params.id, userId, userId }).catch(err => {
         return {
             success: 0,
             message: "coyuld not connect to  db ",
