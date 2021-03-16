@@ -7,7 +7,7 @@ const AlumniJob = require('../models/alumniJobs.model.js');
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
-const { TUTOR_TYPE } = require('../helpers/constants.js');
+const { TUTOR_TYPE, TODAYS_EVENT_TYPE } = require('../helpers/constants.js');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 const { CronJob } = require('cron');
 const cron = require('node-cron');
@@ -1525,11 +1525,11 @@ cron.schedule('* * * * *', function() {
     console.log('running a task every minute');
 
         var today = new Date(); 
-        
+        const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
         var dd = today.getDate(); 
-        var mm = today.getMonth() + 1; 
+        var mm = today.getMonth() ; 
   
         var yyyy = today.getFullYear(); 
-
-        console.log(dd/mm/yyyy)
+        const today = dd + " " + months[mm] + " " + yyyy; 
+        console.log(today)
   });
