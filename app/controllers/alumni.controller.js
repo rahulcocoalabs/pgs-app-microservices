@@ -234,6 +234,11 @@ exports.listAlumni1 = async (req, res) => {
         var elem = arr1[x];
        
         elem1.isMember = 1;
+        elem1._id = elem.id;
+        elem1.image = elem.image;
+        elem1.groupName = elem.groupName;
+        elem1.description = elem.description;
+        elem1.passingYear = elem.passingYear;
         // for (var propKey in elem)
         //     elem1[propKey] = elem[propKey];
         
