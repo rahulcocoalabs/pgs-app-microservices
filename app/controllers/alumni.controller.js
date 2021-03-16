@@ -1523,4 +1523,13 @@ exports.deleteAdmin = async (req, res) => {
 
 cron.schedule('* * * * *', function() {
     console.log('running a task every minute');
+
+        var today = new Date(); 
+        
+        var dd = today.getDate(); 
+        var mm = today.getMonth() + 1; 
+  
+        var yyyy = today.getFullYear(); 
+
+        console.log(dd/mm/yyyy)
   });
