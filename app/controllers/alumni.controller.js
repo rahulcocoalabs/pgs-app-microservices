@@ -203,11 +203,11 @@ exports.listAlumni1 = async (req, res) => {
 
         var elem = count[x];
         var groupId = elem.group;
-       // var cond = group.includes(groupId);
+        // var cond = group.includes(groupId);
 
-      //  if (cond === false) {
-            group.push(groupId)
-       // }
+        //  if (cond === false) {
+        group.push(groupId)
+        // }
     }
 
 
@@ -228,11 +228,17 @@ exports.listAlumni1 = async (req, res) => {
 
     var arr3 = [];
 
-    for (x in arr1){
+    for (x in arr1) {
 
+        var elem1 = {};
         var elem = arr1[x];
-        elem["isMember"] = 1;
-        arr3.push(elem);
+       
+
+        for (var propKey in elem)
+            elem1[propKey] = elem[propKey];
+        elem1["isMember"] = 1;
+       
+        arr3.push(elem1);
     }
 
 
@@ -271,23 +277,23 @@ exports.listAlumni1 = async (req, res) => {
             message: "listed successfully",
             imageBase,
             pagination,
-           
+
             items: output,
         })
     }
 
-    if ((offset + perPage) > arr.length && (offset ) < arr.length) {
+    if ((offset + perPage) > arr.length && (offset) < arr.length) {
 
 
 
-        var output = arr.slice(offset,(offset +(arr.length - offset)));
+        var output = arr.slice(offset, (offset + (arr.length - offset)));
 
         return res.send({
             success: 1,
             message: "listed successfully",
             items: output,
             imageBase,
-            
+
             pagination
         })
     }
@@ -298,7 +304,7 @@ exports.listAlumni1 = async (req, res) => {
     return res.send({
         success: 0,
         message: "maximum documents exceeded"
-        
+
     })
 
 
@@ -412,7 +418,7 @@ exports.joinRequest = async (req, res) => {
         type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
         filtersJsonArr,
         // metaInfo,
-        typeId:params.groupId,
+        typeId: params.groupId,
         userId: owner,
         notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
@@ -440,7 +446,7 @@ exports.details = async (req, res) => {
 
     var returnObj = {};
 
-    
+
     if (group.createdBy.id == userId) {
         returnObj.isAdmin = 1;
     }
@@ -470,7 +476,7 @@ exports.details = async (req, res) => {
         return res.send(peopleCount);
     }
 
-    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId,group:id }).catch(err => {
+    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId, group: id }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     });
 
@@ -479,14 +485,14 @@ exports.details = async (req, res) => {
     }
 
     var isMember = 0;
-    
+
     var didRequested = 0;
 
     if (userInfo) {
         if (userInfo.isApproved == constants.ALUMNI_STATUS_ACCEPTED) {
             isMember = 1;
         }
-       
+
     }
 
     var membersArray = [];
@@ -530,7 +536,7 @@ exports.details = async (req, res) => {
     returnObj.imageBase = imageBase;
     returnObj.userImageBase = userImageBase;
     returnObj.isMember = isMember || 0;
-    
+
     returnObj.didRequested = didRequested || 0;
     return res.send(returnObj);
 
@@ -573,7 +579,7 @@ exports.listJoinRequests = async (req, res) => {
         return res.send(dataAlumniRequest)
     }
 
-    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1,group: params.groupId, isApproved: constants.ALUMNI_STATUS_PENDING }).catch(err => {
+    var dataAlumniCount = await AlumniJoinRequest.countDocuments({ status: 1, group: params.groupId, isApproved: constants.ALUMNI_STATUS_PENDING }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1226,7 +1232,7 @@ exports.eventParticipate = async (req, res) => {
         type: constants.ALUMNI_EVENT_PARTICIPATION,
         filtersJsonArr,
         // metaInfo,
-        typeId:req.params.id,
+        typeId: req.params.id,
         userId: owner,
         notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
