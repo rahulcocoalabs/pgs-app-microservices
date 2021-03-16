@@ -9,6 +9,7 @@ const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
 const { TUTOR_TYPE } = require('../helpers/constants.js');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper');
+const { CronJob } = require('cron');
 
 exports.addAlumni = async (req, res) => {
 
@@ -1518,3 +1519,8 @@ exports.deleteAdmin = async (req, res) => {
 
     })
 }
+
+
+CronJob.schedule('* * * * *', function() {
+    console.log('running a task every minute');
+  });
