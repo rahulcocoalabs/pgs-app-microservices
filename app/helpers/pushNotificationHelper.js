@@ -115,7 +115,7 @@ module.exports = {
         newNotificationObj.title = notificationObj.title;
         newNotificationObj.content = notificationObj.message;
         newNotificationObj.type = notificationObj.type;
-        newNotificationObj.typeId = notificationData.typeId;
+        newNotificationObj.typeId = notificationObj.typeId;
         newNotificationObj.referenceId = notificationObj.referenceId;
         newNotificationObj.notificationType = notificationObj.notificationType;
         if(notificationObj.notificationType === constants.INDIVIDUAL_NOTIFICATION_TYPE){
