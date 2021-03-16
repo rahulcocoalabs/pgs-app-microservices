@@ -1522,7 +1522,7 @@ exports.deleteAdmin = async (req, res) => {
 
 
 cron.schedule('* * * * *', function () {
-    console.log('running a task every minute');
+    
 
     var today = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -1531,8 +1531,7 @@ cron.schedule('* * * * *', function () {
 
     var yyyy = today.getFullYear();
     const today1 = dd + " " + months[mm] + " " + yyyy;
-    console.log(today1)
-
+    
     var events = await AlumniEvents.find({ status: 1, date: today1 }).populate({ path:'groupId'}).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
