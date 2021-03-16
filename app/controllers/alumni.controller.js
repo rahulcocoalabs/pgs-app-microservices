@@ -1233,7 +1233,7 @@ exports.eventParticipate = async (req, res) => {
         return res.send(groupInfo)
     }
 
-    var owner = groupInfo.createdBy;
+    var owner = groupInfo.createdBy || "";
 
 
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
