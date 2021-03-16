@@ -241,8 +241,7 @@ exports.listAlumni1 = async (req, res) => {
         elem1.passingYear = elem.passingYear;
         // for (var propKey in elem)
         //     elem1[propKey] = elem[propKey];
-        console.log("< -------------- >")
-        console.log(elem.createdBy,userId)
+        
         if(elem.createdBy == userId){
             elem1.isAdmin = 1;
         }
