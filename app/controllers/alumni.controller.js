@@ -1549,8 +1549,9 @@ cron.schedule('* * * * *', async function () {
 
     var yyyy = today.getFullYear();
     const today1 = dd + " " + months[mm] + " " + yyyy;
-    
+    console.log(" < -------- started1")
     var events = await AlumniEvents.find({ status: 1, date: today1 }).populate({ path:'groupId'}).catch(err => {
+        console.log(" < -------- end1")
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
 
