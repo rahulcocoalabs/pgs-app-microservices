@@ -1559,7 +1559,7 @@ cron.schedule('* * * * *', async function () {
         console.log(" < -------- end")
         return;
     }
-
+    console.log(" < -------- started2")
     for (x in events) {
         console.log(" < -------- inside for loops")
         var event = events[x];
