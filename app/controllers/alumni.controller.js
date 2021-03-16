@@ -1521,7 +1521,7 @@ exports.deleteAdmin = async (req, res) => {
 }
 
 
-cron.schedule('* * * * *', function () {
+cron.schedule('* * * * *', async function () {
     
 
     var today = new Date();
