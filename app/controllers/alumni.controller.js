@@ -1540,6 +1540,7 @@ exports.deleteAdmin = async (req, res) => {
 
 cron.schedule('* * * * *', async function () {
     
+    console.log(" < -------- started")
 
     var today = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
