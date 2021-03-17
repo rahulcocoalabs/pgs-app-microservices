@@ -1675,6 +1675,7 @@ var job = new CronJob(' * * * * *',async function() {
         }
 
         console.log(event);
+        if (event.groupId == null){continue}
         let groupOwner = event.groupId.createdBy;
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": groupOwner }]
 
