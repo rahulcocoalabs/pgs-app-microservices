@@ -1617,7 +1617,7 @@ cron.schedule('* * * * *', async function () {
 
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob(' * * * * *',async function() {
+var job = new CronJob('  */24 * * *',async function() {
     console.log('You will see this message every second');
 
     var today = new Date();
