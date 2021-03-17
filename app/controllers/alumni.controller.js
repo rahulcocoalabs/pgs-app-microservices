@@ -9,7 +9,7 @@ const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
 const { TUTOR_TYPE, TODAYS_EVENT_TYPE } = require('../helpers/constants.js');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper');
-const { CronJob } = require('cron');
+//const { CronJob } = require('cron');
 const cron = require('node-cron');
 exports.addAlumni = async (req, res) => {
 
@@ -1614,3 +1614,10 @@ cron.schedule('* * * * *', async function () {
         
     }
 });
+
+var CronJob = require('cron').CronJob;
+
+var job = new CronJob('* * * * * *', function() {
+    console.log('You will see this message every second');
+  }, null, true, 'America/Los_Angeles');
+  job.start();
