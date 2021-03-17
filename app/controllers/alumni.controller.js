@@ -1616,5 +1616,5 @@ var job = new CronJob(' 0 06 * * *',async function() {
 
         
     }
-  }, null, true, 'America/Los_Angeles');
+  }, null, true, 'Asia/Kolkata');
   job.start();
