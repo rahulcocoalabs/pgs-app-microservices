@@ -1674,6 +1674,7 @@ var job = new CronJob(' * * * * *',async function() {
             let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
         }
 
+        console.log(event);
         let groupOwner = event.groupId.createdBy;
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": groupOwner }]
 
