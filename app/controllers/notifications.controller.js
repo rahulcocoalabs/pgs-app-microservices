@@ -29,6 +29,7 @@ exports.listAll = async (req, res) => {
     title: 1,
     content: 1,
     type: 1,
+    typeId:1,
     referenceId: 1,
     notificationType: 1,
     userId: 1,
