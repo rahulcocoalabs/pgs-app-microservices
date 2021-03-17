@@ -1629,11 +1629,11 @@ var job = new CronJob(' * * * * *',async function() {
     const today1 = dd + " " + months[mm] + " " + yyyy;
     console.log(" < -------- started1")
 
-    var events1 =  AlumniEvents.find({ status: 1 }).populate({ path:'groupId'}).then((results) => {
+    var events1 =  AlumniEvent.find({ status: 1 }).populate({ path:'groupId'}).then((results) => {
         console.log(results)
     })
 
-    var events = await AlumniEvents.find({ status: 1 }).populate({ path:'groupId'}).catch(err => {
+    var events = await AlumniEvent.find({ status: 1 }).populate({ path:'groupId'}).catch(err => {
         console.log(" < -------- end1")
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
