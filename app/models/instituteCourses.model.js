@@ -6,6 +6,6 @@ const InstituteCourseSchema = mongoose.Schema({
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number
-}, options)
+})
 
 module.exports = mongoose.model('InstitutionCourse', InstituteCourseSchema, 'InstitutionCourses');
