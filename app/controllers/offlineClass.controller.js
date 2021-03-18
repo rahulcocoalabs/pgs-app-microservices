@@ -123,7 +123,7 @@ exports.getCources = async (req, res) => {
   }
 
   return res.send({ 
-    success: 0,
+    success: 1,
     message:"listed successfully",
     items:courses
   })
