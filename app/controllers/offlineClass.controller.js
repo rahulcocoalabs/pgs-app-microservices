@@ -15,7 +15,7 @@ exports.createInstitution = async (req, res) => {
     var userId = userData.userId;
   
   
-    var file = req.files;
+    var file = req.file;
   
     var errors = [];
   
@@ -30,7 +30,7 @@ exports.createInstitution = async (req, res) => {
     if (!file) {
       errors.push({
         field: "image",
-        message: "Please select a class image"
+        message: "Please select a  image"
       })
     }
     if (!req.body.phone) {
