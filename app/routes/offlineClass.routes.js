@@ -30,8 +30,6 @@ var fileUpload = multer({ storage: storage });
 
 module.exports = (app) => {
     const offlineClass = require('../controllers/offlineClass.controller');
-    app.post('/offline-class/add-institution', fileUpload.field( {
-        name: 'image', maxCount: 1
-    }), auth, offlineClass.addInstitution);
+    app.post('/offline-class/add-institution', fileUpload.single('image'), auth, offlineClass.addInstitution);
     
 }
