@@ -418,7 +418,9 @@ exports.joinRequest = async (req, res) => {
         return res.send(groupInfo)
     }
 
-    var owner = groupInfo.createdBy;
+
+
+    var owner = groupInfo.createdBy || "";
 
 
 
