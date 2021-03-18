@@ -57,6 +57,18 @@ exports.createInstitution = async (req, res) => {
         message: "name cannot be empty"
       })
     }
+    if (!req.body.email) {
+      errors.push({
+        field: "email",
+        message: "email cannot be empty"
+      })
+    }
+    if (!req.body.description) {
+      errors.push({
+        field: "description",
+        message: "description cannot be empty"
+      })
+    }
   
   
     if (errors.length > 0) {

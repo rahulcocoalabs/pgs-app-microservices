@@ -11,6 +11,7 @@ const InstituteSchema = mongoose.Schema({
     location:String,
     phone:String,
     email:String,
+    description:String,
     isApproved:Boolean,
     isRejected:Boolean,
     instituteCourse : [{ type: mongoose.Schema.Types.ObjectId, ref: 'InstitutionCourse' }],
