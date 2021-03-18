@@ -247,7 +247,7 @@ module.exports = {
         popularInHomeResultsPerPage : 5,
         latestInHomeResultsPerPage : 5,
         resultsPerPage: 10,
-        imageUploadPath: relativeCommonPath + "offlineclasses/",
+        imageUploadPath: relativeCommonPath + "offlineclass/",
         
         imageBase: commonPath + "classes/"
     },
