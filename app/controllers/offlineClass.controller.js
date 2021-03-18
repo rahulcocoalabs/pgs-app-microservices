@@ -109,7 +109,7 @@ exports.createInstitution = async (req, res) => {
   }
 
   
-exports.getCourse = async (req, res) => {
+exports.getCources = async (req, res) => {
 
   
 
