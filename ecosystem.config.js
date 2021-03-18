@@ -377,6 +377,20 @@ module.exports = {
         NODE_ENV: 'qa',
         port : 7026
       }
+    },
+    {
+      name: 'offline - Edunet Microservices',
+      script: 'offlineClass.service.js',
+      // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '1G',
+      //cron_restart
+      env: {
+        NODE_ENV: 'qa',
+        port : 7027
+      }
     }
     ]
   };
