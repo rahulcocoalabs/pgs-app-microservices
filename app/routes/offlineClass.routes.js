@@ -5,7 +5,7 @@ var crypto = require('crypto');
 var mime = require('mime-types');
 var config = require('../../config/app.config.js');
 
-var classConfig = config.class;
+var classConfig = config.offlineclass;
 
 var storage = multer.diskStorage({
     // destination: usersConfig.imageUploadPath,
