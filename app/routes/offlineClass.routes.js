@@ -8,14 +8,12 @@ var config = require('../../config/app.config.js');
 var classConfig = config.offlineclass;
 
 var storage = multer.diskStorage({
-    // destination: usersConfig.imageUploadPath,
+    
     destination: function (req, file, cb) {
-        // cb(null, classConfig.imageUploadPath.trim());
+        
         if (file.fieldname === "image") {
             cb(null, classConfig.imageUploadPath.trim());
-        } else if (file.fieldname === "video") {
-            cb(null, classConfig.videoUploadPath.trim());
-        } else {
+        }  else {
             return cb({ success: 0, message: "Invalid types" });
         }
     },
