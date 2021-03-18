@@ -11,6 +11,7 @@ const InstituteSchema = mongoose.Schema({
     location:String,
     phone:String,
     email:String,
+    instituteCourse : [{ type: mongoose.Schema.Types.ObjectId, ref: 'InstituteCourse' }],
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number

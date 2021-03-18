@@ -243,6 +243,14 @@ module.exports = {
         videoUploadPath: relativeCommonPath + "classes/video",
         imageBase: commonPath + "classes/"
     },
+    offlineclass: {
+        popularInHomeResultsPerPage : 5,
+        latestInHomeResultsPerPage : 5,
+        resultsPerPage: 10,
+        imageUploadPath: relativeCommonPath + "offlineclasses/",
+        
+        imageBase: commonPath + "classes/"
+    },
     appointment: {
         resultsPerPage : 10
     }
