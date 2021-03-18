@@ -92,6 +92,7 @@ exports.createInstitution = async (req, res) => {
       institutionObj.image = file.image[0].filename;
     }
   
+    institutionObj.description = params.description;
     institutionObj.instituteCourse = params.courses;
     institutionObj.isApproved = false;
     institutionObj.isRejected = false;
