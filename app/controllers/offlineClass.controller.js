@@ -88,8 +88,7 @@ exports.createInstitution = async (req, res) => {
     }
     return res.send({
       success: 1,
-      statusCode: 200,
-      filename: file.filename,
+     
       message: 'Created a institution..waiting for admin approval',
     })
   
