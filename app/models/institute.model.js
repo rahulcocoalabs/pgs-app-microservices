@@ -11,7 +11,9 @@ const InstituteSchema = mongoose.Schema({
     location:String,
     phone:String,
     email:String,
-    instituteCourse : [{ type: mongoose.Schema.Types.ObjectId, ref: 'InstituteCourse' }],
+    isApproved:Boolean,
+    isRejected:Boolean,
+    instituteCourse : [{ type: mongoose.Schema.Types.ObjectId, ref: 'InstitutionCourse' }],
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number

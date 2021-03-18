@@ -8,4 +8,4 @@ const InstituteCourseSchema = mongoose.Schema({
     tsModifiedAt : Number
 }, options)
 
-module.exports = mongoose.model('InstituteCourse', InstituteCourseSchema, 'InstituteCourses');
+module.exports = mongoose.model('InstitutionCourse', InstituteCourseSchema, 'InstitutionCourses');

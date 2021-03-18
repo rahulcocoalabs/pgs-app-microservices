@@ -3,7 +3,7 @@
 
 const Instituion = require('../models/institute.model');
 
-
+const Courses = require('../models/instituteCourses.model');
 
 ObjectId = require('mongodb').ObjectID;
 
@@ -39,6 +39,18 @@ exports.createInstitution = async (req, res) => {
         message: "phone cannot be empty"
       })
     }
+    if (!req.body.courses) {
+      errors.push({
+        field: "courses",
+        message: "courses cannot be empty"
+      })
+    }
+    else if(req.body.courses.length == 0) {
+      errors.push({
+        field: "courses",
+        message: "add atleast one course",
+      })
+    }
     if (!req.body.name) {
       errors.push({
         field: "name",
@@ -68,7 +80,9 @@ exports.createInstitution = async (req, res) => {
       institutionObj.image = file.image[0].filename;
     }
   
-  
+    institutionObj.instituteCourse = params.courses;
+    institutionObj.isApproved = false;
+    institutionObj.isRejected = false;
     institutionObj.status = 1;
     institutionObj.tsCreatedAt = Date.now();
     institutionObj.tsModifiedAt = null;
@@ -93,3 +107,25 @@ exports.createInstitution = async (req, res) => {
     })
   
   }
+
+  
+exports.getCourse = async (req, res) => {
+
+  
+
+  var courses = await Courses.find({ status: 1},{name:1}).catch(err => {
+    return { success: 0,message:"something went wrong", error: err.message}
+  })
+
+  if (courses && courses.success != undefined && courses.success === 0){
+
+    return res.send(courses)
+  }
+
+  return res.send({ 
+    success: 0,
+    message:"listed successfully",
+    items:courses
+  })
+
+}
