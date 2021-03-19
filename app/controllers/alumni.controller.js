@@ -987,6 +987,7 @@ exports.listEvents = async (req, res) => {
         var obj = {};
         obj.description = data.description;
         obj.title = data.title;
+        obj.date = data.date;
         obj.image = data.image;
         var isEnded = false;
         var d1 = Date.parse(data.date);
