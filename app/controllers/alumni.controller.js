@@ -874,6 +874,71 @@ exports.addAlumniEvents = async (req, res) => {
     })
 }
 
+exports.editEvents = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    var params = req.body;
+    var file = req.file;
+    var update = {};
+
+    if (params.title){
+        update.title = params.title;
+    }
+    if (params.description){
+        update.description = params.description;
+    }
+    if (params.venue){
+        update.venue = params.venue;
+    }
+    if (params.date){
+        update.date = params.date;
+    }
+    if (file){
+        if (file.image){
+            update.image = params.image;
+        }
+    }
+    if (params.availableFromTime){
+        update.availableFromTime = params.availableFromTime;
+    }
+    if (params.availableToTime){
+        update.availableToTime = params.availableToTime;
+    }
+    if (params.liveLink){
+        update.descrliveLinkiption = params.liveLink;
+    }
+
+    var filter = {status:1,_id:req.params.id}
+
+    var data = await AlumniEvent.updateOne(filter,update).catch(err => {
+        return { success: 0, message: "something went wrong", error: err.message}
+    })
+
+    return res.send({ success:1,message:"successfully updated"})
+    
+
+}
+
+exports.deleteEvents = async (req, res) => {
+
+    const data = req.identity.data;
+    const userId = data.userId;
+    
+    var update = {status:0};
+
+    
+    var filter = {status:1,_id:req.params.id}
+
+    var data = await AlumniEvent.updateOne(filter,update).catch(err => {
+        return { success: 0, message: "something went wrong", error: err.message}
+    })
+
+    return res.send({ success:1,message:"successfully removed"})
+    
+
+}
+
 exports.addAlumniJobs = async (req, res) => {
 
     const data = req.identity.data;
