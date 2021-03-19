@@ -876,8 +876,7 @@ exports.addAlumniEvents = async (req, res) => {
 
 exports.editEvents = async (req, res) => {
 
-    const data = req.identity.data;
-    const userId = data.userId;
+    
     var params = req.body;
     var file = req.file;
     var update = {};
@@ -922,8 +921,7 @@ exports.editEvents = async (req, res) => {
 
 exports.deleteEvents = async (req, res) => {
 
-    const data = req.identity.data;
-    const userId = data.userId;
+   
     
     var update = {status:0};
 
