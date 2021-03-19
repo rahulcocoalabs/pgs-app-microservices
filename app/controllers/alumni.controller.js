@@ -893,8 +893,11 @@ exports.editEvents = async (req, res) => {
     if (params.date){
         update.date = params.date;
     }
+    console.log(1);
     if (file){
+        console.log(2);
         if (file.image){
+            console.log(3);
             update.image = params.image;
         }
     }
