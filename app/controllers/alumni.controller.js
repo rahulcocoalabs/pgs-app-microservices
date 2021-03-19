@@ -897,7 +897,7 @@ exports.editEvents = async (req, res) => {
     if (file){
         console.log(2);
         if (file.filename){
-            console.log(3);
+            console.log(3,file);
             update.image = params.image;
         }
     }
