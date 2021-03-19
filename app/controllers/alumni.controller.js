@@ -980,13 +980,29 @@ exports.listEvents = async (req, res) => {
     }
 
 
+    var itemArr  = [];
+    for (x in dataAlumni){
 
+        let data = dataAlumni[x];
+        var obj = {};
+        obj.description = data.description;
+        obj.title = data.title;
+        obj.image = data.image;
+        var isEnded = false;
+        var d1 = Date.parse(data.date);
+        var d2 = Date.now(); 
+        if (d1<d2){
+            isEnded = true;
+        }
+        obj.isEnded = isEnded;
+        itemArr.push(obj);
+    }
     return res.send({
         success: 1,
         pagination,
         imageBase,
         message: "listed successfully",
-        items: dataAlumni
+        items: itemArr
     })
 
 
