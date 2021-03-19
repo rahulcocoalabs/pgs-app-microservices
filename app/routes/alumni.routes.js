@@ -42,7 +42,7 @@ module.exports = (app) => {
 
    app.post('/alumni/add-event', auth,upload.single('image'),  alumni.addAlumniEvents);
    app.patch('/alumni/edit-event/:id', auth,upload.single('image'),  alumni.editEvents);
-   app.delete('/alumni/edit-event/:id', auth,upload.single('image'),  alumni.deleteEvents);
+   app.delete('/alumni/remove-event/:id', auth,upload.single('image'),  alumni.deleteEvents);
    app.post('/alumni/add-job', auth,upload.single('image'),  alumni.addAlumniJobs);
 
    app.get('/alumni/list-events',auth,alumni.listEvents);
