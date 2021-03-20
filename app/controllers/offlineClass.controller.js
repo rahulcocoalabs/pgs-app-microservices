@@ -214,14 +214,14 @@ exports.homeSeeMore = async(req,res) => {
   filter.status = 1;
  
   if (query){
-    console.log(query)
+  
     if (query.isPopular == true) {
-     
+      console.log(query)
       filter.isPopular = true;
     }
   }
 
- 
+ console.log(filter)
   
 
   var projection = {name:1,image:1,location:1,email:1,phone:1};
