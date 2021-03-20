@@ -276,3 +276,41 @@ exports.homeSeeMore = async(req,res) => {
 
 
 }
+
+exports.detailInstitution = async (req, res) => {
+
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var id = req.params.id;
+
+
+  var detail = await (await Instituion.findOne({status:1,_id:id},{tsCreatedAt:0,tsModifiedAt:0,status:0})).populated({path:'instituteCourse',select:{'name':1}}).catch(err => {
+    return {success:0,err:err.message,message:"could not fetch data"};
+  })
+  if (detail && (detail.success !== undefined) && (detail.success === 0)) {
+    return res.send(detail);
+  }
+
+  var isOwner = 0;
+  if (detail.userId == userId){
+    isOwner = 1;
+  }
+
+  
+
+  
+
+
+
+  var ret_Obj = {};
+  ret_Obj.success = 1;
+  ret_Obj.message = "fetched data successfully";
+  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.detail = detail;
+  ret_Obj.isOwner = isOwner;
+ 
+  return res.send(ret_Obj);
+
+}
