@@ -215,7 +215,7 @@ exports.homeSeeMore = async(req,res) => {
  
   if (query){
   
-    if (query.isPopular == true) {
+    if (query.isPopular == true || query.isPopular == 'true') {
       console.log(query)
       filter.isPopular = true;
     }
