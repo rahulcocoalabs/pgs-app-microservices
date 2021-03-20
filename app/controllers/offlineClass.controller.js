@@ -6,9 +6,10 @@ const Instituion = require('../models/institute.model');
 const Courses = require('../models/instituteCourses.model');
 
 ObjectId = require('mongodb').ObjectID;
+var config = require('../../config/app.config.js');
 
-
-
+const usersConfig = config.users;
+const classConfig = config.class;
 
 exports.createInstitution = async (req, res) => {
     var userData = req.identity.data;
@@ -140,5 +141,52 @@ exports.getCources = async (req, res) => {
     message:"listed successfully",
     items:courses
   })
+
+}
+
+exports.listInstitutesAtHome = async(req,res) => {
+
+  
+
+  
+
+  var pageParams = {
+    skip: 0,
+    limit: 5
+  };
+
+  var inst_list = await Instituion.find({status:1},{name:1,image:1,location:1,email:1,phone:1},pageParams).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err
+    }
+  })
+
+  var inst_list_popular = await Instituion.find({status:1,isPopular:true},{name:1,image:1,location:1}).limit(page2).skip(offset2).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err
+    }
+  })
+
+  if (inst_list && (inst_list.success !== undefined) && (inst_list.success === 0)) {
+    return res.send(inst_list);
+  }
+  if (inst_list_popular && (inst_list_popular.success !== undefined) && (inst_list_popular.success === 0)) {
+    return res.send(inst_list_popular);
+  }
+
+  
+
+  var ret_Obj = {};
+  ret_Obj.success = 1;
+  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.message = "listed Successfully"
+  ret_Obj.insitutes = inst_list;
+  ret_Obj.popularInstitutes = inst_list_popular;
+ 
+  return res.send(ret_Obj);
 
 }

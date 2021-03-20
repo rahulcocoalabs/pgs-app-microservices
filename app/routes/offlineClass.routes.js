@@ -32,4 +32,5 @@ module.exports = (app) => {
     const offlineClass = require('../controllers/offlineClass.controller');
     app.post('/offline-class/add-institution', fileUpload.single('image'), auth, offlineClass.createInstitution);
     app.get('/offline-class/courses',  auth, offlineClass.getCources);
+    app.get('/offline-class/home',  auth, offlineClass.listInstitutesAtHome);
 }
