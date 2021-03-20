@@ -2,7 +2,7 @@
 
 
 const Instituion = require('../models/institute.model');
-
+const enquiry = require('../models/instituteEnquiry.model');
 const Courses = require('../models/instituteCourses.model');
 
 ObjectId = require('mongodb').ObjectID;
@@ -312,5 +312,60 @@ exports.detailInstitution = async (req, res) => {
   ret_Obj.isOwner = isOwner;
  
   return res.send(ret_Obj);
+
+}
+
+exports.addEnquiry = async (req, res) => {
+
+  var params = req.body;
+  var  data = req.identity.data;
+  var userId = data.userId;
+
+  var errors = [];
+
+  if (!params.comment) {
+    errors.push({
+      field: "comment",
+      message: "comment cannot be empty"
+    })
+  }
+  if (!params.institute) {
+    errors.push({
+      field: "institute",
+      message: "institute cannot be empty"
+    })
+  }
+
+
+  if (errors.length > 0) {
+
+    return res.status(200).send({
+      success: 0,
+      errors: errors,
+
+      code: 200
+    });
+  }
+
+  var obj = {
+    userId : userId,
+    instituteId: params.institute,
+   
+    status: 1,
+    comment:params.comment,
+    tsCreatedAt: Date.now(),
+    tsModifiedAt: null
+  }
+
+  var enquiryObj = new enquiry(obj);
+  var saveData = await enquiryObj.save();
+
+  if(saveData) {
+    return res.send({
+      success:1,
+      message:"send successfully"
+    })
+  }
+
 
 }
