@@ -163,7 +163,7 @@ exports.listInstitutesAtHome = async(req,res) => {
     }
   })
 
-  var inst_list_popular = await Instituion.find({status:1,isPopular:true},{name:1,image:1,location:1}).limit(page2).skip(offset2).catch(err=>{
+  var inst_list_popular = await Instituion.find({status:1,isPopular:true},{name:1,image:1,location:1},pageParams).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
