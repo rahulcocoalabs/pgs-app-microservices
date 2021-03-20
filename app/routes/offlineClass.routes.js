@@ -34,5 +34,5 @@ module.exports = (app) => {
     app.get('/offline-class/courses',  auth, offlineClass.getCources);
     app.get('/offline-class/home',  auth, offlineClass.listInstitutesAtHome);
     app.get('/offline-class/home-see-more',  auth, offlineClass.homeSeeMore);
-    app.get('/offline-class/detail-institutes',  auth, offlineClass.detailInstitution);
+    app.get('/offline-class/detail-institutes/:id',  auth, offlineClass.detailInstitution);
 }
