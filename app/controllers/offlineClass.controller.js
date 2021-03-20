@@ -286,7 +286,7 @@ exports.detailInstitution = async (req, res) => {
   var id = req.params.id;
 
 
-  var detail = await (await Instituion.findOne({status:1,_id:id},{tsCreatedAt:0,tsModifiedAt:0,status:0})).populate({path:'instituteCourse',select:{'name':1}}).catch(err => {
+  var detail = await (await Instituion.findOne({status:1,_id:id},{tsCreatedAt:0,tsModifiedAt:0,status:0})).populate({path:'instituteCourse',select:'name'}).catch(err => {
     return {success:0,err:err.message,message:"could not fetch data"};
   })
   if (detail && (detail.success !== undefined) && (detail.success === 0)) {
