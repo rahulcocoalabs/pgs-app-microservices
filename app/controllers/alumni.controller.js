@@ -104,6 +104,7 @@ exports.addAlumni = async (req, res) => {
 
 exports.listAlumni = async (req, res) => {
 
+
     const data = req.identity.data;
     const userId = data.userId;
     var params = req.query;
@@ -315,7 +316,8 @@ exports.listAlumni1 = async (req, res) => {
 
     return res.send({
         success: 0,
-        message: "maximum documents exceeded"
+        items:[],
+        message: "nor documents to show"
 
     })
 
