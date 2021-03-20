@@ -190,3 +190,85 @@ exports.listInstitutesAtHome = async(req,res) => {
   return res.send(ret_Obj);
 
 }
+
+exports.homeSeeMore = async(req,res) => {
+
+  
+
+  var query = req.query;
+
+
+  var page = Number(params.page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(params.perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
+  var isPopular = false;
+  if (query){
+    if (query.isPopular == true) {
+      isPopular = true;
+    }
+  }
+
+  var filter = {}
+
+  filter.status = 1;
+  filter.isPopular = isPopular;
+
+  var projection = {name:1,image:1,location:1,email:1,phone:1};
+  
+  
+
+ 
+  var inst_list = await Instituion.find(filter,projection,pageParams).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err
+    }
+  })
+
+  
+
+  if (inst_list && (inst_list.success !== undefined) && (inst_list.success === 0)) {
+    return res.send(inst_list);
+  }
+  
+  var dataCount = await Instituion.countDocuments(filter).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err.message
+    }
+  })
+  if (dataCount && (dataCount.success !== undefined) && (dataCount.success === 0)) {
+    return res.send(dataCount);
+  }
+
+  var totalPages = dataCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+      page: page,
+      perPage: perPage,
+      hasNextPage: hasNextPage,
+      totalItems: dataCount,
+      totalPages: totalPages
+  }
+
+  var ret_Obj = {};
+  ret_Obj.success = 1;
+  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.message = "listed Successfully"
+  ret_Obj.insitutes = inst_list;
+
+  ret_Obj.pagination = pagination;
+  return res.send(ret_Obj);
+
+
+}
