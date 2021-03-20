@@ -33,4 +33,5 @@ module.exports = (app) => {
     app.post('/offline-class/add-institution', fileUpload.single('image'), auth, offlineClass.createInstitution);
     app.get('/offline-class/courses',  auth, offlineClass.getCources);
     app.get('/offline-class/home',  auth, offlineClass.listInstitutesAtHome);
+    app.get('/offline-class/home-see-more',  auth, offlineClass.listInstitutesAtHome);
 }
