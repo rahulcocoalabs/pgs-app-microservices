@@ -198,9 +198,9 @@ exports.homeSeeMore = async(req,res) => {
   var query = req.query;
 
 
-  var page = Number(params.page) || 1;
+  var page = Number(query.page) || 1;
   page = page > 0 ? page : 1;
-  var perPage = Number(params.perPage) || classConfig.resultsPerPage;
+  var perPage = Number(query.perPage) || classConfig.resultsPerPage;
   perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
