@@ -208,17 +208,20 @@ exports.homeSeeMore = async(req,res) => {
     skip: offset,
     limit: perPage
   };
-  var isPopular = false;
-  if (query){
-    if (query.isPopular == true) {
-      isPopular = true;
-    }
-  }
 
   var filter = {}
 
   filter.status = 1;
-  filter.isPopular = isPopular;
+ 
+  if (query){
+    if (query.isPopular == true) {
+     
+      filter.isPopular = true;
+    }
+  }
+
+ 
+  
 
   var projection = {name:1,image:1,location:1,email:1,phone:1};
   
