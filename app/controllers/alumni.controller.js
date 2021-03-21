@@ -835,7 +835,15 @@ exports.addAlumniEvents = async (req, res) => {
 
 
 
-    if (userInfo.isAdmin == false) {
+    if (userInfo){
+        if (userInfo.isAdmin == false) {
+            return res.send({
+                success: 0,
+                message: "you are not authorized for this action"
+            })
+        }
+    }
+    else {
         return res.send({
             success: 0,
             message: "you are not authorized for this action"
