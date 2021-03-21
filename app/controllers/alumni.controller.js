@@ -824,7 +824,7 @@ exports.addAlumniEvents = async (req, res) => {
         })
     }
 
-    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId }).catch(err => {
+    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId,group:params.groupId }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     });
 
