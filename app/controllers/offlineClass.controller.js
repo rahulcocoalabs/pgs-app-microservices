@@ -394,7 +394,7 @@ exports.listEnquiry = async(req,res)=>{
 
   filter.status = 1;
  
-  filter.instituteId = 1;
+  filter.instituteId = id;
   
 
   var projection = {comment:1,userId:1};
