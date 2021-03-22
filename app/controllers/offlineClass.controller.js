@@ -369,3 +369,81 @@ exports.addEnquiry = async (req, res) => {
 
 
 }
+
+exports.listEnquiry = async(req,res)=>{
+  var id = req.params.id;
+  var  data = req.identity.data;
+  var userId = data.userId;
+  
+
+  var query = req.query;
+
+
+  var page = Number(query.page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(query.perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
+
+  var filter = {}
+
+  filter.status = 1;
+ 
+  filter.instituteId = 1;
+  
+
+  var projection = {comment:1,userId:1};
+  
+  
+
+ 
+  var enq_list = await enquiry.find(filter,projection,pageParams).populate('userId').catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err
+    }
+  })
+
+  
+
+  if (enq_list && (enq_list.success !== undefined) && (enq_list.success === 0)) {
+    return res.send(enq_list);
+  }
+  
+  var dataCount = await enquiry.countDocuments(filter).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err.message
+    }
+  })
+  if (dataCount && (dataCount.success !== undefined) && (dataCount.success === 0)) {
+    return res.send(dataCount);
+  }
+
+  var totalPages = dataCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+      page: page,
+      perPage: perPage,
+      hasNextPage: hasNextPage,
+      totalItems: dataCount,
+      totalPages: totalPages
+  }
+
+  var ret_Obj = {};
+  ret_Obj.success = 1;
+  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.message = "listed Successfully"
+  ret_Obj.insitutes = enq_list;
+
+  ret_Obj.pagination = pagination;
+  return res.send(ret_Obj);
+}
