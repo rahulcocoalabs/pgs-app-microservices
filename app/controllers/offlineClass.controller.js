@@ -480,3 +480,61 @@ exports.listEnquiry = async(req,res)=>{
   ret_Obj.pagination = pagination;
   return res.send(ret_Obj);
 }
+
+exports.editInstitution = async (req, res) => {
+    var userData = req.identity.data;
+    var userId = userData.userId;
+  
+  
+    var file = req.file;
+  
+   
+  
+    
+    var params = req.body;
+
+    var update = {};
+
+    if (params.courses){
+      update.courses = params.courses;
+    }
+    if (params.name){
+      update.name = params.name;
+    }
+    if (params.location){
+      update.location = params.location;
+    }
+    if (params.phone){
+      update.phone = params.phone;
+    }
+    if (params.email){
+      update.email = params.email;
+    }
+    if (params.description){
+      update.description = params.description;
+    }
+    if (file){
+      update.image =file.filename;
+    }
+    
+    
+  
+    var filter = {};
+    filter.status = 1;
+    filter._id = req.params.id;
+
+    var response = await Instituion.updateOne(filter,update).catch(err => {
+      return { success: 0,message:"something went wrong",error:err.message}
+    })
+
+    if (response && response.success != undefined && response.success ===0){
+      return res.send(response)
+    }
+
+    return res.send({
+      success: 1,
+     
+      message: 'updated institution details',
+    })
+  
+  }
