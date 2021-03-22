@@ -402,7 +402,7 @@ exports.listEnquiry = async(req,res)=>{
   
 
  
-  var enq_list = await enquiry.find(filter,projection,pageParams).populate('userId').catch(err=>{
+  var enq_list = await enquiry.find(filter,projection,pageParams).populate({path:'userId',select:{'name':1,image:1}}).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
