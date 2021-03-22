@@ -219,6 +219,15 @@ exports.homeSeeMore = async(req,res) => {
       console.log(query)
       filter.isPopular = true;
     }
+    if (query.Location) {
+      
+      filter.location = query.location;
+    }
+    
+    if (query.course) {
+      
+      filter.instituteCourse = query.course;
+    }
   }
 
  console.log(filter)

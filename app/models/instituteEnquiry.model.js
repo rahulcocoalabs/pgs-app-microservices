@@ -6,7 +6,7 @@ var InstituteEnquirySchema = mongoose.Schema({
     
     userId : { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     instituteId: { type: mongoose.Schema.Types.ObjectId, ref: 'Institute' },
-   
+    
     status: Number,
     comment:String,
     tsCreatedAt: Number,
