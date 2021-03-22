@@ -219,7 +219,7 @@ exports.homeSeeMore = async(req,res) => {
       console.log(query)
       filter.isPopular = true;
     }
-    if (query.Location) {
+    if (query.location) {
       
       filter.location = query.location;
     }
