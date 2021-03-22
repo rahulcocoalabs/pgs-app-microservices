@@ -376,6 +376,30 @@ exports.listEnquiry = async(req,res)=>{
   var userId = data.userId;
   
 
+  var inst = await Instituion.findOne({_id:id,status:1},{userId:1}).catch(err=>{
+    return {succes:0,message:"something went wrong",error:err.message};
+  });
+
+  if(inst && (inst.success !== undefined) && (inst.success === 0)){
+
+    return res.send(inst);
+  }
+
+  if (inst){
+    if (inst.userId != userId){
+      return res.send({ 
+        success:0,
+        message:"only institute owner has this previlage"
+      })
+    }
+  }
+  else {
+    return res.send({ 
+      success:0,
+      message:"only institute owner has this previlage"
+    })
+  }
+
   var query = req.query;
 
 
