@@ -479,7 +479,7 @@ exports.listEnquiry = async(req,res)=>{
 
   var ret_Obj = {};
   ret_Obj.success = 1;
-  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.imageBase =  usersConfig.imageBase;
   ret_Obj.message = "listed Successfully"
   ret_Obj.insitutes = enq_list;
 
