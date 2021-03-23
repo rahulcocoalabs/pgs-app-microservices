@@ -9,6 +9,9 @@ var InstituteEnquirySchema = mongoose.Schema({
     
     status: Number,
     comment:String,
+    phone: String,
+    email:String,
+    name:String,
     tsCreatedAt: Number,
     tsModifiedAt: Number
 })

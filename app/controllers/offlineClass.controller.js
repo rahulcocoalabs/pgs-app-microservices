@@ -362,6 +362,9 @@ exports.addEnquiry = async (req, res) => {
    
     status: 1,
     comment:params.comment,
+    name:params.name,
+    email:params.email,
+    phone:params.phone,
     tsCreatedAt: Date.now(),
     tsModifiedAt: null
   }
