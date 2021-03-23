@@ -2640,6 +2640,9 @@ async function avaregeRates(type, id) {
 exports.loginWithEmail = async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
+
+  console.log("entered",req.body);
+
   if (!email || !password) {
     let errors = [];
     if (!email) {
