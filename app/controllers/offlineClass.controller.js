@@ -82,6 +82,9 @@ exports.createInstitution = async (req, res) => {
       });
     }
     var params = req.body;
+
+    console.log("<-------------->");
+    console.log(file);
     
     var institutionObj = {};
     institutionObj.userId = userId;
