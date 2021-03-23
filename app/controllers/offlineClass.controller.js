@@ -463,6 +463,21 @@ exports.listEnquiry = async(req,res)=>{
   if (enq_list && (enq_list.success !== undefined) && (enq_list.success === 0)) {
     return res.send(enq_list);
   }
+
+  var arr = [];
+
+  for (x in enq_list) {
+
+    var enq = enq_list[x];
+    var obj = {};
+    obj.comment = enq.comment;
+    obj.name = enq.name;
+    obj.userId = enq.userId;
+    obj.phone = enq.phone;
+    obj.email = enq.email;
+    obj.date = convert(enq.tsCreatedAt)
+    arr.push(obj);
+  }
   
   var dataCount = await enquiry.countDocuments(filter).catch(err=>{
     return {
@@ -490,10 +505,23 @@ exports.listEnquiry = async(req,res)=>{
   ret_Obj.success = 1;
   ret_Obj.imageBase =  usersConfig.imageBase;
   ret_Obj.message = "listed Successfully"
-  ret_Obj.insitutes = enq_list;
+  ret_Obj.insitutes = arr;
 
   ret_Obj.pagination = pagination;
   return res.send(ret_Obj);
+}
+
+function convert(timestamp) {
+  var date = new Date(                          // Convert to date
+    parseInt(                                   // Convert to integer
+      timestamp                 // Take only the part right of the "("
+    )
+  );
+  return [
+    ("0" + date.getDate()).slice(-2),           // Get day and pad it with zeroes
+    ("0" + (date.getMonth()+1)).slice(-2),      // Get month and pad it with zeroes
+    date.getFullYear()                          // Get full year
+  ].join('/');                                  // Glue the pieces together
 }
 
 exports.editInstitution = async (req, res) => {
