@@ -9,7 +9,7 @@ ObjectId = require('mongodb').ObjectID;
 var config = require('../../config/app.config.js');
 
 const usersConfig = config.users;
-const classConfig = config.class;
+const classConfig = config.offlineclass;
 
 exports.createInstitution = async (req, res) => {
     var userData = req.identity.data;
