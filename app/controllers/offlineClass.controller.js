@@ -92,8 +92,8 @@ exports.createInstitution = async (req, res) => {
     institutionObj.location = params.location;
     institutionObj.name = params.name;
     institutionObj.email = params.email;
-    if (file.image && file.image.length > 0) {
-      institutionObj.image = file.image[0].filename;
+    if (file) {
+      institutionObj.image = file.filename;
     }
   
     institutionObj.description = params.description;
