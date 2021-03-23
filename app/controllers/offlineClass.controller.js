@@ -138,11 +138,20 @@ exports.getCources = async (req, res) => {
 
     return res.send(courses)
   }
+  var arr = [];
+
+  for (x in courses) {
+    let course = courses[x];
+    let obj = {};
+    obj.id = course._id;
+    obj.name = course.name;
+    arr.push(obj);
+  }
 
   return res.send({ 
     success: 1,
     message:"listed successfully",
-    items:courses
+    items:arr
   })
 
 }
