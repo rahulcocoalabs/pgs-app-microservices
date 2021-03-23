@@ -37,5 +37,5 @@ module.exports = (app) => {
     app.get('/offline-class/detail-institutes/:id',  auth, offlineClass.detailInstitution);
     app.post('/offline-class/add-institution-enquiry',  auth, offlineClass.addEnquiry);
     app.get('/offline-class/list-enquiry/:id',  auth, offlineClass.listEnquiry);
-    app.patch('/offline-class/edit-institution/:id',  auth, offlineClass.editInstitution);
+    app.patch('/offline-class/edit-institution/:id',fileUpload.single('image'),  auth, offlineClass.editInstitution);
 }
