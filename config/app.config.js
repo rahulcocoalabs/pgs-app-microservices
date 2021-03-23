@@ -249,7 +249,7 @@ module.exports = {
         resultsPerPage: 10,
         imageUploadPath: relativeCommonPath + "offlineclass/",
         
-        imageBase: commonPath + "classes/"
+        imageBase: commonPath + "offlineclass/"
     },
     appointment: {
         resultsPerPage : 10
