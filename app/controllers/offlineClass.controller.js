@@ -517,7 +517,7 @@ exports.editInstitution = async (req, res) => {
       update.description = params.description;
     }
     if (file){
-      update.image =file.filename;
+      update.image =file.image[0].filename;
     }
     
     
