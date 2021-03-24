@@ -539,7 +539,7 @@ exports.editInstitution = async (req, res) => {
     var update = {};
 
     if (params.courses){
-      update.courses = params.courses;
+      update.instituteCourse = params.courses;
     }
     if (params.name){
       update.name = params.name;
