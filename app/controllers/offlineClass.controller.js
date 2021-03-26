@@ -4,7 +4,7 @@
 const Instituion = require('../models/institute.model');
 const enquiry = require('../models/instituteEnquiry.model');
 const Courses = require('../models/instituteCourses.model');
-
+const Keywords = require('../models/keywords.model');
 ObjectId = require('mongodb').ObjectID;
 var config = require('../../config/app.config.js');
 
@@ -589,6 +589,7 @@ exports.editInstitution = async (req, res) => {
     var update = await Instituion.updateMany({},{status:0});
 
     var update1 = await enquiry.updateMany({},{status:0});
+    var update2 = await keyword.updateMany({},{status:0});
 
     return res.send("ok");
   }
