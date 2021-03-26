@@ -583,3 +583,12 @@ exports.editInstitution = async (req, res) => {
     })
   
   }
+
+  exports.removeAll = async (req, res) => {
+
+    var update = await Instituion.updateMany({},{status:0});
+
+    var update1 = await enquiry.updateMany({},{status:0});
+
+    return res.send("ok");
+  }
