@@ -90,7 +90,7 @@ module.exports = (app) => {
     app.post('/accounts/:id/add-innovation-challenge/',auth,accounts.addNewinnovation)
 
     app.post('/accounts/remove-teacher/',auth,accounts.removeTeacher)
-
+    app.delete('/accounts/remove-teacher-request/',auth,accounts.removeTutorRequest)
     app.get('/accounts/tutor-check/',auth,accounts.isTutorCheck)
 
 };
