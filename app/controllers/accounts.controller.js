@@ -5040,6 +5040,16 @@ exports.removeTeacher = async(req,res)=> {
 
 }
 
+exports.removeTutorRequest = async(req,res)=> {
+
+
+  var update = await TutorRequest.updateMany({},{status:0});
+  var cnt = await TutorRequest.countDocuments({status:0});
+
+  return res.send({number:cnt})
+
+}
+
 exports.isTutorCheck = async(req,res) => {
 
     var userData = req.identity.data;
