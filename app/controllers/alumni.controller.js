@@ -316,7 +316,7 @@ exports.listAlumni1 = async (req, res) => {
 
     return res.send({
         success: 0,
-        items:[],
+        items: [],
         message: "nor documents to show"
 
     })
@@ -784,6 +784,23 @@ exports.acceptJoinRequests = async (req, res) => {
         if (update && update.success != undefined && update.success == 0) {
             return res.send(update);
         }
+
+
+        var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": userId }]
+
+        var notificationObj = {
+            title: " Request for joining group",
+            message: "Some has sent you a request to join the group",
+            type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
+            filtersJsonArr,
+            // metaInfo,
+            typeId: params.group,
+            userId: userId,
+            notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+        }
+        let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
+
         return res.send({
             success: 1,
             message: "processed successfully"
@@ -824,7 +841,7 @@ exports.addAlumniEvents = async (req, res) => {
         })
     }
 
-    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId,group:params.groupId }).catch(err => {
+    var userInfo = await AlumniJoinRequest.findOne({ status: 1, user: userId, group: params.groupId }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     });
 
@@ -835,7 +852,7 @@ exports.addAlumniEvents = async (req, res) => {
 
 
 
-    if (userInfo){
+    if (userInfo) {
         if (userInfo.isAdmin == false) {
             return res.send({
                 success: 0,
@@ -886,67 +903,67 @@ exports.addAlumniEvents = async (req, res) => {
 
 exports.editEvents = async (req, res) => {
 
-    
+
     var params = req.body;
     var file = req.file;
     var update = {};
 
-    if (params.title){
+    if (params.title) {
         update.title = params.title;
     }
-    if (params.description){
+    if (params.description) {
         update.description = params.description;
     }
-    if (params.venue){
+    if (params.venue) {
         update.venue = params.venue;
     }
-    if (params.date){
+    if (params.date) {
         update.date = params.date;
     }
-    
-    if (file){
-       
-        if (file.filename){
-            
+
+    if (file) {
+
+        if (file.filename) {
+
             update.image = file.filename;
         }
     }
-    if (params.availableFromTime){
+    if (params.availableFromTime) {
         update.availableFromTime = params.availableFromTime;
     }
-    if (params.availableToTime){
+    if (params.availableToTime) {
         update.availableToTime = params.availableToTime;
     }
-    if (params.liveLink){
+    if (params.liveLink) {
         update.descrliveLinkiption = params.liveLink;
     }
 
-    var filter = {status:1,_id:req.params.id}
+    var filter = { status: 1, _id: req.params.id }
 
-    var data = await AlumniEvent.updateOne(filter,update).catch(err => {
-        return { success: 0, message: "something went wrong", error: err.message}
+    var data = await AlumniEvent.updateOne(filter, update).catch(err => {
+        return { success: 0, message: "something went wrong", error: err.message }
     })
 
-    return res.send({ success:1,message:"successfully updated"})
-    
+    return res.send({ success: 1, message: "successfully updated" })
+
 
 }
 
 exports.deleteEvents = async (req, res) => {
 
-   
-    
-    var update = {status:0};
 
-    
-    var filter = {status:1,_id:req.params.id}
 
-    var data = await AlumniEvent.updateOne(filter,update).catch(err => {
-        return { success: 0, message: "something went wrong", error: err.message}
+    var update = { status: 0 };
+
+
+    var filter = { status: 1, _id: req.params.id }
+
+    var data = await AlumniEvent.updateOne(filter, update).catch(err => {
+        return { success: 0, message: "something went wrong", error: err.message }
     })
 
-    return res.send({ success:1,message:"successfully removed"})
-    
+    return res.send({ success: 1, message: "successfully removed" })
+
 
 }
 
@@ -1056,8 +1073,8 @@ exports.listEvents = async (req, res) => {
     }
 
 
-    var itemArr  = [];
-    for (x in dataAlumni){
+    var itemArr = [];
+    for (x in dataAlumni) {
 
         let data = dataAlumni[x];
         var obj = {};
@@ -1068,8 +1085,8 @@ exports.listEvents = async (req, res) => {
         obj.image = data.image;
         var isEnded = false;
         var d1 = Date.parse(data.date);
-        var d2 = Date.now(); 
-        if (d1<d2){
+        var d2 = Date.now();
+        if (d1 < d2) {
             isEnded = true;
         }
         obj.isEnded = isEnded;
@@ -1263,7 +1280,7 @@ exports.eventParticipate = async (req, res) => {
             message: "please mention   name"
         })
     }
-   
+
     if (!req.params) {
         return res.send({
             success: 0,
@@ -1295,7 +1312,7 @@ exports.eventParticipate = async (req, res) => {
     }
 
 
-    const event1 = await AlumniEvent.findOne({status:1,_id:req.params.id}).catch(err => {
+    const event1 = await AlumniEvent.findOne({ status: 1, _id: req.params.id }).catch(err => {
         return {
             success: 0,
             message: "could not connect to  db ",
@@ -1352,8 +1369,8 @@ exports.eventParticipate = async (req, res) => {
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
     var notificationObj = {
-        title: " Request for event participation",
-        message: "Some has sent request for participating event",
+        title: " Today's Event",
+        message: "Event is today, don't forget to join!",
         type: constants.ALUMNI_EVENT_PARTICIPATION,
         filtersJsonArr,
         // metaInfo,
@@ -1636,7 +1653,7 @@ exports.deleteAdmin = async (req, res) => {
 
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob(' 0 06 * * *',async function() {
+var job = new CronJob(' 0 06 * * *', async function () {
     console.log('You will see this message every second');
 
     var today = new Date();
@@ -1648,11 +1665,11 @@ var job = new CronJob(' 0 06 * * *',async function() {
     const today1 = dd + " " + months[mm] + " " + yyyy;
     console.log(" < -------- started1")
 
-    var events1 =  AlumniEvent.find({ status: 1 }).populate({ path:'groupId'}).then((results) => {
+    var events1 = AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).then((results) => {
         console.log(results)
     })
 
-    var events = await AlumniEvent.find({ status: 1 }).populate({ path:'groupId'}).catch(err => {
+    var events = await AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).catch(err => {
         console.log(" < -------- end1")
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
@@ -1694,7 +1711,7 @@ var job = new CronJob(' 0 06 * * *',async function() {
         }
 
         console.log(event);
-        if (event.groupId == null){continue}
+        if (event.groupId == null) { continue }
         let groupOwner = event.groupId.createdBy;
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": groupOwner }]
 
@@ -1710,7 +1727,7 @@ var job = new CronJob(' 0 06 * * *',async function() {
         }
         let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
-        
+
     }
-  }, null, true, 'Asia/Kolkata');
-  job.start();
+}, null, true, 'Asia/Kolkata');
+job.start();
