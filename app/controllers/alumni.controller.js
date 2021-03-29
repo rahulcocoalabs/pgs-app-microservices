@@ -785,8 +785,20 @@ exports.acceptJoinRequests = async (req, res) => {
             return res.send(update);
         }
 
+        var info = await AlumniJoinRequest.updateOne({ status: 1, _id: id }, { isApproved: status }).catch(err => {
+            return {
+                success: 0,
+                message: "some thing went wrong",
+                error: err.message
+            }
+        })
+        if (info && info.success != undefined && info.success == 0) {
+            return res.send(info);
+        }
 
-        var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": userId }]
+        var user = info.user || null;
+
+        var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": user }]
 
         var notificationObj = {
             title: " Request for joining group",
@@ -794,8 +806,8 @@ exports.acceptJoinRequests = async (req, res) => {
             type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
             filtersJsonArr,
             // metaInfo,
-            typeId: params.group,
-            userId: userId,
+            typeId: group,
+            userId: user,
             notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
         }
         let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
