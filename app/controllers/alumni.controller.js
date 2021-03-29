@@ -1365,12 +1365,21 @@ exports.eventParticipate = async (req, res) => {
 
     var owner = groupInfo.createdBy || "";
 
+    var event = await AlumniEvent.findOne({_id:params.eventId},{name:1}).catch(err => {
+        return {success:0,message:"some error occurred",error: err.message}
+    })
+    if (event && event.success != undefined && event.success == 0) {
+        return res.send(event);
+    }
+    var name = event.name || "";
 
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
+    var message = params.name + " " + "will participate on event" + " " + name;
+
     var notificationObj = {
-        title: " Today's Event",
-        message: "Event is today, don't forget to join!",
+        title: "Event participation",
+        message: message,
         type: constants.ALUMNI_EVENT_PARTICIPATION,
         filtersJsonArr,
         // metaInfo,
