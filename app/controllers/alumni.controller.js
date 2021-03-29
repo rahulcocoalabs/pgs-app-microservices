@@ -785,7 +785,7 @@ exports.acceptJoinRequests = async (req, res) => {
             return res.send(update);
         }
 
-        var info = await AlumniJoinRequest.updateOne({ status: 1, _id: id }, { isApproved: status }).catch(err => {
+        var info = await AlumniJoinRequest.findOne({ status: 1, _id: id }).catch(err => {
             return {
                 success: 0,
                 message: "some thing went wrong",
