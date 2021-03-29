@@ -1377,7 +1377,7 @@ exports.eventParticipate = async (req, res) => {
 
     var owner = groupInfo.createdBy || "";
 
-    var event = await AlumniEvent.findOne({_id:eventId},{name:1}).catch(err => {
+    var event = await AlumniEvent.findOne({_id:eventId},{title:1}).catch(err => {
         return {success:0,message:"some error occurred",error: err.message}
     })
     if (event && event.success != undefined && event.success == 0) {
