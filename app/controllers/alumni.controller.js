@@ -796,7 +796,7 @@ exports.acceptJoinRequests = async (req, res) => {
             return res.send(info);
         }
 
-        var user = info.user || null;
+        var user = info.user ;
 
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": user }]
 
