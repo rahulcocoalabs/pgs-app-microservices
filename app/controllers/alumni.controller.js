@@ -1698,8 +1698,8 @@ var job = new CronJob(' 0 06 * * *', async function () {
             var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
             var notificationObj = {
-                title: " Request for event participation",
-                message: "Some has sent request for participating event",
+                title: " Today's Event",
+                message: "Event is today, don't forget to join!",
                 type: constants.ALUMNI_EVENT_PARTICIPATION,
                 filtersJsonArr,
                 // metaInfo,
@@ -1716,8 +1716,8 @@ var job = new CronJob(' 0 06 * * *', async function () {
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": groupOwner }]
 
         var notificationObj = {
-            title: " Request for event participation",
-            message: "Some has sent request for participating event",
+            title: " Today's Event",
+            message: "Event is today, don't forget to join!",
             type: constants.ALUMNI_EVENT_PARTICIPATION,
             filtersJsonArr,
             // metaInfo,
