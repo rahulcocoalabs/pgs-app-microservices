@@ -1383,7 +1383,7 @@ exports.eventParticipate = async (req, res) => {
     if (event && event.success != undefined && event.success == 0) {
         return res.send(event);
     }
-    var name = event.name || "";
+    var name = event.title || "";
 
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
