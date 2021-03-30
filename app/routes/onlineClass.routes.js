@@ -50,7 +50,7 @@ module.exports = (app) => {
     app.patch('/online-class/tutor/appointment/:id/status', auth, onlineClass.updateAppointmentStatus);
     app.patch('/online-class/student/appointment/:id/delete', auth, onlineClass.deleteStudentAppointmentHistory);
     app.patch('/online-class/tutor/appointment/:id/delete', auth, onlineClass.deleteTutorDeleteAppointmentHistory);
-    app.post('/online-class/student/appointment', auth, onlineClass.requestAppointment);
+   // app.post('/online-class/student/appointment', auth, onlineClass.requestAppointment);
 
     app.post('/online-class/student/requesttutor', auth, onlineClass.createTutorRequest);
 
