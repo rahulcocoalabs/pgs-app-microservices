@@ -1890,6 +1890,8 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     findCriteria.isRejected = false;
     findCriteria.status = 1;
 
+    console.log(findCriteria,"31/03")
+
     var checkOnlineClass = await OnlineCLass.findOne(findCriteria)
       .catch(err => {
         return {
