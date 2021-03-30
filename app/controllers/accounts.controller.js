@@ -5078,3 +5078,14 @@ exports.isTutorCheck = async(req,res) => {
       })
     }
 }
+
+exports.removeUser = async(req,res) => {
+
+
+  let email = req.params.id;
+
+
+ var update = await User.updateOne({email:email,status:1},{status:0});
+
+ return res.send("ok")
+}

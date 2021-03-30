@@ -93,4 +93,6 @@ module.exports = (app) => {
     app.delete('/accounts/remove-teacher-request/',auth,accounts.removeTutorRequest)
     app.get('/accounts/tutor-check/',auth,accounts.isTutorCheck)
 
+    app.delete('/accounts/remove-user/:id',auth,accounts.removeUser)
+
 };
