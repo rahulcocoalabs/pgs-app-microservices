@@ -391,7 +391,7 @@ async function updateClassAndSubject(classId, subjectId, userId) {
 
     }
     if (!info.tutorClassIds.includes(classId)) {
-      var updat2 = { $push: { tutorClassIds: classId } }
+      var update2 = { $push: { tutorClassIds: classId } }
 
 
       var updateinfo = await User.updateOne({ status: 1, _id: userId }, update2).catch(err => { return 0 })
