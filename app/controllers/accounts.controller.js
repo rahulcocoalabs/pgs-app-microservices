@@ -2831,7 +2831,7 @@ exports.sendOtp_1 = async (req, res) => {
       if (otpResponse == undefined) {
         return res.send({
           success: 0,
-          message: 'Something went wrong while sending OTP'
+          message: 'Something went wrong, Your country code may be wrong please check'
         })
       }
       res.status(200).send({
