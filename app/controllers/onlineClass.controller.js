@@ -1033,17 +1033,18 @@ exports.getStudentHome = async (req, res) => {
 
   perPage = tutorConfig.popularInHomeResultsPerPage;
   findCriteria = {};
-  if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
-    // if (tabCheckData.favourites.favouriteTutors) {
-    findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
-    // }
-  }
+  // if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
+  //   // if (tabCheckData.favourites.favouriteTutors) {
+  //   findCriteria = { _id: { $in: tabCheckData.favourites.favouriteTutors } };
+  //   // }
+  // }
   if (params.keyword) {
     findCriteria.firstName = {
       $regex: `.*${params.keyword}.*`,
     }
   }
   if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
+    console.log(tabCheckData,"31/03")
     findCriteria._id = {$and :[{ $ne: userId },{ _id: { $in: tabCheckData.favourites.favouriteTutors } }]}
   }
 
