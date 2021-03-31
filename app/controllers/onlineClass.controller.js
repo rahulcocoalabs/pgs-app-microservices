@@ -1049,10 +1049,10 @@ exports.getStudentHome = async (req, res) => {
       findCriteria._id = { $in: tabCheckData.favourites.favouriteTutors };
     }
     else{
-      
+      findCriteria._id = { $ne: userId } 
     }
   }
-  findCriteria._id = { $ne: userId } 
+  
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
