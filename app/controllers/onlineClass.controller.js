@@ -1044,8 +1044,13 @@ exports.getStudentHome = async (req, res) => {
     }
   }
   if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
-    console.log(tabCheckData,"31/03")
-    findCriteria._id = {$and :[{ $ne: userId },{ _id: { $in: tabCheckData.favourites.favouriteTutors } }]}
+    console.log(tabCheckData,)
+    if (tabCheckData.favourites){
+      findCriteria._id = {$and :[{ $ne: userId },{ $in: tabCheckData.favourites.favouriteTutors } ]}
+    }
+    else{
+      findCriteria._id = {$and :[{ $ne: userId } ]}
+    }
   }
 
   findCriteria.isPopular = true;
