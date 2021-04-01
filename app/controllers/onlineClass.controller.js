@@ -395,7 +395,7 @@ async function updateClassAndSubject(classId, subjectId, userId) {
       var update2 = { $push: { tutorClassIds: classId } }
 
 
-     
+
       var updateinfo = await User.updateOne({ status: 1, _id: userId }, update2).catch(err => { return 0 })
 
       if (updateinfo == 0) {
@@ -407,7 +407,7 @@ async function updateClassAndSubject(classId, subjectId, userId) {
 
     }
 
-  
+
 
   }
   else {
@@ -1012,7 +1012,7 @@ async function publicTabResponse(req, res) {
   var filter1 = {};
   filter1.isPopular = true;
   filter1.status = 1;
-  
+
 }
 
 exports.getStudentHome = async (req, res) => {
@@ -1258,7 +1258,7 @@ exports.getTutorDetails = async (req, res) => {
   }
 }
 
-exports.requestAppointment1 = async(req,res) =>{
+exports.requestAppointment1 = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.body;
@@ -1277,7 +1277,7 @@ exports.requestAppointment1 = async(req,res) =>{
         message: "class id missing"
       });
     }
-    
+
     return res.send({
       success: 0,
       errors: errors,
@@ -1295,17 +1295,17 @@ exports.requestAppointment1 = async(req,res) =>{
 
   var request = new classRequest(obj);
 
-  var saveData = await request.save().catch(err=>{
-    return {success:0,err:err.message}
+  var saveData = await request.save().catch(err => {
+    return { success: 0, err: err.message }
   });
 
-  if(saveData && saveData.success && saveData.success == 0){
+  if (saveData && saveData.success && saveData.success == 0) {
     return res.send(saveData)
   }
 
   return res.send({
-    success:1,
-    message:"submitted your request"
+    success: 1,
+    message: "submitted your request"
   })
 
 }
@@ -1604,6 +1604,59 @@ exports.getTutorAppointmentRequestList = async (req, res) => {
 
   var appointmentRequestListResp = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
   return res.send(appointmentRequestListResp);
+}
+
+exports.getTutorAppointmentRequestList1 = async (req, res) => {
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var query = req.query;
+  var page = Number(query.page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(query.perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
+
+  var list = await classRequest.find({status:1,tutorId:userId},{},pageParams).populate("userId").populate('classId').catch(err=>{
+    return {
+      success:0,
+      message:err.message
+    }
+  })
+
+  var dataCount = await classRequest.countDocuments({status:1,tutorId:userId}).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err.message
+    }
+  })
+  if (dataCount && (dataCount.success !== undefined) && (dataCount.success === 0)) {
+    return res.send(dataCount);
+  }
+
+  var totalPages = dataCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+      page: page,
+      perPage: perPage,
+      hasNextPage: hasNextPage,
+      totalItems: dataCount,
+      totalPages: totalPages
+  }
+
+  return res.send({
+    success:1,
+    message:"listed",
+    items:list,
+    pagination
+  })
 }
 
 
