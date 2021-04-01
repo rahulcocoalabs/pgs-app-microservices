@@ -364,7 +364,7 @@ exports.createOnlineClass = async (req, res) => {
 
 async function updateClassAndSubject(classId, subjectId, userId) {
 
-  var returnValue = 0;
+  var returnValue = 1;
 
 
 
@@ -386,7 +386,7 @@ async function updateClassAndSubject(classId, subjectId, userId) {
         return updateinfo;
       }
       else {
-        return 1;
+        //return 1;
       }
 
     }
@@ -394,18 +394,19 @@ async function updateClassAndSubject(classId, subjectId, userId) {
       var update2 = { $push: { tutorClassIds: classId } }
 
 
+      console.log(update2)
       var updateinfo = await User.updateOne({ status: 1, _id: userId }, update2).catch(err => { return 0 })
 
       if (updateinfo == 0) {
         return updateinfo;
       }
       else {
-        return 1;
+        //return 1;
       }
 
     }
 
-
+  
 
   }
   else {
@@ -1007,7 +1008,10 @@ async function publicTabResponse(req, res) {
   var userId = userData.userId;
   var params = req.query;
 
-  return res.send("ok from function")
+  var filter1 = {};
+  filter1.isPopular = true;
+  filter1.status = 1;
+  
 }
 
 exports.getStudentHome = async (req, res) => {
