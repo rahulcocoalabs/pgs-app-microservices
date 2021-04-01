@@ -1006,6 +1006,8 @@ async function publicTabResponse(req, res) {
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
+
+  return res.send("ok from function")
 }
 
 exports.getStudentHome = async (req, res) => {
