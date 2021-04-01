@@ -1622,6 +1622,8 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
     limit: perPage
   };
 
+  console.log(userId);
+
   var list = await classRequest.find({status:1,tutorId:userId},{},pageParams).populate("userId").populate('classId').catch(err=>{
     return {
       success:0,
