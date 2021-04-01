@@ -20,6 +20,7 @@ const FavouriteClass = require('../models/instituteClassFavourite.model')
 const FavouriteInstitute = require('../models/favouriteInstitutes.model');
 const InstitutionClass = require('../models/instituteClass.model');
 const tutorRequestModel = require('../models/requestForTutor.model');
+const classRequest = require('../models/onlineClassRequests.model');
 const Instituion = require('../models/institute.model');
 const TutorCategory = require('../models/tutorCategory.model');
 const TutorCourse = require('../models/tutorCourse.model');
@@ -1255,6 +1256,47 @@ exports.getTutorDetails = async (req, res) => {
       message: "Tutor not exists"
     })
   }
+}
+
+exports.requestAppointment1 = async(req,res) =>{
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.body;
+
+  if (!params.tutorId || !params.classId) {
+    var errors = [];
+    if (!params.tutorId) {
+      errors.push({
+        field: "tutorId",
+        message: "tutor id missing"
+      });
+    }
+    if (!params.classId) {
+      errors.push({
+        field: "classId",
+        message: "class id missing"
+      });
+    }
+    
+    return res.send({
+      success: 0,
+      errors: errors,
+      code: 200
+    });
+  }
+
+  var obj = {}
+  obj.tutorId = params.tutorId;
+  obj.classId = params.classId;
+  obj.status = 1;
+  obj.tsCreatedAt = Date.now();
+  obj.tsModifiedAt = null;
+  obj.userId = userId;
+
+  var request = new classRequest(obj);
+
+  var saveData = await request.save();
+
 }
 
 exports.requestAppointment = async (req, res) => {
