@@ -1295,7 +1295,18 @@ exports.requestAppointment1 = async(req,res) =>{
 
   var request = new classRequest(obj);
 
-  var saveData = await request.save();
+  var saveData = await request.save().catch(err=>{
+    return {success:0,err:err.message}
+  });
+
+  if(saveData && saveData.success && saveData.success == 0){
+    return res.send(saveData)
+  }
+
+  return res.send({
+    success:1,
+    message:"submitted your request"
+  })
 
 }
 
