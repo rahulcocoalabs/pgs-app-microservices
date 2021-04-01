@@ -394,7 +394,7 @@ async function updateClassAndSubject(classId, subjectId, userId) {
       var update2 = { $push: { tutorClassIds: classId } }
 
 
-      console.log(update2)
+     
       var updateinfo = await User.updateOne({ status: 1, _id: userId }, update2).catch(err => { return 0 })
 
       if (updateinfo == 0) {
@@ -1942,7 +1942,7 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     if (!checkOnlineClass || checkOnlineClass === null) {
       return {
         success: 0,
-        message: 'Requested online class not added, So add class',
+        message: 'Requested online class not yet approved, please contact admin',
       };
     } else {
       updateObj.isApproved = true;
