@@ -64,7 +64,7 @@ exports.createOnlineClass = async (req, res) => {
   var params = req.body;
 
   var file = req.files;
-  
+
 
 
 
@@ -984,6 +984,30 @@ exports.listApointmentsForTutor = async (req, res) => {
 // request tutor by rakesh 
 
 
+exports.getStudentHome1 = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+
+  const tabType = params.tabType;
+
+  switch (tabType) {
+    case "public":
+      publicTabResponse(req, res)
+    case "private":
+      return res.send("private")
+    case "favourites":
+      return res.send("favourites")
+  }
+
+}
+
+async function publicTabResponse(req, res) {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var params = req.query;
+}
+
 exports.getStudentHome = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -1045,14 +1069,14 @@ exports.getStudentHome = async (req, res) => {
   }
   if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
     console.log(tabCheckData,)
-    if (tabCheckData.favourites){
+    if (tabCheckData.favourites) {
       findCriteria._id = { $in: tabCheckData.favourites.favouriteTutors };
     }
-    else{
-      findCriteria._id = { $ne: userId } 
+    else {
+      findCriteria._id = { $ne: userId }
     }
   }
-  
+
   findCriteria.isPopular = true;
   findCriteria.isTutor = true;
   findCriteria.status = 1;
@@ -1090,10 +1114,10 @@ exports.getStudentHome = async (req, res) => {
 
   var d2 = 1000 * 60 * 60 * 24 * 7;
 
-  findCriteria.tsCreatedAt = {$gt: (d1 - d2)};
+  findCriteria.tsCreatedAt = { $gt: (d1 - d2) };
 
-  
-  
+
+
   var listLatestClassData = await listClasses(findCriteria, perPage, page, favouriteData);
   if (listLatestClassData && (listLatestClassData.success !== undefined) && (listLatestClassData.success === 0)) {
     return res.send(listLatestClassData);
@@ -1102,7 +1126,7 @@ exports.getStudentHome = async (req, res) => {
   var instituteList = [];
   if (tabCheckData.isFavourite !== null && tabCheckData.isFavourite) {
 
-    instituteList = await listInstitutes( userId,perPage, page,);
+    instituteList = await listInstitutes(userId, perPage, page,);
 
   }
 
@@ -1111,7 +1135,7 @@ exports.getStudentHome = async (req, res) => {
     popularClasses: listPopularClassData.items,
     popularTutors: listPopularTutorData.items,
     latestClasses: listLatestClassData.items,
-    institutes:instituteList,
+    institutes: instituteList,
 
     classImageBase: classConfig.imageBase,
     tutorImageBase: usersConfig.imageBase,
@@ -1119,14 +1143,14 @@ exports.getStudentHome = async (req, res) => {
   })
 }
 
-async function listInstitutes( userId,perPage, page){
+async function listInstitutes(userId, perPage, page) {
 
 
-  var data = await FavouriteInstitute.find({status:1,userId:userId},{instituteId:1},{perPage:perPage,page:page}).populate({path:"instituteId"}).catch(err=>{
-    return {success:0,message:"some thing went wrong",error: err.message}
+  var data = await FavouriteInstitute.find({ status: 1, userId: userId }, { instituteId: 1 }, { perPage: perPage, page: page }).populate({ path: "instituteId" }).catch(err => {
+    return { success: 0, message: "some thing went wrong", error: err.message }
   });
 
-  if (data && data.succes != undefined && data.success === 0){
+  if (data && data.succes != undefined && data.success === 0) {
     return [];
   }
 
@@ -1494,7 +1518,7 @@ exports.getStudentAppointmentRequestList = async (req, res) => {
   var findCriteria = {};
   findCriteria.userId = userId;
   findCriteria.isStudentDeleted = false;
- 
+
   findCriteria.status = 1;
 
   var appointmentRequestListResp = await getAppointmentRequestList(findCriteria, params.perPage, params.page);
@@ -1896,7 +1920,7 @@ async function checkAppointmentStatusCheck(appointmentData, isApproved, isReject
     findCriteria.isRejected = false;
     findCriteria.status = 1;
 
-    console.log(findCriteria,"31/03")
+    console.log(findCriteria, "31/03")
 
     var checkOnlineClass = await OnlineCLass.findOne(findCriteria)
       .catch(err => {
@@ -2274,7 +2298,7 @@ exports.createInstitution = async (req, res) => {
     });
   }
   var params = req.body;
-  
+
   var institutionObj = {};
   institutionObj.userId = userId;
   institutionObj.phone = params.phone;
@@ -2313,7 +2337,7 @@ exports.createInstitution = async (req, res) => {
 }
 
 
-exports.listInstitutesAtHome = async(req,res) => {
+exports.listInstitutesAtHome = async (req, res) => {
 
   var params = req.query;
 
@@ -2328,7 +2352,7 @@ exports.listInstitutesAtHome = async(req,res) => {
     limit: perPage
   };
 
-  var inst_list = await Instituion.find({status:1},{name:1,image:1,location:1,email:1,phone:1},pageParams).catch(err=>{
+  var inst_list = await Instituion.find({ status: 1 }, { name: 1, image: 1, location: 1, email: 1, phone: 1 }, pageParams).catch(err => {
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
@@ -2351,7 +2375,7 @@ exports.listInstitutesAtHome = async(req,res) => {
   //   return res.send(inst_list_popular);
   // }
 
-  var dataCount = await Instituion.countDocuments({status:1}).catch(err=>{
+  var dataCount = await Instituion.countDocuments({ status: 1 }).catch(err => {
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
@@ -2366,16 +2390,16 @@ exports.listInstitutesAtHome = async(req,res) => {
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
   var pagination = {
-      page: page,
-      perPage: perPage,
-      hasNextPage: hasNextPage,
-      totalItems: dataCount,
-      totalPages: totalPages
+    page: page,
+    perPage: perPage,
+    hasNextPage: hasNextPage,
+    totalItems: dataCount,
+    totalPages: totalPages
   }
 
   var ret_Obj = {};
   ret_Obj.success = 1;
-  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.imageBase = classConfig.imageBase;
   ret_Obj.message = "listed Successfully"
   ret_Obj.insitutes = inst_list;
 
@@ -2393,20 +2417,20 @@ exports.detailInstitution = async (req, res) => {
   var id = req.params.id;
 
 
-  var detail = await Instituion.findOne({status:1,_id:id},{tsCreatedAt:0,tsModifiedAt:0,status:0}).catch(err => {
-    return {success:0,err:err.message,message:"could not fetch data"};
+  var detail = await Instituion.findOne({ status: 1, _id: id }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
+    return { success: 0, err: err.message, message: "could not fetch data" };
   })
   if (detail && (detail.success !== undefined) && (detail.success === 0)) {
     return res.send(detail);
   }
 
   var isOwner = 0;
-  if (detail.userId == userId){
+  if (detail.userId == userId) {
     isOwner = 1;
   }
 
-  var detailListClasses = await InstitutionClass.find({status:1,institution:id},{tsCreatedAt:0,tsModifiedAt:0,status:0}).populate({path:"tutorSubjectId",select:"name"}).catch(err => {
-    return {success:0,err:err.message,message:"could not fetch data"};
+  var detailListClasses = await InstitutionClass.find({ status: 1, institution: id }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).populate({ path: "tutorSubjectId", select: "name" }).catch(err => {
+    return { success: 0, err: err.message, message: "could not fetch data" };
   })
   if (detailListClasses && (detailListClasses.success !== undefined) && (detailListClasses.success === 0)) {
     return res.send(detailListClasses);
@@ -2414,11 +2438,11 @@ exports.detailInstitution = async (req, res) => {
 
   var isFavourite = false;
 
-  const cnt = await FavouriteInstitute.countDocuments({status:1,userId:userId,instituteId:req.params.id}).catch(err => {
+  const cnt = await FavouriteInstitute.countDocuments({ status: 1, userId: userId, instituteId: req.params.id }).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   });
 
@@ -2426,7 +2450,7 @@ exports.detailInstitution = async (req, res) => {
     return res.send(cnt);
   }
 
-  if (cnt > 0){
+  if (cnt > 0) {
     isFavourite = true;
   }
 
@@ -2435,7 +2459,7 @@ exports.detailInstitution = async (req, res) => {
   var ret_Obj = {};
   ret_Obj.success = 1;
   ret_Obj.message = "fetched data successfully";
-  ret_Obj.imageBase =  classConfig.imageBase;
+  ret_Obj.imageBase = classConfig.imageBase;
   ret_Obj.detail = detail;
   ret_Obj.isOwner = isOwner;
   ret_Obj.listClasses = detailListClasses;
@@ -2444,7 +2468,7 @@ exports.detailInstitution = async (req, res) => {
 
 }
 
-exports.addClass = async(req,res)=>{
+exports.addClass = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -2459,7 +2483,7 @@ exports.addClass = async(req,res)=>{
 
 
 
-  
+
   var errors = [];
 
   if (!req.body.institution) {
@@ -2469,7 +2493,7 @@ exports.addClass = async(req,res)=>{
     })
   }
 
- 
+
   if (!req.body.tutorSubjectId) {
     errors.push({
       field: "tutorSubjectId",
@@ -2560,7 +2584,7 @@ exports.addClass = async(req,res)=>{
     })
   }
 
- 
+
   if (errors.length > 0) {
 
     return res.status(200).send({
@@ -2585,16 +2609,16 @@ exports.addClass = async(req,res)=>{
     })
   }
 
-  var owner = await Instituion.countDocuments({_id:req.body.institution,userId:userId}).catch(err=>{
-    return {success:0,message:"could not fetch data about institution",err:err.message}
+  var owner = await Instituion.countDocuments({ _id: req.body.institution, userId: userId }).catch(err => {
+    return { success: 0, message: "could not fetch data about institution", err: err.message }
   })
 
-  if (owner.success && owner.success != undefined && owner.success == 0){
+  if (owner.success && owner.success != undefined && owner.success == 0) {
     return res.send(owner)
   }
 
-  if (owner == 0){
-    return res.send({success:0,message:"you are not authorized for this action"})
+  if (owner == 0) {
+    return res.send({ success: 0, message: "you are not authorized for this action" })
   }
 
 
@@ -2642,7 +2666,7 @@ exports.addClass = async(req,res)=>{
   onlineClassObj.status = 1;
   onlineClassObj.tsCreatedAt = Date.now();
   onlineClassObj.tsModifiedAt = null;
-  
+
 
   var tutorName = await User.findOne({ _id: params.userId, status: 1 }, { firstName: 1 }).catch(err => {
     return { success: 0, message: err.message };
@@ -2682,25 +2706,25 @@ exports.addClass = async(req,res)=>{
   })
 }
 
-exports.removeAll = async(req,res)=>{
+exports.removeAll = async (req, res) => {
 
-  var update = await  OnlineCLass.updateMany({},{status:0}).catch(err=>{})
+  var update = await OnlineCLass.updateMany({}, { status: 0 }).catch(err => { })
 
-  var cnt = await OnlineCLass.countDocuments({status:0}).catch(err => {return {err:err.message}});
+  var cnt = await OnlineCLass.countDocuments({ status: 0 }).catch(err => { return { err: err.message } });
 
-  return res.send({number:cnt});
+  return res.send({ number: cnt });
 }
 
-exports.addFavouriteInstitution = async(req,res) => {
+exports.addFavouriteInstitution = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
-  const cnt = await FavouriteInstitute.countDocuments({status:0,userId:userId,instituteId:req.params.id}).catch(err => {
+  const cnt = await FavouriteInstitute.countDocuments({ status: 0, userId: userId, instituteId: req.params.id }).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   });
 
@@ -2708,26 +2732,26 @@ exports.addFavouriteInstitution = async(req,res) => {
     return res.send(cnt);
   }
 
-  if (cnt > 0){
-    const saveData= await FavouriteInstitute.updateOne({status:0,instituteId:req.params.id,userId:userId},{status:1}).catch(err => {
+  if (cnt > 0) {
+    const saveData = await FavouriteInstitute.updateOne({ status: 0, instituteId: req.params.id, userId: userId }, { status: 1 }).catch(err => {
       return {
-        success:0,
-        message:"success",
-        error:err.message,
+        success: 0,
+        message: "success",
+        error: err.message,
       }
     })
-  
+
     if (saveData && saveData.success !== undefined && saveData.success === 0) {
       return res.send(saveData);
     }
-  
-    return res.send({success:1, message:"added to favourites"})
+
+    return res.send({ success: 1, message: "added to favourites" })
   }
 
-  
+
 
   const newObj = {
-    userId : userId,
+    userId: userId,
     instituteId: req.params.id,
     status: 1,
     tsCreatedAt: Date.now(),
@@ -2735,11 +2759,11 @@ exports.addFavouriteInstitution = async(req,res) => {
 
   const data = new FavouriteInstitute(newObj);
 
-  const saveData= await data.save().catch(err => {
+  const saveData = await data.save().catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   })
 
@@ -2747,21 +2771,21 @@ exports.addFavouriteInstitution = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"added to favourites"})
+  return res.send({ success: 1, message: "added to favourites" })
 
 
 }
 
-exports.removeFavouriteInstitution = async(req,res) => {
+exports.removeFavouriteInstitution = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
-  const saveData= await FavouriteInstitute.updateOne({status:1,instituteId:req.params.id,userId:userId},{status:0}).catch(err => {
+  const saveData = await FavouriteInstitute.updateOne({ status: 1, instituteId: req.params.id, userId: userId }, { status: 0 }).catch(err => {
     return {
-      success:0,
-      message:"success",
-      error:err.message,
+      success: 0,
+      message: "success",
+      error: err.message,
     }
   })
 
@@ -2769,12 +2793,12 @@ exports.removeFavouriteInstitution = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"removed from favourites"})
+  return res.send({ success: 1, message: "removed from favourites" })
 
 
 }
 
-exports.listInstitutionClassAppointment = async(req,res) => {
+exports.listInstitutionClassAppointment = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
@@ -2791,10 +2815,10 @@ exports.listInstitutionClassAppointment = async(req,res) => {
     limit: perPage
   };
 
-  var data1 = await InstituteClassAppointmentRequest.find({status:1,instituteClassId:classId},{},pageParams).populate([{path:'instituteClassId',select:{'availableFromTime':1,'availableToTime':1,'title':1,'image':1}},{path:'userId',select:{'firstName':1,'image':1}},{path:'tutorSubjectId'},{path:'tutorClassId'}]).catch(err=>{
-    return {success:0,message:"something went wrong",error:err.message};
+  var data1 = await InstituteClassAppointmentRequest.find({ status: 1, instituteClassId: classId }, {}, pageParams).populate([{ path: 'instituteClassId', select: { 'availableFromTime': 1, 'availableToTime': 1, 'title': 1, 'image': 1 } }, { path: 'userId', select: { 'firstName': 1, 'image': 1 } }, { path: 'tutorSubjectId' }, { path: 'tutorClassId' }]).catch(err => {
+    return { success: 0, message: "something went wrong", error: err.message };
   })
-  if (data1 && data1.success !== undefined && data1.success === 0){
+  if (data1 && data1.success !== undefined && data1.success === 0) {
     return res.send(data1);
   }
 
@@ -2813,11 +2837,11 @@ exports.listInstitutionClassAppointment = async(req,res) => {
 
   // arr.push(data2);
   // }
-  
-  var dataCount = await  InstituteClassAppointmentRequest.countDocuments({status:1,instituteClassId:classId}).catch(err=>{
-    return {success:0,message:"something went wrong",error:err.message};
+
+  var dataCount = await InstituteClassAppointmentRequest.countDocuments({ status: 1, instituteClassId: classId }).catch(err => {
+    return { success: 0, message: "something went wrong", error: err.message };
   })
-  if (dataCount && dataCount.success !== undefined && dataCount.success === 0){
+  if (dataCount && dataCount.success !== undefined && dataCount.success === 0) {
     return res.send(dataCount);
   }
 
@@ -2825,36 +2849,36 @@ exports.listInstitutionClassAppointment = async(req,res) => {
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
   var pagination = {
-      page: page,
-      perPage: perPage,
-      hasNextPage: hasNextPage,
-      totalItems: dataCount,
-      totalPages: totalPages
+    page: page,
+    perPage: perPage,
+    hasNextPage: hasNextPage,
+    totalItems: dataCount,
+    totalPages: totalPages
   }
 
   return res.send({
-    success:1,
-    message:"success",
+    success: 1,
+    message: "success",
     pagination,
-    items:data1
+    items: data1
   })
 
 
 
 }
 
-exports.rejectInstitutionClassAppointment = async(req,res) => {
+exports.rejectInstitutionClassAppointment = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
 
 
-  const saveData= await InstituteClassAppointmentRequest.updateOne({status:1,_id:req.params.id},{isRejected:true}).catch(err => {
+  const saveData = await InstituteClassAppointmentRequest.updateOne({ status: 1, _id: req.params.id }, { isRejected: true }).catch(err => {
     return {
-      success:0,
-      message:"success",
-      error:err.message,
+      success: 0,
+      message: "success",
+      error: err.message,
     }
   })
 
@@ -2862,22 +2886,22 @@ exports.rejectInstitutionClassAppointment = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"removed your request"})
+  return res.send({ success: 1, message: "removed your request" })
 
 
 }
-exports.acceptInstitutionClassAppointment = async(req,res) => {
+exports.acceptInstitutionClassAppointment = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
 
 
-  const saveData= await InstituteClassAppointmentRequest.updateOne({status:1,_id:req.params.id},{isApproved:true}).catch(err => {
+  const saveData = await InstituteClassAppointmentRequest.updateOne({ status: 1, _id: req.params.id }, { isApproved: true }).catch(err => {
     return {
-      success:0,
-      message:"success",
-      error:err.message,
+      success: 0,
+      message: "success",
+      error: err.message,
     }
   })
 
@@ -2885,45 +2909,45 @@ exports.acceptInstitutionClassAppointment = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"removed your request"})
+  return res.send({ success: 1, message: "removed your request" })
 
 
 }
 
 
-exports.addInstitutionClassAppointment = async(req,res) => {
+exports.addInstitutionClassAppointment = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
   var errors = []
-  if (!req.body.instituteId){
+  if (!req.body.instituteId) {
     errors.push({
       field: "instituteId",
       message: "instituteId cannot be empty"
     })
   }
-  if (!req.body.instituteClassId){
+  if (!req.body.instituteClassId) {
     errors.push({
       field: "instituteClassId",
       message: "instituteClassId cannot be empty"
     })
   }
 
-  if (!req.body.tutorSubjectId){
+  if (!req.body.tutorSubjectId) {
     errors.push({
       field: "tutorSubjectId",
       message: "tutorSubjectId cannot be empty"
     })
   }
-  if (!req.body.tutorClassId){
+  if (!req.body.tutorClassId) {
     errors.push({
       field: "tutorClassId",
       message: "tutorClassId cannot be empty"
     })
   }
 
-  if (errors.length > 0){
+  if (errors.length > 0) {
     return res.status(200).send({
       success: 0,
       errors: errors,
@@ -2932,11 +2956,11 @@ exports.addInstitutionClassAppointment = async(req,res) => {
     });
   }
 
-  const cnt = await InstituteClassAppointmentRequest.countDocuments({status:1,userId:userId,instituteId:req.body.instituteId,instituteClassId:req.body.instituteClassId}).catch(err => {
+  const cnt = await InstituteClassAppointmentRequest.countDocuments({ status: 1, userId: userId, instituteId: req.body.instituteId, instituteClassId: req.body.instituteClassId }).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   });
 
@@ -2944,33 +2968,33 @@ exports.addInstitutionClassAppointment = async(req,res) => {
     return res.send(cnt);
   }
 
-  if (cnt > 0){
-    
-  
-    return res.send({success:1, message:"already added to appointments"})
+  if (cnt > 0) {
+
+
+    return res.send({ success: 1, message: "already added to appointments" })
   }
 
-  
+
 
   const newObj = {
-    userId : userId,
+    userId: userId,
     instituteId: req.body.instituteId,
     instituteClassId: req.body.instituteClassId,
-    tutorClassId:req.body.tutorClassId, 
-    tutorSubjectId:req.body.tutorSubjectId,
-    isApproved:false,
-    isRejected:false,
+    tutorClassId: req.body.tutorClassId,
+    tutorSubjectId: req.body.tutorSubjectId,
+    isApproved: false,
+    isRejected: false,
     status: 1,
     tsCreatedAt: Date.now(),
   }
 
   const data = new InstituteClassAppointmentRequest(newObj);
 
-  const saveData= await data.save().catch(err => {
+  const saveData = await data.save().catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   })
 
@@ -2978,7 +3002,7 @@ exports.addInstitutionClassAppointment = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"added to appointments"})
+  return res.send({ success: 1, message: "added to appointments" })
 
 
 }
@@ -3059,15 +3083,15 @@ exports.getInstituteClassDetails = async (req, res) => {
   }
 }
 
-exports.addInstitutionClassFavourite = async(req,res) => {
+exports.addInstitutionClassFavourite = async (req, res) => {
   const userData = req.identity.data;
   const userId = userData.userId;
 
-  const cnt = await FavouriteClass.countDocuments({status:0,userId:userId,instituteId:req.params.id}).catch(err => {
+  const cnt = await FavouriteClass.countDocuments({ status: 0, userId: userId, instituteId: req.params.id }).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   });
 
@@ -3075,26 +3099,26 @@ exports.addInstitutionClassFavourite = async(req,res) => {
     return res.send(cnt);
   }
 
-  if (cnt > 0){
-    const saveData= await FavouriteClass.updateOne({status:0,institutionClass:req.params.id,userId:userId},{status:1}).catch(err => {
+  if (cnt > 0) {
+    const saveData = await FavouriteClass.updateOne({ status: 0, institutionClass: req.params.id, userId: userId }, { status: 1 }).catch(err => {
       return {
-        success:0,
-        message:"success",
-        error:err.message,
+        success: 0,
+        message: "success",
+        error: err.message,
       }
     })
-  
+
     if (saveData && saveData.success !== undefined && saveData.success === 0) {
       return res.send(saveData);
     }
-  
-    return res.send({success:1, message:"added to favourites"})
+
+    return res.send({ success: 1, message: "added to favourites" })
   }
 
-  
+
 
   const newObj = {
-    userId : userId,
+    userId: userId,
     instituteId: req.params.id,
     status: 1,
     tsCreatedAt: Date.now(),
@@ -3102,11 +3126,11 @@ exports.addInstitutionClassFavourite = async(req,res) => {
 
   const data = new FavouriteInstitute(newObj);
 
-  const saveData= await data.save().catch(err => {
+  const saveData = await data.save().catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message,
+      success: 0,
+      message: "something went wrong",
+      error: err.message,
     }
   })
 
@@ -3114,21 +3138,21 @@ exports.addInstitutionClassFavourite = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"added to favourites"})
+  return res.send({ success: 1, message: "added to favourites" })
 
 
 }
 
-exports.removeInstitutionClassFavourite = async(req,res) => {
+exports.removeInstitutionClassFavourite = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
-  const saveData= await FavouriteClass.updateOne({status:1,instituteId:req.params.id,userId:userId},{status:0}).catch(err => {
+  const saveData = await FavouriteClass.updateOne({ status: 1, instituteId: req.params.id, userId: userId }, { status: 0 }).catch(err => {
     return {
-      success:0,
-      message:"success",
-      error:err.message,
+      success: 0,
+      message: "success",
+      error: err.message,
     }
   })
 
@@ -3136,7 +3160,7 @@ exports.removeInstitutionClassFavourite = async(req,res) => {
     return res.send(saveData);
   }
 
-  return res.send({success:1, message:"removed from favourites"})
+  return res.send({ success: 1, message: "removed from favourites" })
 
 
 }
