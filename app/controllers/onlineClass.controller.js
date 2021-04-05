@@ -1289,6 +1289,8 @@ exports.requestAppointment1 = async (req, res) => {
   obj.tutorId = params.tutorId;
   obj.classId = params.classId;
   obj.status = 1;
+  obj.isApproved = false;
+  obj.isRejected = false;
   obj.tsCreatedAt = Date.now();
   obj.tsModifiedAt = null;
   obj.userId = userId;
