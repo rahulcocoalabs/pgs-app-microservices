@@ -1286,12 +1286,20 @@ exports.requestAppointment1 = async (req, res) => {
   }
 
   var obj = {}
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    const dateObj = new Date();
+    const month = monthNames[dateObj.getMonth()];
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    const output = month  + '\n'+ day  + ',' + year;
   obj.tutorId = params.tutorId;
   obj.classId = params.classId;
   obj.status = 1;
   obj.isApproved = false;
   obj.isRejected = false;
   obj.tsCreatedAt = Date.now();
+  obj.created = output;
   obj.tsModifiedAt = null;
   obj.userId = userId;
 
