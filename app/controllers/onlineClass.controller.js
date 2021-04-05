@@ -1292,7 +1292,7 @@ exports.requestAppointment1 = async (req, res) => {
     const month = monthNames[dateObj.getMonth()];
     const day = String(dateObj.getDate()).padStart(2, '0');
     const year = dateObj.getFullYear();
-    const output = day + ":" + month  + '' + year;
+    const output = day + ":" + month  + ':' + year;
   obj.tutorId = params.tutorId;
   obj.classId = params.classId;
   obj.status = 1;
