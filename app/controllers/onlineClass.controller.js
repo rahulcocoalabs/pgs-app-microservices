@@ -1666,6 +1666,64 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
 }
 
 
+exports.getStudentAppointmentRequestList1 = async (req, res) => {
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var query = req.query;
+  var page = Number(query.page) || 1;
+  page = page > 0 ? page : 1;
+  var perPage = Number(query.perPage) || classConfig.resultsPerPage;
+  perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
+  var offset = (page - 1) * perPage;
+
+  var pageParams = {
+    skip: offset,
+    limit: perPage
+  };
+
+  console.log(userId);
+
+  var list = await classRequest.find({status:1,userId:userId},{},pageParams).populate([{path:'tutorId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).catch(err=>{
+    return {
+      success:0,
+      message:err.message
+    }
+  })
+
+  var dataCount = await classRequest.countDocuments({status:1,tutorId:userId}).catch(err=>{
+    return {
+      success: 0,
+      message: 'Something went wrong while listing institutes',
+      error: err.message
+    }
+  })
+  if (dataCount && (dataCount.success !== undefined) && (dataCount.success === 0)) {
+    return res.send(dataCount);
+  }
+
+  var totalPages = dataCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+      page: page,
+      perPage: perPage,
+      hasNextPage: hasNextPage,
+      totalItems: dataCount,
+      totalPages: totalPages
+  }
+
+  return res.send({
+    success:1,
+    message:"listed",
+    items:list,
+    pagination,
+    imageBase: classConfig.imageBase,
+    userImageBase:usersConfig.imageBase
+  })
+}
+
+
 
 
 async function checkUserIsTutor(userId) {
