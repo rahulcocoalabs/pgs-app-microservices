@@ -1624,7 +1624,7 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({status:1,tutorId:userId},{},pageParams).populate("userId").populate('classId').catch(err=>{
+  var list = await classRequest.find({status:1,tutorId:userId},{},pageParams).populate([{path:'userId',select:{'image':1,'firstName':1}}]).catch(err=>{
     return {
       success:0,
       message:err.message
