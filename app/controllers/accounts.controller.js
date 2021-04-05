@@ -6,6 +6,7 @@ const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
 const TutorRequest = require('../models/tutorRequest.model');
+const classRequest = require('../models/onlineClassRequests.model');
 const TutorProfileUpdateRequest = require('../models/tutorProfileUpdateRequest.model');
 const OnlineClass = require('../models/onlineClass.model');
 const Rating = require('../models/rating.model');
@@ -3946,30 +3947,17 @@ exports.getTutorProfile = async (req, res) => {
   if (myClassData && (myClassData.success !== undefined) && (myClassData.success === 0)) {
     return res.send(myClassData);
   }
-  var appointmentData = await AppointmentClassRequest.find({
-    tutorId: userId,
-    isTutorDeleted: false,
-    status: 1
+  var pageParams1 = {
+    skip:0,
+    limit:2
+  }
+  var appointmentData = await classRequest.find({status:1,tutorId:userId,isApproved:false,isRejected:false},{},pageParams1).populate([{path:'userId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).catch(err=>{
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message
+    }
   })
-    .populate([{
-      path: 'userId',
-      select: {
-        firstName: 1,
-        image: 1,
-        socialPhotoUrl: 1
-      }
-    }, {
-      path: 'tutorSubjectId',
-    }, {
-      path: 'tutorClassId',
-    }])
-    .catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while get appointments data',
-        error: err
-      }
-    })
   if (appointmentData && (appointmentData.success !== undefined) && (appointmentData.success === 0)) {
     return res.send(appointmentData);
   }
