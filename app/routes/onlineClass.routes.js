@@ -42,7 +42,7 @@ module.exports = (app) => {
     app.get('/online-class/tutor/list', auth, onlineClass.listTutorList);
     app.get('/online-class/tutor/list-classes', auth, onlineClass.listClassForTutor);
     app.get('/online-class/tutor/list-requests', auth, onlineClass.listApointmentsForTutor);
-    app.get('/online-class/student/home', auth, onlineClass.getStudentHome1);
+    app.get('/online-class/student/home', auth, onlineClass.getStudentHome);
     app.get('/online-class/student/home-1', auth, onlineClass.getStudentHome1);
     app.get('/online-class/tutor/:id/detail', auth, onlineClass.getTutorDetails);
     app.post('/online-class/student/appointment', auth, onlineClass.requestAppointment1);
