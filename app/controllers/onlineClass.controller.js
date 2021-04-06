@@ -1467,6 +1467,34 @@ exports.updateAppointmentStatus1 = async (req, res) => {
 
 }
 
+exports.deleteApointment = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+ 
+ 
+
+
+  
+
+  var updateInfo = await classRequest.updateOne({_id:req.params.id},{status:0}).catch(err=>{
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message
+    }
+  })
+
+  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
+    return res.send(updateInfo)
+  }
+
+  return res.send({
+    success:1,
+    message:"succesfully removed"
+  })
+
+}
+
 
 exports.updateAppointmentStatus = async (req, res) => {
   var userData = req.identity.data;
