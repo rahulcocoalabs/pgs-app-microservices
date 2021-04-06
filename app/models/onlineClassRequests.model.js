@@ -11,6 +11,7 @@ var OnlineClassRquestSchema = mongoose.Schema({
     isRejected:Boolean,
     status: Number,
     created:String,
+    comments:String,
     tsCreatedAt: Number,
     tsModifiedAt: Number
 })

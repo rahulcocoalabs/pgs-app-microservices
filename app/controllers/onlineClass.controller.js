@@ -1287,12 +1287,12 @@ exports.requestAppointment1 = async (req, res) => {
 
   var obj = {}
   const monthNames = ["01", "02", "03", "04", "05", "06",
-        "07", "08", "09", "10", "11", "12"];
-    const dateObj = new Date();
-    const month = monthNames[dateObj.getMonth()];
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    const year = dateObj.getFullYear();
-    const output = day + ":" + month  + ':' + year;
+    "07", "08", "09", "10", "11", "12"];
+  const dateObj = new Date();
+  const month = monthNames[dateObj.getMonth()];
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const year = dateObj.getFullYear();
+  const output = day + ":" + month + ':' + year;
   obj.tutorId = params.tutorId;
   obj.classId = params.classId;
   obj.status = 1;
@@ -1389,6 +1389,80 @@ exports.requestAppointment = async (req, res) => {
   return res.send({
     success: 1,
     message: 'Appointment request sent successfully'
+  })
+
+}
+
+exports.updateAppointmentStatus1 = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+  var tutorCheck = await checkUserIsTutor(userId);
+  if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
+    return res.send(tutorCheck);
+  }
+  var params = req.body;
+  var appointmentId = req.params.id;
+
+  if (!params.status || (params.status && params.status !== constants.APPROVED_STATUS
+    && params.status !== constants.REJECTED_STATUS) ||
+    (params.status && params.status === constants.REJECTED_STATUS && !params.comments)) {
+    var errors = [];
+    if (!params.status) {
+      errors.push({
+        'field': 'status',
+        'message': 'appoinment status required',
+      })
+    }
+    if ((params.status && params.status !== constants.APPROVED_STATUS
+      && params.status !== constants.REJECTED_STATUS)) {
+      errors.push({
+        'field': 'status',
+        'message': 'Invalid status',
+      })
+    }
+    if ((params.status && params.status === constants.REJECTED_STATUS && !params.comments)) {
+      errors.push({
+        'field': 'comments',
+        'message': 'comments required',
+      })
+    }
+    return res.send({
+      success: 0,
+      errors
+    })
+  }
+  var isApproved = false;
+  var isRejected = false;
+  var message = ""
+  var comments = null;
+  var notificationMessage = ""
+
+  var update = {};
+  
+  if (params.status == constants.REJECTED_STATUS) {
+    update.isRejected = true;
+    update.comments = params.comments
+  }
+  if (params.status == constants.APPROVED_STATUS) {
+    update.isApproved = true;
+    
+  } 
+
+  var updateInfo = await classRequest.updateOne({_id:req.params.id}).catch(err=>{
+    return {
+      success:0,
+      message:"something went wrong",
+      error:err.message
+    }
+  })
+
+  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
+    return res.send(updateInfo)
+  }
+
+  return res.send({
+    success:1,
+    message:"succesfully updated"
   })
 
 }
@@ -1634,14 +1708,14 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({status:1,tutorId:userId,isApproved:false,isRejected:false},{tutorId:0},pageParams).populate([{path:'userId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).catch(err=>{
+  var list = await classRequest.find({ status: 1, tutorId: userId, isApproved: false, isRejected: false }, { tutorId: 0 }, pageParams).populate([{ path: 'userId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).catch(err => {
     return {
-      success:0,
-      message:err.message
+      success: 0,
+      message: err.message
     }
   })
 
-  var dataCount = await classRequest.countDocuments({status:1,tutorId:userId}).catch(err=>{
+  var dataCount = await classRequest.countDocuments({ status: 1, tutorId: userId }).catch(err => {
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
@@ -1656,20 +1730,20 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
   var pagination = {
-      page: page,
-      perPage: perPage,
-      hasNextPage: hasNextPage,
-      totalItems: dataCount,
-      totalPages: totalPages
+    page: page,
+    perPage: perPage,
+    hasNextPage: hasNextPage,
+    totalItems: dataCount,
+    totalPages: totalPages
   }
 
   return res.send({
-    success:1,
-    message:"listed",
-    items:list,
+    success: 1,
+    message: "listed",
+    items: list,
     pagination,
     imageBase: classConfig.imageBase,
-    userImageBase:usersConfig.imageBase
+    userImageBase: usersConfig.imageBase
   })
 }
 
@@ -1692,14 +1766,14 @@ exports.getStudentAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({status:1,userId:userId},{userId:0},pageParams).populate([{path:'tutorId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).catch(err=>{
+  var list = await classRequest.find({ status: 1, userId: userId }, { userId: 0 }, pageParams).populate([{ path: 'tutorId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).catch(err => {
     return {
-      success:0,
-      message:err.message
+      success: 0,
+      message: err.message
     }
   })
 
-  var dataCount = await classRequest.countDocuments({status:1,tutorId:userId}).catch(err=>{
+  var dataCount = await classRequest.countDocuments({ status: 1, tutorId: userId }).catch(err => {
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
@@ -1714,20 +1788,20 @@ exports.getStudentAppointmentRequestList1 = async (req, res) => {
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
   var pagination = {
-      page: page,
-      perPage: perPage,
-      hasNextPage: hasNextPage,
-      totalItems: dataCount,
-      totalPages: totalPages
+    page: page,
+    perPage: perPage,
+    hasNextPage: hasNextPage,
+    totalItems: dataCount,
+    totalPages: totalPages
   }
 
   return res.send({
-    success:1,
-    message:"listed",
-    items:list,
+    success: 1,
+    message: "listed",
+    items: list,
     pagination,
     imageBase: classConfig.imageBase,
-    userImageBase:usersConfig.imageBase
+    userImageBase: usersConfig.imageBase
   })
 }
 
