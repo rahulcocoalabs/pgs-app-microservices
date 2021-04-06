@@ -31,12 +31,13 @@ var fileUpload = multer({ storage: storage });
 module.exports = (app) => {
     const offlineClass = require('../controllers/offlineClass.controller');
     app.post('/offline-class/add-institution', fileUpload.single('image'), auth, offlineClass.createInstitution);
+    //app.post('/offline-class/edit-institution', fileUpload.single('image'), auth, offlineClass.createInstitutionUpdateRequest);
     app.get('/offline-class/courses',  auth, offlineClass.getCources);
     app.get('/offline-class/home',  auth, offlineClass.listInstitutesAtHome);
     app.get('/offline-class/home-see-more',  auth, offlineClass.homeSeeMore);
     app.get('/offline-class/detail-institutes/:id',  auth, offlineClass.detailInstitution);
     app.post('/offline-class/add-institution-enquiry',  auth, offlineClass.addEnquiry);
     app.get('/offline-class/list-enquiry/:id',  auth, offlineClass.listEnquiry);
-    app.patch('/offline-class/edit-institution/:id',fileUpload.single('image'),  auth, offlineClass.editInstitution);
+    app.patch('/offline-class/edit-institution/:id',fileUpload.single('image'),  auth, offlineClass.createInstitutionUpdateRequest);
     app.delete('/offline-class/remove-all', offlineClass.removeAll);
 }

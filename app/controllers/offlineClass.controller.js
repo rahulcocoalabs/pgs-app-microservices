@@ -1,6 +1,6 @@
 
 
-
+const institutionUpdateRequest = require('../models/instituteUpdateRequest.model');
 const Instituion = require('../models/institute.model');
 const enquiry = require('../models/instituteEnquiry.model');
 const Courses = require('../models/instituteCourses.model');
@@ -592,4 +592,55 @@ exports.editInstitution = async (req, res) => {
     var update2 = await Keywords.updateMany({},{status:0});
 
     return res.send("ok");
+  }
+
+
+  exports.createInstitutionUpdateRequest = async (req, res) => {
+    var userData = req.identity.data;
+    var userId = userData.userId;
+  
+  
+    var file = req.file;
+  
+   
+    var params = req.body;
+
+   
+    var institutionObj = {};
+    institutionObj.userId = userId;
+    institutionObj.phone = params.phone;
+    institutionObj.location = params.location;
+    institutionObj.name = params.name;
+    institutionObj.email = params.email;
+    if (file) {
+      institutionObj.image = file.filename;
+    }
+    institutionObj.institution = req.params.id;
+    institutionObj.description = params.description;
+    institutionObj.instituteCourse = params.courses;
+    institutionObj.isApproved = false;
+    institutionObj.isRejected = false;
+    institutionObj.status = 1;
+    institutionObj.tsCreatedAt = Date.now();
+    institutionObj.tsModifiedAt = null;
+    //rakesh 
+  
+    var newInstituion = new institutionUpdateRequest(institutionObj);
+    var response = await newInstituion.save()
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while saving online class',
+          error: err
+        }
+      })
+    if (response && (response.success !== undefined) && (response.success === 0)) {
+      return res.send(response);
+    }
+    return res.send({
+      success: 1,
+     
+      message: 'send a request..waiting for admin approval',
+    })
+  
   }
