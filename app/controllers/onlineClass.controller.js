@@ -1467,7 +1467,7 @@ exports.updateAppointmentStatus1 = async (req, res) => {
 
 }
 
-exports.deleteApointment = async (req, res) => {
+exports.deleteAppointment = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
  
