@@ -1448,7 +1448,7 @@ exports.updateAppointmentStatus1 = async (req, res) => {
     
   } 
 
-  var updateInfo = await classRequest.updateOne({_id:req.params.id}).catch(err=>{
+  var updateInfo = await classRequest.updateOne({_id:req.params.id},update).catch(err=>{
     return {
       success:0,
       message:"something went wrong",
