@@ -3951,7 +3951,7 @@ exports.getTutorProfile = async (req, res) => {
     skip:0,
     limit:2
   }
-  var appointmentData = await classRequest.find({status:1,tutorId:userId,isApproved:false,isRejected:false},{},pageParams1).populate([{path:'userId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).catch(err=>{
+  var appointmentData = await classRequest.find({status:1,tutorId:userId,isApproved:false,isRejected:false},{tutorId:0},pageParams1).populate([{path:'userId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).catch(err=>{
     return {
       success:0,
       message:"something went wrong",
