@@ -1088,6 +1088,7 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
+  console.log("07/04",favouriteData,findCriteria);
   var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
