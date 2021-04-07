@@ -825,6 +825,7 @@ exports.listTutorList = async (req, res) => {
   var favouriteData = favouriteDataResp.favouriteData;
   var findCriteria = {};
   var params = req.query;
+  console.log("04/07",params);
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteTutor } };
   }
