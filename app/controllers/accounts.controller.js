@@ -1724,6 +1724,8 @@ exports.update = async (req, res) => {
 
   var update1 = update;
 
+  console.log("07/04",update);
+
   var update = await User.updateOne(filter, update).catch(err => {
 
     return {
