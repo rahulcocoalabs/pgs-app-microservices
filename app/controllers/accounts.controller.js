@@ -4066,7 +4066,7 @@ exports.updateTutorProfile = async (req, res) => {
   tutorProfileUpdateObj.tsModifiedAt = null;
 
   console.log("31/03",tutorProfileUpdateObj);
-
+  console.log("07/04",req.body);
   var newTutorProfileUpdateObj = new TutorProfileUpdateRequest(tutorProfileUpdateObj);
   var newTutorProfileUpdateResponse = await newTutorProfileUpdateObj.save()
     .catch(err => {
