@@ -725,7 +725,7 @@ exports.getClassDetails = async (req, res) => {
 exports.listOnlineClasses = async (req, res) => {
 
   console.log("test for identifying api success");
-
+  console.log("07/04",req.query);
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
