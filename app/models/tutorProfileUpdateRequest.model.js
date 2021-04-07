@@ -28,7 +28,7 @@ const TutorProfileUpdateRequestSchema = mongoose.Schema({
     tutorCourseIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorCourse' }],
     tutorSubjectIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorSubject' }],
     tutorClassIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorClass' }],
-    tutorCategoryId : { type: mongoose.Schema.Types.ObjectId, ref: 'TutorCategory' },
+    tutorCategoryIds : [{ type: mongoose.Schema.Types.ObjectId, ref: 'TutorCategory' }],
     courceDescription : String,
     isPaid: Boolean,
     fee: Number,
