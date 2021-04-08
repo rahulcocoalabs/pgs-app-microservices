@@ -3904,10 +3904,11 @@ exports.requestAsTutor = async (req, res) => {
       return {
         success: 0,
         message: 'Something went wrong while saving tutor request',
-        error: err
+        error: err.message
       }
     })
   if (newTutorRequestData && (newTutorRequestData.success !== undefined) && (newTutorRequestData.success === 0)) {
+    console.log("08/04",newTutorRequestData);
     return res.send(newTutorRequestData);
   }
 
