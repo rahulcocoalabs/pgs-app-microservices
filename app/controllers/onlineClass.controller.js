@@ -702,10 +702,30 @@ exports.getClassDetails = async (req, res) => {
       classDetails.isFavourite = false;
     }
 
+    var returnObj = JSON.parse(JSON.stringify(classDetails));
+
+    var approvalStatus = await classRequest.countDocuments({classId:req.params.id,status:1,isApproved:true}).catch(err=>{
+      return {
+        success:0,
+        message:"something went wrong",
+        error:err.message
+      }
+    })
+
+    if (approvalStatus && approvalStatus.success != undefined && approvalStatus.success == 0){
+      return res.send(approvalStatus)
+    }
+
+    if (approvalStatus == 0){
+      returnObj.isApproved = false;
+    }
+    else{
+      returnObj.isApproved = true
+    }
     return res.send({
       success: 1,
       flag: 1,
-      item: classDetails,
+      item: returnObj,
       joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
       tutorImageBase: usersConfig.imageBase,
