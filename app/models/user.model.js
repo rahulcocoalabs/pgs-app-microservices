@@ -187,7 +187,7 @@ const UserSchema = mongoose.Schema({
     isTutor : Boolean,
     institution: String,
     achievementsOrAwards: String,
-    yearOfExperience: Number,
+    yearOfExperience: String,
     isBlocked : Boolean,
     isDeactivated : Boolean,
     status: Number,
