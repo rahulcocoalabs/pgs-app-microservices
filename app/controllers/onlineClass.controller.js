@@ -1822,7 +1822,7 @@ exports.getStudentAppointmentRequestList1 = async (req, res) => {
     }
   })
 
-  var dataCount = await classRequest.countDocuments({ status: 1, tutorId: userId }).catch(err => {
+  var dataCount = await classRequest.countDocuments({ status: 1, userId: userId }).catch(err => {
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',

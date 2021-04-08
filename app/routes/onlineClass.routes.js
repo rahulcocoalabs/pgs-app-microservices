@@ -47,7 +47,7 @@ module.exports = (app) => {
     app.get('/online-class/tutor/:id/detail', auth, onlineClass.getTutorDetails);
     app.post('/online-class/student/appointment', auth, onlineClass.requestAppointment1);
     app.post('/online-class/student/appointment-class', auth, onlineClass.requestAppointment1);
-    app.get('/online-class/student/appointment/list', auth, onlineClass.getStudentAppointmentRequestList);
+    app.get('/online-class/student/appointment/list', auth, onlineClass.getStudentAppointmentRequestList1);
     app.get('/online-class/tutor/appointment/list', auth, onlineClass.getTutorAppointmentRequestList1);
     app.get('/online-class/student/appointment/list-new', auth, onlineClass.getStudentAppointmentRequestList1);
     app.get('/online-class/tutor/appointment/list-new', auth, onlineClass.getTutorAppointmentRequestList1);
