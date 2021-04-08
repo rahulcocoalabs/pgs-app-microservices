@@ -560,9 +560,12 @@ exports.getRegisterMasters = (req, res) => {
 }
 
 exports.searchKeywords = async(req, res) => {
+  console.log(req)
+
   var params = req.query;
   console.log(params.keyword);
   console.log(params);
+  console.log(req)
   var keyword = params.keyword;
   var regexp = new RegExp(keyword);
  // var filters = { value: { '$regex': regexp, '$options': 'i' }, status: 1 };
