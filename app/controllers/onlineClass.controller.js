@@ -1290,7 +1290,7 @@ exports.requestAppointment1 = async (req, res) => {
       errors.push({
         field: "tutorId",
         message: "tutor id missing"
-      });
+      }); 
     }
     if (!params.classId) {
       errors.push({
