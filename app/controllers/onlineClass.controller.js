@@ -863,7 +863,7 @@ exports.listTutorList = async (req, res) => {
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
-  console.log(findCriteria)
+  console.log("08-04",findCriteria)
 
   var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
   return res.send(listTutorResp);
