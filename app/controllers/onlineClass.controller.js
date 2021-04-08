@@ -858,7 +858,7 @@ exports.listTutorList = async (req, res) => {
     findCriteria.isPopular = true;
   }
   if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
-    findCriteria._id = { $ne: userId }
+    //findCriteria._id = { $ne: userId }
   }
   findCriteria.isTutor = true;
   findCriteria.status = 1;
