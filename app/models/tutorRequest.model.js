@@ -32,7 +32,7 @@ const TutorRequestSchema = mongoose.Schema({
     courceDescription : String,
     institution: String,
     achievementsOrAwards: String,
-    yearOfExperience: Number,
+    yearOfExperience: String,
     fee: Number,
     sampleVideo : String,
     location : String,
