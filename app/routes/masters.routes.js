@@ -10,7 +10,7 @@ module.exports = (app) => {
     app.get('/masters/languages',masters.getLanguages);
     app.get('/masters/hobbies',masters.getHobbies);
     app.get('/masters/registration',masters.getRegisterMasters);
-    app.get('/masters/search',masters.searchKeywords);
+    app.get('/masters/search',auth,masters.searchKeywords);
     app.get('/masters/search/default',masters.defaultSearch);
     app.get('/masters/filters',masters.getFilters);
     app.get('/masters/currencies',auth,masters.listCurrencies);
