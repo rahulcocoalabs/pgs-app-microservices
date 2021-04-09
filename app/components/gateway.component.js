@@ -10,7 +10,7 @@ module.exports = {
         var url = gatewayUrl + path;
         console.log("Routing path "+url +" through gateway");
         superagent.get(url).query(params).end((err,res)=> { 
-            console.log(err.message,"09/04");
+            console.log(err.message,"09/04",path,params);
 
             if (res != undefined) {
                 callback(err,res.body);
