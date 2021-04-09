@@ -1671,6 +1671,18 @@ exports.deleteAdmin = async (req, res) => {
     })
 }
 
+exports.deleteAll = async(req,res)=>{
+
+    var x = await Alumni.updateMany({},{status:0})
+    var y = await AlumniJoinRequest.updateMany({},{status:0})
+    var z = await AlumniEvent.updateMany({},{status:0})
+    var a = await AlumniEventParticipation.updateMany({},{status:0})
+    var b = await AlumniJob.updateMany({},{status:0})
+    var c = await AlumniJoinRequest.updateMany({},{status:0})
+    
+    return res.send("ok")
+}
+
 
 var CronJob = require('cron').CronJob;
 
