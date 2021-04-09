@@ -1307,6 +1307,23 @@ exports.requestAppointment1 = async (req, res) => {
     });
   }
 
+  var didRequestSend = await classRequest.countDocuments({classId:params.classId,userId:userId}).catch(err=>{
+    return {success:0,message:"something went wrong",error:err.message};
+  });
+
+  if(didRequestSend && didRequestSend.success != undefined && didRequestSend.success === 0){
+    return res.send(didRequestSend);
+  }
+
+  if(didRequestSend > 0){
+    return res.send({
+      success:0,
+      message:"already request send"
+    })
+  }
+
+  
+
   var obj = {}
   const monthNames = ["01", "02", "03", "04", "05", "06",
     "07", "08", "09", "10", "11", "12"];
