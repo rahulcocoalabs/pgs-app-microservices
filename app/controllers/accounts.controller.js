@@ -4028,7 +4028,7 @@ exports.updateTutorProfile = async (req, res) => {
   }
   var tutorProfileUpdateObj = {};
   tutorProfileUpdateObj.userId = userId;
-  if ((params.tutorCourseIds !== null && params.tutorCourseIds !== undefined && (params.tutorCourseIds !== undefined && params.tutorCourseIds.length > 1))) {
+  if ((params.tutorCourseIds !== null && params.tutorCourseIds !== undefined && (params.tutorCourseIds !== undefined && params.tutorCourseIds.length >= 1))) {
     tutorProfileUpdateObj.tutorCourseIds = params.tutorCourseIds;
   }
   if ((params.tutorSubjectIds !== null && params.tutorSubjectIds !== undefined && (params.tutorSubjectIds !== undefined && params.tutorSubjectIds.length >= 1))) {
