@@ -2827,23 +2827,23 @@ exports.sendOtp_1 = async (req, res) => {
       })
     }
 
-    if (country == "+91") {
-      var mobileNum = countryCode + mobile;
-      var otpResponse = await send_otp(mobileNum);
+    // if (country == "+91") {
+    //   var mobileNum = countryCode + mobile;
+    //   var otpResponse = await send_otp(mobileNum);
 
-      if (otpResponse == undefined) {
-        return res.send({
-          success: 0,
-          message: 'Something went wrong, Your country code may be wrong please check'
-        })
-      }
-      res.status(200).send({
-        success: 1,
-        message: 'OTP is sent to your registered phone number for verification',
-        item: otpResponse
-      });
-    }
-    else {
+    //   if (otpResponse == undefined) {
+    //     return res.send({
+    //       success: 0,
+    //       message: 'Something went wrong, Your country code may be wrong please check'
+    //     })
+    //   }
+    //   res.status(200).send({
+    //     success: 1,
+    //     message: 'OTP is sent to your registered phone number for verification',
+    //     item: otpResponse
+    //   });
+    // }
+   // else {
       var mobileNum = countryCode + mobile;
       var otpResponse = await send_otp_bymail_1(email, mobileNum);
       console.log(otpResponse);
@@ -2858,7 +2858,7 @@ exports.sendOtp_1 = async (req, res) => {
         message: 'OTP is sent to your registered email for verification',
         item: otpResponse
       });
-    }
+   // }
 
 
     // console.log("flag5")
