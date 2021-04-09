@@ -1977,6 +1977,8 @@ async function listTutors(findCriteria, perPage, page, favouriteData) {
 
   console.log("now filter ->", findCriteria)
 
+  findCriteria._id = { $in: favouriteData.favouriteTutor } 
+
   var tutorsData = await User.find(findCriteria)
     .populate([{
       path: 'tutorCourseIds'
