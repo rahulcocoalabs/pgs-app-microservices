@@ -1794,7 +1794,7 @@ exports.update = async (req, res) => {
 
     var infoFlag = "";
     if ((userInfo.dob != undefined) && (userInfo.syllabus != undefined) && (userInfo.countryId != undefined)
-      && (userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+      && (userInfo.genderId != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)) {
 
 
@@ -1834,7 +1834,7 @@ exports.update = async (req, res) => {
       return res.send({
         success: 1,
         flag: 3,
-        flag1: userInfo.gender,
+        flag1: userInfo.genderId,
         flag2: userInfo.dob,
         flag3: userInfo.syllabus,
         flag4: userInfo.countryId,

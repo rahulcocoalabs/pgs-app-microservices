@@ -206,12 +206,12 @@ UserSchema.virtual('nationality', {
     foreignField: '_id',
     justOne: true
 });
-UserSchema.virtual('gender', {
-    ref: 'Gender',
-    localField: 'genderId',
-    foreignField: '_id',
-    justOne: true
-});
+// UserSchema.virtual('gender', {
+//     ref: 'Gender',
+//     localField: 'genderId',
+//     foreignField: '_id',
+//     justOne: true
+// });
 UserSchema.virtual('fathersNationality', {
     ref: 'Nationality',
     localField: 'fatherNationalityId',
