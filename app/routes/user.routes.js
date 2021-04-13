@@ -15,6 +15,7 @@ var storage = multer.diskStorage({
         } else if (file.fieldname === "video"){
             cb(null, tutorsConfig.videoUploadPath.trim());
         }else{
+            console.log(file.fieldname);
             return cb({success: 0, message: "Invalid types" });
         }
     },
