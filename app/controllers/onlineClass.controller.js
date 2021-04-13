@@ -1994,9 +1994,13 @@ async function listTutors(findCriteria, perPage, page, favouriteData,tabCheckDat
   perPage = perPage > 0 ? perPage : tutorConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
-  
+  if (tabCheckData != null){
+    if (tabCheckData.isFavourite != null || tabCheckData.isFavourite == true){
+      findCriteria._id = { $in: favouriteData.favouriteTutor } 
+    }
+  }
 
-  findCriteria._id = { $in: favouriteData.favouriteTutor } 
+ 
   console.log("now filter ->", findCriteria)
   var tutorsData = await User.find(findCriteria)
     .populate([{
