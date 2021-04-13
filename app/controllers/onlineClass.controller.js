@@ -867,7 +867,7 @@ exports.listTutorList = async (req, res) => {
 
   console.log("08-04",findCriteria)
 
-  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData)
+  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData,null)
   return res.send(listTutorResp);
 
 }
@@ -1987,7 +1987,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData, sortOptio
 }
 
 
-async function listTutors(findCriteria, perPage, page, favouriteData) {
+async function listTutors(findCriteria, perPage, page, favouriteData,tabCheckData) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || tutorConfig.resultsPerPage;
