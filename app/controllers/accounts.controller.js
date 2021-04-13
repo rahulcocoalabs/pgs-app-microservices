@@ -1790,6 +1790,8 @@ exports.update = async (req, res) => {
 
   userInfo = userInfo.toObject();
 
+  console.log("13/04",userInfo)
+
   if (userInfo.profileCompletion == 0) {
 
     var infoFlag = "";
