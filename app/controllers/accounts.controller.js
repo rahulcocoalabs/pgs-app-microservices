@@ -4006,6 +4006,7 @@ exports.getTutorProfile = async (req, res) => {
 exports.updateTutorProfile = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
+  console.log("13/04")
   var tutorCheck = await checkUserIsTutor(userId);
   if (tutorCheck && (tutorCheck.success !== undefined) && (tutorCheck.success === 0)) {
     return res.send(tutorCheck);
