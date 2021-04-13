@@ -757,6 +757,8 @@ exports.listOnlineClasses = async (req, res) => {
   var findCriteria = {};
   var sortOptions = {};
 
+  console.log("13/04",params);
+
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
   }
