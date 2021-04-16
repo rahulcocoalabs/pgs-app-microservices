@@ -1684,13 +1684,13 @@ exports.listContest = async (req, res) => {
             message:"please provide tab type"
         })
     }
-    if (!params.tabType) {
+    if (!params.tabtype) {
         return res.send({
             success:0,
             message:"please provide tab type"
         })
     }
-    if (params.tabType != "upcoming" && params.tabType != "past") {
+    if (params.tabtype != "upcoming" && params.tabtype != "past") {
         return res.send({
             success:0,
             message:"please provide vaild tab type"
