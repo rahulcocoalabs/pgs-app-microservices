@@ -1678,6 +1678,25 @@ exports.listContest = async (req, res) => {
     const params = req.query;
     const id = req.params.id;
 
+    if (!params) {
+        return res.send({
+            success:0,
+            message:"please provide tab type"
+        })
+    }
+    if (!params.tabType) {
+        return res.send({
+            success:0,
+            message:"please provide tab type"
+        })
+    }
+    if (params.tabType != "upcoming" && params.tabType != "past") {
+        return res.send({
+            success:0,
+            message:"please provide vaild tab type"
+        })
+    }
+
     var page = params.page || 1;
     page = page > 0 ? page : 1;
     var perPage = Number(params.perPage) || 30;
@@ -1692,7 +1711,14 @@ exports.listContest = async (req, res) => {
     var filter = {};
     filter.status = 1;
     const presentTime = Date.now();
-    filter.toDate = { $lt: presentTime };
+
+    if (params.tabtype == "past"){
+        filter.toDate = { $lt: presentTime };
+    }
+    else {
+        filter.toDate = { $gt: presentTime };
+    }
+    
     //  filter.groups = query.groupId;
     var projection = {};
     projection.fromDate = 1;
