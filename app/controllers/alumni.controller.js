@@ -4,6 +4,7 @@ const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
 const AlumniEventParticipation = require('../models/alumniEventParticipation.model.js');
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
+const AlumniContest = require('../models/alumniContests.model.js');
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
@@ -796,7 +797,7 @@ exports.acceptJoinRequests = async (req, res) => {
             return res.send(info);
         }
 
-        var user = info.user ;
+        var user = info.user;
 
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": user }]
 
@@ -1377,8 +1378,8 @@ exports.eventParticipate = async (req, res) => {
 
     var owner = groupInfo.createdBy || "";
 
-    var event = await AlumniEvent.findOne({_id:eventId},{title:1}).catch(err => {
-        return {success:0,message:"some error occurred",error: err.message}
+    var event = await AlumniEvent.findOne({ _id: eventId }, { title: 1 }).catch(err => {
+        return { success: 0, message: "some error occurred", error: err.message }
     })
     if (event && event.success != undefined && event.success == 0) {
         return res.send(event);
@@ -1671,15 +1672,89 @@ exports.deleteAdmin = async (req, res) => {
     })
 }
 
-exports.deleteAll = async(req,res)=>{
+exports.listContest = async (req, res) => {
 
-    var x = await Alumni.updateMany({},{status:0})
-    var y = await AlumniJoinRequest.updateMany({},{status:0})
-    var z = await AlumniEvent.updateMany({},{status:0})
-    var a = await AlumniEventParticipation.updateMany({},{status:0})
-    var b = await AlumniJob.updateMany({},{status:0})
-    var c = await AlumniJoinRequest.updateMany({},{status:0})
-    
+    const params = req.query;
+    const id = req.params.id;
+
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+
+    var filter = {};
+    filter.status = 1;
+    const presentTime = Date.now();
+    filter.toDate = { $gt: presentTime };
+    //  filter.groups = query.groupId;
+    var projection = {};
+    projection.fromDate = 1;
+    projection.toDate = 1;
+    projection.title = 1;
+    projection.image = 1;
+
+    var list = AlumniContest.find(filter, projection, pageParams).then((result) => {
+
+        if (!result) {
+            return res.send({
+                success: 0,
+                message: "no data available"
+            })
+        }
+        else {
+
+            var count = AlumniContest.countDocuments(filter).then((countofDocs) => {
+
+                var itemsCount = countofDocs
+                var totalPages = itemsCount / perPage;
+                totalPages = Math.ceil(totalPages);
+                var hasNextPage = page < totalPages;
+                var pagination = {
+                    page: page,
+                    perPage: perPage,
+                    hasNextPage: hasNextPage,
+                    totalItems: itemsCount,
+                    totalPages: totalPages
+                }
+
+                return res.send({
+                    success: 1,
+                    message: "data available",
+                    imageBase: imageBase,
+                    items: result
+                })
+
+            }).catch((err) => {
+
+            })
+
+
+        }
+    }).catch((err) => {
+        return res.send({
+            success: 0,
+            message: "something went wrong",
+            error: err.message
+        })
+    })
+
+}
+
+exports.deleteAll = async (req, res) => {
+
+    var x = await Alumni.updateMany({}, { status: 0 })
+    var y = await AlumniJoinRequest.updateMany({}, { status: 0 })
+    var z = await AlumniEvent.updateMany({}, { status: 0 })
+    var a = await AlumniEventParticipation.updateMany({}, { status: 0 })
+    var b = await AlumniJob.updateMany({}, { status: 0 })
+    var c = await AlumniJoinRequest.updateMany({}, { status: 0 })
+
     return res.send("ok")
 }
 

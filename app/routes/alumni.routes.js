@@ -55,6 +55,8 @@ module.exports = (app) => {
 
    app.get('/alumni/list-memebers',auth,alumni.listMembers);
 
+   app.get('/alumni/list-contest/:id',auth,alumni.listContest);
+
    app.patch('/alumni/set-admin/:id',auth,alumni.setAdmin);
    app.delete('/alumni/remove-admin/:id',auth,alumni.deleteAdmin);
    app.delete('/alumni/remove-all',auth,alumni.deleteAll);
