@@ -1309,7 +1309,7 @@ exports.requestAppointment1 = async (req, res) => {
     });
   }
 
-  var didRequestSend = await classRequest.countDocuments({classId:params.classId,userId:userId}).catch(err=>{
+  var didRequestSend = await classRequest.countDocuments({classId:params.classId,userId:userId,isRejected:false}).catch(err=>{
     return {success:0,message:"something went wrong",error:err.message};
   });
 
