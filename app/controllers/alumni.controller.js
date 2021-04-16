@@ -1728,6 +1728,7 @@ exports.listContest = async (req, res) => {
                     success: 1,
                     message: "data available",
                     imageBase: contestImageBase,
+                    pagination,
                     items: result
                 })
 
