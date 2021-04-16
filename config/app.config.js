@@ -117,6 +117,7 @@ module.exports = {
         resultsPerPage: 30,
         imageUploadPath: relativeCommonPath + "alumni-images",
         imageBase: commonPath + "alumni-images/",
+        contestImageBase:commonPath +"contest/"
         
     },
     alumniEvents: {

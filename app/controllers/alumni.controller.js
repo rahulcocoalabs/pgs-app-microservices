@@ -5,6 +5,7 @@ const AlumniEventParticipation = require('../models/alumniEventParticipation.mod
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const AlumniContest = require('../models/alumniContests.model.js');
+const contestImageBase = config.alumni.contestImageBase;
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
@@ -1726,7 +1727,7 @@ exports.listContest = async (req, res) => {
                 return res.send({
                     success: 1,
                     message: "data available",
-                    imageBase: imageBase,
+                    imageBase: contestImageBase,
                     items: result
                 })
 
