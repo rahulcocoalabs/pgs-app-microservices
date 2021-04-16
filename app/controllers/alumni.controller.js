@@ -1691,7 +1691,7 @@ exports.listContest = async (req, res) => {
     var filter = {};
     filter.status = 1;
     const presentTime = Date.now();
-    filter.toDate = { $gt: presentTime };
+    filter.toDate = { $lt: presentTime };
     //  filter.groups = query.groupId;
     var projection = {};
     projection.fromDate = 1;
