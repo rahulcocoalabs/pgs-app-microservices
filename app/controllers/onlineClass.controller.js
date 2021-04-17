@@ -1998,6 +1998,7 @@ async function listTutors(findCriteria, perPage, page, favouriteData,tabCheckDat
     console.log("17/04",tabCheckData);
     if (tabCheckData.isFavourite != null || tabCheckData.isFavourite == true){
       findCriteria._id = { $in: favouriteData.favouriteTutor } 
+      findCriteria.isPopular = {$in: [true,false]};
     }
   }
 
