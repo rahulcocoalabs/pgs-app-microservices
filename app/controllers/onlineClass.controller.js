@@ -1993,7 +1993,7 @@ async function listTutors(findCriteria, perPage, page, favouriteData,tabCheckDat
   var perPage = Number(perPage) || tutorConfig.resultsPerPage;
   perPage = perPage > 0 ? perPage : tutorConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
-
+  console.log("17/04",tabCheckData);
   if (tabCheckData != null){
     console.log("17/04",tabCheckData);
     if (tabCheckData.isFavourite != null || tabCheckData.isFavourite == true){
