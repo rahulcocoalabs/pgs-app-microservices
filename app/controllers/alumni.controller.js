@@ -1781,7 +1781,7 @@ exports.listContest = async (req, res) => {
 }
 
 
-exports.listContestForPermission =  (req, res) => {
+exports.listContestForPermission = async (req, res) => {
 
     const params = req.query;
     const id = req.params.id;
@@ -1809,7 +1809,75 @@ exports.listContestForPermission =  (req, res) => {
     var projection = {};
     projection.contest = 1;
 
+    var list = await AlumniContestPermissions.find(filter, projection).catch((err)=>{
+        return {
+            success:0,
+            message:"something went wrong", 
+            error: err.message 
+        }
+    })
 
+    if (list && list.success != undefined && list.success === 0){
+        return res.send(list);
+    }
+
+    var arr = [];
+    for (x in list) {
+        arr.push(list[x].contest);
+    }
+
+    var filter1 = {};
+    filter1.status = 1;
+    filter1._id = { $nin: arr };
+    var projection1 = {};
+    projection1.fromDate = 1;
+    projection1.toDate = 1;
+    projection1.title = 1;
+    projection1.image = 1;
+
+    var list1 = await AlumniContest.find(filter1, projection1, pageParams).catch((err)=>{
+        return {
+            success:0,
+            message:"something went wrong", 
+            error: err.message 
+        }
+    })
+
+    if (list1 && list1.success != undefined && list1.success === 0){
+        return res.send(list1);
+    }
+
+    var count = await AlumniContest.countDocuments(filter1).catch((err)=>{
+        return {
+            success:0,
+            message:"something went wrong", 
+            error: err.message 
+        }
+    })
+
+    if (count && count.success != undefined && count.success === 0){
+        return res.send(count);
+    }
+    var itemsCount = count
+    var totalPages = itemsCount / perPage;
+    totalPages = Math.ceil(totalPages);
+    var hasNextPage = page < totalPages;
+    var pagination = {
+        page: page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+        totalItems: itemsCount,
+        totalPages: totalPages
+    }
+
+    return res.send({
+        success: 1,
+        message: "data available",
+        imageBase: contestImageBase,
+        pagination,
+        
+        items: list1
+    })
 
     var list = AlumniContestPermissions.find(filter, projection).then((result) => {
         var arr = [];
