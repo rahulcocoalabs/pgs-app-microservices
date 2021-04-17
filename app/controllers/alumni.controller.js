@@ -1781,7 +1781,7 @@ exports.listContest = async (req, res) => {
 }
 
 
-exports.listContestForPermission = async (req, res) => {
+exports.listContestForPermission =  (req, res) => {
 
     const params = req.query;
     const id = req.params.id;
