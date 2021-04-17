@@ -1995,6 +1995,7 @@ async function listTutors(findCriteria, perPage, page, favouriteData,tabCheckDat
   var offset = (page - 1) * perPage;
 
   if (tabCheckData != null){
+    console.log("17/04",tabCheckData);
     if (tabCheckData.isFavourite != null || tabCheckData.isFavourite == true){
       findCriteria._id = { $in: favouriteData.favouriteTutor } 
     }
