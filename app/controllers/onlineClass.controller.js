@@ -1777,7 +1777,7 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({ status: 1, tutorId: userId }, { tutorId: 0 }, pageParams).populate([{ path: 'userId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).catch(err => {
+  var list = await classRequest.find({ status: 1, tutorId: userId }, { tutorId: 0 }, pageParams).populate([{ path: 'userId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({'tsCreatedAt':-1}).catch(err => {
     return {
       success: 0,
       message: err.message
@@ -1835,7 +1835,7 @@ exports.getStudentAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({ status: 1, userId: userId }, { userId: 0 }, pageParams).populate([{ path: 'tutorId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).catch(err => {
+  var list = await classRequest.find({ status: 1, userId: userId }, { userId: 0 }, pageParams).populate([{ path: 'tutorId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({'tsCreatedAt':-1}).catch(err => {
     return {
       success: 0,
       message: err.message
