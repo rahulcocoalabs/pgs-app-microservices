@@ -1680,20 +1680,20 @@ exports.listContest = async (req, res) => {
 
     if (!params) {
         return res.send({
-            success:0,
-            message:"please provide tab type"
+            success: 0,
+            message: "please provide tab type"
         })
     }
     if (!params.tabtype) {
         return res.send({
-            success:0,
-            message:"please provide tab type"
+            success: 0,
+            message: "please provide tab type"
         })
     }
     if (params.tabtype != "upcoming" && params.tabtype != "past") {
         return res.send({
-            success:0,
-            message:"please provide vaild tab type"
+            success: 0,
+            message: "please provide vaild tab type"
         })
     }
 
@@ -1712,19 +1712,184 @@ exports.listContest = async (req, res) => {
     filter.status = 1;
     const presentTime = Date.now();
 
-    if (params.tabtype == "past"){
+    if (params.tabtype == "past") {
         filter.toDate = { $lt: presentTime };
     }
     else {
         filter.toDate = { $gt: presentTime };
     }
-    
+
     //  filter.groups = query.groupId;
     var projection = {};
     projection.fromDate = 1;
     projection.toDate = 1;
     projection.title = 1;
     projection.image = 1;
+
+    var list = AlumniContest.find(filter, projection, pageParams).then((result) => {
+
+        if (!result) {
+            return res.send({
+                success: 0,
+                message: "no data available"
+            })
+        }
+        else {
+
+            var count = AlumniContest.countDocuments(filter).then((countofDocs) => {
+
+                var itemsCount = countofDocs
+                var totalPages = itemsCount / perPage;
+                totalPages = Math.ceil(totalPages);
+                var hasNextPage = page < totalPages;
+                var pagination = {
+                    page: page,
+                    perPage: perPage,
+                    hasNextPage: hasNextPage,
+                    totalItems: itemsCount,
+                    totalPages: totalPages
+                }
+
+                return res.send({
+                    success: 1,
+                    message: "data available",
+                    imageBase: contestImageBase,
+                    pagination,
+                    items: result
+                })
+
+            }).catch((err) => {
+                return res.send({
+                    success: 0,
+                    message: "something went wrong",
+                    error: err.message
+                })
+            })
+
+
+        }
+    }).catch((err) => {
+        return res.send({
+            success: 0,
+            message: "something went wrong",
+            error: err.message
+        })
+    })
+
+}
+
+
+exports.listContestForPermission = async (req, res) => {
+
+    const params = req.query;
+    const id = req.params.id;
+
+    if (!params) {
+        return res.send({
+            success: 0,
+            message: "please provide tab type"
+        })
+    }
+    if (!params.tabtype) {
+        return res.send({
+            success: 0,
+            message: "please provide tab type"
+        })
+    }
+    if (params.tabtype != "upcoming" && params.tabtype != "past") {
+        return res.send({
+            success: 0,
+            message: "please provide vaild tab type"
+        })
+    }
+
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || 30;
+    perPage = perPage > 0 ? perPage : 30;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+
+
+    var filter = {};
+    filter.status = 1;
+    filter.permissions = { $in: ["accepted", "rejected"] }
+
+
+
+    //  filter.groups = query.groupId;
+    var projection = {};
+    projection.contest = 1;
+
+
+
+    var list = AlumniContestPermissions.find(filter, projection).then((result) => {
+        var arr = [];
+        for (x in result) {
+            arr.push(result[x].contest);
+        }
+
+        var filter1 = {};
+        filter1.status = 1;
+        filter1._id = { $nin: arr };
+        var projection1 = {};
+        projection1.fromDate = 1;
+        projection1.toDate = 1;
+        projection1.title = 1;
+        projection1.image = 1;
+
+        var list1 = AlumniContest.find(filter1, projection1, pageParams).then((result1) => {
+
+            if (!result1) {
+                return res.send({
+                    success: 0,
+                    message: "something went wrong",
+                })
+            }
+
+            var count = AlumniContest.countDocuments(filter1).then((countofDocs) => {
+
+                var itemsCount = countofDocs
+                var totalPages = itemsCount / perPage;
+                totalPages = Math.ceil(totalPages);
+                var hasNextPage = page < totalPages;
+                var pagination = {
+                    page: page,
+                    perPage: perPage,
+                    hasNextPage: hasNextPage,
+                    totalItems: itemsCount,
+                    totalPages: totalPages
+                }
+
+                return res.send({
+                    success: 1,
+                    message: "data available",
+                    imageBase: contestImageBase,
+                    pagination,
+                    items: result
+                })
+
+            }).catch((err) => {
+                return res.send({
+                    success: 0,
+                    message: "something went wrong",
+                    error: err.message
+                })
+
+            })
+
+        })
+
+    }).catch((err) => {
+        return res.send({
+            success: 0,
+            message: "something went wrong",
+            error: err.message
+        })
+    })
 
     var list = AlumniContest.find(filter, projection, pageParams).then((result) => {
 
