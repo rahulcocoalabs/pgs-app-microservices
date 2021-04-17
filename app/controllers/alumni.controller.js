@@ -1879,124 +1879,62 @@ exports.listContestForPermission = async (req, res) => {
         items: list1
     })
 
-    var list = AlumniContestPermissions.find(filter, projection).then((result) => {
-        var arr = [];
-        for (x in result) {
-            arr.push(result[x].contest);
-        }
+}
 
-        var filter1 = {};
-        filter1.status = 1;
-        filter1._id = { $nin: arr };
-        var projection1 = {};
-        projection1.fromDate = 1;
-        projection1.toDate = 1;
-        projection1.title = 1;
-        projection1.image = 1;
+exports.contestPermission = async(req,res) => {
 
-        var list1 = AlumniContest.find(filter1, projection1, pageParams).then((result1) => {
+    const body = req.body;
 
-            if (!result1) {
-                return res.send({
-                    success: 0,
-                    message: "something went wrong",
-                })
-            }
-
-            var count = AlumniContest.countDocuments(filter1).then((countofDocs) => {
-
-                var itemsCount = countofDocs
-                var totalPages = itemsCount / perPage;
-                totalPages = Math.ceil(totalPages);
-                var hasNextPage = page < totalPages;
-                var pagination = {
-                    page: page,
-                    perPage: perPage,
-                    hasNextPage: hasNextPage,
-                    totalItems: itemsCount,
-                    totalPages: totalPages
-                }
-
-                return res.send({
-                    success: 1,
-                    message: "data available",
-                    imageBase: contestImageBase,
-                    pagination,
-                    filter1,
-                    items: result1
-                })
-
-            }).catch((err) => {
-                return res.send({
-                    success: 0,
-                    message: "something went wrong",
-                    error: err.message
-                })
-
-            })
-
-        }).catch((err) => {
-            return res.send({
-                success:0,
-                message:"something went wrong",
-                error: err.message
-            })
+    var errors = [];
+    if (!body.status){
+        errors.push({
+            filed:"status",
+            message:"please fill status"
         })
+    }
+    if (!body.alumni){
+        errors.push({
+            filed:"alumni",
+            message:"please fill alumni"
+        })
+    }
+    if (!body.contest){
+        errors.push({
+            filed:"contest",
+            message:"please fill contest"
+        })
+    }
 
-    }).catch((err) => {
+    if (body.status != "accepted" && body.status != "rejected"){
         return res.send({
-            success: 0,
-            message: "something went wrong",
-            error: err.message
+            success:0,
+            message:"please provide valide status accept or reject"
         })
-    })
+    }
 
-    var list = AlumniContest.find(filter, projection, pageParams).then((result) => {
+    const obj = {
+        "contest": body.contest,
+        "alumni": body.alumni,
+        "permission": body.status,
+    }
 
-        if (!result) {
-            return res.send({
-                success: 0,
-                message: "no data available"
-            })
+    const saver = new AlumniContestPermissions(obj);
+    var saveData = await saver.save().catch((err) => {
+        return {
+            success:0,
+            message:"something went wrong", 
+            error: err.message 
         }
-        else {
+    });
 
-            var count = AlumniContest.countDocuments(filter).then((countofDocs) => {
+    if (saveData && saveData.success !== undefined && saveData.success === 0){
+        return res.send(saveData)
+    }
 
-                var itemsCount = countofDocs
-                var totalPages = itemsCount / perPage;
-                totalPages = Math.ceil(totalPages);
-                var hasNextPage = page < totalPages;
-                var pagination = {
-                    page: page,
-                    perPage: perPage,
-                    hasNextPage: hasNextPage,
-                    totalItems: itemsCount,
-                    totalPages: totalPages
-                }
-
-                return res.send({
-                    success: 1,
-                    message: "data available",
-                    imageBase: contestImageBase,
-                    pagination,
-                    items: result
-                })
-
-            }).catch((err) => {
-
-            })
-
-
-        }
-    }).catch((err) => {
-        return res.send({
-            success: 0,
-            message: "something went wrong",
-            error: err.message
-        })
+    return res.send({
+        success:1,
+        message:"success" 
     })
-
 }
 
 exports.deleteAll = async (req, res) => {
