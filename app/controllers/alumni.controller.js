@@ -1784,24 +1784,7 @@ exports.listContestForPermission = async (req, res) => {
     const params = req.query;
     const id = req.params.id;
 
-    if (!params) {
-        return res.send({
-            success: 0,
-            message: "please provide tab type"
-        })
-    }
-    if (!params.tabtype) {
-        return res.send({
-            success: 0,
-            message: "please provide tab type"
-        })
-    }
-    if (params.tabtype != "upcoming" && params.tabtype != "past") {
-        return res.send({
-            success: 0,
-            message: "please provide vaild tab type"
-        })
-    }
+   
 
     var page = params.page || 1;
     page = page > 0 ? page : 1;
