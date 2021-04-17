@@ -1867,6 +1867,12 @@ exports.listContestForPermission = async (req, res) => {
 
             })
 
+        }).catch((err) => {
+            return res.send({
+                success:0,
+                message:"something went wrong",
+                error: err.message
+            })
         })
 
     }).catch((err) => {
