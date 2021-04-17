@@ -1854,7 +1854,7 @@ exports.listContestForPermission = async (req, res) => {
                     message: "data available",
                     imageBase: contestImageBase,
                     pagination,
-                 
+                    filter1,
                     items: result1
                 })
 
