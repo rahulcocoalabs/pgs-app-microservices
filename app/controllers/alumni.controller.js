@@ -5,6 +5,8 @@ const AlumniEventParticipation = require('../models/alumniEventParticipation.mod
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const AlumniContest = require('../models/alumniContests.model.js');
+
+const AlumniContestPermissions = require('../models/alumniContestPermission.model.js');
 const contestImageBase = config.alumni.contestImageBase;
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
