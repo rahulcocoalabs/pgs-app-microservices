@@ -1915,7 +1915,7 @@ exports.contestPermission = async(req,res) => {
         })
     }
 
-    if (body.status != "accepted" && body.status != "rejected"){
+    if (body.status != "accepted" || body.status != "rejected"){
         return res.send({
             success:0,
             message:"please provide valide status accept or reject"
