@@ -1915,13 +1915,21 @@ exports.contestPermission = async(req,res) => {
         })
     }
 
-    // if( !(body.status == "accepted" || body.status == "rejected")){
-    //     return res.send({
-    //         success:0,
-    //         body:body.status,
-    //         message:"please provide valide status accept or reject"
-    //     })
-    // }
+    if (errors.length > 0) {
+        return res.send({
+            success:0,
+            message:"please fill all fields",
+            error:errors
+        })
+    }
+
+    if( !(body.status == "accepted" || body.status == "rejected")){
+        return res.send({
+            success:0,
+            body:body.status,
+            message:"please provide valide status accept or reject"
+        })
+    }
 
     const obj = {
         contest: body.contest,
