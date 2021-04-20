@@ -1773,7 +1773,7 @@ exports.listContest = async (req, res) => {
                     imageBase: contestImageBase,
                     pagination,
                     items: result,
-                    approvedContest
+                   
                 })
 
             }).catch((err) => {
