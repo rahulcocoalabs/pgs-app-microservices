@@ -1857,7 +1857,7 @@ exports.listContestForPermission = async (req, res) => {
         return res.send(list1);
     }
 
-    var count = await AlumniContest.countDocuments(filter1).catch((err)=>{
+    var count = await AlumniContest.countDocuments(filter).catch((err)=>{
         return {
             success:0,
             message:"something went wrong", 
