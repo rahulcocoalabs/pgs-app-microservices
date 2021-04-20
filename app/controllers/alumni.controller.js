@@ -1709,7 +1709,7 @@ exports.listContest = async (req, res) => {
         limit: perPage
     };
 
-    var approvedContest = await AlumniContestPermissions.find({ status: 1,alumni:id,permissions:"accepted"},{contest:1}).catch(err => {
+    var approvedContest = await AlumniContestPermissions.find({ status: 1,alumni:id,permission:"accepted"},{contest:1}).catch(err => {
         return {
             success:0,
             message:"did not fetch details from database",
