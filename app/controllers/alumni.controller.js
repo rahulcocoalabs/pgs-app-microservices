@@ -1956,7 +1956,8 @@ exports.contestPermission = async(req,res) => {
 
     return res.send({
         success:1,
-        message:"success" 
+        message:"success" ,
+        saveData
     })
 }
 
