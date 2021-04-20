@@ -1709,9 +1709,24 @@ exports.listContest = async (req, res) => {
         limit: perPage
     };
 
+    var approvedContest = await AlumniContestPermissions.find({ status: 1,alumni:id,permissions:"accepted"},{contest:1}).catch(err => {
+        return {
+            success:0,
+            message:"did not fetch details from database",
+            error:err.message
+        }
+    })
+
+    if (approvedContest && approvedContest.success != undefined && approvedContest.success === 0){
+        return res.send(approvedContest);
+    }
+
+    const approvedContestIds = approvedContest.map(contestItem=>contestItem.contest);
+
 
     var filter = {};
     filter.status = 1;
+    filter._id = {$in:approvedContestIds};
     const presentTime = Date.now();
 
     if (params.tabtype == "past") {
@@ -1721,7 +1736,7 @@ exports.listContest = async (req, res) => {
         filter.toDate = { $gt: presentTime };
     }
 
-    //  filter.groups = query.groupId;
+   
     var projection = {};
     projection.fromDate = 1;
     projection.toDate = 1;
@@ -1798,44 +1813,39 @@ exports.listContestForPermission = async (req, res) => {
         limit: perPage
     };
 
+    var approvedContest = await AlumniContestPermissions.find({ status: 1,alumni:id},{contest:1}).catch(err => {
+        return {
+            success:0,
+            message:"did not fetch details from database",
+            error:err.message
+        }
+    })
+
+    if (approvedContest && approvedContest.success != undefined && approvedContest.success === 0){
+        return res.send(approvedContest);
+    }
+
+    const approvedContestIds = approvedContest.map(contestItem=>contestItem.contest);
+
 
     var filter = {};
     filter.status = 1;
-    filter.permissions = { $in: ["accepted", "rejected"] }
+    filter._id = {$nin : approvedContestIds}
+    
 
 
 
     //  filter.groups = query.groupId;
+   
+
+   
     var projection = {};
-    projection.contest = 1;
+    projection.fromDate = 1;
+    projection.toDate = 1;
+    projection.title = 1;
+    projection.image = 1;
 
-    var list = await AlumniContestPermissions.find(filter, projection).catch((err)=>{
-        return {
-            success:0,
-            message:"something went wrong", 
-            error: err.message 
-        }
-    })
-
-    if (list && list.success != undefined && list.success === 0){
-        return res.send(list);
-    }
-
-    var arr = [];
-    for (x in list) {
-        arr.push(list[x].contest);
-    }
-
-    var filter1 = {};
-    filter1.status = 1;
-    filter1._id = { $nin: arr };
-    var projection1 = {};
-    projection1.fromDate = 1;
-    projection1.toDate = 1;
-    projection1.title = 1;
-    projection1.image = 1;
-
-    var list1 = await AlumniContest.find(filter1, projection1, pageParams).catch((err)=>{
+    var list1 = await AlumniContest.find(filter, projection, pageParams).catch((err)=>{
         return {
             success:0,
             message:"something went wrong", 
