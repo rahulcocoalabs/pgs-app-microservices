@@ -1913,9 +1913,9 @@ exports.contestPermission = async(req,res) => {
     }
 
     const obj = {
-        "contest": body.contest,
-        "alumni": body.alumni,
-        "permission": body.status,
+        contest: body.contest,
+        alumni: body.alumni,
+        permission: body.status,
     }
 
     const saver = new AlumniContestPermissions(obj);

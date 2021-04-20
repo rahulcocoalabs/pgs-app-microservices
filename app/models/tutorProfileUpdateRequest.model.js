@@ -35,6 +35,8 @@ const TutorProfileUpdateRequestSchema = mongoose.Schema({
     institution:String,
     sampleVideo : String,
     location : String,
+    yearOfExperience:String,
+    achievementsOrAwards:String,
     lat : Number,
     lng : Number,
     isApproved : Boolean,
