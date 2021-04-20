@@ -1936,6 +1936,9 @@ exports.contestPermission = async(req,res) => {
         contest: body.contest,
         alumni: body.alumni,
         permission: body.status,
+        status:1, 
+        tsCreatedAt:Date.now(),
+        tsModifiedAt:null
     }
 
     const saver = new AlumniContestPermissions(obj);
