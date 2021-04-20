@@ -13,4 +13,4 @@ const alumniContestPermissionSchema = mongoose.Schema(
     }
 )
 // database collection have name AlumniContest so reference variable given name AlumniContestRef
-module.exports = mongoose.model('alumniContestPermission', alumniContestPermissionSchema, 'alumniContestPermissions');
+module.exports = mongoose.model('AlumniContestPermission', alumniContestPermissionSchema, 'AlumniContestPermissions');
