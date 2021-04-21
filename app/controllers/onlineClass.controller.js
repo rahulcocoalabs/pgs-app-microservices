@@ -780,8 +780,10 @@ exports.listOnlineClasses = async (req, res) => {
   if (params.isPublic !== undefined && params.isPublic === 'false') {
     findCriteria.isPublic = false;
   }
-  if (params.isPopular === 'true') {
-    findCriteria.isPopular = true;
+  if (params.isFavourite == undefined || (params.isFavourite !== undefined && params.isFavourite == false )){
+    if (params.isPopular === 'true') {
+      findCriteria.isPopular = true;
+    }
   }
 
   if (params.isFeeLowToHigh === 'true') {
@@ -1920,6 +1922,9 @@ async function listClasses(findCriteria, perPage, page, favouriteData, sortOptio
   var offset = (page - 1) * perPage;
 
   console.log("21/04",findCriteria)
+
+  
+
   var onlineClassData = await OnlineCLass.find(findCriteria, { zoomLink: 0, startUrl: 0 })
     .populate([{
       path: 'userId',
