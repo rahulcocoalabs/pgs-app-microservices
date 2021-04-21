@@ -1245,7 +1245,7 @@ exports.getTutorDetails = async (req, res) => {
     } else {
       tutorDetails.isFavourite = false;
     }
-    var onlineClassData = await OnlineCLass.find({ status: 1, userId: tutorId, isApproved: true, isPublic: true }, { zoomLink: 0, startUrl: 0 })
+    var onlineClassData = await OnlineCLass.find({ status: 1, userId: tutorId, isApproved: true }, { zoomLink: 0, startUrl: 0 })
       .populate([{
         path: 'userId',
         select: {
