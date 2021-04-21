@@ -1919,7 +1919,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData, sortOptio
   perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
-
+  console.log("21/04",findCriteria)
   var onlineClassData = await OnlineCLass.find(findCriteria, { zoomLink: 0, startUrl: 0 })
     .populate([{
       path: 'userId',
