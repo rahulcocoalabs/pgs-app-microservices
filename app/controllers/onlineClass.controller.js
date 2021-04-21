@@ -774,17 +774,20 @@ exports.listOnlineClasses = async (req, res) => {
 
     findCriteria = await setFIlter(reqFilters, availableFilters, findCriteria)
   }
-  if (params.isPublic !== undefined && params.isPublic === 'true') {
-    findCriteria.isPublic = true;
-  }
-  if (params.isPublic !== undefined && params.isPublic === 'false') {
-    findCriteria.isPublic = false;
-  }
   if (params.isFavourite == undefined || (params.isFavourite !== undefined && params.isFavourite == false )){
+    if (params.isPublic !== undefined && params.isPublic === 'true') {
+      findCriteria.isPublic = true;
+    }
+    if (params.isPublic !== undefined && params.isPublic === 'false') {
+      findCriteria.isPublic = false;
+    }
+  }
+ 
+  //if (params.isFavourite == undefined || (params.isFavourite !== undefined && params.isFavourite == false )){
     if (params.isPopular === 'true') {
       findCriteria.isPopular = true;
     }
-  }
+ // }
 
   if (params.isFeeLowToHigh === 'true') {
     sortOptions = {
