@@ -704,7 +704,7 @@ exports.getClassDetails = async (req, res) => {
 
     var returnObj = JSON.parse(JSON.stringify(classDetails));
 
-    var approvalStatus = await classRequest.countDocuments({ classId: req.params.id, status: 1, isApproved: true }).catch(err => {
+    var approvalStatus = await classRequest.countDocuments({ classId: req.params.id, status: 1, isApproved: true,userId:userId }).catch(err => {
       return {
         success: 0,
         message: "something went wrong",
