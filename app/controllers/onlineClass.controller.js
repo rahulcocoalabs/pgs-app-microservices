@@ -704,22 +704,22 @@ exports.getClassDetails = async (req, res) => {
 
     var returnObj = JSON.parse(JSON.stringify(classDetails));
 
-    var approvalStatus = await classRequest.countDocuments({classId:req.params.id,status:1,isApproved:true}).catch(err=>{
+    var approvalStatus = await classRequest.countDocuments({ classId: req.params.id, status: 1, isApproved: true }).catch(err => {
       return {
-        success:0,
-        message:"something went wrong",
-        error:err.message
+        success: 0,
+        message: "something went wrong",
+        error: err.message
       }
     })
 
-    if (approvalStatus && approvalStatus.success != undefined && approvalStatus.success == 0){
+    if (approvalStatus && approvalStatus.success != undefined && approvalStatus.success == 0) {
       return res.send(approvalStatus)
     }
 
-    if (approvalStatus == 0){
+    if (approvalStatus == 0) {
       returnObj.isApproved = false;
     }
-    else{
+    else {
       returnObj.isApproved = true
     }
     return res.send({
@@ -744,7 +744,7 @@ exports.getClassDetails = async (req, res) => {
 
 exports.listOnlineClasses = async (req, res) => {
 
- 
+
   var userData = req.identity.data;
   var userId = userData.userId;
   var params = req.query;
@@ -757,10 +757,18 @@ exports.listOnlineClasses = async (req, res) => {
   var findCriteria = {};
   var sortOptions = {};
 
-  console.log("13/04",params);
+  console.log("13/04", params);
 
   if (params.isFavourite !== undefined && params.isFavourite === 'true') {
     findCriteria = { _id: { $in: favouriteData.favouriteClass } };
+  }
+  else {
+    if (params.isPublic !== undefined && params.isPublic === 'true') {
+      findCriteria.isPublic = true;
+    }
+    if (params.isPublic !== undefined && params.isPublic === 'false') {
+      findCriteria.isPublic = false;
+    }
   }
   if (favouriteData.isTutor !== undefined && favouriteData.isTutor !== null && favouriteData.isTutor) {
     findCriteria.userId = { $ne: userId }
@@ -774,20 +782,15 @@ exports.listOnlineClasses = async (req, res) => {
 
     findCriteria = await setFIlter(reqFilters, availableFilters, findCriteria)
   }
-  if (params.isFavourite == undefined || (params.isFavourite !== undefined && params.isFavourite == false )){
-    if (params.isPublic !== undefined && params.isPublic === 'true') {
-      findCriteria.isPublic = true;
-    }
-    if (params.isPublic !== undefined && params.isPublic === 'false') {
-      findCriteria.isPublic = false;
-    }
-  }
+
  
-  //if (params.isFavourite == undefined || (params.isFavourite !== undefined && params.isFavourite == false )){
-    if (params.isPopular === 'true') {
-      findCriteria.isPopular = true;
-    }
- // }
+
+
+
+  if (params.isPopular === 'true') {
+    findCriteria.isPopular = true;
+  }
+
 
   if (params.isFeeLowToHigh === 'true') {
     sortOptions = {
@@ -870,9 +873,9 @@ exports.listTutorList = async (req, res) => {
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
-  console.log("08-04",findCriteria)
+  console.log("08-04", findCriteria)
 
-  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData,null)
+  var listTutorResp = await listTutors(findCriteria, params.perPage, params.page, favouriteData, null)
   return res.send(listTutorResp);
 
 }
@@ -1116,8 +1119,8 @@ exports.getStudentHome = async (req, res) => {
   findCriteria.isTutor = true;
   findCriteria.status = 1;
 
-  console.log("07/04",favouriteData,findCriteria);
-  var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData,tabCheckData)
+  console.log("07/04", favouriteData, findCriteria);
+  var listPopularTutorData = await listTutors(findCriteria, params.perPage, params.page, favouriteData, tabCheckData)
   if (listPopularTutorData && (listPopularTutorData.success !== undefined) && (listPopularTutorData.success === 0)) {
     return res.send(listPopularTutorData);
   }
@@ -1298,7 +1301,7 @@ exports.requestAppointment1 = async (req, res) => {
       errors.push({
         field: "tutorId",
         message: "tutor id missing"
-      }); 
+      });
     }
     if (!params.classId) {
       errors.push({
@@ -1314,22 +1317,22 @@ exports.requestAppointment1 = async (req, res) => {
     });
   }
 
-  var didRequestSend = await classRequest.countDocuments({classId:params.classId,userId:userId,isRejected:false}).catch(err=>{
-    return {success:0,message:"something went wrong",error:err.message};
+  var didRequestSend = await classRequest.countDocuments({ classId: params.classId, userId: userId, isRejected: false }).catch(err => {
+    return { success: 0, message: "something went wrong", error: err.message };
   });
 
-  if(didRequestSend && didRequestSend.success != undefined && didRequestSend.success === 0){
+  if (didRequestSend && didRequestSend.success != undefined && didRequestSend.success === 0) {
     return res.send(didRequestSend);
   }
 
-  if(didRequestSend > 0){
+  if (didRequestSend > 0) {
     return res.send({
-      success:0,
-      message:"already request send"
+      success: 0,
+      message: "already request send"
     })
   }
 
-  
+
 
   var obj = {}
   const monthNames = ["01", "02", "03", "04", "05", "06",
@@ -1484,31 +1487,31 @@ exports.updateAppointmentStatus1 = async (req, res) => {
   var notificationMessage = ""
 
   var update = {};
-  
+
   if (params.status == constants.REJECTED_STATUS) {
     update.isRejected = true;
     update.comments = params.comments
   }
   if (params.status == constants.APPROVED_STATUS) {
     update.isApproved = true;
-    
-  } 
 
-  var updateInfo = await classRequest.updateOne({_id:req.params.id},update).catch(err=>{
+  }
+
+  var updateInfo = await classRequest.updateOne({ _id: req.params.id }, update).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message
+      success: 0,
+      message: "something went wrong",
+      error: err.message
     }
   })
 
-  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
+  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0) {
     return res.send(updateInfo)
   }
 
   return res.send({
-    success:1,
-    message:"succesfully updated"
+    success: 1,
+    message: "succesfully updated"
   })
 
 }
@@ -1516,27 +1519,27 @@ exports.updateAppointmentStatus1 = async (req, res) => {
 exports.deleteAppointment = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
- 
- 
 
 
-  
 
-  var updateInfo = await classRequest.updateOne({_id:req.params.id},{status:0}).catch(err=>{
+
+
+
+  var updateInfo = await classRequest.updateOne({ _id: req.params.id }, { status: 0 }).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message
+      success: 0,
+      message: "something went wrong",
+      error: err.message
     }
   })
 
-  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
+  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0) {
     return res.send(updateInfo)
   }
 
   return res.send({
-    success:1,
-    message:"succesfully removed"
+    success: 1,
+    message: "succesfully removed"
   })
 
 }
@@ -1782,7 +1785,7 @@ exports.getTutorAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({ status: 1, tutorId: userId }, { tutorId: 0 }, pageParams).populate([{ path: 'userId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({'tsCreatedAt':-1}).catch(err => {
+  var list = await classRequest.find({ status: 1, tutorId: userId }, { tutorId: 0 }, pageParams).populate([{ path: 'userId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({ 'tsCreatedAt': -1 }).catch(err => {
     return {
       success: 0,
       message: err.message
@@ -1840,7 +1843,7 @@ exports.getStudentAppointmentRequestList1 = async (req, res) => {
 
   console.log(userId);
 
-  var list = await classRequest.find({ status: 1, userId: userId }, { userId: 0 }, pageParams).populate([{ path: 'tutorId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({'tsCreatedAt':-1}).catch(err => {
+  var list = await classRequest.find({ status: 1, userId: userId }, { userId: 0 }, pageParams).populate([{ path: 'tutorId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({ 'tsCreatedAt': -1 }).catch(err => {
     return {
       success: 0,
       message: err.message
@@ -1924,9 +1927,10 @@ async function listClasses(findCriteria, perPage, page, favouriteData, sortOptio
   perPage = perPage > 0 ? perPage : classConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
 
-  console.log("21/04",findCriteria)
+  console.log("21/04", findCriteria)
 
   
+
 
   var onlineClassData = await OnlineCLass.find(findCriteria, { zoomLink: 0, startUrl: 0 })
     .populate([{
@@ -1995,22 +1999,22 @@ async function listClasses(findCriteria, perPage, page, favouriteData, sortOptio
 }
 
 
-async function listTutors(findCriteria, perPage, page, favouriteData,tabCheckData) {
+async function listTutors(findCriteria, perPage, page, favouriteData, tabCheckData) {
   var page = Number(page) || 1;
   page = page > 0 ? page : 1;
   var perPage = Number(perPage) || tutorConfig.resultsPerPage;
   perPage = perPage > 0 ? perPage : tutorConfig.resultsPerPage;
   var offset = (page - 1) * perPage;
-  console.log("17/04",tabCheckData);
-  if (tabCheckData != null){
-    console.log("17/04",tabCheckData);
-    if (tabCheckData.isFavourite != null || tabCheckData.isFavourite == true){
-      findCriteria._id = { $in: favouriteData.favouriteTutor } 
-      findCriteria.isPopular = {$in: [true,false]};
+  console.log("17/04", tabCheckData);
+  if (tabCheckData != null) {
+    console.log("17/04", tabCheckData);
+    if (tabCheckData.isFavourite != null || tabCheckData.isFavourite == true) {
+      findCriteria._id = { $in: favouriteData.favouriteTutor }
+      findCriteria.isPopular = { $in: [true, false] };
     }
   }
 
- 
+
   console.log("now filter ->", findCriteria)
   var tutorsData = await User.find(findCriteria)
     .populate([{
