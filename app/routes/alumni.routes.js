@@ -59,6 +59,7 @@ module.exports = (app) => {
    app.get('/alumni/list-contest-permission/:id',auth,alumni.listContestForPermission);
 
    app.post('/alumni/contest-permission/',auth,alumni.contestPermission);
+   app.get('/alumni/contest-detail/:id',auth,alumni.detailOfContest);
 
    app.patch('/alumni/set-admin/:id',auth,alumni.setAdmin);
    app.delete('/alumni/remove-admin/:id',auth,alumni.deleteAdmin);
