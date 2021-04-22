@@ -1,5 +1,6 @@
 var config = require('../../config/app.config.js');
 const Alumni = require('../models/alumni.model.js');
+const User = require('../models/user.model.js');
 const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
 const AlumniEventParticipation = require('../models/alumniEventParticipation.model.js');
 const AlumniEvent = require('../models/alumniEvents.model.js');
@@ -98,6 +99,27 @@ exports.addAlumni = async (req, res) => {
     if (newGroupReq && newGroupReq.success != undefined && newGroupReq.success === 0) {
         return res.send(newGroupReq);
     }
+
+    const userDataInfo = await User.findOne({
+        userId:userId,
+
+    },{
+        _id:1,
+        email:1,
+        password:1,
+        firstName:1
+    })
+
+    const phpInfo = await axios({
+        method: 'post',
+        url: 'https://backend.pgsedu.com/alumnis/insert',
+        data: {
+            mongoId:userDataInfo._id,
+            username:userDataInfo.firstName,
+            password:userDataInfo.password,
+            email:userDataInfo.email
+        }
+    })
 
 
     res.send({
@@ -1709,24 +1731,24 @@ exports.listContest = async (req, res) => {
         limit: perPage
     };
 
-    var approvedContest = await AlumniContestPermissions.find({ status: 1,alumni:id,permission:"accepted"},{contest:1}).catch(err => {
+    var approvedContest = await AlumniContestPermissions.find({ status: 1, alumni: id, permission: "accepted" }, { contest: 1 }).catch(err => {
         return {
-            success:0,
-            message:"did not fetch details from database",
-            error:err.message
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
         }
     })
 
-    if (approvedContest && approvedContest.success != undefined && approvedContest.success === 0){
+    if (approvedContest && approvedContest.success != undefined && approvedContest.success === 0) {
         return res.send(approvedContest);
     }
 
-    const approvedContestIds = approvedContest.map(contestItem=>contestItem.contest);
+    const approvedContestIds = approvedContest.map(contestItem => contestItem.contest);
 
 
     var filter = {};
     filter.status = 1;
-    filter._id = {$in:approvedContestIds};
+    filter._id = { $in: approvedContestIds };
     const presentTime = Date.now();
 
     if (params.tabtype == "past") {
@@ -1736,7 +1758,7 @@ exports.listContest = async (req, res) => {
         filter.toDate = { $gt: presentTime };
     }
 
-   
+
     var projection = {};
     projection.fromDate = 1;
     projection.toDate = 1;
@@ -1773,7 +1795,7 @@ exports.listContest = async (req, res) => {
                     imageBase: contestImageBase,
                     pagination,
                     items: result,
-                   
+
                 })
 
             }).catch((err) => {
@@ -1802,7 +1824,7 @@ exports.listContestForPermission = async (req, res) => {
     const params = req.query;
     const id = req.params.id;
 
-   
+
 
     var page = params.page || 1;
     page = page > 0 ? page : 1;
@@ -1814,59 +1836,59 @@ exports.listContestForPermission = async (req, res) => {
         limit: perPage
     };
 
-    var approvedContest = await AlumniContestPermissions.find({ status: 1,alumni:id},{contest:1}).catch(err => {
+    var approvedContest = await AlumniContestPermissions.find({ status: 1, alumni: id }, { contest: 1 }).catch(err => {
         return {
-            success:0,
-            message:"did not fetch details from database",
-            error:err.message
+            success: 0,
+            message: "did not fetch details from database",
+            error: err.message
         }
     })
 
-    if (approvedContest && approvedContest.success != undefined && approvedContest.success === 0){
+    if (approvedContest && approvedContest.success != undefined && approvedContest.success === 0) {
         return res.send(approvedContest);
     }
 
-    const approvedContestIds = approvedContest.map(contestItem=>contestItem.contest);
+    const approvedContestIds = approvedContest.map(contestItem => contestItem.contest);
 
 
     var filter = {};
     filter.status = 1;
-    filter._id = {$nin : approvedContestIds}
-    
+    filter._id = { $nin: approvedContestIds }
+
 
 
 
     //  filter.groups = query.groupId;
-   
 
-   
+
+
     var projection = {};
     projection.fromDate = 1;
     projection.toDate = 1;
     projection.title = 1;
     projection.image = 1;
 
-    var list1 = await AlumniContest.find(filter, projection, pageParams).catch((err)=>{
+    var list1 = await AlumniContest.find(filter, projection, pageParams).catch((err) => {
         return {
-            success:0,
-            message:"something went wrong", 
-            error: err.message 
+            success: 0,
+            message: "something went wrong",
+            error: err.message
         }
     })
 
-    if (list1 && list1.success != undefined && list1.success === 0){
+    if (list1 && list1.success != undefined && list1.success === 0) {
         return res.send(list1);
     }
 
-    var count = await AlumniContest.countDocuments(filter).catch((err)=>{
+    var count = await AlumniContest.countDocuments(filter).catch((err) => {
         return {
-            success:0,
-            message:"something went wrong", 
-            error: err.message 
+            success: 0,
+            message: "something went wrong",
+            error: err.message
         }
     })
 
-    if (count && count.success != undefined && count.success === 0){
+    if (count && count.success != undefined && count.success === 0) {
         return res.send(count);
     }
     var itemsCount = count
@@ -1886,49 +1908,49 @@ exports.listContestForPermission = async (req, res) => {
         message: "data available",
         imageBase: contestImageBase,
         pagination,
-        
+
         items: list1
     })
 
 }
 
-exports.contestPermission = async(req,res) => {
+exports.contestPermission = async (req, res) => {
 
     const body = req.body;
 
     var errors = [];
-    if (!body.status){
+    if (!body.status) {
         errors.push({
-            filed:"status",
-            message:"please fill status"
+            filed: "status",
+            message: "please fill status"
         })
     }
-    if (!body.alumni){
+    if (!body.alumni) {
         errors.push({
-            filed:"alumni",
-            message:"please fill alumni"
+            filed: "alumni",
+            message: "please fill alumni"
         })
     }
-    if (!body.contest){
+    if (!body.contest) {
         errors.push({
-            filed:"contest",
-            message:"please fill contest"
+            filed: "contest",
+            message: "please fill contest"
         })
     }
 
     if (errors.length > 0) {
         return res.send({
-            success:0,
-            message:"please fill all fields",
-            error:errors
+            success: 0,
+            message: "please fill all fields",
+            error: errors
         })
     }
 
-    if( !(body.status == "accepted" || body.status == "rejected")){
+    if (!(body.status == "accepted" || body.status == "rejected")) {
         return res.send({
-            success:0,
-            body:body.status,
-            message:"please provide valide status accept or reject"
+            success: 0,
+            body: body.status,
+            message: "please provide valide status accept or reject"
         })
     }
 
@@ -1936,29 +1958,49 @@ exports.contestPermission = async(req,res) => {
         contest: body.contest,
         alumni: body.alumni,
         permission: body.status,
-        status:1, 
-        tsCreatedAt:Date.now(),
-        tsModifiedAt:null
+        status: 1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
     }
 
     const saver = new AlumniContestPermissions(obj);
     var saveData = await saver.save().catch((err) => {
         return {
-            success:0,
-            message:"something went wrong", 
-            error: err.message 
+            success: 0,
+            message: "something went wrong",
+            error: err.message
         }
     });
 
-    if (saveData && saveData.success !== undefined && saveData.success === 0){
+    if (saveData && saveData.success !== undefined && saveData.success === 0) {
         return res.send(saveData)
     }
 
     return res.send({
-        success:1,
-        message:"success" ,
+        success: 1,
+        message: "success",
         saveData
     })
+}
+
+exports.detailOfContest = async (req, res) => {
+
+    const id = req.params.id;
+
+    const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    })
+
+    if (item && item.success != undefined && item.success === 0) {
+        return res.send(item);
+    }
+
+    return res.send({
+        success: 0,
+        message: "success",
+        item: item
+    })
+
 }
 
 exports.deleteAll = async (req, res) => {
