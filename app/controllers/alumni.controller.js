@@ -125,18 +125,17 @@ exports.addAlumni = async (req, res) => {
     // catch (err) {
     //     console.log(err.message);
     // }
-    const phpInfo = await axios({
-        method: 'post',
-        url: 'https://backend.pgsedu.com/alumnis/insert',
-        formData: {
-            "mongoId":userDataInfo._id,
+    const phpInfo = await axios.post(
+       
+        'https://backend.pgsedu.com/alumnis/insert',
+      
+           { "mongoId":userDataInfo._id,
             "username":"",
             "password":userDataInfo.password,
             "email":userDataInfo.email
-        },
-        json:true
+        }
 
-    }).catch(err => {
+    ).catch(err => {
         console.log(err.message);
     })
 
