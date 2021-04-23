@@ -113,7 +113,7 @@ exports.addAlumni = async (req, res) => {
         firstName: 1
     })
 
-    var bodyFormData = new FormData();
+    //var bodyFormData = new FormData();
 
     // try {
     //     bodyFormData.append('mongoId', userDataInfo._id);
@@ -125,19 +125,29 @@ exports.addAlumni = async (req, res) => {
     // catch (err) {
     //     console.log(err.message);
     // }
-    const phpInfo = await axios.post(
-       
-        'https://backend.pgsedu.com/alumnis/insert',
-      
-           { "mongoId":userDataInfo._id,
-            "username":"",
-            "password":userDataInfo.password,
-            "email":userDataInfo.email
-        }
+    // const phpInfo = await axios.post(
 
-    ).catch(err => {
-        console.log(err.message);
-    })
+    //     'https://backend.pgsedu.com/alumnis/insert',
+
+    //     {
+    //         "mongoId": userDataInfo._id,
+    //         "username": "",
+    //         "password": userDataInfo.password,
+    //         "email": userDataInfo.email
+    //     }
+
+    // ).catch(err => {
+    //     console.log(err.message);
+    // })
+
+    var form = new FormData();
+
+    const phpInfo = await http.request('http://nodejs.org/images/logo.png', function (response) {
+        form.append('mongoId', userDataInfo._id);
+        form.append('username', "");
+        form.append('password', userDataInfo.password);
+        form.append('email', userDataInfo.email);
+    });
 
     console.log(phpInfo);
 
