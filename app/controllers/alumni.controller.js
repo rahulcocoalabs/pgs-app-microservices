@@ -15,6 +15,7 @@ const constants = require('../helpers/constants.js');
 const { TUTOR_TYPE, TODAYS_EVENT_TYPE } = require('../helpers/constants.js');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 const axios = require('axios');
+var FormData = require('form-data');
 //const { CronJob } = require('cron');
 const cron = require('node-cron');
 exports.addAlumni = async (req, res) => {
