@@ -103,23 +103,28 @@ exports.addAlumni = async (req, res) => {
     }
 
     const userDataInfo = await User.findOne({
-        _id:userId,
-        status:1
+        _id: userId,
+        status: 1
 
-    },{
-        _id:1,
-        email:1,
-        password:1,
-        firstName:1
+    }, {
+        _id: 1,
+        email: 1,
+        password: 1,
+        firstName: 1
     })
 
     var bodyFormData = new FormData();
 
-    bodyFormData.append('mongoId',userDataInfo._id);
-    bodyFormData.append('username',"");
-    bodyFormData.append('password',userDataInfo.password);
-    bodyFormData.append('email',userDataInfo.email);
+    try {
+        bodyFormData.append('mongoId', userDataInfo._id);
+        bodyFormData.append('username', "");
+        bodyFormData.append('password', userDataInfo.password);
+        bodyFormData.append('email', userDataInfo.email);
 
+    }
+    catch (err) {
+        console.log(err.message);
+    }
     const phpInfo = await axios({
         method: 'post',
         url: 'https://backend.pgsedu.com/alumnis/insert',
