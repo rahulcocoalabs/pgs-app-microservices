@@ -121,6 +121,8 @@ exports.addAlumni = async (req, res) => {
             password:userDataInfo.password,
             email:userDataInfo.email
         }
+    }).catch(err => {
+        console.log(err.message);
     })
 
     console.log(phpInfo);
