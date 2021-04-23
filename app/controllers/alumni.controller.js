@@ -121,6 +121,7 @@ exports.addAlumni = async (req, res) => {
         }
     })
 
+    console.log(phpInfo);
 
     res.send({
         success: 1,
