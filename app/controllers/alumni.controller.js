@@ -102,7 +102,8 @@ exports.addAlumni = async (req, res) => {
     }
 
     const userDataInfo = await User.findOne({
-        userId:userId,
+        _id:userId,
+        status:1
 
     },{
         _id:1,
