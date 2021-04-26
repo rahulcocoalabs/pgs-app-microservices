@@ -2083,7 +2083,7 @@ exports.alumniContestParticipation = async (req, res) => {
         tsModifiedAt: null
     }
 
-    const saver = new AlumniContestPermissions(obj);
+    const saver = new alumniContestParticipation(obj);
     var saveData = await saver.save().catch((err) => {
         return {
             success: 0,
