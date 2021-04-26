@@ -1782,8 +1782,8 @@ exports.listContest = async (req, res) => {
     var filter = {};
     filter.status = 1;
     filter._id = { $in: approvedContestIds };
-    const presentTime = Date.now();
-
+    const presentTimeMilli = Date.now();
+    var presentTime = Math.floor(presentTimeMilli / 1000);
     console.log(presentTime),"26-04";
 
     if (params.tabtype == "past") {
