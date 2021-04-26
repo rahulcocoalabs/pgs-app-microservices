@@ -61,7 +61,7 @@ module.exports = (app) => {
    app.post('/alumni/contest-permission/',auth,alumni.contestPermission);
    app.post('/alumni/contest-participation/',auth,alumni.alumniContestParticipation);
    app.get('/alumni/contest-detail/:id',auth,alumni.detailOfContest);
-   app.get('/alumni/contest-detail-past/:id',auth,alumni.detailOfContestPast);
+   //app.get('/alumni/contest-detail-past/:id',auth,alumni.detailOfContestPast);
 
    app.patch('/alumni/set-admin/:id',auth,alumni.setAdmin);
    app.delete('/alumni/remove-admin/:id',auth,alumni.deleteAdmin);
