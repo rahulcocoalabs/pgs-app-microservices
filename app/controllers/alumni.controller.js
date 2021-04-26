@@ -2111,35 +2111,84 @@ exports.detailOfContest = async (req, res) => {
     const userData = req.identity.data;
     const userId = userData.userId;
 
-    const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
-        return { success: 0, message: "did not get detail for requests", error: err.message }
-    })
+    const query = req.query;
 
-    if (item && item.success != undefined && item.success === 0) {
-        return res.send(item);
-    }
-
-    var isParticipant = false;
-
-    const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
-        return {
+    if (!query && !query.type){
+        return res.send({
             success:0,
-            message:"something went wrong", error: err.message 
-        }
-    });
+            message:"add type"
+        })
+    }
 
-    if (didParticpated > 0){
-        isParticipant = true;
+    if (query.type == "past"){
+
+        const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
+            return { success: 0, message: "did not get detail for requests", error: err.message }
+        })
+    
+        if (item && item.success != undefined && item.success === 0) {
+            return res.send(item);
+        }
+    
+        var winners = await alumniContestParticipation.find({ status: 1,contestId:id,rank:{$in:[1,2,3]}},{userId:1}).populate({path:'userId',select:{ "firstName": 1, "image": 1 }}).catch(err=>{
+            return {
+                success:0,
+                message:"something went wrong", error: err.message
+            }
+        })
+    
+        if (winners && winners.success != undefined && winners.success === 0){
+            return res.send(winners);
+        }
+    
+        return res.send({
+            success: 0,
+            message: "success",
+            winners: winners,
+            item: item
+        })
+
     }
-    else {
-        isParticipant = false
+    if(query.type == "upcoming"){
+
+        const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
+            return { success: 0, message: "did not get detail for requests", error: err.message }
+        })
+    
+        if (item && item.success != undefined && item.success === 0) {
+            return res.send(item);
+        }
+    
+        var isParticipant = false;
+    
+        const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
+            return {
+                success:0,
+                message:"something went wrong", error: err.message 
+            }
+        });
+    
+        if (didParticpated > 0){
+            isParticipant = true;
+        }
+        else {
+            isParticipant = false
+        }
+    
+        return res.send({
+            success: 0,
+            message: "success",
+            isParticipant: isParticipant,
+            item: item
+        })
+
     }
+
+   
 
     return res.send({
-        success: 0,
-        message: "success",
-        isParticipant: isParticipant,
-        item: item
+        success:0,
+        message:"please give valid type"
     })
 
 }
