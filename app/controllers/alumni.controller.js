@@ -2105,6 +2105,9 @@ exports.detailOfContest = async (req, res) => {
 
     const id = req.params.id;
 
+    const userData = req.identity.data;
+    const userId = userData.userId;
+
     const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
@@ -2141,6 +2144,9 @@ exports.detailOfContest = async (req, res) => {
 exports.detailOfContestPast = async (req, res) => {
 
     const id = req.params.id;
+
+    const userData = req.identity.data;
+    const userId = userData.userId;
 
     const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
         return { success: 0, message: "did not get detail for requests", error: err.message }
