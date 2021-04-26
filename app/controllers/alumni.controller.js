@@ -2023,7 +2023,7 @@ exports.alumniContestParticipation = async (req, res) => {
 
     const body = req.body;
 
-    const file = req.files;
+    const file = req.file;
 
     var errors = [];
     if (!body.name) {

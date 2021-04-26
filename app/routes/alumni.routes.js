@@ -59,7 +59,7 @@ module.exports = (app) => {
    app.get('/alumni/list-contest-permission/:id',auth,alumni.listContestForPermission);
 
    app.post('/alumni/contest-permission/',auth,alumni.contestPermission);
-   app.post('/alumni/contest-participation/',auth,alumni.alumniContestParticipation);
+   app.post('/alumni/contest-participation/',auth,upload.fields([{ name: 'image' }, { name: 'document' }, { name: 'video' }]),alumni.alumniContestParticipation);
    app.get('/alumni/contest-detail/:id',auth,alumni.detailOfContest);
    //app.get('/alumni/contest-detail-past/:id',auth,alumni.detailOfContestPast);
 
