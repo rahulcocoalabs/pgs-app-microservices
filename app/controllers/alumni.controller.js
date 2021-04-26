@@ -2130,7 +2130,7 @@ exports.detailOfContest = async (req, res) => {
             return res.send(item);
         }
     
-        var winners = await alumniContestParticipation.find({ status: 1,contestId:id,rank:{$in:[1,2,3]}}).populate({ path: 'userId', select: { "firstName": 1, "image": 1 } }).catch(err=>{
+        var winners = await alumniContestParticipation.find({ status: 1,contestId:id,rank:{$in:[1,2,3]}},{name:1,email:1,userId:1}).populate({ path: 'userId', select: { "firstName": 1, "image": 1 } }).catch(err=>{
             return {
                 success:0,
                 message:"something went wrong", error: err.message
