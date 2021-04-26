@@ -3,6 +3,7 @@ const Alumni = require('../models/alumni.model.js');
 const User = require('../models/user.model.js');
 const AlumniJoinRequest = require('../models/alumniJoinRequest.model.js');
 const AlumniEventParticipation = require('../models/alumniEventParticipation.model.js');
+const AlumniContestParticipation = require('../models/alumniContestParticipation.model.js');
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const AlumniContest = require('../models/alumniContests.model.js');
@@ -2015,6 +2016,91 @@ exports.contestPermission = async (req, res) => {
     })
 }
 
+exports.alumniContestParticipation = async (req, res) => {
+
+    const body = req.body;
+
+    const file = req.files;
+
+    var errors = [];
+    if (!body.name) {
+        errors.push({
+            filed: "name",
+            message: "please fill name"
+        })
+    }
+    if (!body.email) {
+        errors.push({
+            filed: "email",
+            message: "please fill email"
+        })
+    }
+    if (!file) {
+        errors.push({
+            filed: "file",
+            message: "please upload some  files"
+        })
+    }
+
+    if (!body.alumni) {
+        errors.push({
+            filed: "alumni",
+            message: "please fill alumni"
+        })
+    }
+    if (!body.contest) {
+        errors.push({
+            filed: "contest",
+            message: "please fill contest"
+        })
+    }
+
+
+    if (errors.length > 0) {
+        return res.send({
+            success: 0,
+            message: "please fill all fields",
+            error: errors
+        })
+    }
+
+    var filePath = req.file ? req.file.filename : null;
+
+   
+
+    const obj = {
+        contestId: body.contest,
+        groupId: body.alumni,
+        name: body.name,
+        email:body.email,
+        status: 1,
+        rank:0,
+        filePath:filePath,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+    }
+
+    const saver = new AlumniContestPermissions(obj);
+    var saveData = await saver.save().catch((err) => {
+        return {
+            success: 0,
+            message: "something went wrong",
+            error: err.message
+        }
+    });
+
+    if (saveData && saveData.success !== undefined && saveData.success === 0) {
+        return res.send(saveData)
+    }
+
+    return res.send({
+        success: 1,
+        message: "success",
+        saveData
+    })
+}
+
+
 exports.detailOfContest = async (req, res) => {
 
     const id = req.params.id;
@@ -2027,9 +2113,58 @@ exports.detailOfContest = async (req, res) => {
         return res.send(item);
     }
 
+    var isParticipant = false;
+
+    const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
+        return {
+            success:0,
+            message:"something went wrong", error: err.message 
+        }
+    });
+
+    if (didParticpated > 0){
+        isParticipant = true;
+    }
+    else {
+        isParticipant = false
+    }
+
     return res.send({
         success: 0,
         message: "success",
+        isParticipant: isParticipant,
+        item: item
+    })
+
+}
+
+exports.detailOfContestPast = async (req, res) => {
+
+    const id = req.params.id;
+
+    const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    })
+
+    if (item && item.success != undefined && item.success === 0) {
+        return res.send(item);
+    }
+
+    var winners = await alumniContestParticipation.find({ status: 1,contestId:id,rank:{$in:[1,2,3]}},{userId:1}).populate({path:'userId',select:{ "firstName": 1, "image": 1 }}).catch(err=>{
+        return {
+            success:0,
+            message:"something went wrong", error: err.message
+        }
+    })
+
+    if (winners && winners.success != undefined && winners.success === 0){
+        return res.send(winners);
+    }
+
+    return res.send({
+        success: 0,
+        message: "success",
+        winners: winners,
         item: item
     })
 
