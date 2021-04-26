@@ -1784,6 +1784,8 @@ exports.listContest = async (req, res) => {
     filter._id = { $in: approvedContestIds };
     const presentTime = Date.now();
 
+    console.log(presentTime),"26-04";
+
     if (params.tabtype == "past") {
         filter.toDate = { $lt: presentTime };
     }
@@ -1827,6 +1829,7 @@ exports.listContest = async (req, res) => {
                     message: "data available",
                     imageBase: contestImageBase,
                     pagination,
+                    presentTime,
                     items: result,
 
                 })
