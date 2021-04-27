@@ -114,21 +114,21 @@ exports.addAlumni = async (req, res) => {
         firstName: 1
     })
 
-    var bodyFormData = new FormData();
+    // var bodyFormData = new FormData();
 
-    try {
-        bodyFormData.append('mongoId', userDataInfo._id);
-        bodyFormData.append('username', "");
-        bodyFormData.append('password', userDataInfo.password);
-        bodyFormData.append('email', userDataInfo.email);
-        bodyFormData.submit('https://backend.pgsedu.com/alumnis/insert', function (err, res) {
-            console.log(res.statusCode);
-        });
+    // try {
+    //     bodyFormData.append('mongoId', userDataInfo._id);
+    //     bodyFormData.append('username', "");
+    //     bodyFormData.append('password', userDataInfo.password);
+    //     bodyFormData.append('email', userDataInfo.email);
+    //     bodyFormData.submit('https://backend.pgsedu.com/alumnis/insert', function (err, res) {
+    //         console.log(res.statusCode);
+    //     });
 
-    }
-    catch (err) {
-        console.log(err.message, "error");
-    }
+    // }
+    // catch (err) {
+    //     console.log(err.message, "error");
+    // }
     // const phpInfo = await axios.post(
 
     //     'https://backend.pgsedu.com/alumnis/insert',
@@ -146,14 +146,14 @@ exports.addAlumni = async (req, res) => {
 
     // var form = new FormData();
 
-    // const phpInfo = await http.request('https://backend.pgsedu.com/alumnis/insert', function (response) {
-    //     form.append('mongoId', userDataInfo._id);
-    //     form.append('username', "");
-    //     form.append('password', userDataInfo.password);
-    //     form.append('email', userDataInfo.email);
-    // });
+    const phpInfo = await http.request('https://backend.pgsedu.com/alumnis/insert', function (response) {
+        form.append('mongoId', userDataInfo._id);
+        form.append('username', "");
+        form.append('password', userDataInfo.password);
+        form.append('email', userDataInfo.email);
+    });
 
-    //console.log(phpInfo);
+    console.log(phpInfo);
 
     res.send({
         success: 1,
