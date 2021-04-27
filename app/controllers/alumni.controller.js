@@ -2079,6 +2079,7 @@ exports.alumniContestParticipation = async (req, res) => {
         status: 1,
         rank:0,
         filePath:filePath,
+        userId:userId,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
     }
