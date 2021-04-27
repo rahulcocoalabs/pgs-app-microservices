@@ -157,8 +157,8 @@ exports.addAlumni = async (req, res) => {
 
     let res1 = await axios.post('https://backend.pgsedu.com/alumnis/insert', payload);
 
-    let data = res1.data;
-    console.log(data);
+    let data1 = res1.data;
+    console.log(data1);
 
     
 
