@@ -2144,13 +2144,28 @@ exports.detailOfContest = async (req, res) => {
         if (winners && winners.success != undefined && winners.success === 0){
             return res.send(winners);
         }
+        let isParticipant = false;
+    
+        const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
+            return {
+                success:0,
+                message:"something went wrong", error: err.message 
+            }
+        });
+    
+        if (didParticpated > 0){
+            isParticipant = true;
+        }
+        else {
+            isParticipant = false
+        }
     
         return res.send({
             success: 0,
             message: "success",
             winners: winners,
             userImageBase,
-            
+            isParticipant,
             contestImageBase,
             item: item
         })
@@ -2166,7 +2181,7 @@ exports.detailOfContest = async (req, res) => {
             return res.send(item);
         }
     
-        var isParticipant = false;
+        let isParticipant = false;
     
         const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
             return {
