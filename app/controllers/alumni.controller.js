@@ -146,14 +146,21 @@ exports.addAlumni = async (req, res) => {
 
     // var form = new FormData();
 
-    const phpInfo = await http.request('https://backend.pgsedu.com/alumnis/insert', function (response) {
-        form.append('mongoId', userDataInfo._id);
-        form.append('username', "");
-        form.append('password', userDataInfo.password);
-        form.append('email', userDataInfo.email);
-    });
+    // const phpInfo = await http.request('https://backend.pgsedu.com/alumnis/insert', function (response) {
+    //     form.append('mongoId', userDataInfo._id);
+    //     form.append('username', "");
+    //     form.append('password', userDataInfo.password);
+    //     form.append('email', userDataInfo.email);
+    // });
 
-    console.log(phpInfo);
+    let payload = { mongoId:userDataInfo._id , username: '',password: userDataInfo.password, email: userDataInfo.email};
+
+    let res1 = await axios.post('https://backend.pgsedu.com/alumnis/insert', payload);
+
+    let data = res1.data;
+    console.log(data);
+
+    
 
     res.send({
         success: 1,
