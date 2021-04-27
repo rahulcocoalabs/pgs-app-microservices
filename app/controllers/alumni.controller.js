@@ -121,13 +121,13 @@ exports.addAlumni = async (req, res) => {
         bodyFormData.append('username', "");
         bodyFormData.append('password', userDataInfo.password);
         bodyFormData.append('email', userDataInfo.email);
-        bodyFormData.submit('https://backend.pgsedu.com/alumnis/insert', function(err, res) {
+        bodyFormData.submit('https://backend.pgsedu.com/alumnis/insert', function (err, res) {
             console.log(res.statusCode);
-          });
+        });
 
     }
     catch (err) {
-        console.log(err.message,"error");
+        console.log(err.message, "error");
     }
     // const phpInfo = await axios.post(
 
@@ -1784,7 +1784,7 @@ exports.listContest = async (req, res) => {
     filter._id = { $in: approvedContestIds };
     const presentTimeMilli = Date.now();
     var presentTime = Math.floor(presentTimeMilli / 1000);
-    console.log(presentTime),"26-04";
+    console.log(presentTime), "26-04";
 
     if (params.tabtype == "past") {
         filter.toDate = { $lt: presentTime };
@@ -2072,17 +2072,17 @@ exports.alumniContestParticipation = async (req, res) => {
 
     var filePath = req.file ? req.file.filename : null;
 
-   
+
 
     const obj = {
         contestId: body.contest,
         groupId: body.alumni,
         name: body.name,
-        email:body.email,
+        email: body.email,
         status: 1,
-        rank:0,
-        filePath:filePath,
-        userId:userId,
+        rank: 0,
+        filePath: filePath,
+        userId: userId,
         tsCreatedAt: Date.now(),
         tsModifiedAt: null
     }
@@ -2115,51 +2115,56 @@ exports.detailOfContest = async (req, res) => {
     const userData = req.identity.data;
     const userId = userData.userId;
 
-    const query = req.query;
+    const presentTimeMilli = Date.now();
+    
 
-    if (!query && !query.type){
-        return res.send({
-            success:0,
-            message:"add type"
-        })
+    if (params.tabtype == "past") {
+        filter.toDate = { $lt: presentTime };
+    }
+    else {
+        filter.toDate = { $gt: presentTime };
     }
 
-    if (query.type == "past"){
 
-        const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
-            return { success: 0, message: "did not get detail for requests", error: err.message }
-        })
-    
-        if (item && item.success != undefined && item.success === 0) {
-            return res.send(item);
+    const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
+        return { success: 0, message: "did not get detail for requests", error: err.message }
+    })
+
+    if (item && item.success != undefined && item.success === 0) {
+        return res.send(item);
+    }
+
+    var isParticipant = false;
+
+    const didParticpated = await alumniContestParticipation.countDocuments({ status: 1, userId: userId, contestId: id }).catch(err => {
+        return {
+            success: 0,
+            message: "something went wrong", error: err.message
         }
-    
-        var winners = await alumniContestParticipation.find({ status: 1,contestId:id,rank:{$in:[1,2,3]}},{name:1,email:1,userId:1}).populate({ path: 'userId', select: { "firstName": 1, "image": 1 } }).catch(err=>{
+    });
+
+    if (didParticpated > 0) {
+        isParticipant = true;
+    }
+    else {
+        isParticipant = false
+    }
+
+    const presentTimeMilli = Date.now();
+    var presentTime = Math.floor(presentTimeMilli / 1000);
+
+    if (presentTime > item.toDate){
+        var winners = await alumniContestParticipation.find({ status: 1, contestId: id, rank: { $in: [1, 2, 3] } }, { name: 1, email: 1, userId: 1 }).populate({ path: 'userId', select: { "firstName": 1, "image": 1 } }).catch(err => {
             return {
-                success:0,
-                message:"something went wrong", error: err.message
+                success: 0,
+                message: "something went wrong", error: err.message
             }
         })
-    
-        if (winners && winners.success != undefined && winners.success === 0){
+
+        if (winners && winners.success != undefined && winners.success === 0) {
             return res.send(winners);
         }
-        let isParticipant = false;
-    
-        const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
-            return {
-                success:0,
-                message:"something went wrong", error: err.message 
-            }
-        });
-    
-        if (didParticpated > 0){
-            isParticipant = true;
-        }
-        else {
-            isParticipant = false
-        }
-    
+
         return res.send({
             success: 0,
             message: "success",
@@ -2169,52 +2174,22 @@ exports.detailOfContest = async (req, res) => {
             contestImageBase,
             item: item
         })
-
     }
-    if(query.type == "upcoming"){
+    else {
 
-        const item = await AlumniContest.findOne({ _id: id, status: 1 }, { tsCreatedAt: 0, tsModifiedAt: 0, status: 0 }).catch(err => {
-            return { success: 0, message: "did not get detail for requests", error: err.message }
-        })
-    
-        if (item && item.success != undefined && item.success === 0) {
-            return res.send(item);
-        }
-    
-        let isParticipant = false;
-    
-        const didParticpated = await alumniContestParticipation.countDocuments({status :1,userId :userId,contestId :id}).catch(err=>{
-            return {
-                success:0,
-                message:"something went wrong", error: err.message 
-            }
-        });
-    
-        if (didParticpated > 0){
-            isParticipant = true;
-        }
-        else {
-            isParticipant = false
-        }
-    
         return res.send({
             success: 0,
             message: "success",
             isParticipant: isParticipant,
             userImageBase,
-            
+
             contestImageBase,
             item: item
         })
 
     }
 
-   
-
-    return res.send({
-        success:0,
-        message:"please give valid type"
-    })
+    
 
 }
 
@@ -2233,14 +2208,14 @@ exports.detailOfContestPast = async (req, res) => {
         return res.send(item);
     }
 
-    var winners = await alumniContestParticipation.find({ status: 1,contestId:id,rank:{$in:[1,2,3]}},{userId:1}).populate({path:'userId',select:{ "firstName": 1, "image": 1 }}).catch(err=>{
+    var winners = await alumniContestParticipation.find({ status: 1, contestId: id, rank: { $in: [1, 2, 3] } }, { userId: 1 }).populate({ path: 'userId', select: { "firstName": 1, "image": 1 } }).catch(err => {
         return {
-            success:0,
-            message:"something went wrong", error: err.message
+            success: 0,
+            message: "something went wrong", error: err.message
         }
     })
 
-    if (winners && winners.success != undefined && winners.success === 0){
+    if (winners && winners.success != undefined && winners.success === 0) {
         return res.send(winners);
     }
 
