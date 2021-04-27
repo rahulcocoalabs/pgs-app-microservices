@@ -2150,7 +2150,7 @@ exports.detailOfContest = async (req, res) => {
             message: "success",
             winners: winners,
             userImageBase,
-            imageBase,
+            
             contestImageBase,
             item: item
         })
@@ -2187,7 +2187,7 @@ exports.detailOfContest = async (req, res) => {
             message: "success",
             isParticipant: isParticipant,
             userImageBase,
-            imageBase,
+            
             contestImageBase,
             item: item
         })
