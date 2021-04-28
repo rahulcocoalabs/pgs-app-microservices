@@ -2036,23 +2036,25 @@ exports.alumniContestParticipation = async (req, res) => {
     const file = req.files;
 
     var errors = [];
-    if (!body.name) {
-        errors.push({
-            filed: "name",
-            message: "please fill name"
-        })
-    }
-    if (!body.email) {
-        errors.push({
-            filed: "email",
-            message: "please fill email"
-        })
-    }
+   
     if (!file) {
         errors.push({
             filed: "file",
             message: "please upload some  files"
         })
+    }
+
+    if (!body.title) {
+        errors.push({
+            filed: "title",
+            message: "please fill title"
+        })
+    }
+    if (!params.type) {
+        errors.push({
+            field: "Type",
+            message: " type cannot be empty"
+        });
     }
 
     if (!body.alumni) {
@@ -2084,8 +2086,8 @@ exports.alumniContestParticipation = async (req, res) => {
     const obj = {
         contestId: body.contest,
         groupId: body.alumni,
-        name: body.name,
-        email: body.email,
+        title: body.title,
+        type: body.type,
         status: 1,
         rank: 0,
         filePath: filePath,
