@@ -2165,7 +2165,7 @@ exports.detailOfContest = async (req, res) => {
         }
 
         return res.send({
-            success: 0,
+            success: 1,
             message: "success",
             winners: winners,
             userImageBase,
@@ -2177,7 +2177,7 @@ exports.detailOfContest = async (req, res) => {
     else {
 
         return res.send({
-            success: 0,
+            success: 1,
             message: "success",
             isParticipant: isParticipant,
             userImageBase,
