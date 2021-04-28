@@ -1796,7 +1796,7 @@ exports.update = async (req, res) => {
 
     var infoFlag = "";
     if ((userInfo.dob != undefined) && (userInfo.syllabus != undefined) && (userInfo.countryId != undefined)
-      && (userInfo.gender != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+      && (userInfo.gender != undefined || userInfo.genderId != undefined) && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)) {
 
 
