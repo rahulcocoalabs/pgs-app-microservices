@@ -69,8 +69,8 @@ module.exports = (app) => {
 
    app.post('/alumni/contest-permission/',auth,alumni.contestPermission);
    app.post('/alumni/contest-participation/',auth,upload.single('image'),alumni.alumniContestParticipation);
-   app.post('/alumni/contest-participation/',auth,upload.single('video'),alumni.alumniContestParticipation);
-   app.post('/alumni/contest-participation/',auth,upload.single('document'),alumni.alumniContestParticipation);
+   app.post('/alumni/contest-participation-video/',auth,upload.single('video'),alumni.alumniContestParticipation);
+   app.post('/alumni/contest-participation-document/',auth,upload.single('document'),alumni.alumniContestParticipation);
    app.get('/alumni/contest-detail/:id',auth,alumni.detailOfContest);
    //app.get('/alumni/contest-detail-past/:id',auth,alumni.detailOfContestPast);
 
