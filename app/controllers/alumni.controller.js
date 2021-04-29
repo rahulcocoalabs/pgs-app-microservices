@@ -1898,7 +1898,12 @@ exports.listContestForPermission = async (req, res) => {
     filter.status = 1;
     filter._id = { $nin: approvedContestIds }
 
+    filter.groupId = id;
 
+    const presentTimeMilli = Date.now();
+    var presentTime = Math.floor(presentTimeMilli / 1000);
+
+    filter.toDate = {$gt: presentTime }
 
 
     //  filter.groups = query.groupId;

@@ -23,6 +23,7 @@ var options = {
 const alumniContestSchema = mongoose.Schema(
     {
         "title": String,
+        "groupId": { type: mongoose.Schema.Types.ObjectId, ref: 'Alumni' },
         "aboutContest": String,
         "place": String,
         "description":String,
