@@ -9,9 +9,18 @@ var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         if (file.fieldname === "image"){
             cb(null, feedsConfig.imageUploadPath.trim());
-        } else{
+        } 
+        else if (file.fieldname === "video"){
+            cb(null, feedsConfig.videoUploadPath.trim());
+        }
+        else if(file.fieldname == "document"){
+            cb(null, feedsConfig.documentUploadPath.trim());
+        }
+        
+        else{
             return cb({success: 0, message: "Invalid types" });
         }
+
     },
     filename: function (req, file, cb) {
         crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -59,7 +68,9 @@ module.exports = (app) => {
    app.get('/alumni/list-contest-permission/:id',auth,alumni.listContestForPermission);
 
    app.post('/alumni/contest-permission/',auth,alumni.contestPermission);
-   app.post('/alumni/contest-participation/',auth,upload.fields([{ name: 'image' }, { name: 'document' }, { name: 'video' }]),alumni.alumniContestParticipation);
+   app.post('/alumni/contest-participation/',auth,upload.single('image'),alumni.alumniContestParticipation);
+   app.post('/alumni/contest-participation/',auth,upload.single('video'),alumni.alumniContestParticipation);
+   app.post('/alumni/contest-participation/',auth,upload.single('document'),alumni.alumniContestParticipation);
    app.get('/alumni/contest-detail/:id',auth,alumni.detailOfContest);
    //app.get('/alumni/contest-detail-past/:id',auth,alumni.detailOfContestPast);
 
