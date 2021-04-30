@@ -2055,7 +2055,7 @@ exports.alumniContestParticipation = async (req, res) => {
             message: "please fill title"
         })
     }
-    if (!params.type) {
+    if (!body.type) {
         errors.push({
             field: "Type",
             message: " type cannot be empty"
