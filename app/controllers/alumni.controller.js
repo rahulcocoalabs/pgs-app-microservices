@@ -153,7 +153,7 @@ exports.addAlumni = async (req, res) => {
     //     form.append('email', userDataInfo.email);
     // });
 
-    let payload = { mongoId:userDataInfo._id , username: '',password: userDataInfo.password, email: userDataInfo.email};
+    let payload = { mongoId:userDataInfo._id , username: userDataInfo.email,password: userDataInfo.password, email: userDataInfo.email};
 
     let res1 = await axios.post('https://backend.pgsedu.com/alumnis/insert', payload);
 
