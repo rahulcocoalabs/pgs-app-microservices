@@ -2174,7 +2174,7 @@ exports.detailOfContest = async (req, res) => {
             message: "success",
             winners: winners,
             userImageBase,
-            isParticipant,
+            isApplied:isParticipant,
             contestImageBase,
             item: item
         })
