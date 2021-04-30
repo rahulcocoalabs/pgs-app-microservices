@@ -2038,7 +2038,7 @@ exports.alumniContestParticipation = async (req, res) => {
     const data = req.identity.data;
     const userId = data.userId;
 
-    const file = req.files;
+    const file = req.file;
 
     var errors = [];
    
