@@ -9,6 +9,9 @@ module.exports = (app) => {
     app.get('/store/banners',auth, store.banners);
     app.get('/store/categories',auth, store.categories);
     //store autocomplete
+
+
+    app.get('/store/home',auth,store.getHome)
    
 }
 

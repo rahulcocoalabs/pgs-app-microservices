@@ -30,6 +30,8 @@ const alumniContestSchema = mongoose.Schema(
         "status": Number,
         "fromDate": Number,
         "toDate": Number,
+        "isApprovedByAdmin":Boolean,
+        "isRejectedByAdmin": Boolean,
         "uploadFileType":String,
         "image":String,
         "isResultAnnounced": Boolean,

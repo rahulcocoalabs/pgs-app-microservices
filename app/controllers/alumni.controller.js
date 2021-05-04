@@ -1771,7 +1771,7 @@ exports.listContest = async (req, res) => {
         limit: perPage
     };
 
-    var approvedContest = await AlumniContestPermissions.find({ status: 1, alumni: id, permission: "accepted" }, { contest: 1 }).catch(err => {
+    /*var approvedContest = await AlumniContestPermissions.find({ status: 1, alumni: id, permission: "accepted" }, { contest: 1 }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1783,15 +1783,16 @@ exports.listContest = async (req, res) => {
         return res.send(approvedContest);
     }
 
-    const approvedContestIds = approvedContest.map(contestItem => contestItem.contest);
+    const approvedContestIds = approvedContest.map(contestItem => contestItem.contest);*/
 
 
     var filter = {};
     filter.status = 1;
-    filter._id = { $in: approvedContestIds };
+    filter.isApprovedByAdmin = true;
+    //filter._id = { $in: approvedContestIds };
     const presentTimeMilli = Date.now();
     var presentTime = Math.floor(presentTimeMilli / 1000);
-    console.log(presentTime), "26-04";
+    
 
     if (params.tabtype == "past") {
         filter.toDate = { $lt: presentTime };
@@ -1879,7 +1880,7 @@ exports.listContestForPermission = async (req, res) => {
         limit: perPage
     };
 
-    var approvedContest = await AlumniContestPermissions.find({ status: 1, alumni: id }, { contest: 1 }).catch(err => {
+    /*var approvedContest = await AlumniContestPermissions.find({ status: 1, alumni: id }, { contest: 1 }).catch(err => {
         return {
             success: 0,
             message: "did not fetch details from database",
@@ -1891,13 +1892,14 @@ exports.listContestForPermission = async (req, res) => {
         return res.send(approvedContest);
     }
 
-    const approvedContestIds = approvedContest.map(contestItem => contestItem.contest);
+    const approvedContestIds = approvedContest.map(contestItem => contestItem.contest);*/ 
 
 
     var filter = {};
     filter.status = 1;
-    filter._id = { $nin: approvedContestIds }
-
+    //filter._id = { $nin: approvedContestIds }
+    filter.isApprovedByAdmin = false;
+    filter.isRejectedByAdmin = false;
     filter.groupId = id;
 
     const presentTimeMilli = Date.now();
@@ -2002,33 +2004,34 @@ exports.contestPermission = async (req, res) => {
         })
     }
 
-    const obj = {
-        contest: body.contest,
-        alumni: body.alumni,
-        permission: body.status,
-        status: 1,
-        tsCreatedAt: Date.now(),
-        tsModifiedAt: null
+    var updateObj = {};
+
+    if (body.status == "accepted"){
+        updateObj.isApprovedByAdmin = true;
+    }
+    else {
+        updateObj.isRejectedByAdmin = true;
     }
 
-    const saver = new AlumniContestPermissions(obj);
-    var saveData = await saver.save().catch((err) => {
-        return {
-            success: 0,
-            message: "something went wrong",
-            error: err.message
-        }
-    });
 
-    if (saveData && saveData.success !== undefined && saveData.success === 0) {
-        return res.send(saveData)
+    var update = await AlumniContest.updateOne({ status: 1,contest:contest},updateObj).catch(err =>{
+
+        return {
+            success:0,
+            message:err.message
+        }
+    })
+
+    if (update && update.success !== undefined && update.success === 0){
+        return res.send(update)
     }
 
     return res.send({
-        success: 1,
-        message: "success",
-        saveData
+        success:1,
+        message:"changed status"
     })
+
+    
 }
 
 exports.alumniContestParticipation = async (req, res) => {
