@@ -1996,7 +1996,7 @@ exports.contestPermission = async (req, res) => {
         })
     }
 
-    console.log(body.status,"05/05")
+    
 
     if (!(body.status == "accepted" || body.status == "rejected")) {
         return res.send({
@@ -2016,7 +2016,7 @@ exports.contestPermission = async (req, res) => {
     }
 
 
-    var update = await AlumniContest.updateOne({ status: 1,contest:body.contest},updateObj).catch(err =>{
+    var update = await AlumniContest.updateOne({ status: 1,_id:body.contest},updateObj).catch(err =>{
 
         return {
             success:0,
