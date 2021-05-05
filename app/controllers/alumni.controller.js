@@ -1996,6 +1996,8 @@ exports.contestPermission = async (req, res) => {
         })
     }
 
+    console.log(body.status,"05/05")
+
     if (!(body.status == "accepted" || body.status == "rejected")) {
         return res.send({
             success: 0,
