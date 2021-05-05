@@ -26,6 +26,9 @@ var classConfig = config.class;
 
 const superagent = require('superagent');
 
+const Alumni = require('../models/alumni.model.js');
+const axios = require('axios');
+
 const JWT_KEY = config.jwt.key;
 const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
 
@@ -1724,7 +1727,7 @@ exports.update = async (req, res) => {
 
   var update1 = update;
 
-  console.log("07/04",update);
+  console.log("07/04", update);
 
   var update = await User.updateOne(filter, update).catch(err => {
 
@@ -1790,13 +1793,13 @@ exports.update = async (req, res) => {
 
   userInfo = userInfo.toObject();
 
-  console.log("13/04",userInfo)
+  console.log("13/04", userInfo)
 
   if (userInfo.profileCompletion == 0) {
 
     var infoFlag = "";
     if ((userInfo.dob != undefined) && (userInfo.syllabus != undefined) && (userInfo.countryId != undefined)
-       && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
+      && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
       && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)) {
 
 
@@ -2646,7 +2649,7 @@ exports.loginWithEmail = async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
 
-  console.log("entered",req.body);
+  console.log("entered", req.body);
 
   if (!email || !password) {
     let errors = [];
@@ -2845,22 +2848,22 @@ exports.sendOtp_1 = async (req, res) => {
     //     item: otpResponse
     //   });
     // }
-   // else {
-      var mobileNum = countryCode + mobile;
-      var otpResponse = await send_otp_bymail_1(email, mobileNum);
-      console.log(otpResponse);
-      if (otpResponse == undefined) {
-        return res.send({
-          success: 0,
-          message: 'Something went wrong while sending OTP'
-        })
-      }
-      res.status(200).send({
-        success: 1,
-        message: 'OTP is sent to your registered email for verification',
-        item: otpResponse
-      });
-   // }
+    // else {
+    var mobileNum = countryCode + mobile;
+    var otpResponse = await send_otp_bymail_1(email, mobileNum);
+    console.log(otpResponse);
+    if (otpResponse == undefined) {
+      return res.send({
+        success: 0,
+        message: 'Something went wrong while sending OTP'
+      })
+    }
+    res.status(200).send({
+      success: 1,
+      message: 'OTP is sent to your registered email for verification',
+      item: otpResponse
+    });
+    // }
 
 
     // console.log("flag5")
@@ -3198,6 +3201,17 @@ async function addPassword(password, userId) {
       useFindAndModify: false
     });
 
+    var count = await Alumni.countDocuments({ status: 1, createdBy: userId });
+
+    if (count > 0) {
+      let payload = { mongoId: userId, password: hash };
+
+      let res1 = await axios.post('https://backend.pgsedu.com/alumnis/update-user', payload);
+
+      let data1 = res1.data;
+      console.log(data1);
+    }
+
   }
 }
 
@@ -3234,6 +3248,19 @@ async function changePassword(password, oldPassword, userId) {
       new: true,
       useFindAndModify: false
     });
+
+    var count = await Alumni.countDocuments({ status: 1, createdBy: userId });
+
+    if (count > 0) {
+      let payload = { mongoId: userId, password: hash };
+
+      let res1 = await axios.post('https://backend.pgsedu.com/alumnis/update-user', payload);
+
+      let data1 = res1.data;
+      console.log(data1);
+    }
+
+
     return { success: 1 };
   }
   else {
@@ -3910,7 +3937,7 @@ exports.requestAsTutor = async (req, res) => {
       }
     })
   if (newTutorRequestData && (newTutorRequestData.success !== undefined) && (newTutorRequestData.success === 0)) {
-    console.log("09/04",newTutorRequestData);
+    console.log("09/04", newTutorRequestData);
     return res.send(newTutorRequestData);
   }
 
@@ -3953,14 +3980,14 @@ exports.getTutorProfile = async (req, res) => {
     return res.send(myClassData);
   }
   var pageParams1 = {
-    skip:0,
-    limit:2
+    skip: 0,
+    limit: 2
   }
-  var appointmentData = await classRequest.find({status:1,tutorId:userId},{tutorId:0},pageParams1).populate([{path:'userId',select:{'image':1,'firstName':1}},{path:'classId',select:{'title':1}}]).sort({'tsCreatedAt':-1}).catch(err=>{
+  var appointmentData = await classRequest.find({ status: 1, tutorId: userId }, { tutorId: 0 }, pageParams1).populate([{ path: 'userId', select: { 'image': 1, 'firstName': 1 } }, { path: 'classId', select: { 'title': 1 } }]).sort({ 'tsCreatedAt': -1 }).catch(err => {
     return {
-      success:0,
-      message:"something went wrong",
-      error:err.message
+      success: 0,
+      message: "something went wrong",
+      error: err.message
     }
   })
   if (appointmentData && (appointmentData.success !== undefined) && (appointmentData.success === 0)) {
@@ -3977,20 +4004,20 @@ exports.getTutorProfile = async (req, res) => {
     let x = appointmentData[each];
     if (x.userId == null) {
       appointmentsList.push({
-        tutorId:x.tutorId,
-        tutorSubjectId:x.tutorSubjectId,
-        tutorClassId:x.tutorClassId,
-        isApproved:x.isApproved,
-        isRejected:x.isRejected,
-        isStudentDeleted:x.isStudentDeleted,
-        isTutorDeleted:x.isTutorDeleted,
-        id:x.id
+        tutorId: x.tutorId,
+        tutorSubjectId: x.tutorSubjectId,
+        tutorClassId: x.tutorClassId,
+        isApproved: x.isApproved,
+        isRejected: x.isRejected,
+        isStudentDeleted: x.isStudentDeleted,
+        isTutorDeleted: x.isTutorDeleted,
+        id: x.id
       })
     }
     else {
-      appointmentsList.push(x); 
+      appointmentsList.push(x);
     }
-    
+
   }
 
 
@@ -4071,8 +4098,8 @@ exports.updateTutorProfile = async (req, res) => {
   tutorProfileUpdateObj.tsCreatedAt = Date.now();
   tutorProfileUpdateObj.tsModifiedAt = null;
 
-  console.log("31/03",tutorProfileUpdateObj);
-  console.log("07/04",req.body);
+  console.log("31/03", tutorProfileUpdateObj);
+  console.log("07/04", req.body);
   var newTutorProfileUpdateObj = new TutorProfileUpdateRequest(tutorProfileUpdateObj);
   var newTutorProfileUpdateResponse = await newTutorProfileUpdateObj.save()
     .catch(err => {
@@ -5026,62 +5053,62 @@ async function send_otp_bymail(email, phone) {
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
-exports.removeTeacher = async(req,res)=> {
+exports.removeTeacher = async (req, res) => {
 
 
-  var update = await User.updateMany({isTutor:true},{isTutor:false});
-  var cnt = await User.countDocuments({isTutor:false});
+  var update = await User.updateMany({ isTutor: true }, { isTutor: false });
+  var cnt = await User.countDocuments({ isTutor: false });
 
-  return res.send({number:cnt})
-
-}
-
-exports.removeTutorRequest = async(req,res)=> {
-
-
-  var update = await TutorRequest.updateMany({},{status:0});
-  var cnt = await TutorRequest.countDocuments({status:0});
-
-  return res.send({number:cnt})
+  return res.send({ number: cnt })
 
 }
 
-exports.isTutorCheck = async(req,res) => {
+exports.removeTutorRequest = async (req, res) => {
 
-    var userData = req.identity.data;
-    var userId = userData.userId;
 
-    var data = await User.findOne({_id:userId},{isTutor:1}).catch(err=>{
-      return { succes: 0, message: err.message };
+  var update = await TutorRequest.updateMany({}, { status: 0 });
+  var cnt = await TutorRequest.countDocuments({ status: 0 });
+
+  return res.send({ number: cnt })
+
+}
+
+exports.isTutorCheck = async (req, res) => {
+
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var data = await User.findOne({ _id: userId }, { isTutor: 1 }).catch(err => {
+    return { succes: 0, message: err.message };
+  })
+
+  if (data && data.success != undefined && data.success === 0) {
+    return res.send(data);
+  }
+
+  if (data.isTutor == true) {
+    return res.send({
+      success: 1,
+      message: "success",
+      isTutor: true
     })
-
-    if (data && data.success != undefined && data.success === 0){
-      return res.send(data);
-    }
-
-    if (data.isTutor == true){
-      return res.send({
-        success:1,
-        message:"success",
-        isTutor : true
-      })
-    }
-    else {
-      return res.send({
-        success:1,
-        message:"success",
-        isTutor : false
-      })
-    }
+  }
+  else {
+    return res.send({
+      success: 1,
+      message: "success",
+      isTutor: false
+    })
+  }
 }
 
-exports.removeUser = async(req,res) => {
+exports.removeUser = async (req, res) => {
 
 
   let email = req.params.id;
 
 
- var update = await User.updateOne({email:email,status:1},{status:0});
+  var update = await User.updateOne({ email: email, status: 1 }, { status: 0 });
 
- return res.send("ok")
+  return res.send("ok")
 }
