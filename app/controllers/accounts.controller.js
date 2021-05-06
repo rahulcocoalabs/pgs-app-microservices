@@ -1504,7 +1504,43 @@ exports.updateProfile = async (req, res) => {
   }
 
 
+  if (params.phone){
+    var usr = await User.findOne({status:1,_id:userId}).catch(err => {
+      return {
+        success:0,
+        message:"some thing went wrong",
+        error:err.message
+      }
+    })
 
+    if (usr && usr.success != undefined && usr.success === 0){
+      return res.send(usr)
+    }
+
+    if (usr.phone == undefined || usr.phone == null){
+       var cnt = await User.countDocuments({status:1,phone:params.phone}).catch(err => {
+         return {
+           success : 0,
+           message:"some thing went wrong",
+           error:err.message
+         }
+       })
+
+       if (cnt && cnt.success != undefined && cnt.success === 0){
+         return res.send(cnt)
+       }
+
+       if (cnt > 0){
+         return res.send({
+           success :0,
+           message : "mobile number already exist try another number"
+         })
+       }
+
+    }
+
+   
+  }
 
 
 
