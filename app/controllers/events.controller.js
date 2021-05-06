@@ -184,6 +184,7 @@ exports.getDetail = async (req, res) => {
     speakerName: 1,
     speakerTypeId: 1,
     speakerTitle: 1,
+    videoLink:1,
     speakerOrganisation: 1,
     speakerImage: 1,
     speakerDescription: 1,
