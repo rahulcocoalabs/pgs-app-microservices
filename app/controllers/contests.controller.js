@@ -630,6 +630,7 @@ exports.addContestInnovation = async (req, res) => {
     var userId = userData.userId;
     var params = req.body;
     
+    console.log(params,"06/05");
     
     if (!params.title || !params.estimate || !params.contestId || !params.description) {
         errors = [];
