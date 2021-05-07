@@ -14,5 +14,5 @@ const ContestSynopsisSchema = mongoose.Schema({
     tsCreatedAt: Number,
     tsModifiedAt: Number
     
-}, options);
+});
 module.exports = mongoose.model('ContestSynopsis', ContestSynopsisSchema, 'ContestSynopsises');
