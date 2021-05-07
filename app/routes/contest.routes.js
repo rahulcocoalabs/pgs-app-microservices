@@ -39,5 +39,6 @@ module.exports = (app) => {
     app.get('/contest/result-announced',auth, contests.listResultAnnouncedContest);
     app.get('/contest/:id/leader-board',auth, contests.getLeaderBoard);
     app.post('/contest/add-innovation',auth, contests.addContestInnovation);
+    app.post('/contest/add-synopsis',auth,contestUpload.fields([{ name: 'images', maxCount: contestConfig.maxImageCount }, { name: 'documents', maxCount: contestConfig.maxDocumentsCount }, { name: 'video', maxCount: contestConfig.maxVideoCount }]),contests.addSynopsis);
     app.post('/contest',auth,contestUpload.fields([{ name: 'images', maxCount: contestConfig.maxImageCount }, { name: 'documents', maxCount: contestConfig.maxDocumentsCount }, { name: 'video', maxCount: contestConfig.maxVideoCount }]), contests.addContestItem);
 }

@@ -8,6 +8,7 @@ const contestsConfig = config.contests;
 const feedsConfig = config.feeds;
 const usersConfig = config.users;
 const InnovationChallenge = require('../models/innovationChallenge.model');
+const contestSynopsis = require('../models/contestSynopsis.model');
 const ObjectId = require('mongoose').Types.ObjectId;
 var moment = require("moment");
 
@@ -620,7 +621,103 @@ exports.addContestItem = async (req, res) => {
 
 }
 
+exports.addSynopsis = async(req, res) => {
 
+    var userData = req.identity.data;
+    var userId = userData.userId;
+    var params = req.body;
+
+    if (!params.title || !params.estimate || !params.contestId || !params.description) {
+        errors = [];
+        if (!params.title) {
+            errors.push({
+                field: "title",
+                message: "Title cannot be empty"
+            });
+        }
+        if (!params.synopsis) {
+            errors.push({
+                field: "synopsis",
+                message: " synopsis cannot be empty"
+            });
+        }
+       
+        return res.status(200).send({
+            success: 0,
+            errors: errors,
+            code: 200
+        });
+    }
+
+    
+    var type = req.body.type || null;
+    var images = [];
+    var documents = [];
+    var video = null;
+   
+        if (req.files.images && !req.files.video && !req.files.documents) {
+
+            type = "image";
+            var len = files.images.length;
+            var i = 0;
+            while (i < len) {
+                images.push(files.images[i].filename);
+                i++;
+            }
+            console.log("images is " + images);
+        }
+        if (!req.files.images && req.files.video && !req.files.documents) {
+            if (req.files.video[0].size > 10485760) {
+                return res.send({
+                    success: 0,
+                    field: 'video',
+                    message: "video File size exceeded 10mb limit"
+                })
+            }
+            type = "video";
+            video = req.files.video[0].filename;
+        }
+        if (!req.files.images && !req.files.video && req.files.documents) {
+            type = "document";
+            var len = files.documents.length;
+            var i = 0;
+            while (i < len) {
+                documents.push(files.documents[i].filename);
+                i++;
+            }
+
+        }
+        if (!req.files.images && !req.files.video && !req.files.documents) {
+            type = "text";
+        }
+    
+
+    try {
+       
+        const contestItems = new contestSynopsis({
+            title: params.title,
+            synopsis: params.synopsis,
+            contest: params.contestId || null,
+            
+            tsCreatedAt: Number(moment().unix()),
+            tsModifiedAt: null
+        });
+       
+        let saveFeed = await contestItems.save();
+       
+        res.status(200).send({
+            success: 1,
+            message: "Item Posted Successfully"
+        });
+    } catch (err) {
+        res.status(500).send({
+          success: 0,
+          message: 'Something went wrong while uploading',
+          error:err.message
+        })
+       
+    }
+}
 
 exports.addContestInnovation = async (req, res) => {
 
