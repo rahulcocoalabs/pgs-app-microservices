@@ -629,7 +629,7 @@ exports.addSynopsis = async(req, res) => {
     var userId = userData.userId;
     var params = req.body;
 
-    if (!params.title || !params.synopsis) {
+    if (!params.title || !params.synopsis || !params.contestId) {
         
         errors = [];
         if (!params.title) {
@@ -642,6 +642,12 @@ exports.addSynopsis = async(req, res) => {
             errors.push({
                 field: "synopsis",
                 message: " synopsis cannot be empty"
+            });
+        }
+        if (!params.contestId) {
+            errors.push({
+                field: "contest ID",
+                message: " contest ID cannot be empty"
             });
         }
        
