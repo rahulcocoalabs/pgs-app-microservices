@@ -629,7 +629,7 @@ exports.addSynopsis = async(req, res) => {
     var userId = userData.userId;
     var params = req.body;
 
-    if (!params.title || !params.synopsis || !params.contestId) {
+    if (!params.title || !params.synopsis || !params.contestId || !params.type ) {
         
         errors = [];
         if (!params.title) {
@@ -642,6 +642,12 @@ exports.addSynopsis = async(req, res) => {
             errors.push({
                 field: "synopsis",
                 message: " synopsis cannot be empty"
+            });
+        }
+        if (!params.type) {
+            errors.push({
+                field: "Type",
+                message: " type cannot be empty"
             });
         }
         if (!params.contestId) {
@@ -711,7 +717,7 @@ exports.addSynopsis = async(req, res) => {
             title: params.title,
             synopsis: params.synopsis,
             contest: params.contestId || null,
-            
+            type:params.type,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
         });
