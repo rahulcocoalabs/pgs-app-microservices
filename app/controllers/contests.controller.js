@@ -655,7 +655,7 @@ exports.addSynopsis = async(req, res) => {
     var images = [];
     var documents = [];
     var video = null;
-   
+    console.log('1')
         if (req.files.images && !req.files.video && !req.files.documents) {
 
             type = "image";
@@ -665,6 +665,7 @@ exports.addSynopsis = async(req, res) => {
                 images.push(files.images[i].filename);
                 i++;
             }
+            console.log('2')
             console.log("images is " + images);
         }
         if (!req.files.images && req.files.video && !req.files.documents) {
@@ -677,6 +678,7 @@ exports.addSynopsis = async(req, res) => {
             }
             type = "video";
             video = req.files.video[0].filename;
+            console.log('3')
         }
         if (!req.files.images && !req.files.video && req.files.documents) {
             type = "document";
@@ -686,10 +688,12 @@ exports.addSynopsis = async(req, res) => {
                 documents.push(files.documents[i].filename);
                 i++;
             }
+            console.log('4')
 
         }
         if (!req.files.images && !req.files.video && !req.files.documents) {
             type = "text";
+            console.log('5')
         }
     
 
