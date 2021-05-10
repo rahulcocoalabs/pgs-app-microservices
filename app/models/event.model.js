@@ -38,7 +38,7 @@ const EventsSchema = mongoose.Schema({
     description : String,  
     amount : Number, 
     image : String, 
-    lat : Number, 
+    lat : Number,  
     interestedCount:Number,
     lng : Number, 
     venue : String,

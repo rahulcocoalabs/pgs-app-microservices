@@ -627,7 +627,8 @@ exports.addSynopsis = async(req, res) => {
     var userId = userData.userId;
     var params = req.body;
 
-    if (!params.title || !params.estimate || !params.contestId || !params.description) {
+    if (!params.title || !params.synopsis) {
+        
         errors = [];
         if (!params.title) {
             errors.push({

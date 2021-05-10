@@ -1150,3 +1150,46 @@ for(let i = 0; i < scholarshipOrPlacementList.length; i++){
     } 
   }
 }
+
+
+
+
+var CronJob = require('cron').CronJob;
+
+var job = new CronJob(' 0 06 * * *', async function () {
+  
+    var x1 = Date.now();
+    var x2 = x1 + (1000 * 60 * 60 * 24);
+
+    var thisMoment = x1/1000;
+    var tomorrow = x2/1000;
+
+    var filter = {};
+    filter.tsFrom = {$gt: thisMoment};
+    filter.status = 1;
+    filter.tsFrom = {$lt: tomorrow};
+
+    var eves = await Event.find(filter).catch(err => {
+      return { success:0,message:err.message };
+    })
+
+    if (eves && eves.success != undefined && eves.success === 0){
+      return
+    }
+
+    const eveIds = eves.map(eve => eves.id);
+
+    var filter1 = {};
+    filter1.eventId = {$in : eveIds};
+
+    const bookings = await EventBooking.find(filter1).catch(err => {
+      return { success:0,message:err.message };
+    })
+
+    if (bookings && bookings.success != undefined && bookings.success === 0){
+      return
+    }
+
+       
+}, null, true, 'Asia/Kolkata');
+job.start();
