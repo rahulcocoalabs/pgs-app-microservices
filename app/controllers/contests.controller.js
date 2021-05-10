@@ -650,7 +650,7 @@ exports.addSynopsis = async(req, res) => {
         });
     }
 
-    
+    var files = req.files;
     var type = req.body.type || null;
     var images = [];
     var documents = [];
