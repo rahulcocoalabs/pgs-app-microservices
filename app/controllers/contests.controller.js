@@ -623,6 +623,8 @@ exports.addContestItem = async (req, res) => {
 
 exports.addSynopsis = async(req, res) => {
 
+    console.log('10/05')
+
     var userData = req.identity.data;
     var userId = userData.userId;
     var params = req.body;
