@@ -416,31 +416,31 @@ exports.sendEventBooking = async (req, res) => {
     }
 
 
-    var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
-    const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
-      return {
-        success: 0,
-        message: err.message
-      }
-    })
-    if (userUpdate && userUpdate.success && userUpdate.success === 0) {
-      return res.send(userUpdate)
-    }
-    var coinUpdateObj = {
-      coinType: constants.COIN_PARTICIPATE_EVENT,
-      coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
-      coinDate: Date.now()
-    };
-    var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
-    const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
-      return {
-        success: 0,
-        message: err.message
-      }
-    })
-    if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
-      return res.send(userUpdate1)
-    }
+    // var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
+    // const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
+    //   return {
+    //     success: 0,
+    //     message: err.message
+    //   }
+    // })
+    // if (userUpdate && userUpdate.success && userUpdate.success === 0) {
+    //   return res.send(userUpdate)
+    // }
+    // var coinUpdateObj = {
+    //   coinType: constants.COIN_PARTICIPATE_EVENT,
+    //   coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
+    //   coinDate: Date.now()
+    // };
+    // var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
+    // const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
+    //   return {
+    //     success: 0,
+    //     message: err.message
+    //   }
+    // })
+    // if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
+    //   return res.send(userUpdate1)
+    // }
     return res.send({
       success: 1,
       message: "succesfully added booking"
@@ -570,7 +570,7 @@ exports.participateEvent1 = async (req, res) => {
 
 exports.participateEvent = async (req, res) => {
 
-  console.log('11/05')
+  
   var userData = req.identity.data;
   var userId = userData.userId;
 
@@ -718,7 +718,7 @@ exports.getEventLink = async (req, res) => {
     if (checkEventBookResp) {
 
 
-      console.log(checkEventBookResp);
+     
       var responseObj = {}
       if (eventZoomLink.zoomLink !== null && eventZoomLink.zoomLink !== undefined) {
         responseObj.success = 1;
