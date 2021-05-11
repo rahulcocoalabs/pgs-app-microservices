@@ -680,10 +680,9 @@ exports.participateEvent = async (req, res) => {
 exports.getEventLink = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-  console.log('11/05')
+  
   var eventId = req.params.id;
-
-
+ 
   var findCriteria = {
     _id: eventId,
     status: 1
@@ -718,6 +717,8 @@ exports.getEventLink = async (req, res) => {
     }
     if (checkEventBookResp) {
 
+
+      console.log(checkEventBookResp);
       var responseObj = {}
       if (eventZoomLink.zoomLink !== null && eventZoomLink.zoomLink !== undefined) {
         responseObj.success = 1;
