@@ -569,6 +569,8 @@ exports.participateEvent1 = async (req, res) => {
 }
 
 exports.participateEvent = async (req, res) => {
+
+  console.log('11/05')
   var userData = req.identity.data;
   var userId = userData.userId;
 
