@@ -5,6 +5,7 @@ const EventBookingSchema = mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     eventId: { type: mongoose.Schema.Types.ObjectId, ref: 'Event' },
     name: String,
+    
     email: String,
     phoneNumber: Number,
     participateCount: Number,
