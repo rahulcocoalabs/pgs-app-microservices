@@ -633,6 +633,8 @@ exports.participateEvent = async (req, res) => {
           return res.send(userUpdate1)
         }
 
+        console.log('11/05',userUpdate1,userUpdate);
+
         //end
 
         return res.send({
