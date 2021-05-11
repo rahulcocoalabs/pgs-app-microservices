@@ -543,6 +543,31 @@ exports.listEventHistory = async (req, res) => {
 
 }
 
+exports.participateEvent1 = async (req, res) => {
+  var userData = req.identity.data;
+  var userId = userData.userId;
+
+  var eventId = req.params.id;
+
+  var findCriteria = {
+    _id: eventId,
+    status: 1
+  }
+
+  var eventCheck = await Event.findOne(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while checking event exists or not',
+        error: err
+      }
+    })
+  if (eventCheck && eventCheck.success && (eventCheck.success === 0)) {
+    return res.send(eventCheck);
+  }
+
+}
+
 exports.participateEvent = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -605,8 +630,6 @@ exports.participateEvent = async (req, res) => {
           return res.send(updateEventParticipate);
         }
 
-        // by rakesh 
-
         var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
         const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
           return {
@@ -632,10 +655,6 @@ exports.participateEvent = async (req, res) => {
         if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
           return res.send(userUpdate1)
         }
-
-        console.log('11/05',userUpdate1,userUpdate);
-
-        //end
 
         return res.send({
           success: 1,
@@ -1250,3 +1269,127 @@ var job = new CronJob(' 0 06 * * *', async function () {
 
 }, null, true, 'Asia/Kolkata');
 job.start();
+
+var job1 = new CronJob(' 0 06 * * *', async function () {
+
+  var x1 = Date.now();
+  var x2 = x1 - (1000 * 60 * 60 * 24);
+
+  var thisMoment = x1 / 1000;
+  var yesterday = x2 / 1000;
+
+  var filter = {};
+  filter.tsTo = { $lt: thisMoment };
+  filter.status = 1;
+  filter.tsTo = { $gt: yesterday };
+
+  var eves = await Event.find(filter).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (eves && eves.success != undefined && eves.success === 0) {
+    return
+  }
+
+  const eveIds = eves.map(eve => eve._id);
+
+  var filter1 = {};
+  filter1.eventId = { $in: eveIds };
+  filter1.isParticipated = true;
+
+  const bookings = await EventBooking.find(filter1).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (bookings && bookings.success != undefined && bookings.success === 0) {
+    return
+  }
+
+  const users = bookings.map(booking => booking.userId);
+
+  for (y in users) {
+
+    var user = users[y];
+    var owner = user;
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+      title: " Yesterday's Event",
+      message: "Thanks for participating yesterday's event",
+      type: constants.ALUMNI_EVENT_PARTICIPATION,
+      filtersJsonArr,
+      // metaInfo,
+      // typeId: event._id,
+      userId: owner,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  }
+
+
+
+}, null, true, 'Asia/Kolkata');
+job1.start();
+
+var job2 = new CronJob(' 0 06 * * *', async function () {
+
+  var x1 = Date.now();
+  var x2 = x1 - (1000 * 60 * 60 * 24);
+
+  var thisMoment = x1 / 1000;
+  var yesterday = x2 / 1000;
+
+  var filter = {};
+  filter.tsTo = { $lt: thisMoment };
+  filter.status = 1;
+  filter.tsTo = { $gt: yesterday };
+
+  var eves = await Event.find(filter).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (eves && eves.success != undefined && eves.success === 0) {
+    return
+  }
+
+  const eveIds = eves.map(eve => eve._id);
+
+  var filter1 = {};
+  filter1.eventId = { $in: eveIds };
+  filter1.isParticipated = false;
+
+  const bookings = await EventBooking.find(filter1).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (bookings && bookings.success != undefined && bookings.success === 0) {
+    return
+  }
+
+  const users = bookings.map(booking => booking.userId);
+
+  for (y in users) {
+
+    var user = users[y];
+    var owner = user;
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+      title: "Yesterday's Event",
+      message: "You have missed yesterday event",
+      type: constants.ALUMNI_EVENT_PARTICIPATION,
+      filtersJsonArr,
+      // metaInfo,
+      // typeId: event._id,
+      userId: owner,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  }
+
+
+
+}, null, true, 'Asia/Kolkata');
+job2.start();
