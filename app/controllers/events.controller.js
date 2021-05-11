@@ -13,6 +13,7 @@ var config = require('../../config/app.config.js');
 const constants = require('../helpers/constants.js');
 var eventsConfig = config.events;
 var eventSpeakerConfig = config.eventSpeaker;
+var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 ObjectId = require('mongodb').ObjectID;
 
 exports.listAll = async (req, res) => {
@@ -1179,8 +1180,6 @@ var job = new CronJob(' * * * * * *', async function () {
     
     const eveIds = eves.map(eve => eve._id);
 
-    console.log(eveIds,"11/05")
-
     var filter1 = {};
     filter1.eventId = {$in : eveIds};
 
@@ -1194,7 +1193,25 @@ var job = new CronJob(' * * * * * *', async function () {
   
     const users = bookings.map(booking => booking.userId);
 
-    console.log(users);
+    for (y in users) {
+
+      var user = users[y];
+      var owner = user;
+
+      var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+      var notificationObj = {
+          title: " Today's Event",
+          message: "Event is today, don't forget to join!",
+          type: constants.ALUMNI_EVENT_PARTICIPATION,
+          filtersJsonArr,
+          // metaInfo,
+         // typeId: event._id,
+          userId: owner,
+          notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+      }
+      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  }
 
 
        
