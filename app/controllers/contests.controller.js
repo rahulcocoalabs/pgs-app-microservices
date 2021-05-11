@@ -721,7 +721,8 @@ exports.addSynopsis = async(req, res) => {
         const contestItems = new contestSynopsis({
             title: params.title,
             synopsis: params.synopsis,
-            contest: params.contestId || null,
+            userId:userId,
+            contestId: params.contestId || null,
             type:params.type,
             tsCreatedAt: Number(moment().unix()),
             tsModifiedAt: null
