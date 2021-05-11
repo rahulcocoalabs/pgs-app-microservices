@@ -1157,7 +1157,7 @@ for(let i = 0; i < scholarshipOrPlacementList.length; i++){
 
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob(' 0 06  * * * *', async function () {
+var job = new CronJob(' 0 06 * * *', async function () {
   
     var x1 = Date.now();
     var x2 = x1 + (1000 * 60 * 60 * 24);
