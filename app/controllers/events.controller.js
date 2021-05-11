@@ -680,7 +680,7 @@ exports.participateEvent = async (req, res) => {
 exports.getEventLink = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
-
+  console.log('11/05')
   var eventId = req.params.id;
 
 
