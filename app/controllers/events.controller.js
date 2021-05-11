@@ -27,7 +27,7 @@ exports.listAll = async (req, res) => {
     eventCategoryId: 1,
     category: 1,
     timeZoneId: 1,
-    tsFrom:1,
+    tsFrom: 1,
   };
 
 
@@ -82,7 +82,7 @@ exports.listAll = async (req, res) => {
         $gt: endTs
       }
     }
-    sortOptions = {tsFrom : 1};
+    sortOptions = { tsFrom: 1 };
   }
 
   filters.status = 1;
@@ -106,8 +106,8 @@ exports.listAll = async (req, res) => {
         hasNextPage: hasNextPage,
         totalItems: itemsCount,
         totalPages: totalPages,
-        params:params,
-        sort:sortOptions,
+        params: params,
+        sort: sortOptions,
       }
 
       res.send(responseObj);
@@ -185,7 +185,7 @@ exports.getDetail = async (req, res) => {
     speakerName: 1,
     speakerTypeId: 1,
     speakerTitle: 1,
-    videoLink:1,
+    videoLink: 1,
     speakerOrganisation: 1,
     speakerImage: 1,
     speakerDescription: 1,
@@ -390,75 +390,75 @@ exports.sendEventBooking = async (req, res) => {
     eventSubmit()
   })
 
- async function eventSubmit() {
-  const newEvent = new EventBooking({
-    userId: userId,
-    name: params.name,
-    email: params.email,
-    phoneNumber: params.phoneNumber,
-    participateCount: params.participateCount,
-    eventId: params.eventId,
-    isParticipated: false,
-    status: 1,
-    tsCreatedAt: Number(moment().unix()),
-    tsModifiedAt: null
-  });
+  async function eventSubmit() {
+    const newEvent = new EventBooking({
+      userId: userId,
+      name: params.name,
+      email: params.email,
+      phoneNumber: params.phoneNumber,
+      participateCount: params.participateCount,
+      eventId: params.eventId,
+      isParticipated: false,
+      status: 1,
+      tsCreatedAt: Number(moment().unix()),
+      tsModifiedAt: null
+    });
 
-  //rakesh 
-  const saveData = await newEvent.save().catch(err => {
-    return {
-      success: 0,
-      message: err.message
+    //rakesh 
+    const saveData = await newEvent.save().catch(err => {
+      return {
+        success: 0,
+        message: err.message
+      }
+    });
+    if (saveData && saveData && saveData.success === 0) {
+      return res.send(saveData);
     }
-  });
-  if (saveData && saveData && saveData.success === 0) {
-    return res.send(saveData);
-  }
 
 
-  var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
-  const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
-    return {
-      success: 0,
-      message: err.message
+    var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
+    const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
+      return {
+        success: 0,
+        message: err.message
+      }
+    })
+    if (userUpdate && userUpdate.success && userUpdate.success === 0) {
+      return res.send(userUpdate)
     }
-  })
-  if (userUpdate && userUpdate.success && userUpdate.success === 0) {
-    return res.send(userUpdate)
-  }
-  var coinUpdateObj = {
-    coinType: constants.COIN_PARTICIPATE_EVENT,
-    coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
-    coinDate: Date.now()
-  };
-  var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
-  const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
-    return {
-      success: 0,
-      message: err.message
+    var coinUpdateObj = {
+      coinType: constants.COIN_PARTICIPATE_EVENT,
+      coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
+      coinDate: Date.now()
+    };
+    var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
+    const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
+      return {
+        success: 0,
+        message: err.message
+      }
+    })
+    if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
+      return res.send(userUpdate1)
     }
-  })
-  if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
-    return res.send(userUpdate1)
-  }
-  return res.send({
-    success: 1,
-    message: "succesfully added booking"
-  })
-  // newEvent.save()
-  //   .then(data => {
-  //     var formattedData = {
-  //       success: 1,
-  //       message: "Eventbooking submitted"
-  //     };
-  //     res.send(formattedData);
-  //   }).catch(err => {
-  //     res.status(500).send({
-  //       success: 0,
-  //       status: 500,
-  //       message: err.message || "Some error occurred while booking event."
-  //     });
-  //   });
+    return res.send({
+      success: 1,
+      message: "succesfully added booking"
+    })
+    // newEvent.save()
+    //   .then(data => {
+    //     var formattedData = {
+    //       success: 1,
+    //       message: "Eventbooking submitted"
+    //     };
+    //     res.send(formattedData);
+    //   }).catch(err => {
+    //     res.status(500).send({
+    //       success: 0,
+    //       status: 500,
+    //       message: err.message || "Some error occurred while booking event."
+    //     });
+    //   });
   }
 }
 
@@ -604,6 +604,37 @@ exports.participateEvent = async (req, res) => {
         if (updateEventParticipate && updateEventParticipate.success && (updateEventParticipate.success === 0)) {
           return res.send(updateEventParticipate);
         }
+
+        // by rakesh 
+
+        var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
+        const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
+          return {
+            success: 0,
+            message: err.message
+          }
+        })
+        if (userUpdate && userUpdate.success && userUpdate.success === 0) {
+          return res.send(userUpdate)
+        }
+        var coinUpdateObj = {
+          coinType: constants.COIN_PARTICIPATE_EVENT,
+          coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
+          coinDate: Date.now()
+        };
+        var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
+        const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
+          return {
+            success: 0,
+            message: err.message
+          }
+        })
+        if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
+          return res.send(userUpdate1)
+        }
+
+        //end
+
         return res.send({
           success: 1,
           message: 'Event participated successfully'
@@ -629,7 +660,7 @@ exports.getEventLink = async (req, res) => {
 
   var eventId = req.params.id;
 
- 
+
   var findCriteria = {
     _id: eventId,
     status: 1
@@ -646,7 +677,7 @@ exports.getEventLink = async (req, res) => {
     return res.send(eventZoomLink);
   }
   if (eventZoomLink) {
-     findCriteria = {
+    findCriteria = {
       userId,
       eventId,
       status: 1
@@ -691,12 +722,12 @@ exports.getEventLink = async (req, res) => {
   }
 }
 
-exports.getEventScholarshipPlacementList = async(req,res) =>{
+exports.getEventScholarshipPlacementList = async (req, res) => {
   var userData = req.identity.data;
   var userId = userData.userId;
 
 
-  
+
   var params = req.query;
   var page = Number(params.page) || 1;
   page = page > 0 ? page : 1;
@@ -706,7 +737,7 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
 
   var endTs = await getEndTsToday();
 
-  var findCriteria ={
+  var findCriteria = {
     tsTo: {
       $gte: endTs
     }
@@ -715,142 +746,142 @@ exports.getEventScholarshipPlacementList = async(req,res) =>{
   findCriteria.status = 1;
 
   var projection = {
-    title : 1,
-    image : 1,
-    description : 1,
-    tsFrom : 1,
-    tsTo : 1,
-    isStudent : 1,
-    venue : 1
+    title: 1,
+    image: 1,
+    description: 1,
+    tsFrom: 1,
+    tsTo: 1,
+    isStudent: 1,
+    venue: 1
   }
 
-   var scholarshipOrPlacementList = await ScholarshipOrPlacement.find(findCriteria,projection)
-   .limit(perPage)
-   .skip(offset)
-   .sort({
-     'tsCreatedAt': -1
-   })
-   .catch(err => {
-     return {
-       success: 0,
-       message: 'Something went wrong while listing scholarship Or placement',
-       error: err
-     }
-   })
- if (scholarshipOrPlacementList && (scholarshipOrPlacementList.success !== undefined) && (scholarshipOrPlacementList.success === 0)) {
-   return res.send(scholarshipOrPlacementList);
- }
+  var scholarshipOrPlacementList = await ScholarshipOrPlacement.find(findCriteria, projection)
+    .limit(perPage)
+    .skip(offset)
+    .sort({
+      'tsCreatedAt': -1
+    })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while listing scholarship Or placement',
+        error: err
+      }
+    })
+  if (scholarshipOrPlacementList && (scholarshipOrPlacementList.success !== undefined) && (scholarshipOrPlacementList.success === 0)) {
+    return res.send(scholarshipOrPlacementList);
+  }
 
- let totalScholarshipOrPlacementCount = await ScholarshipOrPlacement.countDocuments(findCriteria)
-   .catch(err => {
-     return {
-       success: 0,
-       message: 'Something went wrong while getting total total scholarship or placement count',
-       error: err
-     }
-   })
- if (totalScholarshipOrPlacementCount && totalScholarshipOrPlacementCount.success && (totalScholarshipOrPlacementCount.success === 0)) {
-   return res.send(totalScholarshipOrPlacementCount);
- }
+  let totalScholarshipOrPlacementCount = await ScholarshipOrPlacement.countDocuments(findCriteria)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting total total scholarship or placement count',
+        error: err
+      }
+    })
+  if (totalScholarshipOrPlacementCount && totalScholarshipOrPlacementCount.success && (totalScholarshipOrPlacementCount.success === 0)) {
+    return res.send(totalScholarshipOrPlacementCount);
+  }
 
- var totalPages = totalScholarshipOrPlacementCount / perPage;
- totalPages = Math.ceil(totalPages);
- var hasNextPage = page < totalPages;
- var pagination = {
-   page,
-   perPage,
-   hasNextPage,
-   totalItems: totalScholarshipOrPlacementCount,
-   totalPages,
- };
+  var totalPages = totalScholarshipOrPlacementCount / perPage;
+  totalPages = Math.ceil(totalPages);
+  var hasNextPage = page < totalPages;
+  var pagination = {
+    page,
+    perPage,
+    hasNextPage,
+    totalItems: totalScholarshipOrPlacementCount,
+    totalPages,
+  };
 
- scholarshipOrPlacementList = JSON.parse(JSON.stringify(scholarshipOrPlacementList));
- scholarshipOrPlacementListObj = await checkAndUpdateIsAppliedField(userId,scholarshipOrPlacementList)
- if (scholarshipOrPlacementListObj && (scholarshipOrPlacementListObj.success !== undefined) && (scholarshipOrPlacementListObj.success === 0)) {
-  return res.send(scholarshipOrPlacementListObj);
+  scholarshipOrPlacementList = JSON.parse(JSON.stringify(scholarshipOrPlacementList));
+  scholarshipOrPlacementListObj = await checkAndUpdateIsAppliedField(userId, scholarshipOrPlacementList)
+  if (scholarshipOrPlacementListObj && (scholarshipOrPlacementListObj.success !== undefined) && (scholarshipOrPlacementListObj.success === 0)) {
+    return res.send(scholarshipOrPlacementListObj);
+  }
+  return res.send({
+    success: 1,
+    pagination,
+    imageBase: eventsConfig.imageBase,
+    items: scholarshipOrPlacementListObj.list,
+    message: 'scholarship or placement list'
+  })
 }
- return res.send({
-   success: 1,
-   pagination,
-   imageBase: eventsConfig.imageBase,
-   items: scholarshipOrPlacementListObj.list,
-   message: 'scholarship or placement list'
- })
-}
 
-exports.getEventScholarshipPlacementDetail = async(req,res) =>{
+exports.getEventScholarshipPlacementDetail = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
   var eventScholarshipPlacementId = req.params.id;
 
   var findCriteria = {
-    _id : eventScholarshipPlacementId,
-    status : 1
+    _id: eventScholarshipPlacementId,
+    status: 1
   }
   var projection = {
-    title : 1,
-    image : 1,
-    description : 1,
-    tsFrom : 1,
-    tsTo : 1,
-    isStudent : 1,
-    venue : 1
+    title: 1,
+    image: 1,
+    description: 1,
+    tsFrom: 1,
+    tsTo: 1,
+    isStudent: 1,
+    venue: 1
   }
-  var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria,projection)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while get details of scholarship orplacement',
-      error: err
-    }
-  })
-if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !== undefined) && (checkEventScholarshipPlacement.success === 0)) {
-  return res.send(checkEventScholarshipPlacement);
-}
-if(checkEventScholarshipPlacement){
-  var isApplied = false;
-    findCriteria = {
-      userId,
-      scholarshipOrPlacementId : eventScholarshipPlacementId,
-      status : 1
-    }
-    var checkApplied = await ScholarshipOrPlacementRequest.findOne(findCriteria)
+  var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria, projection)
     .catch(err => {
       return {
         success: 0,
-        message: 'Something went wrong while checking scholarship or placement applied or not',
+        message: 'Something went wrong while get details of scholarship orplacement',
         error: err
       }
     })
-  if (checkApplied && (checkApplied.success !== undefined) && (checkApplied.success === 0)) {
-    return res.send(checkApplied);
+  if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !== undefined) && (checkEventScholarshipPlacement.success === 0)) {
+    return res.send(checkEventScholarshipPlacement);
   }
-  if(checkApplied){
-    isApplied  = true;
-  }
+  if (checkEventScholarshipPlacement) {
+    var isApplied = false;
+    findCriteria = {
+      userId,
+      scholarshipOrPlacementId: eventScholarshipPlacementId,
+      status: 1
+    }
+    var checkApplied = await ScholarshipOrPlacementRequest.findOne(findCriteria)
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while checking scholarship or placement applied or not',
+          error: err
+        }
+      })
+    if (checkApplied && (checkApplied.success !== undefined) && (checkApplied.success === 0)) {
+      return res.send(checkApplied);
+    }
+    if (checkApplied) {
+      isApplied = true;
+    }
 
-  const fromDate = moment.unix(checkEventScholarshipPlacement.tsFrom).format("MMM DD YYYY");
-  const toDate = moment.unix(checkEventScholarshipPlacement.tsTo).format("MMM DD YYYY");
-  const duration = fromDate + "- " + toDate;
- 
+    const fromDate = moment.unix(checkEventScholarshipPlacement.tsFrom).format("MMM DD YYYY");
+    const toDate = moment.unix(checkEventScholarshipPlacement.tsTo).format("MMM DD YYYY");
+    const duration = fromDate + "- " + toDate;
+
     return res.send({
       success: 1,
       item: checkEventScholarshipPlacement,
       isApplied,
-      duration:duration || "duration not available",
+      duration: duration || "duration not available",
       imageBase: eventsConfig.imageBase,
       message: 'Scholaship or placement details'
     })
-}else{
-  return res.send({
-    success: 0,
-    message: "Scholaship or placement not exists"
-  })
-}
+  } else {
+    return res.send({
+      success: 0,
+      message: "Scholaship or placement not exists"
+    })
+  }
 }
 
-exports.applyEventScholarshipPlacement = async(req,res) =>{
+exports.applyEventScholarshipPlacement = async (req, res) => {
 
   var userData = req.identity.data;
   var userId = userData.userId;
@@ -858,160 +889,160 @@ exports.applyEventScholarshipPlacement = async(req,res) =>{
   var params = req.body;
 
   var findCriteria = {
-    _id : eventScholarshipPlacementId,
-    status : 1
+    _id: eventScholarshipPlacementId,
+    status: 1
   }
   var projection = {
-    title : 1,
-    image : 1,
-    description : 1,
-    tsFrom : 1,
-    tsTo : 1,
-    isStudent : 1,
-    venue : 1
+    title: 1,
+    image: 1,
+    description: 1,
+    tsFrom: 1,
+    tsTo: 1,
+    isStudent: 1,
+    venue: 1
   }
-  var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria,projection)
-  .catch(err => {
-    return {
-      success: 0,
-      message: 'Something went wrong while get details of scholarship orplacement',
-      error: err
-    }
-  })
-if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !== undefined) && (checkEventScholarshipPlacement.success === 0)) {
-  return res.send(checkEventScholarshipPlacement);
-}
-if(checkEventScholarshipPlacement){
+  var checkEventScholarshipPlacement = await ScholarshipOrPlacement.findOne(findCriteria, projection)
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while get details of scholarship orplacement',
+        error: err
+      }
+    })
+  if (checkEventScholarshipPlacement && (checkEventScholarshipPlacement.success !== undefined) && (checkEventScholarshipPlacement.success === 0)) {
+    return res.send(checkEventScholarshipPlacement);
+  }
+  if (checkEventScholarshipPlacement) {
 
     findCriteria = {
-      scholarshipOrPlacementId : eventScholarshipPlacementId,
+      scholarshipOrPlacementId: eventScholarshipPlacementId,
       userId,
-      status : 1
+      status: 1
     }
     var checkAlreadyApplied = await ScholarshipOrPlacementRequest.findOne(findCriteria)
-    .catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while checking already applied for scholarship or placement',
-        error: err
-      }
-    })
-  if (checkAlreadyApplied && (checkAlreadyApplied.success !== undefined) && (checkAlreadyApplied.success === 0)) {
-    return res.send(checkAlreadyApplied);
-  }
-
-  if(checkAlreadyApplied){
-    var alreadyExistsMessage = ''
-
-    if(checkEventScholarshipPlacement.isStudent){
-      alreadyExistsMessage = 'Already applied for this scholarship'
-    }else{
-      alreadyExistsMessage = 'Already applied for this placement'
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while checking already applied for scholarship or placement',
+          error: err
+        }
+      })
+    if (checkAlreadyApplied && (checkAlreadyApplied.success !== undefined) && (checkAlreadyApplied.success === 0)) {
+      return res.send(checkAlreadyApplied);
     }
+
+    if (checkAlreadyApplied) {
+      var alreadyExistsMessage = ''
+
+      if (checkEventScholarshipPlacement.isStudent) {
+        alreadyExistsMessage = 'Already applied for this scholarship'
+      } else {
+        alreadyExistsMessage = 'Already applied for this placement'
+      }
+      return res.send({
+        success: 0,
+        message: alreadyExistsMessage
+      })
+    } else {
+      var message = '';
+      var eventScholarshipPlacementObj = {};
+      eventScholarshipPlacementObj.userId = userId;
+      eventScholarshipPlacementObj.scholarshipOrPlacementId = eventScholarshipPlacementId;
+      eventScholarshipPlacementObj.isStudent = checkEventScholarshipPlacement.isStudent;
+
+
+      if (checkEventScholarshipPlacement.isStudent) {
+        if (!params.courceDoing || !params.previousClassDetails || !params.subjectWithGrades) {
+          var errors = [];
+          if (!params.courceDoing) {
+            errors.push({
+              field: "courceDoing",
+              message: "courceDoing id missing"
+            });
+          }
+          if (!params.previousClassDetails) {
+            errors.push({
+              field: "previousClassDetails",
+              message: "previousClassDetails id missing"
+            });
+          }
+          if (!params.subjectWithGrades) {
+            errors.push({
+              field: "subjectWithGrades",
+              message: "subjectWithGrades id missing"
+            });
+          }
+          return res.send({
+            success: 0,
+            errors: errors,
+            code: 200
+          });
+        }
+        eventScholarshipPlacementObj.courceDoing = params.courceDoing;
+        eventScholarshipPlacementObj.previousClassDetails = params.previousClassDetails;
+        eventScholarshipPlacementObj.subjectWithGrades = params.subjectWithGrades;
+        message = 'You applied scholarship successfully'
+      } else {
+        if (!params.higherEducation || !params.projectBrief || !params.subjectWithGrades) {
+          var errors = [];
+          if (!params.higherEducation) {
+            errors.push({
+              field: "higherEducation",
+              message: "higherEducation id missing"
+            });
+          }
+          if (!params.projectBrief) {
+            errors.push({
+              field: "projectBrief",
+              message: "projectBrief id missing"
+            });
+          }
+          if (!params.subjectWithGrades) {
+            errors.push({
+              field: "subjectWithGrades",
+              message: "subjectWithGrades id missing"
+            });
+          }
+          return res.send({
+            success: 0,
+            errors: errors,
+            code: 200
+          });
+        }
+        eventScholarshipPlacementObj.higherEducation = params.higherEducation;
+        eventScholarshipPlacementObj.projectBrief = params.projectBrief;
+        eventScholarshipPlacementObj.subjectWithGrades = params.subjectWithGrades;
+        message = 'You applied for placement successfully'
+      }
+      eventScholarshipPlacementObj.status = 1;
+      eventScholarshipPlacementObj.tsCreatedAt = Date.now();
+      eventScholarshipPlacementObj.tsModifiedAt = null;
+
+      var newEventScholarshipPlacement = new ScholarshipOrPlacementRequest(eventScholarshipPlacementObj);
+      var newEventScholarshipPlacementRequest = await newEventScholarshipPlacement.save()
+        .catch(err => {
+          return {
+            success: 0,
+            message: 'Something went wrong while saving scholarship or placement request',
+            error: err
+          }
+        })
+      if (newEventScholarshipPlacementRequest && (newEventScholarshipPlacementRequest.success !== undefined) && (newEventScholarshipPlacementRequest.success === 0)) {
+        return res.send(newEventScholarshipPlacementRequest);
+      }
+      return res.send({
+        success: 1,
+        message
+      })
+
+    }
+
+  } else {
     return res.send({
       success: 0,
-      message: alreadyExistsMessage
+      message: "Scholaship or placement not exists"
     })
-  }else{
-    var message = '';
-    var eventScholarshipPlacementObj = {};
-    eventScholarshipPlacementObj.userId = userId;
-    eventScholarshipPlacementObj.scholarshipOrPlacementId = eventScholarshipPlacementId;
-    eventScholarshipPlacementObj.isStudent = checkEventScholarshipPlacement.isStudent;
- 
-
-    if(checkEventScholarshipPlacement.isStudent){
-      if(!params.courceDoing || !params.previousClassDetails || !params.subjectWithGrades){
-        var errors = [];
-        if (!params.courceDoing) {
-          errors.push({
-            field: "courceDoing",
-            message: "courceDoing id missing"
-          });
-        }
-        if (!params.previousClassDetails) {
-          errors.push({
-            field: "previousClassDetails",
-            message: "previousClassDetails id missing"
-          });
-        }
-        if (!params.subjectWithGrades) {
-          errors.push({
-            field: "subjectWithGrades",
-            message: "subjectWithGrades id missing"
-          });
-        }
-        return res.send({
-          success: 0,
-          errors: errors,
-          code: 200
-        });
-      }
-      eventScholarshipPlacementObj.courceDoing = params.courceDoing;
-      eventScholarshipPlacementObj.previousClassDetails = params.previousClassDetails;
-      eventScholarshipPlacementObj.subjectWithGrades = params.subjectWithGrades;
-      message = 'You applied scholarship successfully'
-    }else{
-      if(!params.higherEducation || !params.projectBrief || !params.subjectWithGrades){
-        var errors = [];
-        if (!params.higherEducation) {
-          errors.push({
-            field: "higherEducation",
-            message: "higherEducation id missing"
-          });
-        }
-        if (!params.projectBrief) {
-          errors.push({
-            field: "projectBrief",
-            message: "projectBrief id missing"
-          });
-        }
-        if (!params.subjectWithGrades) {
-          errors.push({
-            field: "subjectWithGrades",
-            message: "subjectWithGrades id missing"
-          });
-        }
-        return res.send({
-          success: 0,
-          errors: errors,
-          code: 200
-        });
-      }
-      eventScholarshipPlacementObj.higherEducation = params.higherEducation;
-      eventScholarshipPlacementObj.projectBrief = params.projectBrief;
-      eventScholarshipPlacementObj.subjectWithGrades = params.subjectWithGrades;
-      message = 'You applied for placement successfully'
-    }
-    eventScholarshipPlacementObj.status = 1;
-    eventScholarshipPlacementObj.tsCreatedAt = Date.now();
-    eventScholarshipPlacementObj.tsModifiedAt = null;
-  
-    var newEventScholarshipPlacement = new ScholarshipOrPlacementRequest(eventScholarshipPlacementObj);
-    var  newEventScholarshipPlacementRequest = await newEventScholarshipPlacement.save()
-    .catch(err => {
-      return {
-        success: 0,
-        message: 'Something went wrong while saving scholarship or placement request',
-        error: err
-      }
-    })
-  if (newEventScholarshipPlacementRequest && (newEventScholarshipPlacementRequest.success !== undefined) && (newEventScholarshipPlacementRequest.success === 0)) {
-    return res.send(newEventScholarshipPlacementRequest);
   }
-  return res.send({
-    success: 1,
-    message
-  })
-
-  }
-  
-}else{
-  return res.send({
-    success: 0,
-    message: "Scholaship or placement not exists"
-  })
-}
 }
 
 async function getStartTsToday() {
@@ -1100,55 +1131,55 @@ exports.addInterest = async (req, res) => {
 }
 
 
-async function checkAndUpdateIsAppliedField(userId,scholarshipOrPlacementList){
-  if(scholarshipOrPlacementList.length > 0){
-  var yourScholarshipOrPlacementData = await ScholarshipOrPlacementRequest.find({
-    userId,
-    status : 1
-  },{
-    scholarshipOrPlacementId : 1
-  })
-  .catch(err => {
+async function checkAndUpdateIsAppliedField(userId, scholarshipOrPlacementList) {
+  if (scholarshipOrPlacementList.length > 0) {
+    var yourScholarshipOrPlacementData = await ScholarshipOrPlacementRequest.find({
+      userId,
+      status: 1
+    }, {
+      scholarshipOrPlacementId: 1
+    })
+      .catch(err => {
+        return {
+          success: 0,
+          message: 'Something went wrong while getting applied scholarships or payments',
+          error: err
+        }
+      })
+    if (yourScholarshipOrPlacementData && (yourScholarshipOrPlacementData.success !== undefined) && (yourScholarshipOrPlacementData.success === 0)) {
+      return yourScholarshipOrPlacementData;
+    }
+    if (yourScholarshipOrPlacementData.length > 0) {
+      for (let i = 0; i < scholarshipOrPlacementList.length; i++) {
+        var scoloarOrPlacmentObj = scholarshipOrPlacementList[i];
+        var checkIndex = await yourScholarshipOrPlacementData.findIndex(obj => (JSON.stringify(obj.scholarshipOrPlacementId) === JSON.stringify(scoloarOrPlacmentObj.id)))
+        if (checkIndex > -1) {
+          scholarshipOrPlacementList[i].isApplied = true;
+        } else {
+          scholarshipOrPlacementList[i].isApplied = false;
+        }
+      }
+      return {
+        success: 1,
+        list: scholarshipOrPlacementList,
+        message: 'Applied list'
+      }
+    } else {
+      for (let i = 0; i < scholarshipOrPlacementList.length; i++) {
+        scholarshipOrPlacementList[i].isApplied = false;
+      }
+      return {
+        success: 1,
+        list: scholarshipOrPlacementList,
+        message: 'Nothing applied'
+      }
+    }
+  } else {
     return {
-      success: 0,
-      message: 'Something went wrong while getting applied scholarships or payments',
-      error: err
+      success: 1,
+      list: scholarshipOrPlacementList,
+      message: 'Empty list'
     }
-  })
-if (yourScholarshipOrPlacementData && (yourScholarshipOrPlacementData.success !== undefined) && (yourScholarshipOrPlacementData.success === 0)) {
-  return yourScholarshipOrPlacementData;
-}
-if(yourScholarshipOrPlacementData.length > 0){
-  for(let i = 0; i < scholarshipOrPlacementList.length; i++){
-    var scoloarOrPlacmentObj = scholarshipOrPlacementList[i];
-    var checkIndex = await yourScholarshipOrPlacementData.findIndex(obj => (JSON.stringify(obj.scholarshipOrPlacementId) === JSON.stringify(scoloarOrPlacmentObj.id)))
-    if(checkIndex > -1){
-      scholarshipOrPlacementList[i].isApplied = true;
-    }else{
-      scholarshipOrPlacementList[i].isApplied = false;
-    }
-  }
-  return{
-    success : 1,
-    list : scholarshipOrPlacementList,
-    message : 'Applied list'
-  } 
-}else{
-for(let i = 0; i < scholarshipOrPlacementList.length; i++){
-  scholarshipOrPlacementList[i].isApplied = false;
-  }
-  return{
-    success : 1,
-    list : scholarshipOrPlacementList,
-    message : 'Nothing applied'
-  } 
-}
-  }else{
-    return{
-      success : 1,
-      list : scholarshipOrPlacementList,
-      message : 'Empty list'
-    } 
   }
 }
 
@@ -1158,62 +1189,62 @@ for(let i = 0; i < scholarshipOrPlacementList.length; i++){
 var CronJob = require('cron').CronJob;
 
 var job = new CronJob(' 0 06 * * *', async function () {
-  
-    var x1 = Date.now();
-    var x2 = x1 + (1000 * 60 * 60 * 24);
 
-    var thisMoment = x1/1000;
-    var tomorrow = x2/1000;
+  var x1 = Date.now();
+  var x2 = x1 + (1000 * 60 * 60 * 24);
 
-    var filter = {};
-    filter.tsFrom = {$gt: thisMoment};
-    filter.status = 1;
-    filter.tsFrom = {$lt: tomorrow};
+  var thisMoment = x1 / 1000;
+  var tomorrow = x2 / 1000;
 
-    var eves = await Event.find(filter).catch(err => {
-      return { success:0,message:err.message };
-    })
+  var filter = {};
+  filter.tsFrom = { $gt: thisMoment };
+  filter.status = 1;
+  filter.tsFrom = { $lt: tomorrow };
 
-    if (eves && eves.success != undefined && eves.success === 0){
-      return
+  var eves = await Event.find(filter).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (eves && eves.success != undefined && eves.success === 0) {
+    return
+  }
+
+  const eveIds = eves.map(eve => eve._id);
+
+  var filter1 = {};
+  filter1.eventId = { $in: eveIds };
+
+  const bookings = await EventBooking.find(filter1).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (bookings && bookings.success != undefined && bookings.success === 0) {
+    return
+  }
+
+  const users = bookings.map(booking => booking.userId);
+
+  for (y in users) {
+
+    var user = users[y];
+    var owner = user;
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+      title: " Today's Event",
+      message: "Event is today, don't forget to join!",
+      type: constants.ALUMNI_EVENT_PARTICIPATION,
+      filtersJsonArr,
+      // metaInfo,
+      // typeId: event._id,
+      userId: owner,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
-    
-    const eveIds = eves.map(eve => eve._id);
-
-    var filter1 = {};
-    filter1.eventId = {$in : eveIds};
-
-    const bookings = await EventBooking.find(filter1).catch(err => {
-      return { success:0,message:err.message };
-    })
-
-    if (bookings && bookings.success != undefined && bookings.success === 0){
-      return
-    }
-  
-    const users = bookings.map(booking => booking.userId);
-
-    for (y in users) {
-
-      var user = users[y];
-      var owner = user;
-
-      var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
-
-      var notificationObj = {
-          title: " Today's Event",
-          message: "Event is today, don't forget to join!",
-          type: constants.ALUMNI_EVENT_PARTICIPATION,
-          filtersJsonArr,
-          // metaInfo,
-         // typeId: event._id,
-          userId: owner,
-          notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
-      }
-      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
   }
 
 
-       
+
 }, null, true, 'Asia/Kolkata');
 job.start();
