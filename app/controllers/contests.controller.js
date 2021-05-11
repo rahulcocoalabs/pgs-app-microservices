@@ -101,6 +101,11 @@ exports.detail = async (req, res) => {
         if (count >= 1) {
             isApplied = true;
         }
+
+        count = await contestSynopsis.countDocuments({ status: 1, userId: userId, contestId: id });
+        if (count >= 1) {
+            isApplied = true;
+        }
         res.status(200).send({
             success: 1,
             imageBase: contestsConfig.contestImageBase,
