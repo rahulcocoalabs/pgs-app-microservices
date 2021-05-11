@@ -1179,6 +1179,8 @@ var job = new CronJob(' * * * * * *', async function () {
 
     const eveIds = eves.map(eve => eves.id);
 
+    console.log(eveIds)
+
     var filter1 = {};
     filter1.eventId = {$in : eveIds};
 
