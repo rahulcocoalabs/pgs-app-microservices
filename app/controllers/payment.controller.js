@@ -7,9 +7,9 @@ const Razorpay = require('razorpay')
 const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
 const Payment = require('../models/payment.model');
+const classRequest = require('../models/onlineClassRequests.model');
 
-
-async function getSettingData()  {
+async function getSettingData() {
 
   var keyId = await Setting.findOne({
     key: constants.RAZORPAY_KEY_ID,
@@ -54,20 +54,20 @@ exports.getKey = async (req, res) => {
   if (object === undefined) {
     return res.status(200).json({
       success: 0,
-      message:"something went wrong in ftching key"
+      message: "something went wrong in ftching key"
     })
   }
   let key = object.key;
   if (key === undefined) {
     return res.status(200).json({
       success: 0,
-      message:"something went wrong in ftching key"
+      message: "something went wrong in ftching key"
     })
   }
   return res.status(200).json({
     success: 1,
-    message:"obtained key successfully",
-    key:key
+    message: "obtained key successfully",
+    key: key
   })
 }
 
@@ -89,16 +89,16 @@ exports.getCredentials = async (req, res) => {
     };
     instance.orders.create(options, async function (err, order) {
       if (err) {
-        console.log(err,err.message)
+        console.log(err, err.message)
         return res.status(500).json({
           message: "Something Went Wrong",
           error: err.message
         });
       }
       return res.status(200).json({
-        success:1,
-        message:"fetched successfully credentials for payments",
-        item:order
+        success: 1,
+        message: "fetched successfully credentials for payments",
+        item: order
       });
     });
   } catch (err) {
@@ -109,36 +109,36 @@ exports.getCredentials = async (req, res) => {
   }
 };
 
-exports.updatePayment= async (req, res) => {
+exports.updatePayment = async (req, res) => {
 
   let object = getSettingData();
   let paymentId = req.params.id;
   let amount = req.body.amount;
   try {
     return request(
-     {
-     method: "POST",
-     url: `https://rzp_test_0eNdXM0OQ3OMf0:8P2s0RUm6DWeErPG3H7vXoWa@api.razorpay.com/v1/payments/${paymentId}/capture`,
-     form: {
-        amount: amount * 100, // amount == Rs 10 // Same As Order amount
-        currency: "INR",
+      {
+        method: "POST",
+        url: `https://rzp_test_0eNdXM0OQ3OMf0:8P2s0RUm6DWeErPG3H7vXoWa@api.razorpay.com/v1/payments/${paymentId}/capture`,
+        form: {
+          amount: amount * 100, // amount == Rs 10 // Same As Order amount
+          currency: "INR",
+        },
       },
-    },
-   async function (err, response, body) {
-     if (err) {
-      return res.status(500).json({
-         message: "Something Went Wrong",
-       }); 
-     }
-      console.log("Status:", response.statusCode);
-      console.log("Headers:", JSON.stringify(response.headers));
-      console.log("Response:", body);
-      return res.status(200).json(body);
-    });
+      async function (err, response, body) {
+        if (err) {
+          return res.status(500).json({
+            message: "Something Went Wrong",
+          });
+        }
+        console.log("Status:", response.statusCode);
+        console.log("Headers:", JSON.stringify(response.headers));
+        console.log("Response:", body);
+        return res.status(200).json(body);
+      });
   } catch (err) {
     return res.status(500).json({
       message: "Something Went Wrong",
-   });
+    });
   }
 }
 
@@ -156,8 +156,8 @@ exports.savePayment = async (req, res) => {
 
   const newPayment = new Payment({
     userId: userId,
-    charityId:charityId,
-    classId:classId,
+    charityId: charityId,
+    classId: classId,
     transactionId: transactionId,
     amount: amount,
     paidStatus: paidStatus,
@@ -174,7 +174,35 @@ exports.savePayment = async (req, res) => {
     return res.status(200).send(savePayment);
   }
 
- 
+  if (body.classId) {
+    var obj = {}
+    const monthNames = ["01", "02", "03", "04", "05", "06",
+      "07", "08", "09", "10", "11", "12"];
+    const dateObj = new Date();
+    const month = monthNames[dateObj.getMonth()];
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    const output = day + ":" + month + ':' + year;
+    obj.tutorId = params.tutorId;
+    obj.classId = params.classId;
+    obj.status = 1;
+    obj.isApproved = false;
+    obj.isRejected = false;
+    obj.tsCreatedAt = Date.now();
+    obj.created = output;
+    obj.tsModifiedAt = null;
+    obj.userId = userId;
+
+    var request = new classRequest(obj);
+
+    var saveData = await request.save().catch(err => {
+      return { success: 0, err: err.message }
+    });
+
+    if (saveData && saveData.success && saveData.success == 0) {
+      return res.send(saveData)
+    }
+  }
 
   res.status(200).send({
     success: 1,
@@ -182,3 +210,4 @@ exports.savePayment = async (req, res) => {
   })
 
 }
+

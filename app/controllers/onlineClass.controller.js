@@ -13,7 +13,7 @@ var msg91 = require("msg91")(smsConfig.key, smsConfig.fromNo, smsConfig.route);
 var jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var crypto = require("crypto");
-
+const Payment = require('../models/payment.model');
 const User = require('../models/user.model');
 const OnlineCLass = require('../models/onlineClass.model');
 const FavouriteClass = require('../models/instituteClassFavourite.model')
@@ -725,6 +725,21 @@ exports.getClassDetails = async (req, res) => {
     else {
       returnObj.isApproved = true
     }
+
+ 
+
+     var isPaymentDone = false;
+      var result = await Payment.countDocuments({status:1,classId:classId,userId:userId}).catch(err => {
+        return 0
+      })
+    
+      if(result > 0){
+        isPaymentDone = true;
+      }
+
+      returnObj.isPaymentDone = isPaymentDone;
+     
+    
     return res.send({
       success: 1,
       flag: 1,
