@@ -153,6 +153,7 @@ exports.savePayment = async (req, res) => {
   var paidStatus = params.paidStatus;
   var paidOn = params.paidOn;
   var charityId = params.charityId;
+  var classId = params.classId;
 
   const newPayment = new Payment({
     userId: userId,
