@@ -12,7 +12,7 @@ const classRequest = require('../models/onlineClassRequests.model');
 async function getSettingData() {
 
   var keyId = await Setting.findOne({
-    key: constants.RAZORPAY_KEY_ID,
+    key: constants.RAZORPAY_KEY_ID_TEST,
     status: 1
   })
     .catch(err => {
@@ -27,7 +27,7 @@ async function getSettingData() {
   }
 
   var keySecret = await Setting.findOne({
-    key: constants.RAZORPAY_KEY_SECRET,
+    key: constants.RAZORPAY_KEY_SECRET_TEST,
     status: 1
   })
     .catch(err => {
