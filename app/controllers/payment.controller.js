@@ -174,19 +174,7 @@ exports.savePayment = async (req, res) => {
     return res.status(200).send(savePayment);
   }
 
-  if (body.classId){
-    var booking = await axios.post('139.162.231.108:8000',{
-      classId:params.classId,
-      tutorId:params.tutorId
-    })
-
-    if (booking && booking.success != undefined && booking.success === 0) {
-      return res.send({
-        success:0,
-        message:"booking failed"
-      })
-    }
-  }
+ 
 
   res.status(200).send({
     success: 1,
