@@ -213,6 +213,9 @@ exports.createOnlineClass = async (req, res) => {
     onlineClassObj.fee = params.fee;
     onlineClassObj.classTimeCategory = params.classTimeCategory;
     onlineClassObj.currencyId = params.currencyId;
+    onlineClassObj.slot = params.slot;
+    onlineClassObj.numberOfSlots = params.numberOfSlots;
+    onlineClassObj.TotalFee = params.fee * params.numberOfSlots
   } else {
     onlineClassObj.isPaid = false;
     onlineClassObj.fee = null;

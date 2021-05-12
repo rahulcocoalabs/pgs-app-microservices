@@ -25,6 +25,7 @@ var options = {
 
 const CurrencySchema = mongoose.Schema({
     name : String,
+    code:String,
     status : Number,
     tsCreatedAt : Number,
     tsModifiedAt : Number
