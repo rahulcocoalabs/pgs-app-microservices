@@ -216,7 +216,7 @@ exports.createOnlineClass = async (req, res) => {
     onlineClassObj.slot = params.slot;
     onlineClassObj.numberOfSlots = params.numberOfSlots;
     onlineClassObj.totalFee = params.fee * params.numberOfSlots
-    console.log(params.fee,params.numberOfSlots);
+    console.log(params.fee, params.numberOfSlots);
   } else {
     onlineClassObj.isPaid = false;
     onlineClassObj.fee = null;
@@ -708,7 +708,7 @@ exports.getClassDetails = async (req, res) => {
 
     var returnObj = JSON.parse(JSON.stringify(classDetails));
 
-    var approvalStatus = await classRequest.countDocuments({ classId: req.params.id, status: 1, isApproved: true,userId:userId }).catch(err => {
+    var approvalStatus = await classRequest.countDocuments({ classId: req.params.id, status: 1, isApproved: true, userId: userId }).catch(err => {
       return {
         success: 0,
         message: "something went wrong",
@@ -727,30 +727,30 @@ exports.getClassDetails = async (req, res) => {
       returnObj.isApproved = true
     }
 
- 
 
-      console.log(userId,classId)
-      var result = await Payment.countDocuments({status:1,classId:classId,userId:userId}).catch(err => {
-        return {
-          success:0,
-          message:err.message
-        }
-      })
-      if(result && result.success != undefined && success === 0){
-        return res.send(result);
+
+    console.log(userId, classId)
+    var result = await Payment.countDocuments({ status: 1, classId: classId, userId: userId }).catch(err => {
+      return {
+        success: 0,
+        message: err.message
       }
-      if(result > 0){
-        returnObj.isPaymentDone = true;
-        console.log('13/04',true);
-      }
-      else{
-        console.log('13/04',false)
-        returnObj.isPaymentDone = false;
-      }
-      
-      
-     
-    
+    })
+    if (result && result.success != undefined && success === 0) {
+      return res.send(result);
+    }
+    if (result > 0) {
+      returnObj.isPaymentDone = true;
+      console.log('13/04', true);
+    }
+    else {
+      console.log('13/04', false)
+      returnObj.isPaymentDone = false;
+    }
+
+
+
+
     return res.send({
       success: 1,
       flag: 1,
@@ -812,7 +812,7 @@ exports.listOnlineClasses = async (req, res) => {
     findCriteria = await setFIlter(reqFilters, availableFilters, findCriteria)
   }
 
- 
+
 
 
 
@@ -866,6 +866,14 @@ exports.listOnlineClasses = async (req, res) => {
         }
       }]
     };
+  }
+
+  if (params.isLatest && params.isLatest === true) {
+    var d1 = Date.now();
+
+    var d2 = 1000 * 60 * 60 * 24 * 7;
+    findCritetia.isPopular = false;
+    findCriteria.tsCreatedAt = { $gt: (d1 - d2) };
   }
 
   //end rakesh's mods
@@ -1958,7 +1966,7 @@ async function listClasses(findCriteria, perPage, page, favouriteData, sortOptio
 
   console.log("21/04", findCriteria)
 
-  
+
 
 
   var onlineClassData = await OnlineCLass.find(findCriteria, { zoomLink: 0, startUrl: 0 })
