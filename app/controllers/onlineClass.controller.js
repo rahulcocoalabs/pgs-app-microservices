@@ -729,7 +729,7 @@ exports.getClassDetails = async (req, res) => {
 
  
 
-     
+      console.log(userId,classId)
       var result = await Payment.countDocuments({status:1,classId:classId,userId:userId}).catch(err => {
         return {
           success:0,
