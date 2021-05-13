@@ -729,16 +729,26 @@ exports.getClassDetails = async (req, res) => {
 
  
 
-     var isPaymentDone = false;
+     
       var result = await Payment.countDocuments({status:1,classId:classId,userId:userId}).catch(err => {
-        return 0
+        return {
+          success:0,
+          message:err.message
+        }
       })
-    
-      if(result > 0){
-        isPaymentDone = true;
+      if(result && result.success != undefined && success === 0){
+        return res.send(result);
       }
-
-      returnObj.isPaymentDone = isPaymentDone;
+      if(result > 0){
+        returnObj.isPaymentDone = true;
+        console.log('13/04',true);
+      }
+      else{
+        console.log('13/04',false)
+        returnObj.isPaymentDone = false;
+      }
+      
+      
      
     
     return res.send({
