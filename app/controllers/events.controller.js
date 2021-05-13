@@ -286,6 +286,7 @@ exports.getDetail = async (req, res) => {
         }
 
         var eventDetail = {
+          
           id: id || null,
           title: event.title || null,
           description: event.description || null,
@@ -314,6 +315,7 @@ exports.getDetail = async (req, res) => {
           imageBase: eventsConfig.imageBase || null,
           organizerImageBase: eventsConfig.organizerImageBase || null,
           eventSpeakerImageBase: eventSpeakerConfig.imageBase || null,
+          videoLink:event.videoLink,
           isBooked,
           isParticipated
         }
