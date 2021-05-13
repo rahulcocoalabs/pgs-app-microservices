@@ -9,6 +9,7 @@ var OnlineClassRquestSchema = mongoose.Schema({
     tutorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     isApproved:Boolean,
     isRejected:Boolean,
+    isPaid:{ type: Boolean, default: false},
     status: Number,
     created:String,
     comments:String,

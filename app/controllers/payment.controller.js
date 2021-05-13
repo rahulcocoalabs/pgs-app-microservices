@@ -193,6 +193,7 @@ exports.savePayment = async (req, res) => {
     obj.created = output;
     obj.tsModifiedAt = null;
     obj.userId = userId;
+    obj.isPaid = true;
 
     var request = new classRequest(obj);
 
