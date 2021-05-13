@@ -9,6 +9,10 @@ const PaymentSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Charity'
     },
+    classId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'OnlineClass'
+    },
     transactionId: String,
     amount: Number,
     paidStatus: Boolean,
