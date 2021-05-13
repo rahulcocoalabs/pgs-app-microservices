@@ -175,7 +175,7 @@ exports.savePayment = async (req, res) => {
     return res.status(200).send(savePayment);
   }
 
-  if (params.classId && params.isPublic) {
+  if (params.classId && params.isPublic == false) {
     var obj = {}
     const monthNames = ["01", "02", "03", "04", "05", "06",
       "07", "08", "09", "10", "11", "12"];
