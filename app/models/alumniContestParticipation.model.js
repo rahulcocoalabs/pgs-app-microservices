@@ -8,7 +8,7 @@ const AlumniContestParticipationSchema = mongoose.Schema({
     title:String,
     rank:Number,
     type:String,
-    
+    filePath:String,
     status:Number,
     userId:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     tsCreatedAt: Number,
