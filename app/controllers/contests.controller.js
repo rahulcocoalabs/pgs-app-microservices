@@ -671,19 +671,20 @@ exports.addSynopsis = async(req, res) => {
 
     var files = req.files;
     var type = req.body.type || null;
-    var images = [];
-    var documents = [];
-    var video = null;
+    var images = "";
+    var documents = "";
+    var video = "";
     console.log('1')
         if (req.files.images && !req.files.video && !req.files.documents) {
 
             type = "image";
             var len = files.images.length;
             var i = 0;
-            while (i < len) {
-                images.push(files.images[i].filename);
-                i++;
-            }
+            // while (i < len) {
+            //     images.push(files.images[i].filename);
+            //     i++;
+            // }
+            image = files.images.filename;
             console.log('2')
             console.log("images is " + images);
         }
@@ -696,17 +697,18 @@ exports.addSynopsis = async(req, res) => {
                 })
             }
             type = "video";
-            video = req.files.video[0].filename;
+            video = req.files.video.filename;
             console.log('3')
         }
         if (!req.files.images && !req.files.video && req.files.documents) {
             type = "document";
             var len = files.documents.length;
             var i = 0;
-            while (i < len) {
-                documents.push(files.documents[i].filename);
-                i++;
-            }
+            // while (i < len) {
+            //     documents.push(files.documents[i].filename);
+            //     i++;
+            // }
+            documents =  files.documents.filename;
             console.log('4')
 
         }
@@ -722,6 +724,10 @@ exports.addSynopsis = async(req, res) => {
             title: params.title,
             synopsis: params.synopsis,
             userId:userId,
+            type:type,
+            images:images,
+            documents:documents,
+            video:video,
             status:1,
             contestId: params.contestId || null,
             type:params.type,
