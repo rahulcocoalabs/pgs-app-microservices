@@ -867,7 +867,7 @@ exports.listOnlineClasses = async (req, res) => {
       }]
     };
   }
-
+   console.log(params);
   if (params.isLatest && params.isLatest === true) {
     var d1 = Date.now();
 
