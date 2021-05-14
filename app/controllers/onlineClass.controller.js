@@ -875,7 +875,7 @@ exports.listOnlineClasses = async (req, res) => {
     findCritetia.isPopular = false;
     findCriteria.tsCreatedAt = { $gt: (d1 - d2) };
   }
-
+  console.log(findCriteria);
   //end rakesh's mods
   var listClassResp = await listClasses(findCriteria, params.perPage, params.page, favouriteData, sortOptions);
   return res.send(listClassResp);
