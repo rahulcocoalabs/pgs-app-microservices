@@ -872,7 +872,7 @@ exports.listOnlineClasses = async (req, res) => {
     var d1 = Date.now();
 
     var d2 = 1000 * 60 * 60 * 24 * 7;
-    findCritetia.isPopular = false;
+    findCriteria.isPopular = false;
     findCriteria.tsCreatedAt = { $gt: (d1 - d2) };
   }
   console.log(findCriteria);
