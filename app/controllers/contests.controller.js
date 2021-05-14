@@ -685,7 +685,7 @@ exports.addSynopsis = async(req, res) => {
             //     i++;
             // }
             images = files.images.filename;
-            console.log('2')
+            console.log('2',file.images);
             console.log("images is " + images);
         }
         if (!req.files.images && req.files.video && !req.files.documents) {
