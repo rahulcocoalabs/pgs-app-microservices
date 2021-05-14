@@ -684,7 +684,7 @@ exports.addSynopsis = async(req, res) => {
             //     images.push(files.images[i].filename);
             //     i++;
             // }
-            image = files.images.filename;
+            images = files.images.filename;
             console.log('2')
             console.log("images is " + images);
         }
