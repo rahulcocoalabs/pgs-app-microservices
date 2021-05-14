@@ -684,7 +684,7 @@ exports.addSynopsis = async(req, res) => {
             //     images.push(files.images[i].filename);
             //     i++;
             // }
-            images = files.images.filename;
+            images = files.images[0].filename;
             console.log('2',files.images);
             console.log("images is " + images);
         }
@@ -697,7 +697,7 @@ exports.addSynopsis = async(req, res) => {
                 })
             }
             type = "video";
-            video = req.files.video.filename;
+            video = req.files.video[0].filename;
             console.log('3')
         }
         if (!req.files.images && !req.files.video && req.files.documents) {
@@ -708,7 +708,7 @@ exports.addSynopsis = async(req, res) => {
             //     documents.push(files.documents[i].filename);
             //     i++;
             // }
-            documents =  files.documents.filename;
+            documents =  files.documents[0].filename;
             console.log('4')
 
         }
