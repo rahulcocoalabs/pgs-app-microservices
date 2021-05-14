@@ -722,6 +722,7 @@ exports.addSynopsis = async(req, res) => {
             title: params.title,
             synopsis: params.synopsis,
             userId:userId,
+            status:1,
             contestId: params.contestId || null,
             type:params.type,
             tsCreatedAt: Number(moment().unix()),
