@@ -868,7 +868,7 @@ exports.listOnlineClasses = async (req, res) => {
     };
   }
    console.log(params);
-  if (params.isLatest && params.isLatest === true) {
+  if (params.isLatest) {
     var d1 = Date.now();
 
     var d2 = 1000 * 60 * 60 * 24 * 7;
