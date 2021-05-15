@@ -154,6 +154,9 @@ exports.savePayment = async (req, res) => {
   var paidOn = params.paidOn;
   var charityId = params.charityId;
   var classId = params.classId;
+  var paymentStatus = params.paymentStatus;
+  var message = params.message;
+  var type = params.type;
 
   const newPayment = new Payment({
     userId: userId,
@@ -161,7 +164,9 @@ exports.savePayment = async (req, res) => {
     classId: classId,
     transactionId: transactionId,
     amount: amount,
-    paidStatus: paidStatus,
+    paymentStatus: paymentStatus,
+    message: message,
+    paymentType:type,
     paidOn: paidOn,
     status: 1,
     tsCreatedAt: Date.now(),

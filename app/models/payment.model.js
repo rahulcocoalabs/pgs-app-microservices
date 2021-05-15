@@ -14,8 +14,11 @@ const PaymentSchema = mongoose.Schema({
         ref: 'OnlineClass'
     },
     transactionId: String,
+    paymentType:String,
+    paymentStatus:String,
+    message:String,
     amount: Number,
-    paidStatus: Boolean,
+   
     paidOn: Date,
     status: Number,
     tsCreatedAt: Number,
