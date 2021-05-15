@@ -2158,7 +2158,7 @@ exports.detailOfContest = async (req, res) => {
     else {
         isParticipant = false
     }
-
+     console.log(userId,contestId,isParticipant,didParticpated);
     const presentTimeMilli = Date.now();
     var presentTime = Math.floor(presentTimeMilli / 1000);
 
