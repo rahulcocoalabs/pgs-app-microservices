@@ -1411,7 +1411,7 @@ exports.eventParticipate = async (req, res) => {
         eventId: eventId,
         email: params.email,
         attendeeCount: params.count,
-        user: userId,
+        userId: userId,
         group: groupId,
         status: 1,
         tsCreatedAt: Date.now(),
