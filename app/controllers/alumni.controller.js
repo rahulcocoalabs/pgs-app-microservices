@@ -1789,7 +1789,7 @@ exports.listContest = async (req, res) => {
     var filter = {};
     filter.status = 1;
     filter.isApprovedByAdmin = true;
-    //filter._id = { $in: approvedContestIds };
+    filter.groupId = id;
     const presentTimeMilli = Date.now();
     var presentTime = Math.floor(presentTimeMilli / 1000);
     
