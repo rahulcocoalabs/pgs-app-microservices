@@ -163,24 +163,14 @@ exports.addAlumni = async (req, res) => {
 
     try {
         const res = await superagent.post('https://backend.pgsedu.com/alumnis/insert').send(payload);
-        console.log(res);
+        console.log('res');
       } catch (err) {
         console.error(err.message);
       }
 
-    var adminData = await AlumniAdmin.create({
-        email:userDataInfo.email,
-        mongoId:userId,
-        password_hash:userDataInfo.password, 
-        username:userDataInfo.email
-    }).catch(err => {
-        console.log(err.message,'17/05');
-        return { success: 0, message: "did not get detail for requests", error: err.message}
-    });
+    
 
-    if(adminData && adminData.success != undefined && adminData.success === 0){
-        return res.send(adminData);
-    }
+   
 
     
 
