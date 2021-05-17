@@ -7,12 +7,13 @@ const alumniContestParticipation = require('../models/alumniContestParticipation
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const AlumniContest = require('../models/alumniContests.model.js');
-const AlumniAdmin = methods.loadModel('alumniAdmin')//require('../models/alumniAdmin.model.js');
+const AlumniAdmin = require('../models/alumniAdmin.model.js');
 const AlumniContestPermissions = require('../models/alumniContestPermission.model.js');
 const contestImageBase = config.alumni.contestImageBase;
 const imageBase = config.alumni.imageBase;
 const userImageBase = config.users.imageBase;
 const constants = require('../helpers/constants.js');
+const superagent = require('superagent');
 const { TUTOR_TYPE, TODAYS_EVENT_TYPE } = require('../helpers/constants.js');
 var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 const axios = require('axios');
@@ -159,6 +160,13 @@ exports.addAlumni = async (req, res) => {
 
     let data1 = res1.data;
     console.log(data1);
+
+    try {
+        const res = await superagent.post('https://backend.pgsedu.com/alumnis/insert').send(payload);
+        console.log(res);
+      } catch (err) {
+        console.error(err.message);
+      }
 
     var adminData = await AlumniAdmin.create({
         email:userDataInfo.email,
