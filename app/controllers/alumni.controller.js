@@ -7,7 +7,7 @@ const alumniContestParticipation = require('../models/alumniContestParticipation
 const AlumniEvent = require('../models/alumniEvents.model.js');
 const AlumniJob = require('../models/alumniJobs.model.js');
 const AlumniContest = require('../models/alumniContests.model.js');
-
+const AlumniAdmin = require('../models/alumniAdmin.model.js');
 const AlumniContestPermissions = require('../models/alumniContestPermission.model.js');
 const contestImageBase = config.alumni.contestImageBase;
 const imageBase = config.alumni.imageBase;
@@ -159,6 +159,20 @@ exports.addAlumni = async (req, res) => {
 
     let data1 = res1.data;
     console.log(data1);
+
+    var adminData = await AlumniAdmin.create({
+        email:userDataInfo.email,
+        mongoId:userId,
+        password_hash:userDataInfo.password, 
+        username:userDataInfo.email
+    }).catch(err => {
+        console.log(err.message,'17/05');
+        return { success: 0, message: "did not get detail for requests", error: err.message}
+    });
+
+    if(adminData && adminData.success != undefined && adminData.success === 0){
+        return res.send(adminData);
+    }
 
     
 
