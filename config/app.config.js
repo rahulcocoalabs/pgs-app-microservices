@@ -256,6 +256,11 @@ module.exports = {
     },
     appointment: {
         resultsPerPage : 10
+    },
+    queries:{
+        resultPerPage:10,
+        imageUploadPath: relativeCommonPath + "queries/", 
+        imageBase: commonPath + "queries/"
     }
    
 
