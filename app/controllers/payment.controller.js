@@ -156,7 +156,7 @@ exports.savePayment = async (req, res) => {
   var classId = params.classId;
   var paymentStatus = params.paymentStatus;
   var message = params.message;
-  var type = params.type;
+  var type = params.paymentType;
 
   const newPayment = new Payment({
     userId: userId,
