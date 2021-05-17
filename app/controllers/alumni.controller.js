@@ -2245,7 +2245,9 @@ exports.deleteAll = async (req, res) => {
     var a = await AlumniEventParticipation.updateMany({}, { status: 0 })
     var b = await AlumniJob.updateMany({}, { status: 0 })
     var c = await AlumniJoinRequest.updateMany({}, { status: 0 })
-
+    var d = await AlumniContest.updateMany({}, { status: 0 })
+    var e = await AlumniContestPermissions.updateMany({}, { status: 0 })
+    var f = await alumniContestParticipation.updateMany({}, { status: 0 })
     return res.send("ok")
 }
 
