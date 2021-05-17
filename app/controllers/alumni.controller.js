@@ -156,13 +156,10 @@ exports.addAlumni = async (req, res) => {
 
     let payload = { mongoId:userDataInfo._id , username: userDataInfo.email,password: userDataInfo.password, email: userDataInfo.email};
 
-    let res1 = await axios.post('https://backend.pgsedu.com/alumnis/insert', payload);
-
-    let data1 = res1.data;
-    console.log(data1);
+    
 
     try {
-        const res = await superagent.post('https://backend.pgsedu.com/alumnis/insert').send(payload);
+        const res1 = await superagent.post('https://backend.pgsedu.com/alumnis/insert').send(payload);
         console.log('res');
       } catch (err) {
         console.error(err.message);
