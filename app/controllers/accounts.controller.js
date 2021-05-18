@@ -3301,7 +3301,7 @@ async function changePassword(password, oldPassword, userId) {
   }
   else {
 
-    return { success: 0 }
+    return { success: 0 ,message:"old password does not match"}
   }
 
 }
