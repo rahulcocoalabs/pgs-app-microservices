@@ -9,4 +9,4 @@ const QuerySchema = mongoose.Schema({
     tsModifiedAt: Number
 
 });
-module.exports = mongoose.model('QueryCategory', QuerySchema, 'QueryCategories');
+module.exports = mongoose.model('QueryCategory', QuerySchema, 'Categories');
