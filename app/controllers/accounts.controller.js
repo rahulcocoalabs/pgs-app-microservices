@@ -1592,10 +1592,20 @@ exports.update = async (req, res) => {
   if (params.password != undefined && params.oldPassword != undefined) {
 
     var y = await changePassword(params.password, params.oldPassword, userId);
-    return res.send({
-      success: 1,
-      message: "updated"
-    })
+    
+
+    if (y.success === 1){
+      return res.send({
+        success: 1,
+        message: "updated"
+      })
+    }
+    else{
+      return res.send({
+        success: 0,
+        message: "old password does not match"
+      })
+    }
   }
 
   if (params.password != undefined) {
