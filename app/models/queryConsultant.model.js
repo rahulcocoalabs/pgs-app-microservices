@@ -13,4 +13,4 @@ const QueryConsultantSchema = mongoose.Schema({
     tsModifiedAt: Number
 
 });
-module.exports = mongoose.model('QueryConsultant', QueryConsultantSchema, 'QueryConsultants');
+module.exports = mongoose.model('QueryConsultant', QueryConsultantSchema, 'Consultants');
