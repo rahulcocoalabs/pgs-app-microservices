@@ -5,7 +5,7 @@ const queryConfig = config.queries;
 const app = express();
 app.use(cors());
 
-const QueryCategory = require('../models/queriesCategory.model');
+const QueryCategory = require('../models/queryCategory.model');
 
 
 exports.getCategories = async (req, res) => {
