@@ -52,7 +52,7 @@ exports.getConsultants = async (req, res) => {
         return { success:0, message: err.message }
     });
 
-    if(categories && categories.success !== undefined && categories.success === 0){
+    if(consultants && consultants.success !== undefined && consultants.success === 0){
         return res.send(categories);
     }
 
