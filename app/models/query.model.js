@@ -4,6 +4,7 @@ const QueryConsultantSchema = mongoose.Schema({
     question:String,
     answer:String,
     isAnswered:Boolean,
+    code:Number,
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'QueryCategory'

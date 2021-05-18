@@ -60,3 +60,31 @@ exports.getConsultants = async (req, res) => {
 
 
 }
+
+exports.postQuery = async (req, res) => {
+
+
+    const body = req.body;
+    const userData = req.identity.data.userId;
+    const userId = userData.userId;
+    const consultantId = req.params.id;
+    var errors = [];
+
+    if(body.question){
+        errors.push({
+            field: "question",
+            message: "question cannot be empty"
+        })
+    }
+    if(body.category){
+        errors.push({
+            field: "category",
+            message: "category cannot be empty"
+        })
+    }
+    
+    const a = Math.floor(Math.random() * (1000000000 - 1)) + 1;
+    console.log(`Random value is ${a}`);
+
+
+}

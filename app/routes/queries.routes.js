@@ -5,5 +5,5 @@ module.exports = (app) => {
     
     app.get('/queries/get-categories',auth, query.getCategories);
     app.get('/queries/get-consultants/:id',auth, query.getConsultants);
-   
+    app.post('/queries/post-query/:id',auth, query.postQuery);
 }
