@@ -91,7 +91,7 @@ exports.postQuery = async (req, res) => {
         isAnswered:false,
         code:code,
         category: body.category,
-        consultant: id,
+        consultant: consultantId,
         userId: userId,
         status: 1,
         tsCreatedAt: Date.now(),
