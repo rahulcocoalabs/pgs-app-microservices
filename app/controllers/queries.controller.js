@@ -183,7 +183,7 @@ exports.addAnswer = async(req,res) =>{
         })
     }
     
-    const updateData = await query.updateOne({status:1,_id:queryId},{answer:body.answer,tsModifiedAt:Date.now()}).catch(err => {
+    const updateData = await query.updateOne({status:1,_id:queryId,code:body.code},{answer:body.answer,tsModifiedAt:Date.now(),isAnswered:true}).catch(err => {
         return {
             success:0,
             message:err.message
@@ -196,7 +196,7 @@ exports.addAnswer = async(req,res) =>{
     }
 
     return res.send({
-        success:0,
+        success:1,
         message:"success"
     })
 }
