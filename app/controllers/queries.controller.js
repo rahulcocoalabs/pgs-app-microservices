@@ -4,7 +4,8 @@ var config = require('../../config/app.config.js');
 const queryConfig = config.queries;
 const app = express();
 app.use(cors());
-
+const Setting = require('../models/setting.model');
+const sgMail = require('@sendgrid/mail');
 const QueryCategory = require('../models/queryCategory.model');
 const Consultant = require('../models/queryConsultant.model');
 const query = require('../models/query.model');
@@ -23,14 +24,14 @@ exports.getCategories = async (req, res) => {
         limit: perPage
     };
     const categories = await QueryCategory.find({ status: 1 }, { name: 1, image: 1, description: 1 }, pageParams).catch(err => {
-        return { success:0, message: err.message }
+        return { success: 0, message: err.message }
     });
 
-    if(categories && categories.success !== undefined && categories.success === 0){
+    if (categories && categories.success !== undefined && categories.success === 0) {
         return res.send(categories);
     }
 
-    return res.send({ success:1, message: "success",items:categories,imageBase:queryConfig.imageBase});
+    return res.send({ success: 1, message: "success", items: categories, imageBase: queryConfig.imageBase });
 
 
 }
@@ -48,15 +49,15 @@ exports.getConsultants = async (req, res) => {
         limit: perPage
     };
     const id = req.params.id;
-    const consultants = await Consultant.find({ status: 1 ,category:id}, { name: 1, image: 1, description: 1 }, pageParams).catch(err => {
-        return { success:0, message: err.message }
+    const consultants = await Consultant.find({ status: 1, category: id }, { name: 1, image: 1, description: 1 }, pageParams).catch(err => {
+        return { success: 0, message: err.message }
     });
 
-    if(consultants && consultants.success !== undefined && consultants.success === 0){
+    if (consultants && consultants.success !== undefined && consultants.success === 0) {
         return res.send(categories);
     }
 
-    return res.send({ success:1, message: "success",items:consultants,imageBase:queryConfig.imageBase});
+    return res.send({ success: 1, message: "success", items: consultants, imageBase: queryConfig.imageBase });
 
 
 }
@@ -70,26 +71,26 @@ exports.postQuery = async (req, res) => {
     const consultantId = req.params.id;
     var errors = [];
 
-    if(body.question){
+    if (body.question) {
         errors.push({
             field: "question",
             message: "question cannot be empty"
         })
     }
-    if(body.category){
+    if (body.category) {
         errors.push({
             field: "category",
             message: "category cannot be empty"
         })
     }
-    
+
     const code = Math.floor(Math.random() * (1000000000 - 1)) + 1;
 
     const newObj = new query({
-        question:body.question,
-        answer:null,
-        isAnswered:false,
-        code:code,
+        question: body.question,
+        answer: null,
+        isAnswered: false,
+        code: code,
         category: body.category,
         consultant: consultantId,
         userId: userId,
@@ -100,18 +101,69 @@ exports.postQuery = async (req, res) => {
 
     const saveData = await newObj.save().catch(err => {
         return {
-            success:0,
-            message:err.message
+            success: 0,
+            message: err.message
         }
     });
 
-    if (saveData && saveData.success != undefined && saveData.success === 0){
+    if (saveData && saveData.success != undefined && saveData.success === 0) {
         return res.send(saveData);
     }
 
+    var settingData = await Setting.findOne({
+        key: constants.SEND_GRID_AUTH_KEY,
+        status: 1
+    })
+        .catch(err => {
+            return {
+                success: 0,
+                message: 'Something went wrong while getting sendgrid data',
+                error: err
+            }
+        })
+    if (settingData && (settingData.success !== undefined) && (settingData.success === 0)) {
+        return res.send(settingData);
+    }
+    if (settingData) {
+
+        const mailmsg = "You have a question from a user  and code is " + "   " + code;
+        sgMail.setApiKey(settingData.value);
+
+
+        const x = await sendMail(mailmsg, email, "Password reset link from PGS App");
+
+        if (x && (x == 1)) {
+            return res.json({
+                success: 0,
+                message: "Mail could not be sent"
+            })
+        }
+    }
+
     return res.send({
-        success:1,
-        message:"success"
+        success: 1,
+        message: "success"
     })
 
+}
+async function sendMail(message, target, title) {
+
+    var ret = 0;
+
+    const msg = {
+        to: target,
+        from: config.resetpassword.fromMail,
+        subject: title,
+        text: message,
+    };
+    console.log(target, message, "sender", config.resetpassword.fromMail);
+    sgMail
+        .send(msg)
+        .then(() => console.log('send mail success'))
+        .catch(err => {
+            console.log(JSON.stringify(err));
+            ret = 1;
+            return ret;
+        });
+    return ret;
 }
