@@ -7,7 +7,7 @@ app.use(cors());
 
 const QueryCategory = require('../models/queryCategory.model');
 const Consultant = require('../models/queryConsultant.model');
-
+const query = require('../models/query.model');
 
 exports.getCategories = async (req, res) => {
 
@@ -83,8 +83,35 @@ exports.postQuery = async (req, res) => {
         })
     }
     
-    const a = Math.floor(Math.random() * (1000000000 - 1)) + 1;
-    console.log(`Random value is ${a}`);
+    const code = Math.floor(Math.random() * (1000000000 - 1)) + 1;
 
+    const newObj = new query({
+        question:body.question,
+        answer:null,
+        isAnswered:false,
+        code:code,
+        category: body.category,
+        consultant: id,
+        userId: userId,
+        status: 1,
+        tsCreatedAt: Date.now(),
+        tsModifiedAt: null
+    })
+
+    const saveData = await newObj.save().catch(err => {
+        return {
+            success:0,
+            message:err.message
+        }
+    });
+
+    if (saveData && saveData.success != undefined && saveData.success === 0){
+        return res.send(saveData);
+    }
+
+    return res.send({
+        success:1,
+        message:"success"
+    })
 
 }
