@@ -168,7 +168,7 @@ async function sendMail(message, target, title) {
     return ret;
 }
 
-exports.addAnswer = (req,res) =>{
+exports.addAnswer = async(req,res) =>{
 
     const body = req.body;
     const userData = req.identity.data.userId;
