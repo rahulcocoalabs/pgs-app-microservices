@@ -167,3 +167,36 @@ async function sendMail(message, target, title) {
         });
     return ret;
 }
+
+exports.addAnswer = (req,res) =>{
+
+    const body = req.body;
+    const userData = req.identity.data.userId;
+    const userId = userData.userId;
+    const queryId = req.params.id;
+    var errors = [];
+
+    if (body.answer) {
+        errors.push({
+            field: "question",
+            message: "question cannot be empty"
+        })
+    }
+    
+    const updateData = await query.updateOne({status:1,_id:queryId},{answer:body.answer,tsModifiedAt:Date.now()}).catch(err => {
+        return {
+            success:0,
+            message:err.message
+        }
+    })
+
+    if (updateData && updateData.success != undefined && updateData.success === 0){
+
+        return res.send(updateData)
+    }
+
+    return res.send({
+        success:0,
+        message:"success"
+    })
+}
