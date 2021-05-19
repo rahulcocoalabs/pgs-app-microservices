@@ -182,6 +182,19 @@ exports.addAnswer = async(req,res) =>{
             message: "question cannot be empty"
         })
     }
+    if (body.code) {
+        errors.push({
+            field: "question",
+            message: "question cannot be empty"
+        })
+    }
+
+    if(errors.length > 0){
+        return res.send({
+            success:0,
+            errors:errors
+        })
+    }
     
     const updateData = await query.updateOne({status:1,_id:queryId,code:body.code},{answer:body.answer,tsModifiedAt:Date.now(),isAnswered:true}).catch(err => {
         return {
