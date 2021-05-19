@@ -229,7 +229,7 @@ exports.listQueries = async(req,res)=> {
     };
     const id = req.params.id;
     const queryList = await query.find({
-        _id:id,status:1,isAnswered:false
+        consultant:id,status:1,isAnswered:false
     },{tsCreatedAt:0},pageParams).catch(err => {
         return {
             success:0,message:err.message
