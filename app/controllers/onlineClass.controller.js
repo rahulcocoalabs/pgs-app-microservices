@@ -1560,8 +1560,10 @@ exports.updateAppointmentStatus1 = async (req, res) => {
   if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0) {
     return res.send(updateInfo)
   }
-
+   console.log('20/05')
+   console.log(params.status,constants.APPROVEDSTATUS)
   if (params.status == constants.APPROVEDSTATUS) {
+    console.log('20/05','1')
     var classReqInfo = await classRequest.findOne({ _id: req.params.id }).catch(err => {
       return {
         success: 0,
