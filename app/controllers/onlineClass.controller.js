@@ -1572,7 +1572,7 @@ exports.updateAppointmentStatus1 = async (req, res) => {
   if (classReqInfo && classReqInfo.success != undefined && classReqInfo.success === 0) {
     return res.send(classReqInfo)
   }
-
+   console.log('20/05',classReqInfo);
   var notificationMessage = "Some one has sent you request to join class"
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": classReqInfo.userId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
