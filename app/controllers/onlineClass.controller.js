@@ -1561,33 +1561,35 @@ exports.updateAppointmentStatus1 = async (req, res) => {
     return res.send(updateInfo)
   }
 
-  var classReqInfo = await classRequest.findOne({ _id: req.params.id }).catch(err => {
-    return {
-      success: 0,
-      message: "something went wrong",
-      error: err.message
+  if (params.status == constants.APPROVEDSTATUS) {
+    var classReqInfo = await classRequest.findOne({ _id: req.params.id }).catch(err => {
+      return {
+        success: 0,
+        message: "something went wrong",
+        error: err.message
+      }
+    })
+
+    if (classReqInfo && classReqInfo.success != undefined && classReqInfo.success === 0) {
+      return res.send(classReqInfo)
     }
-  })
+    
+    var notificationMessage = "tutor has approved your  request to join class"
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": classReqInfo.userId }]
+    // var metaInfo = {"type":"event","reference_id":eventData.id}
+    var notificationObj = {
+      title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
+      message: notificationMessage,
+      type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+      referenceId: classReqInfo._id,
+      filtersJsonArr,
+      // metaInfo,
 
-  if (classReqInfo && classReqInfo.success != undefined && classReqInfo.success === 0) {
-    return res.send(classReqInfo)
+      userId: classReqInfo.userId,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
   }
-   console.log('20/05',classReqInfo);
-  var notificationMessage = "Some one has sent you request to join class"
-  var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": classReqInfo.userId }]
-  // var metaInfo = {"type":"event","reference_id":eventData.id}
-  var notificationObj = {
-    title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
-    message: notificationMessage,
-    type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
-    referenceId: classReqInfo._id,
-    filtersJsonArr,
-    // metaInfo,
-
-    userId: classReqInfo.userId,
-    notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
-  }
-  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
   return res.send({
     success: 1,
