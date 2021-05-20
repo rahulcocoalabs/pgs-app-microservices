@@ -188,16 +188,16 @@ exports.addAnswer = async(req,res) =>{
     const queryId = req.params.id;
     var errors = [];
 
-    if (body.answer) {
+    if (!body.answer) {
         errors.push({
-            field: "question",
-            message: "question cannot be empty"
+            field: "answer",
+            message: "answer cannot be empty"
         })
     }
-    if (body.code) {
+    if (!body.code) {
         errors.push({
-            field: "question",
-            message: "question cannot be empty"
+            field: "code",
+            message: "code cannot be empty"
         })
     }
 
