@@ -71,6 +71,16 @@ exports.postQuery = async (req, res) => {
     const consultantId = req.params.id;
     var errors = [];
 
+    const consultantInfo = await Consultant.findOne({status:1,_id:consultantId}).catch(err => {
+        return {
+            success: 0,
+            message: err.message
+        }
+    })
+
+    if (consultantInfo && consultantInfo.success != undefined && consultantInfo.success === 0) {
+        return res.send(consultantInfo);
+    }
     if (body.question) {
         errors.push({
             field: "question",
