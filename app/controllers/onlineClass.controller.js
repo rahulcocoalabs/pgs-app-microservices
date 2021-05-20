@@ -1354,7 +1354,7 @@ exports.requestAppointment1 = async (req, res) => {
     });
   }
 
-  var didRequestSend = await classRequest.countDocuments({ classId: params.classId, userId: userId, isRejected: false,status:1 }).catch(err => {
+  var didRequestSend = await classRequest.countDocuments({ classId: params.classId, userId: userId, isRejected: false, status: 1 }).catch(err => {
     return { success: 0, message: "something went wrong", error: err.message };
   });
 
@@ -1408,7 +1408,7 @@ exports.requestAppointment1 = async (req, res) => {
     referenceId: saveData._id,
     filtersJsonArr,
     // metaInfo,
-    
+
     userId: params.tutorId,
     notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
   }
@@ -1560,6 +1560,22 @@ exports.updateAppointmentStatus1 = async (req, res) => {
   if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0) {
     return res.send(updateInfo)
   }
+
+  var notificationMessage = "Some one has sent you request to join class"
+  var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": updateInfo.userId }]
+  // var metaInfo = {"type":"event","reference_id":eventData.id}
+  var notificationObj = {
+    title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
+    message: notificationMessage,
+    type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+    referenceId: updateInfo._id,
+    filtersJsonArr,
+    // metaInfo,
+
+    userId: updateInfo.userId,
+    notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+  }
+  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
   return res.send({
     success: 1,
