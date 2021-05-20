@@ -1561,7 +1561,7 @@ exports.updateAppointmentStatus1 = async (req, res) => {
     return res.send(updateInfo)
   }
 
-  var classReqInfo = await classRequest.findOne({ _id: req.params.id }, update).catch(err => {
+  var classReqInfo = await classRequest.findOne({ _id: req.params.id }).catch(err => {
     return {
       success: 0,
       message: "something went wrong",
