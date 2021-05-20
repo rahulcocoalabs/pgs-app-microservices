@@ -1398,7 +1398,7 @@ exports.requestAppointment1 = async (req, res) => {
   if (saveData && saveData.success && saveData.success == 0) {
     return res.send(saveData)
   }
-
+  var notificationMessage = "Some one has sent you request to join class"
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": params.tutorId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
   var notificationObj = {
