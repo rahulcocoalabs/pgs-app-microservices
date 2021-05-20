@@ -78,6 +78,8 @@ exports.postQuery = async (req, res) => {
         }
     })
 
+    const email = consultantInfo.email || "mailrkponline@gmail.com"
+
     if (consultantInfo && consultantInfo.success != undefined && consultantInfo.success === 0) {
         return res.send(consultantInfo);
     }
