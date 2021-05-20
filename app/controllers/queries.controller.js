@@ -9,7 +9,7 @@ const sgMail = require('@sendgrid/mail');
 const QueryCategory = require('../models/queryCategory.model');
 const Consultant = require('../models/queryConsultant.model');
 const query = require('../models/query.model');
-
+const constants = require('../helpers/constants');
 exports.getCategories = async (req, res) => {
 
 
