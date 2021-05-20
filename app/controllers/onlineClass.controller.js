@@ -867,7 +867,7 @@ exports.listOnlineClasses = async (req, res) => {
       }]
     };
   }
-   console.log(params);
+  console.log(params);
   if (params.isLatest) {
     var d1 = Date.now();
 
@@ -1399,6 +1399,21 @@ exports.requestAppointment1 = async (req, res) => {
     return res.send(saveData)
   }
 
+  var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": params.tutorId }]
+  // var metaInfo = {"type":"event","reference_id":eventData.id}
+  var notificationObj = {
+    title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
+    message: notificationMessage,
+    type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+    referenceId: saveData._id,
+    filtersJsonArr,
+    // metaInfo,
+    
+    userId: params.tutorId,
+    notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+  }
+  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
   return res.send({
     success: 1,
     message: "submitted your request"
@@ -1688,7 +1703,7 @@ exports.updateAppointmentStatus = async (req, res) => {
     if (updateAppointmentStatus && (updateAppointmentStatus.success !== undefined) && (updateAppointmentStatus.success === 0)) {
       return res.send(updateAppointmentStatus);
     }
-
+    var notificationMessage = "Some one has sent you request to join class"
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": checkAppointment.userId }]
     // var metaInfo = {"type":"event","reference_id":eventData.id}
     var notificationObj = {
