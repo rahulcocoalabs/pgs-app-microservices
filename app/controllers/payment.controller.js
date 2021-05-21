@@ -220,7 +220,11 @@ exports.savePayment = async (req, res) => {
       return res.send(userInfo)
     }
     const studentName = userInfo.firstName + " " + userInfo.lastName;
-    const classInfo = await onlineClass.findOne({ status:1,_id:params.classId}).populate('currencyId').populate('tutorSubjectId').catch(err => {
+    const classInfo = await onlineClass.findOne({ status:1,_id:params.classId}).populate([ {
+      path: 'tutorSubjectId',
+    }, {
+      path: 'currencyId',
+    }]).catch(err => {
       return { success: 0, err: err.message}
     })
     if (classInfo && classInfo.success && classInfo.success == 0) {
