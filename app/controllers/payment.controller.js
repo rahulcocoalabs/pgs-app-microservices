@@ -226,9 +226,10 @@ exports.savePayment = async (req, res) => {
     if (classInfo && classInfo.success && classInfo.success == 0) {
       return res.send(classInfo )
     } 
-    const currency = classInfo.currencyId.name;
-    const subject = classInfo.tutorSubjectId.name;
-    const notify = await sendNotification("",params.tutorId,studentName,amount,subject,currency,params.classId)
+    console.log('21/05',classInfo);
+    // const currency = classInfo.currencyId.name;
+    // const subject = classInfo.tutorSubjectId.name;
+    // const notify = await sendNotification("",params.tutorId,studentName,amount,subject,currency,params.classId)
   }
 
   res.status(200).send({
