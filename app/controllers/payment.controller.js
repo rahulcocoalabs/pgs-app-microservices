@@ -2,13 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const axios = require('axios');
 const app = express();
+var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 app.use(cors());
 const Razorpay = require('razorpay')
 const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
 const Payment = require('../models/payment.model');
 const classRequest = require('../models/onlineClassRequests.model');
-
+const User = require('../models/user.model');
+const onlineClass = require('../models/onlineClass');
+const constants = require('../helpers/constants');
 async function getSettingData() {
 
   var keyId = await Setting.findOne({
@@ -166,7 +169,7 @@ exports.savePayment = async (req, res) => {
     amount: amount,
     paymentStatus: paymentStatus,
     message: message,
-    paymentType:type,
+    paymentType: type,
     paidOn: paidOn,
     status: 1,
     tsCreatedAt: Date.now(),
@@ -209,6 +212,23 @@ exports.savePayment = async (req, res) => {
     if (saveData && saveData.success && saveData.success == 0) {
       return res.send(saveData)
     }
+
+    const userInfo = await User.findOne({ status:1,_id:userId}).catch(err => {
+      return { success: 0, err: err.message}
+    })
+    if (userInfo && userInfo.success && userInfo.success == 0) {
+      return res.send(userInfo)
+    }
+    const studentName = userInfo.firstName + " " + userInfo.lastName;
+    const classInfo = await (await User.findOne({ status:1,_id:params.classId}).populate('currencyId')).populate('tutorSubjectId').catch(err => {
+      return { success: 0, err: err.message}
+    })
+    if (classInfo && classInfo.success && classInfo.success == 0) {
+      return res.send(classInfo )
+    } 
+    const currency = classInfo.currencyId.name;
+    const subject = classInfo.tutorSubjectId.name;
+    const notify = await sendNotification("",params.tutorId,studentName,amount,subject,currency,params.classId)
   }
 
   res.status(200).send({
@@ -218,3 +238,22 @@ exports.savePayment = async (req, res) => {
 
 }
 
+async function sendNotification(studentId,tutorId,studentName,amount,subject,currency,classId) {
+
+  var notificationMessage = studentName + " paid " + amount + " " + currency + "to your " + subject; 
+  var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": tutorId }]
+  // var metaInfo = {"type":"event","reference_id":eventData.id}
+  var notificationObj = {
+    title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
+    message: notificationMessage,
+    type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+    referenceId: classId,
+    filtersJsonArr,
+    // metaInfo,
+
+    userId: tutorId,
+    notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+  }
+  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
+}
