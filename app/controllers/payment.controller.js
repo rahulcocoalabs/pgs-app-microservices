@@ -12,7 +12,7 @@ const classRequest = require('../models/onlineClassRequests.model');
 const User = require('../models/user.model');
 const onlineClass = require('../models/onlineClass.model');
 
-const Subject = require('../models/tutorSubject.model');
+const subject = require('../models/tutorSubject.model');
 const currency = require('../models/currency.model');
 
 async function getSettingData() {
@@ -236,9 +236,16 @@ exports.savePayment = async (req, res) => {
     if (currencyInfo && currencyInfo.success && currencyInfo.success == 0) {
       return res.send(currencyInfo )
     } ;
-    console.log(currencyInfo)
-    // const subject = classInfo.tutorSubjectId.name;
-    // const notify = await sendNotification("",params.tutorId,studentName,amount,subject,currency,params.classId)
+
+    const subjectInfo = await subject.findOne({status:1,_id:classInfo.tutorSubjectId}).catch(err => {
+      return { success: 0, err: err.message}
+    })
+    if (subjectInfo && subjectInfo.success && subjectInfo.success == 0) {
+      return res.send(subjectInfo )
+    } ;
+    
+    
+     const notify = await sendNotification("",params.tutorId,studentName,amount,subjectInfo.name,currencyInfo.name,params.classId)
   }
 
   res.status(200).send({
