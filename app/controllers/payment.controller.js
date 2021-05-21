@@ -10,7 +10,7 @@ const constants = require('../helpers/constants');
 const Payment = require('../models/payment.model');
 const classRequest = require('../models/onlineClassRequests.model');
 const User = require('../models/user.model');
-const onlineClass = require('../models/onlineClass');
+const onlineClass = require('../models/onlineClass.model');
 
 async function getSettingData() {
 
