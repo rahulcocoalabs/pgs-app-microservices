@@ -257,7 +257,7 @@ exports.savePayment = async (req, res) => {
 
 async function sendNotification(studentId,tutorId,studentName,amount,subject,currency,classId) {
 
-  var notificationMessage = studentName + " paid " + amount + " " + currency + "to your " + subject; 
+  var notificationMessage = studentName + " paid " + amount + " " + currency + " for your " + subject + " class"; 
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": tutorId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
   var notificationObj = {
