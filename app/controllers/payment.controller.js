@@ -261,7 +261,7 @@ async function sendNotification(studentId,tutorId,studentName,amount,subject,cur
   var notificationMessage = studentName + " paid " + amount + " " + currency + " for your " + subject + " class"; 
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": tutorId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
-  var notificationObj = {
+  var notificationObj1 = {
     title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
     message: notificationMessage,
     type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
@@ -272,7 +272,7 @@ async function sendNotification(studentId,tutorId,studentName,amount,subject,cur
     userId: tutorId,
     notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
   }
-  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  let notificationData1 = await pushNotificationHelper.sendNotification(notificationObj1)
 
 }
 
@@ -281,7 +281,7 @@ async function sendNotificationStudent(studentId,amount,subject,currency,classId
   var notificationMessage =  currency + " " + amount + " paid successfully for " + subject + " class"; 
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": studentId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
-  var notificationObj = {
+  var notificationObj2 = {
     title: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TITLE,
     message: notificationMessage,
     type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
@@ -292,6 +292,6 @@ async function sendNotificationStudent(studentId,amount,subject,currency,classId
     userId: studentId,
     notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
   }
-  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  let notificationData2 = await pushNotificationHelper.sendNotification(notificationObj2)
 
 }
