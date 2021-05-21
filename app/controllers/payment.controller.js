@@ -222,14 +222,14 @@ exports.savePayment = async (req, res) => {
     if (userInfo && userInfo.success && userInfo.success == 0) {
       return res.send(userInfo)
     }
-    const studentName = userInfo.firstName + " " + userInfo.lastName;
+    const studentName = userInfo.firstName ;
     const classInfo = await onlineClass.findOne({ status:1,_id:params.classId}).catch(err => {
       return { success: 0, err: err.message}
     })
     if (classInfo && classInfo.success && classInfo.success == 0) {
       return res.send(classInfo )
     } 
-    console.log('21/05',classInfo);
+    
      const currencyInfo = await currency.findOne({status:1,_id:classInfo.currencyId}).catch(err => {
       return { success: 0, err: err.message}
     })
