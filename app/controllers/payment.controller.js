@@ -11,7 +11,7 @@ const Payment = require('../models/payment.model');
 const classRequest = require('../models/onlineClassRequests.model');
 const User = require('../models/user.model');
 const onlineClass = require('../models/onlineClass');
-const constants = require('../helpers/constants');
+
 async function getSettingData() {
 
   var keyId = await Setting.findOne({
