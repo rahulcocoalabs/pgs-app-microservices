@@ -284,6 +284,7 @@ async function sendNotification(tutorId,studentName,amount,subject,currency,clas
 async function sendNotificationStudent(studentId,amount,subject,currency,classId) {
 
   var notificationMessage =  currency + " " + amount + " paid successfully for " + subject + " class"; 
+  console.log(" ------------------- >                       message   <--------------------------")
   console.log(notificationMessage,'24/05');
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": studentId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
