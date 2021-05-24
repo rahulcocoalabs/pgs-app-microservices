@@ -245,7 +245,7 @@ exports.savePayment = async (req, res) => {
     } ;
     
     
-     const notify1 = await sendNotification("",params.tutorId,studentName,amount,subjectInfo.name,currencyInfo.name,params.classId)
+     //const notify1 = await sendNotification("",params.tutorId,studentName,amount,subjectInfo.name,currencyInfo.name,params.classId)
      const notify2 = await sendNotificationStudent(userId,amount,subject,currency,classId)
   }
 
