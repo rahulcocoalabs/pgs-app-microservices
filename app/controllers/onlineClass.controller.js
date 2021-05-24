@@ -3620,12 +3620,12 @@ var job1 = new CronJob(' */15  * * * * *', async function () {
   filter.status = 1;
   filter.availableDays = n;
   filter.isPublic = false;
-
+  console.log(filter);
   const classes = await OnlineCLass.find(filter, { _id: 1 }).catch(err => {
     console.log("error in cron job");
     console.log(err.message);
   })
-
+  console.log(classes);
   const classIds = classes.map(classId => classId._id)
 
   const reqs = await classRequest.find({ _id: { $in: classIds }, isApproved: true }, { userId: 1, classId: 1 }).catch(err => {
