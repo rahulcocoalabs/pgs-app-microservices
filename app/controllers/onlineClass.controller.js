@@ -3614,7 +3614,7 @@ var job1 = new CronJob(' */15  * * * * *', async function () {
   weekday[6] = "Saturday";
 
   var n = weekday[d.getDay()];
-
+  console.log(n);
 
   var filter = {};
   filter.status = 1;
