@@ -246,7 +246,7 @@ exports.savePayment = async (req, res) => {
     
     
      const notify1 = await sendNotification(params.tutorId,studentName,amount,subjectInfo.name,currencyInfo.name,params.classId)
-     const notify2 = await sendNotificationStudent(userId,amount,subjectInfo.name,currencyIno.name,classId)
+     const notify2 = await sendNotificationStudent(userId,amount,subjectInfo.name,currencyInfo.name,classId)
   }
 
   res.status(200).send({
