@@ -3627,12 +3627,12 @@ var job1 = new CronJob(' */30  * * * * *', async function () {
   })
   console.log(classes);
   const classIds = classes.map(classId => classId.id)
-
+  console.log(classIds);
   const reqs = await classRequest.find({ _id: { $in: classIds }, isApproved: true }, { userId: 1, classId: 1 }).catch(err => {
     console.log("error in cron job");
     console.log(err.message);
   })
-
+  console.log(reqs);
   for (x in reqs) {
     let classId = reqs[x].classId;
     let userId = reqs[x].userId;
