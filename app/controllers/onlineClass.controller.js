@@ -3601,7 +3601,7 @@ var CronJob = require("cron").CronJob;
 // New CronJob run a task every 5 seconds
 
 
-var job1 = new CronJob(' */15  * * * * *', async function () {
+var job1 = new CronJob(' */30  * * * * *', async function () {
   console.log('cron started')
   var d = new Date();
   var weekday = new Array(7);
@@ -3626,7 +3626,7 @@ var job1 = new CronJob(' */15  * * * * *', async function () {
     console.log(err.message);
   })
   console.log(classes);
-  const classIds = classes.map(classId => classId._id)
+  const classIds = classes.map(classId => classId.id)
 
   const reqs = await classRequest.find({ _id: { $in: classIds }, isApproved: true }, { userId: 1, classId: 1 }).catch(err => {
     console.log("error in cron job");
