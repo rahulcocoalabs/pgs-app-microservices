@@ -9,7 +9,7 @@ const JWT_KEY = config.jwt.key;
 const JWT_EXPIRY_SECONDS = config.jwt.expirySeconds;
 
 var msg91 = require("msg91")(smsConfig.key, smsConfig.fromNo, smsConfig.route);
-
+var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 var jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var crypto = require("crypto");
@@ -1560,9 +1560,9 @@ exports.updateAppointmentStatus1 = async (req, res) => {
   if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0) {
     return res.send(updateInfo)
   }
-  
-   if (params.status == constants.APPROVED_STATUS) {
-    
+
+  if (params.status == constants.APPROVED_STATUS) {
+
     var classReqInfo = await classRequest.findOne({ _id: req.params.id }).catch(err => {
       return {
         success: 0,
@@ -1574,7 +1574,7 @@ exports.updateAppointmentStatus1 = async (req, res) => {
     if (classReqInfo && classReqInfo.success != undefined && classReqInfo.success === 0) {
       return res.send(classReqInfo)
     }
-    
+
     var notificationMessage = "tutor has approved your  request to join class"
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": classReqInfo.userId }]
     // var metaInfo = {"type":"event","reference_id":eventData.id}
@@ -3596,3 +3596,60 @@ exports.removeInstitutionClassFavourite = async (req, res) => {
 
 
 }
+
+var CronJob = require('cron').CronJob;
+
+var job = new CronJob(' 0 17 * * *', async function () {
+
+  var d = new Date();
+  var weekday = new Array(7);
+  weekday[0] = "Sunday";
+  weekday[1] = "Monday";
+  weekday[2] = "Tuesday";
+  weekday[3] = "Wednesday";
+  weekday[4] = "Thursday";
+  weekday[5] = "Friday";
+  weekday[6] = "Saturday";
+
+  var n = weekday[d.getDay()];
+
+
+  var filter = {};
+  filter.status = 1;
+  filter.availableDays = n;
+  filter.isPublic = false;
+
+  const classes = await OnlineCLass.find(filter, { _id: 1 }).catch(err => {
+    console.log("error in cron job");
+    console.log(err.message);
+  })
+
+  const classIds = classes.map(classId => classId._id)
+
+  const reqs = await classRequest.find({ _id: { $in: classIds } }, { userId: 1, classId: 1 }).catch(err => {
+    console.log("error in cron job");
+    console.log(err.message);
+  })
+
+  for (x in reqs) {
+    let classId = reqs[x].classId;
+    let userId = reqs[x].userId;
+    
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": userId }]
+
+    var notificationObj = {
+      title: " Today's Class",
+      message: "Class is today, don't forget to join!",
+      type: constants.ONLINE_CLASS_PARTICIPATION,
+      filtersJsonArr,
+      // metaInfo,
+      typeId: classId,
+      userId: userId,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  }
+
+}, null, true, 'Asia/Kolkata');
+job.start();
