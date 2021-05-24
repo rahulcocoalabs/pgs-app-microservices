@@ -3626,7 +3626,7 @@ var job = new CronJob(' 0 17 * * *', async function () {
 
   const classIds = classes.map(classId => classId._id)
 
-  const reqs = await classRequest.find({ _id: { $in: classIds } }, { userId: 1, classId: 1 }).catch(err => {
+  const reqs = await classRequest.find({ _id: { $in: classIds } ,isApproved: true}, { userId: 1, classId: 1 }).catch(err => {
     console.log("error in cron job");
     console.log(err.message);
   })
