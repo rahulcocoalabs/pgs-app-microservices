@@ -3599,19 +3599,9 @@ exports.removeInstitutionClassFavourite = async (req, res) => {
 
 var CronJob = require("cron").CronJob;
 // New CronJob run a task every 5 seconds
-var job = new CronJob("*/5 * * * * *", task,onComplete);
-// task to execute from cron job
-function task() {
-console.log("My First Cron Job task run at: " + new Date());
-console.log("Next task at: " + job.nextDates(1));
-// call onComplete method
-this.onComplete();
-}
-function onComplete() {
-console.log("Task completed");
-}
 
-var job1 = new CronJob(' */5 * * * *', async function () {
+
+var job1 = new CronJob(' */15  * * * * *', async function () {
   console.log('cron started')
   var d = new Date();
   var weekday = new Array(7);
