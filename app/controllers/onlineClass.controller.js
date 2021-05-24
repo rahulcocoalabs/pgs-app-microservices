@@ -3599,7 +3599,7 @@ exports.removeInstitutionClassFavourite = async (req, res) => {
 
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob(' 16 * * * *', async function () {
+var job = new CronJob(' */15 * * * *', async function () {
 
   var d = new Date();
   var weekday = new Array(7);
