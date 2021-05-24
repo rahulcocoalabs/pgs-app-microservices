@@ -3600,7 +3600,7 @@ exports.removeInstitutionClassFavourite = async (req, res) => {
 var CronJob = require('cron').CronJob;
 
 var job = new CronJob(' */15 * * * *', async function () {
-
+  console.log('cron started')
   var d = new Date();
   var weekday = new Array(7);
   weekday[0] = "Sunday";
@@ -3626,7 +3626,7 @@ var job = new CronJob(' */15 * * * *', async function () {
 
   const classIds = classes.map(classId => classId._id)
 
-  const reqs = await classRequest.find({ _id: { $in: classIds } ,isApproved: true}, { userId: 1, classId: 1 }).catch(err => {
+  const reqs = await classRequest.find({ _id: { $in: classIds }, isApproved: true }, { userId: 1, classId: 1 }).catch(err => {
     console.log("error in cron job");
     console.log(err.message);
   })
@@ -3634,7 +3634,7 @@ var job = new CronJob(' */15 * * * *', async function () {
   for (x in reqs) {
     let classId = reqs[x].classId;
     let userId = reqs[x].userId;
-    
+
 
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": userId }]
 
