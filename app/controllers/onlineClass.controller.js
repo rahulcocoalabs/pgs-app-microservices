@@ -3601,7 +3601,7 @@ var CronJob = require("cron").CronJob;
 // New CronJob run a task every 5 seconds
 
 
-var job1 = new CronJob(' */30  * * * * *', async function () {
+var job1 = new CronJob(' 0 06 * * *', async function () {
   console.log('cron started')
   var d = new Date();
   var weekday = new Array(7);
