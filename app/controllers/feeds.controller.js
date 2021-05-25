@@ -320,7 +320,7 @@ exports.getSummary1 = async (req, res) => {
   //   array.push({emotionsinfo:object})
   // }
 
-  const totalNumFeeds = await Feed.find({status: 1}).catch(err =>{
+  const totalNumFeeds = await Feed.countDocuments({status: 1}).catch(err =>{
     return {
       success:0,
       message:err.message
