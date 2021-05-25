@@ -259,7 +259,7 @@ exports.getSummary1 = async (req, res) => {
   var offset = (page - 1) * perPage;
   var pageParams = {
     skip: offset,
-    limit: perPage
+    limit: 30
   };
 
   var feeds = await Feed.find({ status: 1 }, {}, pageParams).catch(err => {
