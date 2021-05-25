@@ -342,7 +342,7 @@ exports.getSummary1 = async (req, res) => {
     perPage: perPage,
     hasNextPage: hasNextPage,
     totalPages: totalPages,
-    items: array
+    items: feeds
   }
 
   var summary = {
