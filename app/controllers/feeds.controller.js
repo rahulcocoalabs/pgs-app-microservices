@@ -270,57 +270,63 @@ exports.getSummary1 = async (req, res) => {
     return res.send(feeds);
   }
 
-  var array = [];
-  for (x in feeds) {
-    let object = feeds[x];
-    let emotions = object.emotions;
-    var emotionObject = {
-      userEmotion: null,
-      total: 0,
-      love: 0,
-      happy: 0,
-      heartfilled: 0,
-      surprise: 0,
-      sad: 0,
-      angry: 0
-    };
-    for (y in emotions) {
-      let emotion = emotions[y];
+  // var array = [];
+  // for (x in feeds) {
+  //   let object = feeds[x];
+  //   let emotions = object.emotions;
+  //   var emotionObject = {
+  //     userEmotion: null,
+  //     total: 0,
+  //     love: 0,
+  //     happy: 0,
+  //     heartfilled: 0,
+  //     surprise: 0,
+  //     sad: 0,
+  //     angry: 0
+  //   };
+  //   for (y in emotions) {
+  //     let emotion = emotions[y];
      
-      if (emotion.userId == userId) {
+  //     if (emotion.userId == userId) {
        
 
-        emotionObject.userEmotion = emotion.emotion;
-        // return res.send({
-        //   flag:1,
-        //   emotionObject
-        // })
-      }
-      if (emotion.emotion == "heartfilled") {
-        emotionObject.heartfilled += 1;
-      }
-      if (emotion.emotion == "sad") {
-        emotionObject.sad += 1;
-      }
-      if (emotion.emotion == "happy") {
-        emotionObject.sad += 1;
-      }
-      if (emotion.emotion == "surprie") {
-        emotionObject.surprise += 1;
-      }
-      if (emotion.emotion == "angry") {
-        emotionObject.angry += 1;
-      }
-      if (emotion.emotion == "love") {
-        emotionObject.love += 1;
-      }
-    }
+  //       emotionObject.userEmotion = emotion.emotion;
+  //       // return res.send({
+  //       //   flag:1,
+  //       //   emotionObject
+  //       // })
+  //     }
+  //     if (emotion.emotion == "heartfilled") {
+  //       emotionObject.heartfilled += 1;
+  //     }
+  //     if (emotion.emotion == "sad") {
+  //       emotionObject.sad += 1;
+  //     }
+  //     if (emotion.emotion == "happy") {
+  //       emotionObject.sad += 1;
+  //     }
+  //     if (emotion.emotion == "surprie") {
+  //       emotionObject.surprise += 1;
+  //     }
+  //     if (emotion.emotion == "angry") {
+  //       emotionObject.angry += 1;
+  //     }
+  //     if (emotion.emotion == "love") {
+  //       emotionObject.love += 1;
+  //     }
+  //   }
   
-    object.emotionsInfo1 = emotionObject;
-    array.push({emotionsinfo:object})
-  }
+  //   object.emotionsInfo1 = emotionObject;
+  //   array.push({emotionsinfo:object})
+  // }
 
-  var totalPages = array.length / perPage;
+  const totalNumFeeds = await Feed.find({status: 1}).catch(err =>{
+    return {
+      success:0,
+      message:err.message
+    }
+  })
+  var totalPages = totalNumFeeds / perPage;
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
 
@@ -343,7 +349,7 @@ exports.getSummary1 = async (req, res) => {
     feeds: feedsSummary,
    
   }
-  res.send(feedsSummary);
+  res.send(summary);
  
 }
 
