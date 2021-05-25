@@ -421,10 +421,9 @@ exports.create = async (req, res) => {
   var coinType = constants.COIN_PROFILE_COMPLETION;
   var inviteApp = constants.COIN_INVITE_APP;
   if (!req.body.firstName || !req.body.phone
-    || !req.body.dob || !req.body.language
-    || !req.body.email || !req.body.school
+    || !req.body.dob || !req.body.email
     || !req.body.password || !req.body.countryCode
-    || !req.body.countryId) {
+    ) {
     var errors = [];
     if (!req.body.firstName) {
       errors.push({
@@ -438,12 +437,12 @@ exports.create = async (req, res) => {
         message: "Date of Birth cannot be empty"
       });
     }
-    if (!req.body.school) {
-      errors.push({
-        field: "school",
-        message: "School Name cannot be empty"
-      });
-    }
+    // if (!req.body.school) {
+    //   errors.push({
+    //     field: "school",
+    //     message: "School Name cannot be empty"
+    //   });
+    // }
     // if (!req.body.syllabusId) {
     //     errors.push({
     //         field: "syllabusId",
@@ -456,18 +455,18 @@ exports.create = async (req, res) => {
     //         message: "Syllabus Id is not a valid objectId"
     //     });
     // }
-    if (!req.body.language) {
-      errors.push({
-        field: "language",
-        message: "Array of language Ids cannot be empty"
-      });
-    }
-    if (!req.body.countryId) {
-      errors.push({
-        field: "countryId",
-        message: "countryId cannot be empty"
-      });
-    }
+    // if (!req.body.language) {
+    //   errors.push({
+    //     field: "language",
+    //     message: "Array of language Ids cannot be empty"
+    //   });
+    // }
+    // if (!req.body.countryId) {
+    //   errors.push({
+    //     field: "countryId",
+    //     message: "countryId cannot be empty"
+    //   });
+    // }
     // if (!req.body.stateId) {
     //     errors.push({
     //         field: "stateId",
