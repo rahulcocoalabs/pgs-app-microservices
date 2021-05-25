@@ -330,6 +330,14 @@ exports.getSummary1 = async (req, res) => {
   totalPages = Math.ceil(totalPages);
   var hasNextPage = page < totalPages;
 
+  var pagination = {
+    page,
+    perPage,
+    hasNextPage,
+    totalItems:totalNumFeeds,
+    totalPages,
+};
+
   var feedsSummary = {
     imageBase: feedsConfig.imageBase,
     documentImage: feedsConfig.documentImage,
@@ -337,11 +345,7 @@ exports.getSummary1 = async (req, res) => {
     documentBase: feedsConfig.documentBase,
     authorImageBase: feedsConfig.authorImageBase,
     //adsImageBase: adsResult.imageBase,
-    totalItems: totalNumFeeds,
-    page: Number(page),
-    perPage: perPage,
-    hasNextPage: hasNextPage,
-    totalPages: totalPages,
+    pagination,
     items: feeds
   }
 
