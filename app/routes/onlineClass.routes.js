@@ -68,7 +68,7 @@ module.exports = (app) => {
 
     // get start zoom link 
     app.get('/online-class/tutor/start-zoom-link/:id', auth, onlineClass.getZoomStartLink);
-
+    app.post('/online-class/add-public-request',auth, onlineClass.addPublicClassRequest);
 
     app.post('/online-class/add-institution', fileUpload.fields([{
         name: 'image', maxCount: 1

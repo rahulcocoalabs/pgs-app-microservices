@@ -27,6 +27,7 @@ const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
 const TutorSubject = require('../models/tutorSubject.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
+const PublicClassRequest = require('../models/publicClassRequests.model');
 
 const InstituteClassAppointmentRequest = require('../models/instituteClassAppointment.model');
 const Currency = require('../models/currency.model');
@@ -3595,6 +3596,51 @@ exports.removeInstitutionClassFavourite = async (req, res) => {
   return res.send({ success: 1, message: "removed from favourites" })
 
 
+}
+
+exports.addPublicClassRequest = async (req,res) => {
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const body = req.body;
+  var errors = [];
+  if(!body.classId){
+    errors.push({
+      fileld:"classId",
+      message:"classId is missing"
+    })
+  }
+  if(!body.tutorId){
+    errors.push({
+      fileld:"tutorId",
+      message:"tutorId is missing"
+    })
+  }
+  if(errors.length > 0){
+    return res.send({
+      success:0,
+      errors:errors
+    })
+  }
+
+  var publicReq = new PublicClassRequest({
+    userId: userId,
+    classId:body.classId, 
+    tutorId: body.tutorId,
+    status:1,
+    isPaid:false,
+    tsCreatedAt: Date.now()
+  })
+
+  const saveData = await publicReq.save().catch(err => {
+    return {success:0,message:err.message}
+  })
+  if(saveData.success && saveData.success != undefined && saveData.success === 0) {
+    return res.send(saveData);
+  }
+
+  return res.send({ success: 1, message:"success"})
 }
 
 var CronJob = require("cron").CronJob;
