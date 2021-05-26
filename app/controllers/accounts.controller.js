@@ -3811,7 +3811,7 @@ exports.requestAsTutor = async (req, res) => {
     || params.tutorCategoryIds === null || params.tutorCategoryIds === undefined || (params.tutorCategoryIds !== undefined && params.tutorCategoryIds.length < 1)
     || !params.courceDescription
     // || !file 
-    || !params.location
+    //|| !params.location
     // ||  (params.yearOfExperience === null || params.yearOfExperience === undefined)
     //  ||  !params.achievementsOrAwards || !params.achievementsOrAwards
     //  ||  !params.institution || !params.institution
