@@ -120,11 +120,12 @@ var options = {
 
 const FeedsSchema = mongoose.Schema({
     title: String,
+
     description: String,
     images: [String],
     video: String,
     documents: [String],
-    authorUserId:{ type: mongoose.Schema.Types.ObjectId, ref: 'authorUser' },
+    authorUserId:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     contest: { type: mongoose.Schema.Types.ObjectId, ref: 'Contest' },
     creatorDob: Number,
     creatorLanguage: String,
