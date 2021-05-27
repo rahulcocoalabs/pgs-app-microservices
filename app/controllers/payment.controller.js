@@ -186,6 +186,39 @@ exports.savePayment = async (req, res) => {
     return res.status(200).send(savePayment);
   }
 
+  if(params.classId && params.isPublic == true){
+
+    var obj = {}
+    const monthNames = ["01", "02", "03", "04", "05", "06",
+      "07", "08", "09", "10", "11", "12"];
+    const dateObj = new Date();
+    const month = monthNames[dateObj.getMonth()];
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    const output = day + ":" + month + ':' + year;
+    obj.tutorId = params.tutorId;
+    obj.classId = params.classId;
+    obj.status = 1;
+    obj.isPublic = true;
+    obj.isApproved = false;
+    obj.isRejected = false;
+    obj.tsCreatedAt = Date.now();
+    obj.created = output;
+    obj.tsModifiedAt = null;
+    obj.userId = userId;
+    obj.isPaid = true;
+
+    var request = new classRequest(obj);
+
+    var saveData = await request.save().catch(err => {
+      return { success: 0, err: err.message }
+    });
+
+    if (saveData && saveData.success && saveData.success == 0) {
+      return res.send(saveData)
+    }
+  }
+
   if (params.classId && params.isPublic == false) {
     var obj = {}
     const monthNames = ["01", "02", "03", "04", "05", "06",
