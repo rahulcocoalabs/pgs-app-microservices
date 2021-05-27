@@ -749,7 +749,23 @@ exports.getClassDetails = async (req, res) => {
       returnObj.isPaymentDone = false;
     }
 
-
+    var result1 = await PublicClassRequest.countDocuments({ status: 1, classId: classId, userId: userId }).catch(err => {
+      return {
+        success: 0,
+        message: err.message
+      }
+    })
+    if (result1 && result1.success != undefined && result1.success === 0) {
+      return res.send(result1);
+    }
+    if (result1 > 0) {
+      returnObj.isBooked = true;
+      
+    }
+    else {
+      
+      returnObj.isBooked = false;
+    }
 
 
     return res.send({
