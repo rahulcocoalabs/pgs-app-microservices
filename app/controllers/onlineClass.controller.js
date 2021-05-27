@@ -749,7 +749,7 @@ exports.getClassDetails = async (req, res) => {
       returnObj.isPaymentDone = false;
     }
 
-    var result1 = await PublicClassRequest.countDocuments({ status: 1, classId: classId, userId: userId }).catch(err => {
+    var result1 = await classRequest.countDocuments({ status: 1, classId: classId, userId: userId,isPublic:true }).catch(err => {
       return {
         success: 0,
         message: err.message
@@ -3640,10 +3640,11 @@ exports.addPublicClassRequest = async (req,res) => {
     })
   }
 
-  var publicReq = new PublicClassRequest({
+  var publicReq = new classRequest({
     userId: userId,
     classId:body.classId, 
     tutorId: body.tutorId,
+    isPublic:true,
     status:1,
     isPaid:false,
     tsCreatedAt: Date.now()
