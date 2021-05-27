@@ -262,7 +262,16 @@ exports.getSummary1 = async (req, res) => {
     limit: 30
   };
 
-  var feeds = await Feed.find({ status: 1 }, {}, pageParams).populate('authorUserId').catch(err => {
+  var feeds = await Feed.find({ status: 1 }, {}, pageParams).populate({
+    path: 'authorUser',
+    select: {
+      firstName: 1,
+      middleName: 1,
+      lastName: 1,
+      image: 1,
+      _id: 1
+    }
+  }).catch(err => {
     return { success: 0, message: err.message };
   })
 
