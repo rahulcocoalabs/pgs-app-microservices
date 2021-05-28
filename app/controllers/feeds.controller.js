@@ -262,7 +262,7 @@ exports.getSummary1 = async (req, res) => {
     limit: 30
   };
 
-  var feeds = await Feed.find({ status: 1,feddType:"feeds" }, {}, pageParams).populate({
+  var feeds = await Feed.find({ status: 1,feedType:"feeds" }, {}, pageParams).populate({
     path: 'authorUser',
     select: {
       firstName: 1,
