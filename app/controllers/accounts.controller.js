@@ -4423,8 +4423,8 @@ async function validateSocialSignupRequest(params) {
     !params.firstName ||
     !params.provider ||
     (params.provider && params.provider !== constants.FACEBOOK_PROVIDER && params.provider !== constants.GOOGLE_PROVIDER) ||
-    !params.id ||
-    !params.photoUrl
+    !params.id 
+    // !params.photoUrl
     // || !params.dob
     // || !params.language
   ) {
