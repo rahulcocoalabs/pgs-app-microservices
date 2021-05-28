@@ -4458,12 +4458,14 @@ async function validateSocialSignupRequest(params) {
         message: "Invalid provider"
       });
     }
-    if (!params.photoUrl) {
-      errors.push({
-        field: "photoUrl",
-        message: "photoUrl missing"
-      });
-    }
+    // start : modified by Manesh request
+    // if (!params.photoUrl) {
+    //   errors.push({
+    //     field: "photoUrl",
+    //     message: "photoUrl missing"
+    //   });
+    // }
+    // end
     // if (!params.dob) {
     //   errors.push({
     //     field: "dob",
