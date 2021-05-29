@@ -1034,6 +1034,8 @@ exports.editEvents = async (req, res) => {
     if(data &&  data.success != undefined && data.success == 0){
         return res.send(data)
     }
+    console.log(params)
+    console.log(update)
     return res.send({ success: 1, message: "successfully updated" })
 
 
