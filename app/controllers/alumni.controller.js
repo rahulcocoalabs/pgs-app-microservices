@@ -1022,7 +1022,7 @@ exports.editEvents = async (req, res) => {
         update.availableToTime = params.availableToTime;
     }
     if (params.liveLink) {
-        update.descrliveLinkiption = params.liveLink;
+        update.liveLink = params.liveLink;
     }
 
     var filter = { status: 1, _id: req.params.id }
@@ -1031,6 +1031,9 @@ exports.editEvents = async (req, res) => {
         return { success: 0, message: "something went wrong", error: err.message }
     })
 
+    if(data &&  data.success != undefined && data.success == 0){
+        return res.send(data)
+    }
     return res.send({ success: 1, message: "successfully updated" })
 
 
