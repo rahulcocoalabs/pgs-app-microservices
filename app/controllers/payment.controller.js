@@ -11,7 +11,7 @@ const Payment = require('../models/payment.model');
 const classRequest = require('../models/onlineClassRequests.model');
 const User = require('../models/user.model');
 const onlineClass = require('../models/onlineClass.model');
-
+const Packages = require('../models/packages.model');
 const subject = require('../models/tutorSubject.model');
 const currency = require('../models/currency.model');
 
@@ -330,3 +330,37 @@ async function sendNotificationStudent(studentId,amount,subject,currency,classId
   let notificationData2 = await pushNotificationHelper.sendNotification(notificationObj2)
 
 }
+
+exports.getPackage = async (req, res) => {
+
+  const packagesList = await Packages.find({status: 1}).catch(err=>{
+    return { success: 0, err: err.message}
+  })
+  if(packagesList && packagesList.success && packagesList.success == 0){
+    return res.send(packagesList )
+  }
+  return res.send({ success:1,items:packagesList})
+}
+
+async function manageSubscriptions(req){
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const body = req.body;
+
+  var errors = [];
+  if(!body.institution) {
+    errors.push({
+      filed:'institution',
+      message:'institution not provided'
+    })
+  }
+  if(!body.duration) {
+    errors.push({
+      filed:'duration',
+      message:'duration not provided'
+    })
+  }
+}
+

@@ -347,6 +347,8 @@ exports.getSummary1 = async (req, res) => {
     totalPages,
 };
 
+const feedsShuffled = shuffleArray(feeds);
+
   var feedsSummary = {
     imageBase: feedsConfig.imageBase,
     documentImage: feedsConfig.documentImage,
@@ -356,7 +358,7 @@ exports.getSummary1 = async (req, res) => {
     authorImageBase: feedsConfig.authorImageBase,
     //adsImageBase: adsResult.imageBase,
     pagination,
-    items: feeds
+    items: feedsShuffled
   }
 
   var summary = {
@@ -365,6 +367,25 @@ exports.getSummary1 = async (req, res) => {
   }
   res.send(summary);
  
+}
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
 
 exports.getSummary = (req, res) => {
