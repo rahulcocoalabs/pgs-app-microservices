@@ -186,6 +186,10 @@ exports.savePayment = async (req, res) => {
     return res.status(200).send(savePayment);
   }
 
+  if (params.institution){
+    let result3 = await manageSubscriptions(req);
+  }
+
   if(params.classId && params.isPublic == true){
 
     var obj = {}
@@ -362,5 +366,20 @@ async function manageSubscriptions(req){
       message:'duration not provided'
     })
   }
+
+  const interval = body.duration * 24 * 60 * 60 * 1000;
+  const now = new Date();
+  console.log(interval);
+  console.log(now);
+}
+
+exports.tests = async (req, res) => {
+
+  const interval = body.duration * 24 * 60 * 60 * 1000;
+  const now = new Date();
+  console.log(interval + now);
+  console.log(now);
+
+  return res.send({ first: interval + now,second: now });
 }
 
