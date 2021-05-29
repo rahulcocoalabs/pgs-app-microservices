@@ -3691,6 +3691,18 @@ exports.deleteAccount = async (req, res) => {
       return res.send(checkTutorAndUpdateResp);
     }
 
+    let payload = { mongoId:userId};
+    
+
+    
+
+    try {
+        const res1 = await superagent.post('https://backend.pgsedu.com/alumnis/delete-user').send(payload);
+        console.log('res');
+      } catch (err) {
+        console.error(err.message);
+      }
+
 
     return res.send({
       status: 1,
@@ -5152,10 +5164,43 @@ exports.isTutorCheck = async (req, res) => {
 exports.removeUser = async (req, res) => {
 
 
+  
   let email = req.params.id;
 
+  var userData = await User.findOne({ email: email, status: 1 }).catch(err => {
+    return { success: 0,err: err.message}
+  })
 
-  var update = await User.updateOne({ email: email, status: 1 }, { status: 0 });
+  if(userData && userData.success!== undefined && userData.success === 0){
+    return res.send(userData);
+  }
 
-  return res.send("ok")
+  if (!userData){
+    return res.send({
+      success:0,
+      message:"user not exists"
+    })
+  }
+
+
+  var update = await User.updateOne({ email: email, status: 1 }, { status: 0 }).catch(err => {
+    return { success: 0,err: err.message}
+  })
+
+  if(update && update.success!== undefined && update.success === 0){
+    return res.send(update);
+  };
+
+
+  try {
+    const res1 = await superagent.post('https://backend.pgsedu.com/alumnis/delete-user').send({mongoId:userId});
+    console.log('res');
+  } catch (err) {
+    console.error(err.message);
+  }
+
+  return res.send({
+    success:1,
+    update:update
+  })
 }
