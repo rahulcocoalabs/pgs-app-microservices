@@ -5190,7 +5190,7 @@ exports.removeUser = async (req, res) => {
   if(update && update.success!== undefined && update.success === 0){
     return res.send(update);
   };
-
+ const userId = userData._id
 
   try {
     const res1 = await superagent.post('https://backend.pgsedu.com/alumnis/delete-user').send({mongoId:userId});
