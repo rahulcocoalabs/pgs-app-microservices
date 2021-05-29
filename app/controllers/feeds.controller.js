@@ -347,7 +347,7 @@ exports.getSummary1 = async (req, res) => {
     totalPages,
 };
 
-const feedsShuffled = shuffleArray(feeds);
+const feedsShuffled = shuffle(feeds);
 
   var feedsSummary = {
     imageBase: feedsConfig.imageBase,
