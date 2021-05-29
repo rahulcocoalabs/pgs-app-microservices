@@ -5194,9 +5194,11 @@ exports.removeUser = async (req, res) => {
 
   try {
     const res1 = await superagent.post('https://backend.pgsedu.com/alumnis/delete-user').send({mongoId:userId});
-    console.log('res');
+    
   } catch (err) {
-    console.error(err.message);
+    return res.send({
+      success:0,err: err.message
+    })
   }
 
   return res.send({
