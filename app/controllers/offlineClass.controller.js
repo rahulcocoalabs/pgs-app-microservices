@@ -167,7 +167,12 @@ exports.listInstitutesAtHome = async(req,res) => {
     limit: 5
   };
 
-  var inst_list = await Instituion.find({status:1,isApproved:true},{name:1,image:1,location:1,email:1,phone:1},pageParams).catch(err=>{
+  var filter = {};
+  filter.status = 1;
+  filter.isApproved = true;
+  filter.toDate = { $gt: Date.now() };
+
+  var inst_list = await Instituion.find(filter,{name:1,image:1,location:1,email:1,phone:1},pageParams).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
@@ -175,7 +180,9 @@ exports.listInstitutesAtHome = async(req,res) => {
     }
   })
 
-  var inst_list_popular = await Instituion.find({status:1,isPopular:true,isApproved:true},{name:1,image:1,location:1},pageParams).catch(err=>{
+  filter.isPopular = true;
+
+  var inst_list_popular = await Instituion.find(filter,{name:1,image:1,location:1},pageParams).catch(err=>{
     return {
       success: 0,
       message: 'Something went wrong while listing institutes',
@@ -244,12 +251,12 @@ exports.homeSeeMore = async(req,res) => {
     }
   }
 
- console.log(filter)
+ 
   
 
   var projection = {name:1,image:1,location:1,email:1,phone:1};
   
-  
+  filter.toDate = {$gt: Date.now()};
 
  
   var inst_list = await Instituion.find(filter,projection,pageParams).catch(err=>{

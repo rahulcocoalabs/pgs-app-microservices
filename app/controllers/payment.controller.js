@@ -188,6 +188,17 @@ exports.savePayment = async (req, res) => {
 
   if (params.institution){
     let result3 = await manageSubscriptions(req);
+
+    if(result3 === true){
+      return res.status(200).send({
+        success: 1,message: "Success"
+      })
+    }
+    else{
+      return res.status(200).send({
+        success: 0,message: "failed"
+      })
+    }
   }
 
   if(params.classId && params.isPublic == true){
@@ -367,19 +378,24 @@ async function manageSubscriptions(req){
     })
   }
 
-  const interval = body.duration * 24 * 60 * 60 * 1000;
-  const now = new Date();
-  console.log(interval);
-  console.log(now);
-}
-
-exports.tests = async (req, res) => {
+  if (errors.length > 0){
+    return false;
+  }
 
   const interval = body.duration * 24 * 60 * 60 * 1000;
   const now = new Date();
-  console.log(interval + now);
-  console.log(now);
+  
+  const toDate = interval + now;
 
-  return res.send({ first: interval + now,second: now });
+  const id = body.institution;
+
+  const updateInfo = await Instituion.updateOne({_id: id},{toDate:toDate}).catch(err =>{
+    return {success: 0, err: err.message};
+  });
+
+  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
+    return false;
+  }
+  return true;
 }
 
