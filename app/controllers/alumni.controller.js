@@ -804,6 +804,11 @@ exports.acceptJoinRequests = async (req, res) => {
 
         })
     }
+    var message = "admin has rejected your request"
+
+    if(status == constants.ALUMNI_STATUS_ACCEPTED){
+        message = "admin has accepted your request"
+    }
 
 
     var info = await Alumni.findOne({ status: 1, _id: group }).populate('group').catch(err => {
@@ -877,7 +882,7 @@ exports.acceptJoinRequests = async (req, res) => {
 
         var notificationObj = {
             title: "Accepted your request for joining group",
-            message: "Admin has accepted your request to join the group",
+            message: message,
             type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
             filtersJsonArr,
             // metaInfo,
