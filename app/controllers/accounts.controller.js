@@ -3348,6 +3348,7 @@ exports. socialSignup = async (req, res) => {
   obj.provider = params.provider;
   obj.status = 1;
   obj.tsCreatedAt = Date.now();
+  
   obj.tsModifiedAt = null;
 
   if (socialDataResponse && socialDataResponse.isRegistered === false) {

@@ -22,9 +22,9 @@ function transform(record) {
     delete ret.fatherProfessionId;
 
     //ret.dob = moment(ret.dob).add(1,'days').format("DD MMMM YYYY");
-    if (ret.dob){
+    // if (ret.dob){
         ret.dob = moment(ret.dob).format("DD MMMM YYYY");
-    }
+   // }
     if (ret.syllabus) {
         delete ret.syllabusId;
         delete ret.syllabus._id;
@@ -157,7 +157,7 @@ const UserSchema = mongoose.Schema({
     cityId: { type: mongoose.Schema.Types.ObjectId, ref: 'City' },
     city:String,
     coinCount: Number,
-    
+    socialSignUpCompleted:{type: Boolean,default: false},
     karmaIndex: String,
     coinHistory: Array,
     profileCompletion :Number,
