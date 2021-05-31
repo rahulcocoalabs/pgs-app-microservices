@@ -4353,6 +4353,7 @@ async function setLoginResponse(findCriteria, socialDataResponse, isEmailUpdated
     isSocialLogin: 1,
     socialPhotoUrl: 1,
     password: 1,
+    socialSignUpCompleted:1,
     isTutor: 1
   })
     .catch(err => {
