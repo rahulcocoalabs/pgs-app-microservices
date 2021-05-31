@@ -1502,6 +1502,9 @@ exports.updateProfile = async (req, res) => {
     update.fatherName = params.fatherName;
   }
 
+  update.socialSignUpCompleted = true;
+
+
 
   if (params.phone){
     var usr = await User.findOne({status:1,_id:userId}).catch(err => {
@@ -1541,7 +1544,7 @@ exports.updateProfile = async (req, res) => {
    
   }
 
-
+  
 
   let value = await User.updateOne({ status: 1, _id: userId }, update).catch(err => { return { succes: 0, message: err.message } });
   if (value && value.success != undefined && value.success === 0) {
