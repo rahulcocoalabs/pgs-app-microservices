@@ -714,8 +714,9 @@ exports.createFeed = async (req, res) => {
     }).populate('language');
     let creatorDob = findUser.dob.getFullYear()
     if( findUser.language != null){
-      let creatorLanguage = findUser.language.name;
+      var creatorLanguage = findUser.language.name;
     }
+    
     const newFeed = new Feed({
       title: params.title,
       feedType: params.feedType,
