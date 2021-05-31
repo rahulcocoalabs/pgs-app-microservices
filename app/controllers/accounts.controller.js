@@ -3315,7 +3315,7 @@ async function changePassword(password, oldPassword, userId) {
 
 }
 
-exports.socialSignup = async (req, res) => {
+exports. socialSignup = async (req, res) => {
   console.log("in social signup")
   var params = req.body;
 

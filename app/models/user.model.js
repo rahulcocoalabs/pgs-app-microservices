@@ -22,7 +22,7 @@ function transform(record) {
     delete ret.fatherProfessionId;
 
     // ret.dob = moment(ret.dob).add(1,'days').format("DD MMMM YYYY");
-    ret.dob = moment(ret.dob).format("DD MMMM YYYY");
+    //ret.dob = moment(ret.dob).format("DD MMMM YYYY");
     if (ret.syllabus) {
         delete ret.syllabusId;
         delete ret.syllabus._id;
