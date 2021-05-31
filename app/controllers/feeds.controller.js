@@ -657,7 +657,7 @@ exports.createFeed = async (req, res) => {
     }
   }
 
- console.log("-------------------------------------> title <-------------------------------",params.title,userId);
+ 
  
 
   var type = req.body.type || null;
@@ -775,7 +775,7 @@ exports.createFeed = async (req, res) => {
     //   success: 0,
     //   message: 'Something went wrong while creating feed'
     // })
-    console.log(err);
+    console.log("31/05",err.message);
   }
 }
 
