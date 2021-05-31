@@ -6,6 +6,6 @@ module.exports = (app) => {
     app.post('/payment/update-payments/:id',auth, payment.updatePayment);
     app.get('/payment/get-key',auth, payment.getKey);
     
-    app.post('/payment/save-transaction', payment.savePayment);
+    app.post('/payment/save-transaction',auth, payment.savePayment);
    
 }
