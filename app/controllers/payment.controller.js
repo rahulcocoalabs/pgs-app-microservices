@@ -152,8 +152,8 @@ exports.savePayment = async (req, res) => {
 
   console.log(req.identity);
 
-  var identity = req.identity.data;
-  var userId = identity.userId;
+  var userData = req.identity.data;
+  var userId = userData.userId;
   var params = req.body;
 
   var transactionId = params.transactionId;
