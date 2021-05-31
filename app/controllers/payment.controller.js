@@ -150,7 +150,7 @@ exports.updatePayment = async (req, res) => {
 
 exports.savePayment = async (req, res) => {
 
-  console.log(req);
+  console.log(req.identity);
 
   var identity = req.identity.data;
   var userId = identity.userId;
