@@ -4502,6 +4502,18 @@ async function validateSocialSignupRequest(params) {
       code: 200
     };
   }
+  var didNormalLogin = await User.countDocuments({status:1,email:params.email,isSocialLogin:false}).catch(err=>{
+    return {succes: 0, message: err.message }
+  })
+
+  if(didNormalLogin && didNormalLogin.succes != undefined && didNormalLogin.succes === 0){
+    return didNormalLogin
+  }
+
+  if(didNormalLogin > 0){
+    return {success: 0,message:"user already registered with password"}
+  }
+
   var isProvideAnyUnique = false;
   if ((!params.email || params.email === null) && (params.provider === constants.FACEBOOK_PROVIDER)) {
     isProvideAnyUnique = true;
