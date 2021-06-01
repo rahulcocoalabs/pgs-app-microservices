@@ -144,13 +144,23 @@ exports.listContestHistory = async (req, res) => {
 
     var projection = { contestId: 1 };
 
-    var data = await InnovationChallenge.find(findCriteria, projection).catch(err => { return { success: 0, message: err.message } });
+    var data1 = await InnovationChallenge.find(findCriteria, projection).catch(err => { return { success: 0, message: err.message } });
 
 
-    if (data && data.success != undefined && data.success === 0) {
+    if (data1 && data1.success != undefined && data1.success === 0) {
 
-        return res.send(data);
+        return res.send(data1);
     }
+
+    var data2 = await InnovationChallenge.find(findCriteria, projection).catch(err => { return { success: 0, message: err.message } });
+
+
+    if (data2 && data2.success != undefined && data2.success === 0) {
+
+        return res.send(data2);
+    }
+
+    const data = data1 + data2;
 
     if (data.count === 0) {
 
@@ -208,14 +218,20 @@ exports.listContestHistory = async (req, res) => {
             return res.send(contests);
         }
 
-        var totalPages = contests.length / perPage;
+        var contestsLen = await Contests.countDocuments(filter).catch(err => { return { success: 0, message: err.message } })
+
+        if (contestsLen && contestsLen.success != undefined && contestsLen.success === 0) {
+            return res.send(contestsLen);
+        }
+
+        var totalPages = contestsLen / perPage;
         totalPages = Math.ceil(totalPages);
         var hasNextPage = page < totalPages;
         var pagination = {
             page,
             perPage,
             hasNextPage,
-            totalItems: contests.length,
+            totalItems: contestsLen,
             totalPages,
         };
 
@@ -628,7 +644,7 @@ exports.addContestItem = async (req, res) => {
 
 exports.addSynopsis = async(req, res) => {
 
-    console.log('10/05')
+    
 
     var userData = req.identity.data;
     var userId = userData.userId;
