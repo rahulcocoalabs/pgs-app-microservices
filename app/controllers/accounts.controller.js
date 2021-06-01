@@ -1848,7 +1848,7 @@ exports.update = async (req, res) => {
     var infoFlag = "";
     if ((userInfo.dob != undefined) && (userInfo.syllabus != undefined) && (userInfo.countryId != undefined)
       && (userInfo.fatherNationality != undefined) && (userInfo.fatherProfession != undefined)
-      && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined)) {
+      && (userInfo.motherNationality != undefined) && (userInfo.mothersProfession != undefined) && (userInfo.image != undefined)) {
 
 
       if ((userInfo.language == undefined) || (userInfo.language.length == 0)) {
