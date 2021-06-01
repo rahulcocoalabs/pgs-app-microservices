@@ -35,6 +35,7 @@ module.exports = (app) => {
     app.get('/feeds',auth, feeds.listAll);
     app.get('/feeds/summary',auth,feeds.getSummary);
     app.get('/feeds/summary1',auth,feeds.getSummary1);
+    
     app.get('/feeds/self',auth,feeds.getUserFeeds);
     app.get('/feeds/summary/v2',auth,feeds.getSummaryForWeb);
     app.post('/feeds',auth,feedsUpload.fields([{ name: 'images', maxCount: feedsConfig.maxImageCount }, { name: 'documents', maxCount: feedsConfig.maxDocumentsCount }, { name: 'video', maxCount: feedsConfig.maxVideoCount }]), feeds.createFeed);

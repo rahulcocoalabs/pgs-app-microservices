@@ -253,6 +253,7 @@ function favouriteObject(userId, list) {
 exports.getSummary1 = async (req, res) => {
 
   var userId = req.identity.data.userId;
+
   var params = req.query;
   var page = params.page ? params.page : 1;
   var perPage = params.perPage ? params.perPage : feedsConfig.perPage;
@@ -262,7 +263,7 @@ exports.getSummary1 = async (req, res) => {
     limit: 30
   };
 
-  var feeds = await Feed.find({ status: 1,feedType:"feeds" }, {}, pageParams).populate({
+  var feeds = await Feed.find({ status: 1,feedType:"feeds",isApproved:true }, {}, pageParams).populate({
     path: 'authorUser',
     select: {
       firstName: 1,
