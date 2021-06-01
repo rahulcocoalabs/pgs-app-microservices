@@ -161,6 +161,10 @@ exports.listContestHistory = async (req, res) => {
     }
 
     const data = data1 + data2;
+    console.log(' <------------------------------------>');
+    console.log(data1);
+    console.log(data2);
+    console.log(data);
 
     if (data.count === 0) {
 
