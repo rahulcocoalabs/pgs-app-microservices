@@ -443,6 +443,19 @@ exports.sendEventBooking = async (req, res) => {
     // if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
     //   return res.send(userUpdate1)
     // }
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": userId }]
+
+        var notificationObj = {
+            title: "Booked your request for participating event",
+            message: "you have booked for event",
+            type: constants.EVENT_BOOKING,
+            filtersJsonArr,
+            // metaInfo,
+           // typeId: group,
+            userId: userId,
+            notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+        }
+        let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
     return res.send({
       success: 1,
       message: "succesfully added booking"
