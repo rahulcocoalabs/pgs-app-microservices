@@ -1272,7 +1272,7 @@ var job = new CronJob(' 0 06 * * *', async function () {
 
     var notificationObj = {
       title: " Today's Event",
-      message: "Event is today, don't forget to join!",
+      message: "You have booked an event, don't forget to join!",
       type: constants.ALUMNI_EVENT_PARTICIPATION,
       filtersJsonArr,
       // metaInfo,
@@ -1411,3 +1411,64 @@ var job2 = new CronJob(' 0 06 * * *', async function () {
 
 }, null, true, 'Asia/Kolkata');
 job2.start();
+
+var job3 = new CronJob(' 0 07 * * *', async function () {
+
+  var x1 = Date.now();
+  var x2 = x1 + (1000 * 60 * 60 * 24);
+  var x3 = x1 + (1000 * 60 * 60 * 48);
+  var thisMoment = x2 / 1000;
+  var tomorrow = x3 / 1000;
+
+  var filter = {};
+  filter.tsFrom = { $gt: thisMoment };
+  filter.status = 1;
+  filter.tsFrom = { $lt: tomorrow };
+
+  var eves = await Event.find(filter).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (eves && eves.success != undefined && eves.success === 0) {
+    return
+  }
+
+  const eveIds = eves.map(eve => eve._id);
+
+  var filter1 = {};
+  filter1.eventId = { $in: eveIds };
+
+  const bookings = await EventBooking.find(filter1).catch(err => {
+    return { success: 0, message: err.message };
+  })
+
+  if (bookings && bookings.success != undefined && bookings.success === 0) {
+    return
+  }
+
+  const users = bookings.map(booking => booking.userId);
+
+  for (y in users) {
+
+    var user = users[y];
+    var owner = user;
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+      title: " Tomorrow's Event",
+      message: "You have booked an event, don't forget to join!",
+      type: constants.ALUMNI_EVENT_PARTICIPATION,
+      filtersJsonArr,
+      // metaInfo,
+      // typeId: event._id,
+      userId: owner,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  }
+
+
+
+}, null, true, 'Asia/Kolkata');
+job3.start();
