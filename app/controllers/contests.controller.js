@@ -152,7 +152,7 @@ exports.listContestHistory = async (req, res) => {
         return res.send(data1);
     }
 
-    var data2 = await InnovationChallenge.find(findCriteria, projection).catch(err => { return { success: 0, message: err.message } });
+    var data2 = await contestSynopsis.find(findCriteria, projection).catch(err => { return { success: 0, message: err.message } });
 
 
     if (data2 && data2.success != undefined && data2.success === 0) {
