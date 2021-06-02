@@ -166,7 +166,7 @@ exports.listContestHistory = async (req, res) => {
     console.log(data2);
     console.log(data);
 
-    if (data.count === 0) {
+    if (data.length === 0) {
 
         var pagination = {
             page,
