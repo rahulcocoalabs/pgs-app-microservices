@@ -200,7 +200,7 @@ exports.listContestHistory = async (req, res) => {
             console.log('in for looop')
             console.log(item)
 
-            ids.push(id);
+            ids.push(ObjectId(id));
 
         }
 
