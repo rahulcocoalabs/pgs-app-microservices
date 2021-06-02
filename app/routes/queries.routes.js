@@ -9,4 +9,6 @@ module.exports = (app) => {
     app.patch('/queries/post-answer/:id',auth, query.addAnswer);
     app.get('/queries/list-queries/:id',auth, query.listQueries);
     app.get('/queries/list-chat/:id',auth, query.listChat);
+    app.get('/queries/history/',auth, query.listHistory);
+    app.get('/queries/consultant-details/',auth, query.consultantDetails);
 }

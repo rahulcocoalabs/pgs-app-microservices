@@ -62,6 +62,24 @@ exports.getConsultants = async (req, res) => {
 
 }
 
+exports.consultantDetails = async (req, res) => {
+
+
+
+    const id = req.params.id;
+    const consultants = await Consultant.findOne({ status: 1, _id: id }, ).catch(err => {
+        return { success: 0, message: err.message }
+    });
+
+    if (consultants && consultants.success !== undefined && consultants.success === 0) {
+        return res.send(categories);
+    }
+
+    return res.send({ success: 1, message: "success", items: consultants, imageBase: queryConfig.imageBase });
+
+
+}
+
 exports.postQuery = async (req, res) => {
 
 
@@ -273,6 +291,39 @@ exports.listChat = async(req,res)=> {
     const id = req.params.id;
     const queryList = await query.find({
         consultant:id,status:1,isAnswered:true
+    },{tsCreatedAt:0},pageParams).catch(err => {
+        return {
+            success:0,message:err.message
+        }
+    })
+
+    if (queryList && queryList.success != undefined && queryList.success ===0 ){
+        return res.send(queryList)
+    }
+
+    return res.send({
+        success:1,items:queryList,message:'success'
+    })
+}
+
+exports.listHistory = async(req,res)=> {
+
+    const userData = req.identity.data;
+    const userId = userData.userId;
+
+    var params = req.query;
+    var page = params.page || 1;
+    page = page > 0 ? page : 1;
+    var perPage = Number(params.perPage) || queryConfig.resultsPerPage;
+    perPage = perPage > 0 ? perPage : queryConfig.resultsPerPage;
+    var offset = (page - 1) * perPage;
+    var pageParams = {
+        skip: offset,
+        limit: perPage
+    };
+    const id = req.params.id;
+    const queryList = await query.find({
+        userId:userId,status:1
     },{tsCreatedAt:0},pageParams).catch(err => {
         return {
             success:0,message:err.message
