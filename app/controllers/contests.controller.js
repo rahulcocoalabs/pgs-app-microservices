@@ -195,9 +195,10 @@ exports.listContestHistory = async (req, res) => {
         for (x in data) {
             var item = data[x];
             var id = item.contestId;
+            console.log('in for looop')
+            console.log(ids)
 
-
-            ids.push(ObjectId(id));
+            ids.push(id);
 
         }
 
