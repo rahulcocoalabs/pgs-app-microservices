@@ -159,8 +159,8 @@ exports.listContestHistory = async (req, res) => {
 
         return res.send(data2);
     }
-
-    const data = data1 + data2;
+    var data = [];
+    data = data + data1 + data2;
     console.log(' <------------------------------------>');
     console.log(data1);
     console.log(data2);
@@ -193,10 +193,10 @@ exports.listContestHistory = async (req, res) => {
         var ids = [];
 
         for (x in data) {
-            var item = data[x];
-            var id = item.contestId;
+            let item = data[x];
+            let id = item.contestId;
             console.log('in for looop')
-            console.log(ids)
+            console.log(item)
 
             ids.push(id);
 
