@@ -7,7 +7,7 @@ const QueryConsultantSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'QueryCategory'
     },
-    
+    Image:String,
     status: Number,
     tsCreatedAt: Number,
     tsModifiedAt: Number
