@@ -161,7 +161,7 @@ exports.listContestHistory = async (req, res) => {
     }
     
 
-    data1.push(data2);
+    Array.prototype.push.apply(data1,data2); 
 
     console.log(' <------------------------------------>');
     console.log(data1);
