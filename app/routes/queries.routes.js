@@ -10,5 +10,5 @@ module.exports = (app) => {
     app.get('/queries/list-queries/:id',auth, query.listQueries);
     app.get('/queries/list-chat/:id',auth, query.listChat);
     app.get('/queries/history/',auth, query.listHistory);
-    app.get('/queries/consultant-details/',auth, query.consultantDetails);
+    app.get('/queries/consultant-details/:id',auth, query.consultantDetails);
 }
