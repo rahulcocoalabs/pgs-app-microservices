@@ -84,7 +84,7 @@ exports.postQuery = async (req, res) => {
 
 
     const body = req.body;
-    const userData = req.identity.data.userId;
+    const userData = req.identity.data;
     const userId = userData.userId;
     const consultantId = req.params.id;
     var errors = [];
