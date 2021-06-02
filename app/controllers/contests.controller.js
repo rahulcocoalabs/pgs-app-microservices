@@ -166,8 +166,8 @@ exports.listContestHistory = async (req, res) => {
     console.log(data2);
     console.log(data);
 
-    if (data.length === 0) {
-
+    if (data.length == 0) {
+        console.log('02/06')
         var pagination = {
             page,
             perPage,
@@ -189,7 +189,7 @@ exports.listContestHistory = async (req, res) => {
         })
     }
     else {
-
+        console.log('02/06,else block')
         var ids = [];
 
         for (x in data) {
