@@ -159,14 +159,16 @@ exports.listContestHistory = async (req, res) => {
 
         return res.send(data2);
     }
-    var data = [];
-    data = data + data1 + data2;
+    
+
+    data1.push(data2);
+
     console.log(' <------------------------------------>');
     console.log(data1);
     console.log(data2);
-    console.log(data);
+   
 
-    if (data.length == 0) {
+    if (data1.length == 0) {
         console.log('02/06')
         var pagination = {
             page,
@@ -192,8 +194,8 @@ exports.listContestHistory = async (req, res) => {
         console.log('02/06,else block')
         var ids = [];
 
-        for (x in data) {
-            let item = data[x];
+        for (x in data1) {
+            let item = data1[x];
             let id = item.contestId;
             console.log('in for looop')
             console.log(item)
