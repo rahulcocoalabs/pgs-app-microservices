@@ -881,7 +881,7 @@ exports.acceptJoinRequests = async (req, res) => {
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": user }]
 
         var notificationObj = {
-            title: "Accepted your request for joining group",
+            title: "Rejected your request for joining group",
             message: message,
             type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
             filtersJsonArr,
