@@ -451,7 +451,7 @@ exports.sendEventBooking = async (req, res) => {
             type: constants.EVENT_BOOKING,
             filtersJsonArr,
             // metaInfo,
-           // typeId: group,
+            typeId: params.eventId,
             userId: userId,
             notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
         }
