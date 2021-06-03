@@ -22,6 +22,7 @@ const InstitutionClass = require('../models/instituteClass.model');
 const tutorRequestModel = require('../models/requestForTutor.model');
 const classRequest = require('../models/onlineClassRequests.model');
 const Instituion = require('../models/institute.model');
+const offlineMaterial = require('../models/offlineMaterials.model');
 const TutorCategory = require('../models/tutorCategory.model');
 const TutorCourse = require('../models/tutorCourse.model');
 const TutorClass = require('../models/tutorClass.model');
@@ -3660,7 +3661,48 @@ exports.addPublicClassRequest = async (req,res) => {
   return res.send({ success: 1, message:"success"})
 }
 
+exports.addMaterial = async(req,res)=>{
+
+  const userData = req.identity.data;
+  const userId = userData.userId;
+
+  const params = req.body;
+  var errors = [];
+  if(!params.title){
+    errors.push({fileld:"title",message:"title is missing"})
+  }
+  if(!params.description){
+    errors.push({fileld:"description",message:"description is missing"})
+  }
+  if(!params.links){
+    errors.push({fileld:"links",message:"links is missing"})
+  }
+  if(!params.classId){
+    errors.push({fileld:"classId",message:"class ID is missing"})
+  }
+
+  const material = new offlineMaterial({
+    userId:userId,
+    description:params.description,
+    link:params.link,
+    title:params.title,
+    status:1
+  })
+
+  const saveData = await material.save().catch(err => {return {success:0,message:err.message}})
+
+  if(saveData && saveData.success != undefined && saveData.success === 0){
+    return res.send(saveData);
+  }
+
+  return res.send({
+    success:1,message:"success"
+  })
+
+}
+
 var CronJob = require("cron").CronJob;
+const offlineMaterialsModel = require('../models/offlineMaterials.model.js');
 // New CronJob run a task every 5 seconds
 
 

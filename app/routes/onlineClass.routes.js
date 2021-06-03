@@ -96,4 +96,6 @@ module.exports = (app) => {
     app.delete('/online-class/remove-all',onlineClass.removeAll); 
     app.post('/online-class/add-institution-class-favourite/:id', auth, onlineClass.addInstitutionClassFavourite);
     app.post('/online-class/remove-institution-class-favourite/:id', auth, onlineClass.removeInstitutionClassFavourite);
+
+    app.post('/online-class/add-material',auth,onlineClass.addMaterial);
 }
