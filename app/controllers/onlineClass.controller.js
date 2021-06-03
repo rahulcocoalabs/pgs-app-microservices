@@ -768,11 +768,34 @@ exports.getClassDetails = async (req, res) => {
       returnObj.isBooked = false;
     }
 
+    var filter3 = {};
+    filter3.status = 1;
+    filter3.classId = classId;
+    const presentTime = Date.now();
+
+    const timeLimit = presentTime + (2 * 60 * 60);
+
+    filter3.tsCreatedAt = {$gt: timeLimit};
+    const materials = await offlineMaterial.find(filter,{link:1,description:1,title:1}).catch(err=>{
+      return {
+        success:0,
+        message:err.message
+      }
+    })
+
+    if(materials && materials.success != undefined && materials.success === 0){
+
+      return res.send(materials);
+    }
+
+
+
 
     return res.send({
       success: 1,
       flag: 1,
       item: returnObj,
+      material:materials || null,
       joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
       tutorImageBase: usersConfig.imageBase,
