@@ -3685,7 +3685,9 @@ exports.addMaterial = async(req,res)=>{
     userId:userId,
     description:params.description,
     link:params.link,
+    classId:params.classId,
     title:params.title,
+    tsCreatedAt:Date.now(),
     status:1
   })
 
