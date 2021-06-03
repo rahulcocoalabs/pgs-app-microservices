@@ -5,7 +5,7 @@ module.exports = (app) => {
     app.get('/payment/get-credentials',auth, payment.getCredentials);
     app.post('/payment/update-payments/:id',auth, payment.updatePayment);
     app.get('/payment/get-key',auth, payment.getKey);
-    
+    app.get('/payment/list-packages',auth, payment.getPackage);
     app.post('/payment/save-transaction',auth, payment.savePayment);
    
 }
