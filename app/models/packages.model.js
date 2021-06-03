@@ -10,4 +10,4 @@ const PackagsSchema = mongoose.Schema({
     tsModifiedAt : Number
 })
 
-module.exports = mongoose.model('Package', PackagsSchema, 'Packages');
+module.exports = mongoose.model('Package', PackagsSchema, 'OfflinePackages');
