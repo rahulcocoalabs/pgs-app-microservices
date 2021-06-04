@@ -651,3 +651,22 @@ exports.editInstitution = async (req, res) => {
     })
   
   }
+
+  exports.myInstitutes = async (req, res) => {
+
+    const userData = req.identity.data;
+    const userId = userData.userId;
+
+    const list = await Instituion.find({userId: userId,status:1}).catch(err => {
+      return { success: 0,message:err.message}
+    })
+
+    if (list.success && list.success !== undefined && list.success === 0 ) {
+      return res.send(list)
+    }
+
+    return res.send({
+      success:1,
+      items:list
+    })
+  }
