@@ -382,6 +382,7 @@ async function manageSubscriptions(req){
   }
 
   if (errors.length > 0){
+    console.log('04/06:1')
     return false;
   }
 
@@ -397,6 +398,7 @@ async function manageSubscriptions(req){
   });
 
   if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
+    console.log('04/06:2')
     return false;
   }
   return true;
