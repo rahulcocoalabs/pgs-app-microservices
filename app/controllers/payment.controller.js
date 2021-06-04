@@ -394,6 +394,7 @@ async function manageSubscriptions(req){
   const id = body.institution;
 
   const updateInfo = await Instituion.updateOne({_id: id},{toDate:toDate}).catch(err =>{
+    console.log(err.message)
     return {success: 0, err: err.message};
   });
 
