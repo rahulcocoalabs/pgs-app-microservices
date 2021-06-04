@@ -98,7 +98,14 @@ exports.postQuery = async (req, res) => {
 
     console.log('04/06')
     console.log(consultantInfo)
-    const email = consultantInfo.email || "mailrkponline@gmail.com"
+    const email = consultantInfo.email;
+
+    if(email == undefined) {
+        return res.send({
+            success: 0,
+            message:"could not load consultant's email"
+        })
+    }
 
     if (consultantInfo && consultantInfo.success != undefined && consultantInfo.success === 0) {
         return res.send(consultantInfo);
