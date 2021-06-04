@@ -9,6 +9,7 @@ const Setting = require('../models/setting.model');
 const constants = require('../helpers/constants');
 const Payment = require('../models/payment.model');
 const classRequest = require('../models/onlineClassRequests.model');
+const Instituion = require('../models/institute.model');
 const User = require('../models/user.model');
 const onlineClass = require('../models/onlineClass.model');
 const Packages = require('../models/packages.model');
