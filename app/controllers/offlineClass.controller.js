@@ -83,8 +83,7 @@ exports.createInstitution = async (req, res) => {
     }
     var params = req.body;
 
-    console.log("<-------------->");
-    console.log(file);
+    
     
     var institutionObj = {};
     institutionObj.userId = userId;
@@ -104,6 +103,7 @@ exports.createInstitution = async (req, res) => {
     institutionObj.tsCreatedAt = Date.now();
     institutionObj.tsModifiedAt = null;
     //rakesh 
+    
   
     var newInstituion = new Instituion(institutionObj);
     var response = await newInstituion.save()
@@ -119,7 +119,7 @@ exports.createInstitution = async (req, res) => {
     }
     return res.send({
       success: 1,
-     
+      item:response,
       message: 'Created a institution..waiting for admin approval',
     })
   
