@@ -156,11 +156,12 @@ exports.postQuery = async (req, res) => {
     }
     if (settingData) {
 
-        const mailmsg = "You have a question from a user  and code is " + "   " + code;
+        const link = "https://www.pgsedu.com/queries/#/index.html" + "/" + consultantId
+        const mailmsg = "You have a question from a user  and code is " + "   " + code  + " click to answer " + link;
         sgMail.setApiKey(settingData.value);
 
 
-        const x = await sendMail(mailmsg, email, "Password reset link from PGS App");
+        const x = await sendMail(mailmsg, email, "Queries from users in PGS app");
 
         if (x && (x == 1)) {
             return res.json({
