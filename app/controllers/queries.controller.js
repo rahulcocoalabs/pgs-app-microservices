@@ -96,6 +96,8 @@ exports.postQuery = async (req, res) => {
         }
     })
 
+    console.log('04/06')
+    console.log(consultantInfo)
     const email = consultantInfo.email || "mailrkponline@gmail.com"
 
     if (consultantInfo && consultantInfo.success != undefined && consultantInfo.success === 0) {
