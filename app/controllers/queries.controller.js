@@ -98,9 +98,10 @@ exports.postQuery = async (req, res) => {
 
     console.log('04/06')
     console.log(consultantInfo)
+    console.log(consultantInfo.email)
     const email = consultantInfo.email;
 
-    if(email == undefined) {
+    if(!email) {
         return res.send({
             success: 0,
             message:"could not load consultant's email"
