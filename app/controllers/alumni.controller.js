@@ -2319,8 +2319,8 @@ var job = new CronJob(' 0 06 * * *', async function () {
             var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
             var notificationObj = {
-                title: " Today's Event",
-                message: "Event is today, don't forget to join!",
+                title: " Today's Alumni Event",
+                message: "Alumni event is today, don't forget to join!",
                 type: constants.ALUMNI_EVENT_PARTICIPATION,
                 filtersJsonArr,
                 // metaInfo,
