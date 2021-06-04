@@ -269,7 +269,7 @@ exports.showQuery = async(req,res)=> {
     const id = req.params.id;
     const queryList = await query.findOne({
         _id:id,status:1,isAnswered:false
-    },{tsCreatedAt:0},pageParams).catch(err => {
+    },{tsCreatedAt:0}).catch(err => {
         return {
             success:0,message:err.message
         }
