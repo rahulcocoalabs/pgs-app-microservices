@@ -255,7 +255,7 @@ exports.addAnswer = async(req,res) =>{
     })
 }
 
-exports.listQueries = async(req,res)=> {
+exports.showQuery = async(req,res)=> {
 
 
     
