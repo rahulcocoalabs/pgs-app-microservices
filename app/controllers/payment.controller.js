@@ -382,7 +382,7 @@ async function manageSubscriptions(req){
   }
 
   if (errors.length > 0){
-    console.log('04/06:1')
+    
     return false;
   }
 
@@ -394,12 +394,12 @@ async function manageSubscriptions(req){
   const id = body.institution;
 
   const updateInfo = await Instituion.updateOne({_id: id},{toDate:toDate}).catch(err =>{
-    console.log(err.message)
+    
     return {success: 0, err: err.message};
   });
 
   if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
-    console.log('04/06:2')
+    
     return false;
   }
   return true;
