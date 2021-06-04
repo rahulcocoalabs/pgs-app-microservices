@@ -775,7 +775,7 @@ exports.getClassDetails = async (req, res) => {
 
     const timeLimit = presentTime + (2 * 60 * 60 * 1000);
 
-    filter3.tsCreatedAt = {$gt: timeLimit};
+    filter3.tsCreatedAt = {$lt: timeLimit};
     const materials = await offlineMaterial.find(filter3,{link:1,description:1,title:1}).catch(err=>{
       return {
         success:0,
