@@ -258,19 +258,10 @@ exports.addAnswer = async(req,res) =>{
 exports.listQueries = async(req,res)=> {
 
 
-    var params = req.query;
-    var page = params.page || 1;
-    page = page > 0 ? page : 1;
-    var perPage = Number(params.perPage) || queryConfig.resultsPerPage;
-    perPage = perPage > 0 ? perPage : queryConfig.resultsPerPage;
-    var offset = (page - 1) * perPage;
-    var pageParams = {
-        skip: offset,
-        limit: perPage
-    };
+    
     const id = req.params.id;
-    const queryList = await query.find({
-        consultant:id,status:1,isAnswered:false
+    const queryList = await query.findOne({
+        _id:id,status:1,isAnswered:false
     },{tsCreatedAt:0},pageParams).catch(err => {
         return {
             success:0,message:err.message
