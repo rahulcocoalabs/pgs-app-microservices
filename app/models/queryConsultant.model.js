@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const QueryConsultantSchema = mongoose.Schema({
     name:String,
     description:String,
+    email:String,
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'QueryCategory'
