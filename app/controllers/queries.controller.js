@@ -166,6 +166,13 @@ exports.postQuery = async (req, res) => {
     }
     if (settingData) {
 
+        if(!saveData._id){
+            return res.send({ 
+                success : 0,
+                message:"some technical issues"
+            })
+        }
+
         const link = "https://www.pgsedu.com/queries/#/index.html" + "/" + saveData._id
         const mailmsg = "You have a question from a user  and code is " + "   " + code  + " click to answer " + link;
         sgMail.setApiKey(settingData.value);
