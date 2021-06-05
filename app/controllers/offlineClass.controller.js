@@ -667,6 +667,7 @@ exports.editInstitution = async (req, res) => {
 
     return res.send({
       success:1,
-      items:list
+      items:list,
+      imageBase:classConfig.imageBase
     })
   }
