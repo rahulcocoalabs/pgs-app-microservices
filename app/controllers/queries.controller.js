@@ -67,7 +67,7 @@ exports.consultantDetails = async (req, res) => {
 
 
     const id = req.params.id;
-    const consultants = await Consultant.findOne({ status: 1, _id: id }, ).catch(err => {
+    const consultants = await Consultant.findOne({ status: 1, _id: id },).catch(err => {
         return { success: 0, message: err.message }
     });
 
@@ -89,7 +89,7 @@ exports.postQuery = async (req, res) => {
     const consultantId = req.params.id;
     var errors = [];
 
-    const consultantInfo = await Consultant.findOne({status:1,_id:consultantId}).catch(err => {
+    const consultantInfo = await Consultant.findOne({ status: 1, _id: consultantId }).catch(err => {
         return {
             success: 0,
             message: err.message
@@ -101,10 +101,10 @@ exports.postQuery = async (req, res) => {
     console.log(consultantInfo.email)
     const email = consultantInfo.email;
 
-    if(!email) {
+    if (!email) {
         return res.send({
             success: 0,
-            message:"could not load consultant's email"
+            message: "could not load consultant's email"
         })
     }
 
@@ -166,15 +166,15 @@ exports.postQuery = async (req, res) => {
     }
     if (settingData) {
 
-        if(!saveData._id){
-            return res.send({ 
-                success : 0,
-                message:"some technical issues"
+        if (!saveData._id) {
+            return res.send({
+                success: 0,
+                message: "some technical issues"
             })
         }
 
         const link = "https://www.pgsedu.com/queries/#/index.html" + "/" + saveData._id
-        const mailmsg = "You have a question from a user  and code is " + "   " + code  + " click to answer " + link;
+        const mailmsg = "You have a question from a user  and code is " + "   " + code + " click to answer " + link;
         sgMail.setApiKey(settingData.value);
 
 
@@ -216,7 +216,7 @@ async function sendMail(message, target, title) {
     return ret;
 }
 
-exports.addAnswer = async(req,res) =>{
+exports.addAnswer = async (req, res) => {
 
     const body = req.body;
     const userData = req.identity.data.userId;
@@ -237,54 +237,82 @@ exports.addAnswer = async(req,res) =>{
         })
     }
 
-    if(errors.length > 0){
+    if (errors.length > 0) {
         return res.send({
-            success:0,
-            errors:errors
+            success: 0,
+            errors: errors
         })
     }
-    
-    const updateData = await query.updateOne({status:1,_id:queryId,code:body.code},{answer:body.answer,tsModifiedAt:Date.now(),isAnswered:true}).catch(err => {
+
+    const updateData = await query.updateOne({ status: 1, _id: queryId, code: body.code }, { answer: body.answer, tsModifiedAt: Date.now(), isAnswered: true }).catch(err => {
         return {
-            success:0,
-            message:err.message
+            success: 0,
+            message: err.message
         }
     })
 
-    if (updateData && updateData.success != undefined && updateData.success === 0){
+    if (updateData && updateData.success != undefined && updateData.success === 0) {
 
         return res.send(updateData)
     }
 
+    if(!updateData) {
+        return res.send({ status:0, message: "could not update"})
+    }
+
+    const queryInfo = await query.findOne({ status: 1, _id: queryId, code: body.code }).catch(err => {
+        return { success: 0, message: err.message}
+    })
+
+    if (queryInfo && queryInfo.success != undefined && queryInfo.success === 0) {
+        return res.send(queryInfo);
+    }
+
+    const owner = queryInfo.userId;
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+        title: " Today's Alumni Event",
+        message: "Alumni event is today, don't forget to join!",
+        type: constants.ALUMNI_EVENT_PARTICIPATION,
+        filtersJsonArr,
+        // metaInfo,
+        typeId: event._id,
+        userId: owner,
+        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
     return res.send({
-        success:1,
-        message:"success"
+        success: 1,
+        message: "success"
     })
 }
 
-exports.showQuery = async(req,res)=> {
+exports.showQuery = async (req, res) => {
 
 
-    
+
     const id = req.params.id;
     const queryList = await query.findOne({
-        _id:id,status:1,isAnswered:false
-    },{tsCreatedAt:0}).catch(err => {
+        _id: id, status: 1, isAnswered: false
+    }, { tsCreatedAt: 0 }).catch(err => {
         return {
-            success:0,message:err.message
+            success: 0, message: err.message
         }
     })
 
-    if (queryList && queryList.success != undefined && queryList.success ===0 ){
+    if (queryList && queryList.success != undefined && queryList.success === 0) {
         return res.send(queryList)
     }
 
     return res.send({
-        success:1,items:queryList,message:'success'
+        success: 1, items: queryList, message: 'success'
     })
 }
 
-exports.listChat = async(req,res)=> {
+exports.listChat = async (req, res) => {
 
 
     var params = req.query;
@@ -299,23 +327,23 @@ exports.listChat = async(req,res)=> {
     };
     const id = req.params.id;
     const queryList = await query.find({
-        consultant:id,status:1,isAnswered:true
-    },{tsCreatedAt:0},pageParams).catch(err => {
+        consultant: id, status: 1, isAnswered: true
+    }, { tsCreatedAt: 0 }, pageParams).catch(err => {
         return {
-            success:0,message:err.message
+            success: 0, message: err.message
         }
     })
 
-    if (queryList && queryList.success != undefined && queryList.success ===0 ){
+    if (queryList && queryList.success != undefined && queryList.success === 0) {
         return res.send(queryList)
     }
 
     return res.send({
-        success:1,items:queryList,message:'success'
+        success: 1, items: queryList, message: 'success'
     })
 }
 
-exports.listHistory = async(req,res)=> {
+exports.listHistory = async (req, res) => {
 
     const userData = req.identity.data;
     const userId = userData.userId;
@@ -332,18 +360,18 @@ exports.listHistory = async(req,res)=> {
     };
     const id = req.params.id;
     const queryList = await query.find({
-        userId:userId,status:1
-    },{tsCreatedAt:0},pageParams).catch(err => {
+        userId: userId, status: 1
+    }, { tsCreatedAt: 0 }, pageParams).catch(err => {
         return {
-            success:0,message:err.message
+            success: 0, message: err.message
         }
     })
 
-    if (queryList && queryList.success != undefined && queryList.success ===0 ){
+    if (queryList && queryList.success != undefined && queryList.success === 0) {
         return res.send(queryList)
     }
 
     return res.send({
-        success:1,items:queryList,message:'success'
+        success: 1, items: queryList, message: 'success'
     })
 }
