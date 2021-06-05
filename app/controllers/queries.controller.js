@@ -273,12 +273,12 @@ exports.addAnswer = async (req, res) => {
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
     var notificationObj = {
-        title: " Today's Alumni Event",
-        message: "Alumni event is today, don't forget to join!",
-        type: constants.ALUMNI_EVENT_PARTICIPATION,
+        title: " Answer for your question",
+        message: "Consultant has replied to your question",
+        type: constants.QUERY_REPLY,
         filtersJsonArr,
         // metaInfo,
-        typeId: event._id,
+        //typeId: event._id,
         userId: owner,
         notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
