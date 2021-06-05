@@ -189,22 +189,22 @@ exports.savePayment = async (req, res) => {
     return res.status(200).send(savePayment);
   }
 
-  if (params.institution){
+  if (params.institution) {
     let result3 = await manageSubscriptions(req);
 
-    if(result3 === true){
+    if (result3 === true) {
       return res.status(200).send({
-        success: 1,message: "Success"
+        success: 1, message: "Success"
       })
     }
-    else{
+    else {
       return res.status(200).send({
-        success: 0,message: "failed"
+        success: 0, message: "failed"
       })
     }
   }
 
-  if(params.classId && params.isPublic == true){
+  if (params.classId && params.isPublic == true) {
 
     var obj = {}
     const monthNames = ["01", "02", "03", "04", "05", "06",
@@ -231,6 +231,21 @@ exports.savePayment = async (req, res) => {
     var saveData = await request.save().catch(err => {
       return { success: 0, err: err.message }
     });
+    const owner = params.tutorId;
+
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+      title: " Booking for your class",
+      message: "some one has booked to your class",
+      type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+      filtersJsonArr,
+      // metaInfo,
+      //typeId: event._id,
+      userId: owner,
+      notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
     if (saveData && saveData.success && saveData.success == 0) {
       return res.send(saveData)
@@ -267,37 +282,37 @@ exports.savePayment = async (req, res) => {
       return res.send(saveData)
     }
 
-    const userInfo = await User.findOne({ status:1,_id:userId}).catch(err => {
-      return { success: 0, err: err.message}
+    const userInfo = await User.findOne({ status: 1, _id: userId }).catch(err => {
+      return { success: 0, err: err.message }
     })
     if (userInfo && userInfo.success && userInfo.success == 0) {
       return res.send(userInfo)
     }
-    const studentName = userInfo.firstName ;
-    const classInfo = await onlineClass.findOne({ status:1,_id:params.classId}).catch(err => {
-      return { success: 0, err: err.message}
+    const studentName = userInfo.firstName;
+    const classInfo = await onlineClass.findOne({ status: 1, _id: params.classId }).catch(err => {
+      return { success: 0, err: err.message }
     })
     if (classInfo && classInfo.success && classInfo.success == 0) {
-      return res.send(classInfo )
-    } 
-    
-     const currencyInfo = await currency.findOne({status:1,_id:classInfo.currencyId}).catch(err => {
-      return { success: 0, err: err.message}
+      return res.send(classInfo)
+    }
+
+    const currencyInfo = await currency.findOne({ status: 1, _id: classInfo.currencyId }).catch(err => {
+      return { success: 0, err: err.message }
     })
     if (currencyInfo && currencyInfo.success && currencyInfo.success == 0) {
-      return res.send(currencyInfo )
-    } ;
+      return res.send(currencyInfo)
+    };
 
-    const subjectInfo = await subject.findOne({status:1,_id:classInfo.tutorSubjectId}).catch(err => {
-      return { success: 0, err: err.message}
+    const subjectInfo = await subject.findOne({ status: 1, _id: classInfo.tutorSubjectId }).catch(err => {
+      return { success: 0, err: err.message }
     })
     if (subjectInfo && subjectInfo.success && subjectInfo.success == 0) {
-      return res.send(subjectInfo )
-    } ;
-    
-    
-     const notify1 = await sendNotification(params.tutorId,studentName,amount,subjectInfo.name,currencyInfo.name,params.classId)
-     const notify2 = await sendNotificationStudent(userId,amount,subjectInfo.name,currencyInfo.name,classId)
+      return res.send(subjectInfo)
+    };
+
+
+    const notify1 = await sendNotification(params.tutorId, studentName, amount, subjectInfo.name, currencyInfo.name, params.classId)
+    const notify2 = await sendNotificationStudent(userId, amount, subjectInfo.name, currencyInfo.name, classId)
   }
 
   res.status(200).send({
@@ -307,9 +322,9 @@ exports.savePayment = async (req, res) => {
 
 }
 
-async function sendNotification(tutorId,studentName,amount,subject,currency,classId) {
+async function sendNotification(tutorId, studentName, amount, subject, currency, classId) {
 
-  var notificationMessage = studentName + " paid " + amount + " " + currency + " for your " + subject + " class"; 
+  var notificationMessage = studentName + " paid " + amount + " " + currency + " for your " + subject + " class";
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": tutorId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
   var notificationObj1 = {
@@ -327,11 +342,11 @@ async function sendNotification(tutorId,studentName,amount,subject,currency,clas
 
 }
 
-async function sendNotificationStudent(studentId,amount,subject,currency,classId) {
+async function sendNotificationStudent(studentId, amount, subject, currency, classId) {
 
-  var notificationMessage =  currency + " " + amount + " paid successfully for " + subject + " class"; 
+  var notificationMessage = currency + " " + amount + " paid successfully for " + subject + " class";
   console.log(" ------------------- >                       message   <--------------------------")
-  console.log(notificationMessage,'24/05');
+  console.log(notificationMessage, '24/05');
   var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": studentId }]
   // var metaInfo = {"type":"event","reference_id":eventData.id}
   var notificationObj2 = {
@@ -351,16 +366,16 @@ async function sendNotificationStudent(studentId,amount,subject,currency,classId
 
 exports.getPackage = async (req, res) => {
 
-  const packagesList = await Packages.find({status: 1}).catch(err=>{
-    return { success: 0, err: err.message}
+  const packagesList = await Packages.find({ status: 1 }).catch(err => {
+    return { success: 0, err: err.message }
   })
-  if(packagesList && packagesList.success && packagesList.success == 0){
-    return res.send(packagesList )
+  if (packagesList && packagesList.success && packagesList.success == 0) {
+    return res.send(packagesList)
   }
-  return res.send({ success:1,items:packagesList})
+  return res.send({ success: 1, items: packagesList })
 }
 
-async function manageSubscriptions(req){
+async function manageSubscriptions(req) {
 
   const userData = req.identity.data;
   const userId = userData.userId;
@@ -368,38 +383,38 @@ async function manageSubscriptions(req){
   const body = req.body;
 
   var errors = [];
-  if(!body.institution) {
+  if (!body.institution) {
     errors.push({
-      filed:'institution',
-      message:'institution not provided'
+      filed: 'institution',
+      message: 'institution not provided'
     })
   }
-  if(!body.duration) {
+  if (!body.duration) {
     errors.push({
-      filed:'duration',
-      message:'duration not provided'
+      filed: 'duration',
+      message: 'duration not provided'
     })
   }
 
-  if (errors.length > 0){
-    
+  if (errors.length > 0) {
+
     return false;
   }
 
-  const interval = body.duration * 24 * 60 * 60 ;
+  const interval = body.duration * 24 * 60 * 60;
   const now = Date.now();
-  
+
   const toDate = interval + now;
 
   const id = body.institution;
 
-  const updateInfo = await Instituion.updateOne({_id: id},{toDate:toDate,duration:body.duration,amount:body.amount}).catch(err =>{
-    
-    return {success: 0, err: err.message};
+  const updateInfo = await Instituion.updateOne({ _id: id }, { toDate: toDate, duration: body.duration, amount: body.amount }).catch(err => {
+
+    return { success: 0, err: err.message };
   });
 
-  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0){
-    
+  if (updateInfo && updateInfo.success != undefined && updateInfo.success === 0) {
+
     return false;
   }
   return true;

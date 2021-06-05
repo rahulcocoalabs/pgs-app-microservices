@@ -750,7 +750,7 @@ exports.getClassDetails = async (req, res) => {
       returnObj.isPaymentDone = false;
     }
 
-    var result1 = await classRequest.countDocuments({ status: 1, classId: classId, userId: userId,isPublic:true }).catch(err => {
+    var result1 = await classRequest.countDocuments({ status: 1, classId: classId, userId: userId, isPublic: true }).catch(err => {
       return {
         success: 0,
         message: err.message
@@ -761,10 +761,10 @@ exports.getClassDetails = async (req, res) => {
     }
     if (result1 > 0) {
       returnObj.isBooked = true;
-      
+
     }
     else {
-      
+
       returnObj.isBooked = false;
     }
 
@@ -775,15 +775,15 @@ exports.getClassDetails = async (req, res) => {
 
     const timeLimit = presentTime + (2 * 60 * 60 * 1000);
 
-    filter3.tsCreatedAt = {$lt: timeLimit};
-    const materials = await offlineMaterial.find(filter3,{link:1,description:1,title:1}).catch(err=>{
+    filter3.tsCreatedAt = { $lt: timeLimit };
+    const materials = await offlineMaterial.find(filter3, { link: 1, description: 1, title: 1 }).catch(err => {
       return {
-        success:0,
-        message:err.message
+        success: 0,
+        message: err.message
       }
     })
 
-    if(materials && materials.success != undefined && materials.success === 0){
+    if (materials && materials.success != undefined && materials.success === 0) {
 
       return res.send(materials);
     }
@@ -795,7 +795,7 @@ exports.getClassDetails = async (req, res) => {
       success: 1,
       flag: 1,
       item: returnObj,
-      material:materials || null,
+      material: materials || null,
       joinLinkAvailable: checkResp.joinLinkAvailable,
       classImageBase: classConfig.imageBase,
       tutorImageBase: usersConfig.imageBase,
@@ -3638,90 +3638,106 @@ exports.removeInstitutionClassFavourite = async (req, res) => {
 
 }
 
-exports.addPublicClassRequest = async (req,res) => {
+exports.addPublicClassRequest = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
   const body = req.body;
   var errors = [];
-  if(!body.classId){
+  if (!body.classId) {
     errors.push({
-      fileld:"classId",
-      message:"classId is missing"
+      fileld: "classId",
+      message: "classId is missing"
     })
   }
-  if(!body.tutorId){
+  if (!body.tutorId) {
     errors.push({
-      fileld:"tutorId",
-      message:"tutorId is missing"
+      fileld: "tutorId",
+      message: "tutorId is missing"
     })
   }
-  if(errors.length > 0){
+  if (errors.length > 0) {
     return res.send({
-      success:0,
-      errors:errors
+      success: 0,
+      errors: errors
     })
   }
 
   var publicReq = new classRequest({
     userId: userId,
-    classId:body.classId, 
+    classId: body.classId,
     tutorId: body.tutorId,
-    isPublic:true,
-    status:1,
-    isPaid:false,
+    isPublic: true,
+    status: 1,
+    isPaid: false,
     tsCreatedAt: Date.now()
   })
 
   const saveData = await publicReq.save().catch(err => {
-    return {success:0,message:err.message}
+    return { success: 0, message: err.message }
   })
-  if(saveData.success && saveData.success != undefined && saveData.success === 0) {
+  if (saveData.success && saveData.success != undefined && saveData.success === 0) {
     return res.send(saveData);
   }
 
-  return res.send({ success: 1, message:"success"})
+  const owner = body.tutorId;
+
+  var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+  var notificationObj = {
+    title: " Booking for your class",
+    message: "some one has booked to your class",
+    type: constants.APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE,
+    filtersJsonArr,
+    // metaInfo,
+    //typeId: event._id,
+    userId: owner,
+    notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+  }
+  let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
+  return res.send({ success: 1, message: "success" })
 }
 
-exports.addMaterial = async(req,res)=>{
+exports.addMaterial = async (req, res) => {
 
   const userData = req.identity.data;
   const userId = userData.userId;
 
   const params = req.body;
   var errors = [];
-  if(!params.title){
-    errors.push({fileld:"title",message:"title is missing"})
+  if (!params.title) {
+    errors.push({ fileld: "title", message: "title is missing" })
   }
-  if(!params.description){
-    errors.push({fileld:"description",message:"description is missing"})
+  if (!params.description) {
+    errors.push({ fileld: "description", message: "description is missing" })
   }
-  if(!params.links){
-    errors.push({fileld:"links",message:"links is missing"})
+  if (!params.links) {
+    errors.push({ fileld: "links", message: "links is missing" })
   }
-  if(!params.classId){
-    errors.push({fileld:"classId",message:"class ID is missing"})
+  if (!params.classId) {
+    errors.push({ fileld: "classId", message: "class ID is missing" })
   }
 
   const material = new offlineMaterial({
-    userId:userId,
-    description:params.description,
-    link:params.link,
-    classId:params.classId,
-    title:params.title,
-    tsCreatedAt:Date.now(),
-    status:1
+    userId: userId,
+    description: params.description,
+    link: params.link,
+    classId: params.classId,
+    title: params.title,
+    tsCreatedAt: Date.now(),
+    status: 1
   })
 
-  const saveData = await material.save().catch(err => {return {success:0,message:err.message}})
+  const saveData = await material.save().catch(err => { return { success: 0, message: err.message } })
 
-  if(saveData && saveData.success != undefined && saveData.success === 0){
+  if (saveData && saveData.success != undefined && saveData.success === 0) {
     return res.send(saveData);
   }
 
   return res.send({
-    success:1,message:"success"
+    success: 1, message: "success"
   })
 
 }
