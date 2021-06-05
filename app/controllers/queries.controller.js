@@ -220,8 +220,8 @@ async function sendMail(message, target, title) {
 exports.addAnswer = async (req, res) => {
 
     const body = req.body;
-    const userData = req.identity.data.userId;
-    const userId = userData.userId;
+   // const userData = req.identity.data;
+    //const userId = userData.userId;
     const queryId = req.params.id;
     var errors = [];
 
