@@ -401,7 +401,7 @@ async function manageSubscriptions(req) {
     return false;
   }
 
-  const interval = body.duration * 24 * 60 * 60;
+  const interval = body.duration * 24 * 60 * 60 * 1000;
   const now = Date.now();
 
   const toDate = interval + now;
