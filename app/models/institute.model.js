@@ -8,6 +8,7 @@ const InstituteSchema = mongoose.Schema({
     image:String,
     name:String,
     isPopular:Boolean,
+    amount:Number,
     toDate:Number,
     duration:Number,
     location:String,
