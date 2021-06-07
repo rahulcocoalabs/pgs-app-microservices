@@ -654,6 +654,9 @@ exports.participateEvent = async (req, res) => {
             message: err.message
           }
         })
+        console.log('07/06');
+        console.log(updateInfo);
+        console.log(userUpdate)
         if (userUpdate && userUpdate.success && userUpdate.success === 0) {
           return res.send(userUpdate)
         }
