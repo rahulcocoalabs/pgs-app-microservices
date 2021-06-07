@@ -574,6 +574,38 @@ exports.getZoomLink = async (req, res) => {
         return res.send(requestDetailsCount);
       }
       if (requestDetailsCount > 0) {
+
+
+        // mod for coins count update 
+
+        var updateInfo = { $inc: { 'coinCount': constants.COIN_COUNT_EVENT_PARTICIPATE } };
+        const userUpdate = await User.updateOne({ _id: userId }, updateInfo).catch(err => {
+          return {
+            success: 0,
+            message: err.message
+          }
+        })
+
+        if (userUpdate && userUpdate.success && userUpdate.success === 0) {
+          return res.send(userUpdate)
+        }
+        var coinUpdateObj = {
+          coinType: constants.COIN_PARTICIPATE_EVENT,
+          coinCount: constants.COIN_COUNT_EVENT_PARTICIPATE,
+          coinDate: Date.now()
+        };
+        var updateInfo1 = { $push: { coinHistory: coinUpdateObj } };
+        const userUpdate1 = await User.updateOne({ _id: userId }, updateInfo1).catch(err => {
+          return {
+            success: 0,
+            message: err.message
+          }
+        })
+        if (userUpdate1 && userUpdate1.success && userUpdate1.success === 0) {
+          return res.send(userUpdate1)
+        }
+        // end 
+
         return res.send({
           success: 1,
           message: "link to join class",
@@ -773,7 +805,7 @@ exports.getClassDetails = async (req, res) => {
     filter3.classId = classId;
     const presentTime = Date.now();
 
-    const timeLimit = presentTime + (2 * 60 * 60 );
+    const timeLimit = presentTime + (2 * 60 * 60);
 
     filter3.tsCreatedAt = { $lt: timeLimit };
     const materials = await offlineMaterial.find(filter3, { link: 1, description: 1, title: 1 }).catch(err => {
