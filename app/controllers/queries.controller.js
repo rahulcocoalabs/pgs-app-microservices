@@ -363,11 +363,9 @@ exports.listHistory = async (req, res) => {
     const queryList = await query.find({
         userId: userId, status: 1
     }, { tsCreatedAt: 0 }, pageParams).populate({
-        path: 'category',
-        select: 'name'
+        path: 'category'
       },{
-        path: 'consultant',
-        select: 'name'
+        path: 'consultant'
       }).catch(err => {
         return {
             success: 0, message: err.message
