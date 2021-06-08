@@ -13,7 +13,7 @@ const Rating = require('../models/rating.model');
 const AppointmentClassRequest = require('../models/appointmentClassRequest.model');
 const EarnCoin = require('../models/earnCoin.model');
 const LoginBanner = require('../models/loginBanner.model');
-
+var pushNotificationHelper = require('../helpers/pushNotificationHelper');
 const InnovationChallenge = require('../models/innovationChallenge.model');
 const otplib = require('otplib');
 const uuidv4 = require('uuid/v4');
@@ -4008,6 +4008,27 @@ exports.requestAsTutor = async (req, res) => {
     message: 'Sent your request to become tutor',
   })
 }
+
+// notification for php 
+
+exports.approvalAlert = async (req,res) => {
+  var owner = req.body.userId;
+    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+    var notificationObj = {
+        title: " Approved tutor status",
+        message: "Admin has approved your request to become tutor",
+        type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
+        filtersJsonArr,
+        // metaInfo,
+        typeId: params.groupId,
+        userId: owner,
+        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+    }
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+}
+
+//end
 
 exports.getTutorProfile = async (req, res) => {
   var userData = req.identity.data;
