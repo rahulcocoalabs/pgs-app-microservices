@@ -98,4 +98,6 @@ module.exports = (app) => {
 
     app.delete('/accounts/remove-user/:id',auth,accounts.removeUser)
 
+    app.post('/accounts/approvr-alert',accounts.approvalAlert);
+
 };
