@@ -4025,7 +4025,18 @@ exports.approvalAlert = async (req,res) => {
       message:"user not found"
     })
   }
-
+  if (!req.body.message){
+    return res.send({
+      success:0,
+      message:"message not found"
+    })
+  }
+  if (!req.body.title){
+    return res.send({
+      success:0,
+      message:"title not found"
+    })
+  }
 
 
   var owners = req.body.userId;
@@ -4043,8 +4054,8 @@ exports.approvalAlert = async (req,res) => {
       var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
       var notificationObj = {
-          title: " Approved tutor status",
-          message: "Admin has approved your request to become tutor",
+          title: req.body.title,
+          message: req.body.message,
           type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
           filtersJsonArr,
           // metaInfo,
