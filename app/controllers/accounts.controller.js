@@ -4026,24 +4026,40 @@ exports.approvalAlert = async (req,res) => {
     })
   }
 
-  var owner = req.body.userId;
-    var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
-    var notificationObj = {
-        title: " Approved tutor status",
-        message: "Admin has approved your request to become tutor",
-        type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
-        filtersJsonArr,
-        // metaInfo,
-       // typeId: params.groupId,
-        userId: owner,
-        notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
-    }
-    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
+  var owners = req.body.userId;
+
+
+  if(owners.length == 0){
+    return res.send({
+      success:0,
+      message:"user not found"
+    })
+  }
+
+  for (x in owners){
+      var owner = owners[x];
+      var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
+
+      var notificationObj = {
+          title: " Approved tutor status",
+          message: "Admin has approved your request to become tutor",
+          type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
+          filtersJsonArr,
+          // metaInfo,
+         // typeId: params.groupId,
+          userId: owner,
+          notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
+      }
+      let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+  }
+
+    
 
     return res.send({
       success:1,
-      item : notificationData
+      message : "notifications send"
     })
 }
 
