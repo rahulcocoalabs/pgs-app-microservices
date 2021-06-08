@@ -113,7 +113,7 @@ module.exports = Object.freeze({
     APPOINTMENT_STATUS_UPDATE_NOTIFICATION_TYPE : 'appointmentStatusUpdate',
 
     ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE: 'alumniJoinRequestStatusUpdate',
-    REQUEST_APPROVED = "approvedRequestToBecomeTutor",
+    REQUEST_APPROVED : "approvedRequestToBecomeTutor",
     ALUMNI_EVENT_PARTICIPATION: 'alumniEventParticipation',
     ONLINE_CLASS_PARTICIPATION: 'onlineClassParticipation',
     EVENT_BOOKING: 'event booking',
