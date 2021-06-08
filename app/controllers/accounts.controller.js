@@ -4012,6 +4012,20 @@ exports.requestAsTutor = async (req, res) => {
 // notification for php 
 
 exports.approvalAlert = async (req,res) => {
+
+  if (!req.body){
+    return res.send({
+      success:0,
+      message:"body not found"
+    })
+  }
+  if (!req.body.userId){
+    return res.send({
+      success:0,
+      message:"user not found"
+    })
+  }
+
   var owner = req.body.userId;
     var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": owner }]
 
@@ -4021,11 +4035,16 @@ exports.approvalAlert = async (req,res) => {
         type: constants.ALUMNI_JOIN_REQUEST_NOTIFICATION_TYPE,
         filtersJsonArr,
         // metaInfo,
-        typeId: params.groupId,
+       // typeId: params.groupId,
         userId: owner,
         notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
     let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+
+    return res.send({
+      success:1,
+      item : notificationData
+    })
 }
 
 //end
