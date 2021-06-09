@@ -55,6 +55,45 @@ async function getSettingData() {
 
 
 }
+async function getSettingDataBusiness() {
+
+  var keyId = await Setting.findOne({
+    key: "RAZORPAY_KEY_ID_BUSSINES_TEST",
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting sendgrid data',
+        error: err
+      }
+    })
+  if (keyId && (keyId.success !== undefined) && (keyId.success === 0)) {
+    return res.send(keyId);
+  }
+
+  var keySecret = await Setting.findOne({
+    key: "RAZORPAY_KEY_SECRET_BUSSINES_TEST",
+    status: 1
+  })
+    .catch(err => {
+      return {
+        success: 0,
+        message: 'Something went wrong while getting sendgrid data',
+        error: err
+      }
+    })
+  if (keySecret && (keySecret.success !== undefined) && (keySecret.success === 0)) {
+    return res.send(keySecret);
+  }
+
+  return {
+    key: keyId.value,
+    secret: keySecret.value
+  }
+
+
+}
 exports.getKey = async (req, res) => {
 
   let object = await getSettingData();
@@ -81,6 +120,44 @@ exports.getKey = async (req, res) => {
 exports.getCredentials = async (req, res) => {
 
   let object = await getSettingData();
+  let amount = req.query.amount;
+  const instance = new Razorpay({
+    key_id: object.key,
+    key_secret: object.secret,
+  });
+  try {
+    const options = {
+      amount: amount * 100, // amount == Rs 10
+      currency: "INR",
+      receipt: "receipt#1",
+      payment_capture: 0,
+      // 1 for automatic capture // 0 for manual capture
+    };
+    instance.orders.create(options, async function (err, order) {
+      if (err) {
+        console.log(err, err.message)
+        return res.status(500).json({
+          message: "Something Went Wrong",
+          error: err.message
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        message: "fetched successfully credentials for payments",
+        item: order
+      });
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something Went Wrong",
+      error: err.message
+    });
+  }
+};
+
+exports.getCredentialsBusiness = async (req, res) => {
+
+  let object = await getSettingDataBusiness();
   let amount = req.query.amount;
   const instance = new Razorpay({
     key_id: object.key,
