@@ -58,7 +58,7 @@ async function getSettingData() {
 async function getSettingDataBusiness() {
 
   var keyId = await Setting.findOne({
-    key: "RAZORPAY_KEY_ID_BUSSINES_TEST",
+    key: constants.RAZORPAY_KEY_ID_BUSINESS,
     status: 1
   })
     .catch(err => {
@@ -73,7 +73,7 @@ async function getSettingDataBusiness() {
   }
 
   var keySecret = await Setting.findOne({
-    key: "RAZORPAY_KEY_SECRET_BUSSINES_TEST",
+    key: constants.RAZORPAY_KEY_SECRET_BUSINESS,
     status: 1
   })
     .catch(err => {
