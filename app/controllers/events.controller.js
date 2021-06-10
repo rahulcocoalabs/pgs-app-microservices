@@ -82,7 +82,7 @@ exports.listAll = async (req, res) => {
         $gt: endTs
       }
     }
-    sortOptions = { eventDate: 1 };
+    sortOptions = { tsFrom: 1 };
   }
 
   filters.status = 1;
