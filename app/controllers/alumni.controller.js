@@ -2274,7 +2274,7 @@ exports.deleteAll = async (req, res) => {
 
 var CronJob = require('cron').CronJob;
 
-var job = new CronJob(' * * * * *', async function () {
+var job = new CronJob(' 0 06 * * *', async function () {
     console.log('You will see this message every second');
 
     var today = new Date();
