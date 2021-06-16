@@ -2283,14 +2283,14 @@ var job = new CronJob(' 0 06 * * *', async function () {
     var mm = today.getMonth();
 
     var yyyy = today.getFullYear();
-    const today1 = dd + " " + months[mm] + " " + yyyy;
+    const today1 = dd + "/" + months[mm] + "/" + yyyy;
     console.log(" < -------- started1")
 
-    var events1 = AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).then((results) => {
-        console.log(results)
-    })
+    // var events1 = AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).then((results) => {
+    //     console.log(results)
+    // })
 
-    var events = await AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).catch(err => {
+    var events = await AlumniEvent.find({ status: 1,date:today1 }).populate({ path: 'groupId' }).catch(err => {
         console.log(" < -------- end1")
         return { success: 0, message: "did not get detail for requests", error: err.message }
     })
