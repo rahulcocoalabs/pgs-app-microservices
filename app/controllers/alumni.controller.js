@@ -2284,7 +2284,7 @@ var job = new CronJob(' 0 06 * * *', async function () {
 
     var yyyy = today.getFullYear();
     const today1 = dd + "/" + months[mm] + "/" + yyyy;
-    console.log(" < -------- started1")
+    console.log(" 16/06",today1);
 
     // var events1 = AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).then((results) => {
     //     console.log(results)
@@ -2328,7 +2328,7 @@ var job = new CronJob(' 0 06 * * *', async function () {
                 userId: owner,
                 notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
             }
-            let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+            //let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
         }
 
         console.log(event);
@@ -2346,7 +2346,7 @@ var job = new CronJob(' 0 06 * * *', async function () {
             userId: groupOwner,
             notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
         }
-        let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+        //let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
 
 
     }
