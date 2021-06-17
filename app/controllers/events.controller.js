@@ -1351,7 +1351,7 @@ var job1 = new CronJob(' 0 06 * * *', async function () {
 }, null, true, 'Asia/Kolkata');
 job1.start();
 
-var job2 = new CronJob(' 10 * * * * *', async function () {
+var job2 = new CronJob(' * * * * *', async function () {
 
   var x1 = Date.now();
   var x2 = x1 - (1000 * 60 * 60 * 24);
