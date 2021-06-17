@@ -1376,6 +1376,7 @@ var job2 = new CronJob(' * * * * *', async function () {
 
   console.log(eveIds);
   console.log(yesterday)
+  console.log(thisMoment)
   var filter1 = {};
   filter1.eventId = { $in: eveIds };
   filter1.isParticipated = false;
