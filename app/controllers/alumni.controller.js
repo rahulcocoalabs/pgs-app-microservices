@@ -2284,7 +2284,7 @@ var job = new CronJob(' 0 06 * * *', async function () {
 
     var yyyy = today.getFullYear();
     const today1 = dd + "/" + months[mm] + "/" + yyyy;
-    console.log(" 16/06",today1);
+    
 
     // var events1 = AlumniEvent.find({ status: 1 }).populate({ path: 'groupId' }).then((results) => {
     //     console.log(results)
@@ -2337,8 +2337,8 @@ var job = new CronJob(' 0 06 * * *', async function () {
         var filtersJsonArr = [{ "field": "tag", "key": "user_id", "relation": "=", "value": groupOwner }]
 
         var notificationObj = {
-            title: " Today's Event",
-            message: "Event is today, don't forget to join!",
+            title: " Today's Alumni Event",
+            message: "Alumni event is today, don't forget to join!",
             type: constants.ALUMNI_EVENT_PARTICIPATION,
             filtersJsonArr,
             // metaInfo,
