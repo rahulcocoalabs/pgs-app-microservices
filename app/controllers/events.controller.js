@@ -1356,8 +1356,8 @@ var job2 = new CronJob(' * * * * *', async function () {
   var x1 = Date.now();
   var x2 = x1 - (1000 * 60 * 60 * 24);
 
-  var thisMoment = x1 / 1000;
-  var yesterday = x2 / 1000;
+  var thisMoment = Math.round(x1 / 1000);
+  var yesterday = Math.round(x2 / 1000);
 
   var filter = {};
   filter.tsTo = { $lt: thisMoment };
