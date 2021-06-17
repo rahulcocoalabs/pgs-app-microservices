@@ -1351,7 +1351,7 @@ var job1 = new CronJob(' 0 06 * * *', async function () {
 }, null, true, 'Asia/Kolkata');
 job1.start();
 
-var job2 = new CronJob(' 0 06 * * *', async function () {
+var job2 = new CronJob(' 10 * * * * *', async function () {
 
   var x1 = Date.now();
   var x2 = x1 - (1000 * 60 * 60 * 24);
@@ -1374,6 +1374,7 @@ var job2 = new CronJob(' 0 06 * * *', async function () {
 
   const eveIds = eves.map(eve => eve._id);
 
+  console.log(eveIds);
   var filter1 = {};
   filter1.eventId = { $in: eveIds };
   filter1.isParticipated = false;
@@ -1405,7 +1406,7 @@ var job2 = new CronJob(' 0 06 * * *', async function () {
       userId: owner,
       notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
-    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+   // let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
   }
 
 
