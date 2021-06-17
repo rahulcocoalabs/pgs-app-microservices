@@ -1408,7 +1408,7 @@ var job2 = new CronJob(' 0 06 * * *', async function () {
       userId: owner,
       notificationType: constants.INDIVIDUAL_NOTIFICATION_TYPE
     }
-   // let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
+    let notificationData = await pushNotificationHelper.sendNotification(notificationObj)
   }
 
 
