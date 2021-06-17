@@ -1298,9 +1298,9 @@ var job1 = new CronJob(' 0 06 * * *', async function () {
   var yesterday = x2 / 1000;
 
   var filter = {};
-  filter.tsTo = { $lt: thisMoment };
+ 
   filter.status = 1;
-  filter.tsTo = { $gt: yesterday };
+  filter.tsTo = { $gt: yesterday ,$lt: thisMoment};
 
   var eves = await Event.find(filter).catch(err => {
     return { success: 0, message: err.message };
